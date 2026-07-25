@@ -1,0 +1,556 @@
+{
+ "generated_at": "2026-07-25T07:04:56.017637+00:00",
+ "neighborhood_property": "nhood",
+ "attributes": {
+  "Western Addition": {
+   "trees_per_km2": 4012.6092949497192,
+   "transit_stops": 62,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 6,
+   "flood_zone_share": 0,
+   "sfmta_projects": 4,
+   "rpp_parcels": 2027,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.1
+  },
+  "West of Twin Peaks": {
+   "trees_per_km2": 1965.5611014071762,
+   "transit_stops": 217,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 12,
+   "flood_zone_share": 0,
+   "sfmta_projects": 6,
+   "rpp_parcels": 5135,
+   "storefront_vacancy_rate": 0.0036101083032490976,
+   "ems_response_median_mins": 8.85
+  },
+  "Visitacion Valley": {
+   "trees_per_km2": 908.6323051630834,
+   "transit_stops": 66,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 5,
+   "flood_zone_share": 0,
+   "sfmta_projects": 8,
+   "rpp_parcels": 0,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 11.166666666666666
+  },
+  "Twin Peaks": {
+   "trees_per_km2": 422.94845243250563,
+   "transit_stops": 40,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0,
+   "sfmta_projects": 1,
+   "rpp_parcels": 92,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 9.016666666666667
+  },
+  "South of Market": {
+   "trees_per_km2": 2250.4617482275316,
+   "transit_stops": 212,
+   "cannabis_retailers": 13,
+   "tri_facilities": 2,
+   "grocery_stores": 12,
+   "flood_zone_share": 0,
+   "sfmta_projects": 9,
+   "rpp_parcels": 3172,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 8.583333333333334
+  },
+  "Treasure Island": {
+   "trees_per_km2": 3.4744936421435058,
+   "transit_stops": 14,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 2,
+   "flood_zone_share": 0.2468458399042527,
+   "sfmta_projects": 1,
+   "rpp_parcels": 0,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 9.066666666666666
+  },
+  "Presidio Heights": {
+   "trees_per_km2": 2903.54422138948,
+   "transit_stops": 32,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 3,
+   "flood_zone_share": 0,
+   "sfmta_projects": 0,
+   "rpp_parcels": 2425,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.6083333333333325
+  },
+  "Presidio": {
+   "trees_per_km2": 18.126747030486733,
+   "transit_stops": 83,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0.040337201701628134,
+   "sfmta_projects": 2,
+   "rpp_parcels": 15,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 10.566666666666666
+  },
+  "Potrero Hill": {
+   "trees_per_km2": 1934.8609697965408,
+   "transit_stops": 69,
+   "cannabis_retailers": 3,
+   "tri_facilities": 1,
+   "grocery_stores": 10,
+   "flood_zone_share": 0.03888380139342538,
+   "sfmta_projects": 7,
+   "rpp_parcels": 2696,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 8.283333333333333
+  },
+  "Portola": {
+   "trees_per_km2": 1225.8064591964996,
+   "transit_stops": 64,
+   "cannabis_retailers": 2,
+   "tri_facilities": 0,
+   "grocery_stores": 13,
+   "flood_zone_share": 0,
+   "sfmta_projects": 9,
+   "rpp_parcels": 0,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.3
+  },
+  "Pacific Heights": {
+   "trees_per_km2": 3205.966550920913,
+   "transit_stops": 64,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 5,
+   "flood_zone_share": 0,
+   "sfmta_projects": 1,
+   "rpp_parcels": 5792,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.166666666666667
+  },
+  "Outer Richmond": {
+   "trees_per_km2": 1491.3826297391981,
+   "transit_stops": 119,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 15,
+   "flood_zone_share": 0.024777315931697214,
+   "sfmta_projects": 2,
+   "rpp_parcels": 410,
+   "storefront_vacancy_rate": 0.020833333333333332,
+   "ems_response_median_mins": 8.15
+  },
+  "Outer Mission": {
+   "trees_per_km2": 1442.4483050568083,
+   "transit_stops": 69,
+   "cannabis_retailers": 3,
+   "tri_facilities": 0,
+   "grocery_stores": 8,
+   "flood_zone_share": 0,
+   "sfmta_projects": 6,
+   "rpp_parcels": 1559,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.1
+  },
+  "Sunset/Parkside": {
+   "trees_per_km2": 1145.963109734436,
+   "transit_stops": 222,
+   "cannabis_retailers": 3,
+   "tri_facilities": 0,
+   "grocery_stores": 23,
+   "flood_zone_share": 0.03787867688564478,
+   "sfmta_projects": 3,
+   "rpp_parcels": 688,
+   "storefront_vacancy_rate": 0.011834319526627219,
+   "ems_response_median_mins": 8.983333333333333
+  },
+  "Oceanview/Merced/Ingleside": {
+   "trees_per_km2": 1560.616216086562,
+   "transit_stops": 90,
+   "cannabis_retailers": 2,
+   "tri_facilities": 0,
+   "grocery_stores": 6,
+   "flood_zone_share": 0,
+   "sfmta_projects": 3,
+   "rpp_parcels": 1966,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.2
+  },
+  "North Beach": {
+   "trees_per_km2": 2467.941779875237,
+   "transit_stops": 73,
+   "cannabis_retailers": 4,
+   "tri_facilities": 1,
+   "grocery_stores": 10,
+   "flood_zone_share": 0.02058171463156161,
+   "sfmta_projects": 7,
+   "rpp_parcels": 2386,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 8.133333333333333
+  },
+  "Noe Valley": {
+   "trees_per_km2": 3581.4874141264786,
+   "transit_stops": 85,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 6,
+   "flood_zone_share": 0,
+   "sfmta_projects": 0,
+   "rpp_parcels": 2370,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.383333333333334
+  },
+  "Lone Mountain/USF": {
+   "trees_per_km2": 2202.596663802671,
+   "transit_stops": 45,
+   "cannabis_retailers": 2,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0,
+   "sfmta_projects": 1,
+   "rpp_parcels": 3080,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.583333333333333
+  },
+  "Lincoln Park": {
+   "trees_per_km2": 21.514795140075382,
+   "transit_stops": 6,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0.03001963765812868,
+   "sfmta_projects": 0,
+   "rpp_parcels": 0,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 9.833333333333334
+  },
+  "Seacliff": {
+   "trees_per_km2": 2678.0631686256497,
+   "transit_stops": 6,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0.03623615020444344,
+   "sfmta_projects": 1,
+   "rpp_parcels": 62,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 7.85
+  },
+  "Nob Hill": {
+   "trees_per_km2": 2546.8290332335714,
+   "transit_stops": 91,
+   "cannabis_retailers": 3,
+   "tri_facilities": 0,
+   "grocery_stores": 13,
+   "flood_zone_share": 0,
+   "sfmta_projects": 3,
+   "rpp_parcels": 5632,
+   "storefront_vacancy_rate": 0.043478260869565216,
+   "ems_response_median_mins": 7.016666666666667
+  },
+  "Mission Bay": {
+   "trees_per_km2": 1380.2756844908527,
+   "transit_stops": 92,
+   "cannabis_retailers": 0,
+   "tri_facilities": 2,
+   "grocery_stores": 3,
+   "flood_zone_share": 0.06395501194377298,
+   "sfmta_projects": 4,
+   "rpp_parcels": 617,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 8.266666666666667
+  },
+  "Mission": {
+   "trees_per_km2": 3315.328137773412,
+   "transit_stops": 154,
+   "cannabis_retailers": 11,
+   "tri_facilities": 2,
+   "grocery_stores": 62,
+   "flood_zone_share": 0,
+   "sfmta_projects": 15,
+   "rpp_parcels": 6159,
+   "storefront_vacancy_rate": 0.007155635062611807,
+   "ems_response_median_mins": 7.683333333333334
+  },
+  "Russian Hill": {
+   "trees_per_km2": 2494.4783156384883,
+   "transit_stops": 105,
+   "cannabis_retailers": 5,
+   "tri_facilities": 0,
+   "grocery_stores": 11,
+   "flood_zone_share": 0.013714912654766336,
+   "sfmta_projects": 2,
+   "rpp_parcels": 4880,
+   "storefront_vacancy_rate": 0.03333333333333333,
+   "ems_response_median_mins": 7.6
+  },
+  "Marina": {
+   "trees_per_km2": 1820.786999011651,
+   "transit_stops": 90,
+   "cannabis_retailers": 4,
+   "tri_facilities": 0,
+   "grocery_stores": 3,
+   "flood_zone_share": 0.020744824402709458,
+   "sfmta_projects": 4,
+   "rpp_parcels": 5650,
+   "storefront_vacancy_rate": 0.013986013986013986,
+   "ems_response_median_mins": 7.916666666666667
+  },
+  "Lakeshore": {
+   "trees_per_km2": 125.30131373285423,
+   "transit_stops": 93,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 3,
+   "flood_zone_share": 0.028523185009069685,
+   "sfmta_projects": 4,
+   "rpp_parcels": 39,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 9.85
+  },
+  "Tenderloin": {
+   "trees_per_km2": 2387.1996982610617,
+   "transit_stops": 99,
+   "cannabis_retailers": 5,
+   "tri_facilities": 1,
+   "grocery_stores": 27,
+   "flood_zone_share": 0,
+   "sfmta_projects": 2,
+   "rpp_parcels": 444,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.65
+  },
+  "McLaren Park": {
+   "trees_per_km2": 125.40393895726368,
+   "transit_stops": 17,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0,
+   "sfmta_projects": 8,
+   "rpp_parcels": 0,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 10.608333333333334
+  },
+  "Japantown": {
+   "trees_per_km2": 3995.218372286935,
+   "transit_stops": 17,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 3,
+   "flood_zone_share": 0,
+   "sfmta_projects": 4,
+   "rpp_parcels": 363,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.75
+  },
+  "Inner Sunset": {
+   "trees_per_km2": 1749.8206283614513,
+   "transit_stops": 121,
+   "cannabis_retailers": 1,
+   "tri_facilities": 0,
+   "grocery_stores": 9,
+   "flood_zone_share": 0,
+   "sfmta_projects": 2,
+   "rpp_parcels": 2658,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 8.266666666666667
+  },
+  "Hayes Valley": {
+   "trees_per_km2": 4508.406463166606,
+   "transit_stops": 44,
+   "cannabis_retailers": 7,
+   "tri_facilities": 0,
+   "grocery_stores": 9,
+   "flood_zone_share": 0,
+   "sfmta_projects": 6,
+   "rpp_parcels": 4070,
+   "storefront_vacancy_rate": 0.025,
+   "ems_response_median_mins": 7.416666666666667
+  },
+  "Haight Ashbury": {
+   "trees_per_km2": 3727.800381777827,
+   "transit_stops": 67,
+   "cannabis_retailers": 2,
+   "tri_facilities": 0,
+   "grocery_stores": 6,
+   "flood_zone_share": 0,
+   "sfmta_projects": 1,
+   "rpp_parcels": 2494,
+   "storefront_vacancy_rate": 0.004694835680751174,
+   "ems_response_median_mins": 7.416666666666667
+  },
+  "Golden Gate Park": {
+   "trees_per_km2": 21.7135105208956,
+   "transit_stops": 97,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 0,
+   "flood_zone_share": 0.030103070914072574,
+   "sfmta_projects": 3,
+   "rpp_parcels": 4,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 8.7
+  },
+  "Inner Richmond": {
+   "trees_per_km2": 1959.1338046673757,
+   "transit_stops": 54,
+   "cannabis_retailers": 2,
+   "tri_facilities": 0,
+   "grocery_stores": 17,
+   "flood_zone_share": 0,
+   "sfmta_projects": 1,
+   "rpp_parcels": 3574,
+   "storefront_vacancy_rate": 0.013289036544850499,
+   "ems_response_median_mins": 7.716666666666667
+  },
+  "Glen Park": {
+   "trees_per_km2": 2257.005902231743,
+   "transit_stops": 66,
+   "cannabis_retailers": 0,
+   "tri_facilities": 0,
+   "grocery_stores": 4,
+   "flood_zone_share": 0,
+   "sfmta_projects": 0,
+   "rpp_parcels": 859,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.4
+  },
+  "Financial District/South Beach": {
+   "trees_per_km2": 2246.78669455517,
+   "transit_stops": 529,
+   "cannabis_retailers": 6,
+   "tri_facilities": 2,
+   "grocery_stores": 17,
+   "flood_zone_share": 0.01734698150815335,
+   "sfmta_projects": 23,
+   "rpp_parcels": 4934,
+   "storefront_vacancy_rate": 0,
+   "ems_response_median_mins": 8.716666666666667
+  },
+  "Excelsior": {
+   "trees_per_km2": 1360.1425853630642,
+   "transit_stops": 126,
+   "cannabis_retailers": 3,
+   "tri_facilities": 0,
+   "grocery_stores": 7,
+   "flood_zone_share": 0,
+   "sfmta_projects": 8,
+   "rpp_parcels": 26,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.683333333333334
+  },
+  "Chinatown": {
+   "trees_per_km2": 1785.5402068267895,
+   "transit_stops": 56,
+   "cannabis_retailers": 1,
+   "tri_facilities": 1,
+   "grocery_stores": 57,
+   "flood_zone_share": 0,
+   "sfmta_projects": 11,
+   "rpp_parcels": 1151,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 7.466666666666667
+  },
+  "Castro/Upper Market": {
+   "trees_per_km2": 3628.1601195056055,
+   "transit_stops": 131,
+   "cannabis_retailers": 4,
+   "tri_facilities": 0,
+   "grocery_stores": 9,
+   "flood_zone_share": 0,
+   "sfmta_projects": 2,
+   "rpp_parcels": 5104,
+   "storefront_vacancy_rate": 0.0625,
+   "ems_response_median_mins": 7.783333333333333
+  },
+  "Bernal Heights": {
+   "trees_per_km2": 3191.3672594208906,
+   "transit_stops": 106,
+   "cannabis_retailers": 6,
+   "tri_facilities": 0,
+   "grocery_stores": 15,
+   "flood_zone_share": 0,
+   "sfmta_projects": 6,
+   "rpp_parcels": 756,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 8.566666666666666
+  },
+  "Bayview Hunters Point": {
+   "trees_per_km2": 1014.8357778700992,
+   "transit_stops": 279,
+   "cannabis_retailers": 2,
+   "tri_facilities": 7,
+   "grocery_stores": 29,
+   "flood_zone_share": 0.07266008827497693,
+   "sfmta_projects": 21,
+   "rpp_parcels": 64,
+   "storefront_vacancy_rate": 0.0,
+   "ems_response_median_mins": 9.633333333333333
+  }
+ },
+ "attribute_meta": {
+  "trees_per_km2": {
+   "source": "datasf_street_trees",
+   "source_as_of": "2026-07-23",
+   "note": "City street-tree inventory, trees per km\u00b2"
+  },
+  "transit_stops": {
+   "source": "gtfs_ca_statewide_calitp",
+   "source_as_of": "2026-07-21",
+   "note": "Distinct transit stops (Cal-ITP statewide GTFS)"
+  },
+  "cannabis_retailers": {
+   "source": "ca_cannabis_retailers",
+   "source_as_of": "2026-07-25",
+   "note": "Licensed cannabis retailers (DCC, daily API)"
+  },
+  "tri_facilities": {
+   "source": "epa_tri_ca",
+   "source_as_of": "2026-07-25",
+   "note": "EPA TRI toxic-release facilities in the neighborhood (higher = more industrial)"
+  },
+  "grocery_stores": {
+   "source": "fsq_os_places",
+   "source_as_of": "2026-07-09",
+   "note": "Open grocery stores (Foursquare OS Places, latest snapshot)"
+  },
+  "flood_zone_share": {
+   "source": "fema_nfhl_flood",
+   "source_as_of": "2026-07-25",
+   "note": "Share of area inside FEMA Special Flood Hazard Area (SFHA)"
+  },
+  "sfmta_projects": {
+   "source": "datasf_sfmta_projects",
+   "source_as_of": "2025-09-02",
+   "note": "SFMTA transit/street projects intersecting the neighborhood"
+  },
+  "rpp_parcels": {
+   "source": "datasf_rpp_zones",
+   "source_as_of": "2024-01-15",
+   "note": "Parcels eligible for a residential parking-permit zone"
+  },
+  "storefront_vacancy_rate": {
+   "source": "datasf_commercial_vacancy",
+   "source_as_of": "2026-07-24",
+   "note": "Share of taxable commercial spaces reported vacant, latest tax year (Prop-D roll)"
+  },
+  "ems_response_median_mins": {
+   "source": "datasf_fire_ems_calls",
+   "source_as_of": "2026-07-24",
+   "note": "Median minutes received->on-scene, fire/EMS calls, trailing 12 months"
+  }
+ },
+ "skipped": [
+  "fire_hazard: CAL FIRE FHSZ has no severity zones inside SF proper \u2014 attribute would be uniformly empty",
+  "good_schools: needs school-location join (CAASPP has no coordinates) \u2014 deferred",
+  "rezoning_apps: datasf_planning_records has no coordinates in the export \u2014 needs geocoding/staging",
+  "political_lean: precinct returns landed but chip is a founder decision (constraint #2 adjacency)"
+ ]
+}

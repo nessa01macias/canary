@@ -178,19 +178,35 @@ def fetch_cannabis(*, force: bool = False) -> None:
         print(f"[current] {CANNABIS.key}: already have snapshot as_of {as_of_str}")
         return
     lon_min, lat_min, lon_max, lat_max = CA_BBOX
-    resp = requests.get(
-        CANNABIS_URL,
-        params={"minLatitude": lat_min, "maxLatitude": lat_max, "minLongitude": lon_min, "maxLongitude": lon_max},
-        headers=base.DEFAULT_HEADERS,
-        timeout=90,
-    )
-    resp.raise_for_status()
-    payload = resp.json()
-    total = payload.get("metadata", {}).get("totalCount")
-    print(f"[pull] {CANNABIS.key} as_of {as_of_str}: {total} retailer licenses")
+    params = {
+        "minLatitude": lat_min, "maxLatitude": lat_max,
+        "minLongitude": lon_min, "maxLongitude": lon_max,
+        "pageSize": 250,
+    }
+    # The API paginates (250/page); walk every page or the dataset silently truncates.
+    records: list = []
+    page = 1
+    while True:
+        resp = requests.get(
+            CANNABIS_URL, params={**params, "pageNumber": page},
+            headers=base.DEFAULT_HEADERS, timeout=90,
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+        records.extend(payload.get("data") or [])
+        meta = payload.get("metadata", {})
+        if not meta.get("hasNext"):
+            break
+        page += 1
+    total = meta.get("totalCount")
+    print(f"[pull] {CANNABIS.key} as_of {as_of_str}: {len(records)} of {total} retailer licenses ({page} pages)")
     snap = _new_snapshot(CANNABIS, as_of_str)
-    snap.write_json("dcc_retailers_ca.json", payload, source_url=CANNABIS_URL)
-    snap.finalize(extra={"total_count": total, "bbox": CA_BBOX, "note": "retailers only; live daily API"})
+    snap.write_json(
+        "dcc_retailers_ca.json",
+        {"metadata": {**meta, "pages_fetched": page}, "data": records},
+        source_url=CANNABIS_URL,
+    )
+    snap.finalize(extra={"total_count": total, "rows": len(records), "bbox": CA_BBOX, "note": "retailers only; live daily API; paginated"})
 
 
 # --- shared helpers ----------------------------------------------------------
