@@ -1,0 +1,390 @@
+{
+  "source": "Inside Airbnb (insideairbnb.com), CC BY 4.0",
+  "snapshot_date": "2026-06-14",
+  "data_as_of": "2026-06-14",
+  "generated_at": "2026-07-25T03:42:41.010680+00:00",
+  "metric_notes": {
+    "reviews_trailing_90d": "Count of guest reviews in the 90 days ending on data_as_of. Anchored to the snapshot date, not wall-clock now.",
+    "calendar_unavailable_rate": "Fraction of forward listing-nights marked unavailable (booked OR host-blocked -- Inside Airbnb cannot distinguish) within each horizon starting data_as_of."
+  },
+  "windows": {
+    "reviews_trailing_90d": {
+      "from": "2026-03-17",
+      "to": "2026-06-14"
+    },
+    "calendar_forward_30d": {
+      "from": "2026-06-14",
+      "to": "2026-07-14"
+    },
+    "calendar_forward_90d": {
+      "from": "2026-06-14",
+      "to": "2026-09-12"
+    },
+    "calendar_forward_365d": {
+      "from": "2026-06-14",
+      "to": "2027-06-14"
+    }
+  },
+  "neighbourhoods": {
+    "Western Addition": {
+      "listing_count": 473,
+      "entire_home_share": 0.56,
+      "median_price_usd": 223.0,
+      "reviews_trailing_90d": 1135,
+      "listings_with_calendar": 473,
+      "calendar_unavailable_rate_30d": 0.7703,
+      "calendar_unavailable_rate_90d": 0.6579,
+      "calendar_unavailable_rate_365d": 0.491
+    },
+    "Bernal Heights": {
+      "listing_count": 244,
+      "entire_home_share": 0.721,
+      "median_price_usd": 255.0,
+      "reviews_trailing_90d": 602,
+      "listings_with_calendar": 244,
+      "calendar_unavailable_rate_30d": 0.8343,
+      "calendar_unavailable_rate_90d": 0.7128,
+      "calendar_unavailable_rate_365d": 0.573
+    },
+    "Outer Mission": {
+      "listing_count": 139,
+      "entire_home_share": 0.532,
+      "median_price_usd": 205.0,
+      "reviews_trailing_90d": 560,
+      "listings_with_calendar": 139,
+      "calendar_unavailable_rate_30d": 0.7783,
+      "calendar_unavailable_rate_90d": 0.6171,
+      "calendar_unavailable_rate_365d": 0.5105
+    },
+    "Haight Ashbury": {
+      "listing_count": 240,
+      "entire_home_share": 0.646,
+      "median_price_usd": 267.0,
+      "reviews_trailing_90d": 476,
+      "listings_with_calendar": 240,
+      "calendar_unavailable_rate_30d": 0.8026,
+      "calendar_unavailable_rate_90d": 0.6914,
+      "calendar_unavailable_rate_365d": 0.5502
+    },
+    "Bayview": {
+      "listing_count": 154,
+      "entire_home_share": 0.532,
+      "median_price_usd": 180.0,
+      "reviews_trailing_90d": 459,
+      "listings_with_calendar": 154,
+      "calendar_unavailable_rate_30d": 0.836,
+      "calendar_unavailable_rate_90d": 0.6558,
+      "calendar_unavailable_rate_365d": 0.4562
+    },
+    "Nob Hill": {
+      "listing_count": 363,
+      "entire_home_share": 0.493,
+      "median_price_usd": 211.0,
+      "reviews_trailing_90d": 418,
+      "listings_with_calendar": 363,
+      "calendar_unavailable_rate_30d": 0.6547,
+      "calendar_unavailable_rate_90d": 0.5303,
+      "calendar_unavailable_rate_365d": 0.4555
+    },
+    "Castro/Upper Market": {
+      "listing_count": 285,
+      "entire_home_share": 0.779,
+      "median_price_usd": 278.0,
+      "reviews_trailing_90d": 1044,
+      "listings_with_calendar": 285,
+      "calendar_unavailable_rate_30d": 0.8058,
+      "calendar_unavailable_rate_90d": 0.6721,
+      "calendar_unavailable_rate_365d": 0.5516
+    },
+    "Noe Valley": {
+      "listing_count": 229,
+      "entire_home_share": 0.786,
+      "median_price_usd": 264.0,
+      "reviews_trailing_90d": 488,
+      "listings_with_calendar": 229,
+      "calendar_unavailable_rate_30d": 0.8355,
+      "calendar_unavailable_rate_90d": 0.7489,
+      "calendar_unavailable_rate_365d": 0.605
+    },
+    "Parkside": {
+      "listing_count": 135,
+      "entire_home_share": 0.674,
+      "median_price_usd": 233.0,
+      "reviews_trailing_90d": 710,
+      "listings_with_calendar": 135,
+      "calendar_unavailable_rate_30d": 0.7942,
+      "calendar_unavailable_rate_90d": 0.5936,
+      "calendar_unavailable_rate_365d": 0.467
+    },
+    "Potrero Hill": {
+      "listing_count": 130,
+      "entire_home_share": 0.815,
+      "median_price_usd": 242.0,
+      "reviews_trailing_90d": 345,
+      "listings_with_calendar": 130,
+      "calendar_unavailable_rate_30d": 0.8235,
+      "calendar_unavailable_rate_90d": 0.6966,
+      "calendar_unavailable_rate_365d": 0.5171
+    },
+    "Pacific Heights": {
+      "listing_count": 146,
+      "entire_home_share": 0.801,
+      "median_price_usd": 298.0,
+      "reviews_trailing_90d": 196,
+      "listings_with_calendar": 146,
+      "calendar_unavailable_rate_30d": 0.8165,
+      "calendar_unavailable_rate_90d": 0.7165,
+      "calendar_unavailable_rate_365d": 0.4864
+    },
+    "Glen Park": {
+      "listing_count": 45,
+      "entire_home_share": 0.822,
+      "median_price_usd": 277.0,
+      "reviews_trailing_90d": 133,
+      "listings_with_calendar": 45,
+      "calendar_unavailable_rate_30d": 0.9117,
+      "calendar_unavailable_rate_90d": 0.7775,
+      "calendar_unavailable_rate_365d": 0.6165
+    },
+    "Financial District": {
+      "listing_count": 300,
+      "entire_home_share": 0.503,
+      "median_price_usd": 386.0,
+      "reviews_trailing_90d": 388,
+      "listings_with_calendar": 300,
+      "calendar_unavailable_rate_30d": 0.5626,
+      "calendar_unavailable_rate_90d": 0.4388,
+      "calendar_unavailable_rate_365d": 0.3971
+    },
+    "Outer Richmond": {
+      "listing_count": 199,
+      "entire_home_share": 0.658,
+      "median_price_usd": 205.0,
+      "reviews_trailing_90d": 1009,
+      "listings_with_calendar": 199,
+      "calendar_unavailable_rate_30d": 0.8347,
+      "calendar_unavailable_rate_90d": 0.6526,
+      "calendar_unavailable_rate_365d": 0.5001
+    },
+    "Mission": {
+      "listing_count": 438,
+      "entire_home_share": 0.632,
+      "median_price_usd": 193.0,
+      "reviews_trailing_90d": 857,
+      "listings_with_calendar": 438,
+      "calendar_unavailable_rate_30d": 0.848,
+      "calendar_unavailable_rate_90d": 0.7173,
+      "calendar_unavailable_rate_365d": 0.5752
+    },
+    "Downtown/Civic Center": {
+      "listing_count": 1106,
+      "entire_home_share": 0.493,
+      "median_price_usd": 322.0,
+      "reviews_trailing_90d": 2152,
+      "listings_with_calendar": 1106,
+      "calendar_unavailable_rate_30d": 0.5751,
+      "calendar_unavailable_rate_90d": 0.523,
+      "calendar_unavailable_rate_365d": 0.5255
+    },
+    "Ocean View": {
+      "listing_count": 108,
+      "entire_home_share": 0.509,
+      "median_price_usd": 142.0,
+      "reviews_trailing_90d": 269,
+      "listings_with_calendar": 108,
+      "calendar_unavailable_rate_30d": 0.7863,
+      "calendar_unavailable_rate_90d": 0.5837,
+      "calendar_unavailable_rate_365d": 0.4045
+    },
+    "Marina": {
+      "listing_count": 235,
+      "entire_home_share": 0.519,
+      "median_price_usd": 274.0,
+      "reviews_trailing_90d": 640,
+      "listings_with_calendar": 235,
+      "calendar_unavailable_rate_30d": 0.6649,
+      "calendar_unavailable_rate_90d": 0.5492,
+      "calendar_unavailable_rate_365d": 0.381
+    },
+    "Inner Richmond": {
+      "listing_count": 191,
+      "entire_home_share": 0.696,
+      "median_price_usd": 210.0,
+      "reviews_trailing_90d": 755,
+      "listings_with_calendar": 191,
+      "calendar_unavailable_rate_30d": 0.8257,
+      "calendar_unavailable_rate_90d": 0.6893,
+      "calendar_unavailable_rate_365d": 0.5081
+    },
+    "West of Twin Peaks": {
+      "listing_count": 92,
+      "entire_home_share": 0.652,
+      "median_price_usd": 255.0,
+      "reviews_trailing_90d": 295,
+      "listings_with_calendar": 92,
+      "calendar_unavailable_rate_30d": 0.6907,
+      "calendar_unavailable_rate_90d": 0.5231,
+      "calendar_unavailable_rate_365d": 0.5214
+    },
+    "South of Market": {
+      "listing_count": 602,
+      "entire_home_share": 0.65,
+      "median_price_usd": 232.0,
+      "reviews_trailing_90d": 1421,
+      "listings_with_calendar": 602,
+      "calendar_unavailable_rate_30d": 0.7544,
+      "calendar_unavailable_rate_90d": 0.6262,
+      "calendar_unavailable_rate_365d": 0.4324
+    },
+    "Inner Sunset": {
+      "listing_count": 136,
+      "entire_home_share": 0.743,
+      "median_price_usd": 249.0,
+      "reviews_trailing_90d": 447,
+      "listings_with_calendar": 136,
+      "calendar_unavailable_rate_30d": 0.7655,
+      "calendar_unavailable_rate_90d": 0.6184,
+      "calendar_unavailable_rate_365d": 0.5894
+    },
+    "Diamond Heights": {
+      "listing_count": 10,
+      "entire_home_share": 0.9,
+      "median_price_usd": 266.0,
+      "reviews_trailing_90d": 10,
+      "listings_with_calendar": 10,
+      "calendar_unavailable_rate_30d": 0.7534,
+      "calendar_unavailable_rate_90d": 0.713,
+      "calendar_unavailable_rate_365d": 0.6172
+    },
+    "Twin Peaks": {
+      "listing_count": 43,
+      "entire_home_share": 0.907,
+      "median_price_usd": 282.0,
+      "reviews_trailing_90d": 125,
+      "listings_with_calendar": 43,
+      "calendar_unavailable_rate_30d": 0.7869,
+      "calendar_unavailable_rate_90d": 0.6329,
+      "calendar_unavailable_rate_365d": 0.5094
+    },
+    "Chinatown": {
+      "listing_count": 171,
+      "entire_home_share": 0.602,
+      "median_price_usd": 285.0,
+      "reviews_trailing_90d": 278,
+      "listings_with_calendar": 171,
+      "calendar_unavailable_rate_30d": 0.7433,
+      "calendar_unavailable_rate_90d": 0.6854,
+      "calendar_unavailable_rate_365d": 0.6353
+    },
+    "Russian Hill": {
+      "listing_count": 216,
+      "entire_home_share": 0.602,
+      "median_price_usd": 364.0,
+      "reviews_trailing_90d": 276,
+      "listings_with_calendar": 216,
+      "calendar_unavailable_rate_30d": 0.6837,
+      "calendar_unavailable_rate_90d": 0.6317,
+      "calendar_unavailable_rate_365d": 0.578
+    },
+    "Excelsior": {
+      "listing_count": 146,
+      "entire_home_share": 0.459,
+      "median_price_usd": 171.0,
+      "reviews_trailing_90d": 568,
+      "listings_with_calendar": 146,
+      "calendar_unavailable_rate_30d": 0.8011,
+      "calendar_unavailable_rate_90d": 0.5851,
+      "calendar_unavailable_rate_365d": 0.3678
+    },
+    "Outer Sunset": {
+      "listing_count": 333,
+      "entire_home_share": 0.574,
+      "median_price_usd": 212.0,
+      "reviews_trailing_90d": 1818,
+      "listings_with_calendar": 333,
+      "calendar_unavailable_rate_30d": 0.7841,
+      "calendar_unavailable_rate_90d": 0.6306,
+      "calendar_unavailable_rate_365d": 0.5271
+    },
+    "North Beach": {
+      "listing_count": 289,
+      "entire_home_share": 0.561,
+      "median_price_usd": 520.0,
+      "reviews_trailing_90d": 433,
+      "listings_with_calendar": 289,
+      "calendar_unavailable_rate_30d": 0.4753,
+      "calendar_unavailable_rate_90d": 0.3966,
+      "calendar_unavailable_rate_365d": 0.319
+    },
+    "Presidio Heights": {
+      "listing_count": 27,
+      "entire_home_share": 0.963,
+      "median_price_usd": 352.0,
+      "reviews_trailing_90d": 96,
+      "listings_with_calendar": 27,
+      "calendar_unavailable_rate_30d": 0.7442,
+      "calendar_unavailable_rate_90d": 0.6594,
+      "calendar_unavailable_rate_365d": 0.4948
+    },
+    "Crocker Amazon": {
+      "listing_count": 50,
+      "entire_home_share": 0.46,
+      "median_price_usd": 159.0,
+      "reviews_trailing_90d": 165,
+      "listings_with_calendar": 50,
+      "calendar_unavailable_rate_30d": 0.8062,
+      "calendar_unavailable_rate_90d": 0.5818,
+      "calendar_unavailable_rate_365d": 0.4059
+    },
+    "Golden Gate Park": {
+      "listing_count": 3,
+      "entire_home_share": 0.333,
+      "median_price_usd": 206.0,
+      "reviews_trailing_90d": 1,
+      "listings_with_calendar": 3,
+      "calendar_unavailable_rate_30d": 0.7333,
+      "calendar_unavailable_rate_90d": 0.5741,
+      "calendar_unavailable_rate_365d": 0.2402
+    },
+    "Presidio": {
+      "listing_count": 25,
+      "entire_home_share": 0.2,
+      "median_price_usd": 540.0,
+      "reviews_trailing_90d": 20,
+      "listings_with_calendar": 25,
+      "calendar_unavailable_rate_30d": 0.7044,
+      "calendar_unavailable_rate_90d": 0.5286,
+      "calendar_unavailable_rate_365d": 0.2708
+    },
+    "Lakeshore": {
+      "listing_count": 57,
+      "entire_home_share": 0.491,
+      "median_price_usd": 218.0,
+      "reviews_trailing_90d": 209,
+      "listings_with_calendar": 57,
+      "calendar_unavailable_rate_30d": 0.7386,
+      "calendar_unavailable_rate_90d": 0.583,
+      "calendar_unavailable_rate_365d": 0.4193
+    },
+    "Visitacion Valley": {
+      "listing_count": 55,
+      "entire_home_share": 0.691,
+      "median_price_usd": 193.0,
+      "reviews_trailing_90d": 304,
+      "listings_with_calendar": 55,
+      "calendar_unavailable_rate_30d": 0.7806,
+      "calendar_unavailable_rate_90d": 0.6072,
+      "calendar_unavailable_rate_365d": 0.5088
+    },
+    "Seacliff": {
+      "listing_count": 7,
+      "entire_home_share": 0.714,
+      "median_price_usd": 474.0,
+      "reviews_trailing_90d": 40,
+      "listings_with_calendar": 7,
+      "calendar_unavailable_rate_30d": 0.8557,
+      "calendar_unavailable_rate_90d": 0.7117,
+      "calendar_unavailable_rate_365d": 0.6932
+    }
+  }
+}

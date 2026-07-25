@@ -1,121 +1,140 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useRef, useState } from 'react'
+import * as maplibregl from 'maplibre-gl'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import { samplePoints, type ChangePoint } from './samplePoints'
+import { fetchSfPermits } from './sfPermits'
 import './App.css'
 
+const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
+
+const KIND_COLOR: Record<ChangePoint['kind'], string> = {
+  construction: '#FF6624',
+  closure:      '#c1443c',
+  opening:      '#3f8f5c',
+}
+
+const KIND_LABEL: Record<ChangePoint['kind'], string> = {
+  construction: 'Permit · Construction',
+  closure:      'Business Closure',
+  opening:      'Business Opening',
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const mapContainer = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<maplibregl.Map | null>(null)
+  const [selected, setSelected] = useState<ChangePoint | null>(null)
+  const [sfCount, setSfCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!mapContainer.current || mapRef.current) return
+
+    const map = new maplibregl.Map({
+      container: mapContainer.current,
+      style: MAPTILER_KEY
+        ? `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MAPTILER_KEY}`
+        : 'https://demotiles.maplibre.org/style.json',
+      center: [-119.4, 37.2],
+      zoom: 5.5,
+      pitch: 50,
+      bearing: -10,
+      maxPitch: 85,
+    })
+
+    map.addControl(new maplibregl.NavigationControl(), 'bottom-right')
+    mapRef.current = map
+
+    const markers: maplibregl.Marker[] = []
+
+    const addPoint = (point: ChangePoint) => {
+      const el = document.createElement('div')
+      el.className = 'change-marker'
+      el.style.setProperty('--color', KIND_COLOR[point.kind])
+      el.title = point.headline
+      el.addEventListener('click', () => setSelected(point))
+      markers.push(
+        new maplibregl.Marker({ element: el }).setLngLat([point.lng, point.lat]).addTo(map)
+      )
+    }
+
+    map.on('load', () => {
+      if (MAPTILER_KEY) {
+        map.addSource('terrain', {
+          type: 'raster-dem',
+          url: `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`,
+          tileSize: 256,
+        })
+        map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
+      }
+
+      samplePoints.forEach(addPoint)
+
+      fetchSfPermits()
+        .then((permits) => {
+          permits.forEach(addPoint)
+          setSfCount(permits.length)
+        })
+        .catch((err) => console.error('SF permits failed:', err))
+    })
+
+    return () => {
+      markers.forEach((m) => m.remove())
+      map.remove()
+      mapRef.current = null
+    }
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div id="app">
+      {/* Top bar */}
+      <header className="topbar">
+        <div className="topbar-left">
+          <span className="brand">canary</span>
+          <span className="brand-sep" />
+          <span className="brand-sub">The change layer of California</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+        <div className="topbar-right">
+          <span className="live-badge">
+            <span className="live-dot" />
+            {sfCount === null ? 'Loading…' : `${sfCount} live permits`}
+          </span>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
+      {/* Map */}
+      <div ref={mapContainer} id="map" />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Bottom legend strip */}
+      <footer className="legend-strip">
+        <div className="legend-item">
+          <span className="legend-dot" style={{ background: KIND_COLOR.construction }} />
+          Permit · Construction
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="legend-item">
+          <span className="legend-dot" style={{ background: KIND_COLOR.closure }} />
+          Business Closure
         </div>
-      </section>
+        <div className="legend-item">
+          <span className="legend-dot" style={{ background: KIND_COLOR.opening }} />
+          Business Opening
+        </div>
+        <div className="legend-hint">Click any marker to explore</div>
+      </footer>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {/* Detail drawer */}
+      {selected && (
+        <div className="drawer" onClick={(e) => e.target === e.currentTarget && setSelected(null)}>
+          <div className="drawer-card">
+            <div className="drawer-accent" style={{ background: KIND_COLOR[selected.kind] }} />
+            <button className="drawer-close" onClick={() => setSelected(null)}>×</button>
+            <p className="drawer-kind">{KIND_LABEL[selected.kind]}</p>
+            <h2 className="drawer-city">{selected.city}</h2>
+            <h3 className="drawer-headline">{selected.headline}</h3>
+            <p className="drawer-detail">{selected.detail}</p>
+            <p className="drawer-source">⟶ {selected.source}</p>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
