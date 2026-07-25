@@ -3,6 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { samplePoints, type ChangePoint } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
+import { Contribute } from './Contribute'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -24,6 +25,7 @@ function App() {
   const mapRef = useRef<maplibregl.Map | null>(null)
   const [selected, setSelected] = useState<ChangePoint | null>(null)
   const [sfCount, setSfCount] = useState<number | null>(null)
+  const [contributing, setContributing] = useState(false)
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return
@@ -97,8 +99,13 @@ function App() {
             <span className="live-dot" />
             {sfCount === null ? 'Loading…' : `${sfCount} live permits`}
           </span>
+          <button className="contribute-btn" onClick={() => setContributing(true)}>
+            + Review a neighborhood
+          </button>
         </div>
       </header>
+
+      {contributing && <Contribute onClose={() => setContributing(false)} />}
 
       {/* Map */}
       <div ref={mapContainer} id="map" />

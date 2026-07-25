@@ -1,0 +1,668 @@
+{
+  "generated_at": "2026-07-25T05:10:19.902750+00:00",
+  "sources": [
+    {
+      "key": "datasf_permits",
+      "name": "DataSF: Building Permits",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/i98e-djp9",
+      "canonical_source": "sf_permits",
+      "tier": "T6.1",
+      "requires_auth": false,
+      "notes": "forward layer / construction",
+      "implemented": true
+    },
+    {
+      "key": "datasf_business_locations",
+      "name": "DataSF: Registered Business Locations",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/g8m3-pdis",
+      "canonical_source": "sf_regbiz",
+      "tier": "T6.5",
+      "requires_auth": false,
+      "notes": "business open/close churn (decades of backfill)",
+      "implemented": true
+    },
+    {
+      "key": "datasf_evictions",
+      "name": "DataSF: Eviction Notices",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/5cei-gny5",
+      "canonical_source": "sf_evictions",
+      "tier": "T6",
+      "requires_auth": false,
+      "notes": "displacement / gentrification pressure",
+      "implemented": true
+    },
+    {
+      "key": "datasf_crime",
+      "name": "DataSF: Police Incident Reports 2018-present",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/wg3w-h783",
+      "canonical_source": "sf_police",
+      "tier": "T1.3",
+      "requires_auth": false,
+      "notes": "crime/safety",
+      "implemented": true
+    },
+    {
+      "key": "datasf_threeoneone",
+      "name": "DataSF: 311 Cases",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/vw6y-z8j6",
+      "canonical_source": "sf_311",
+      "tier": "T3.12",
+      "requires_auth": false,
+      "notes": "noise/blight complaints",
+      "implemented": true
+    },
+    {
+      "key": "datasf_zoning",
+      "name": "DataSF: Zoning Map - Zoning Districts",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "daily",
+      "fmt": "geojson",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/3i4a-hu95",
+      "canonical_source": "sf_zoning",
+      "tier": "T2.4",
+      "requires_auth": false,
+      "notes": "parcel/adjacent zoning",
+      "implemented": true
+    },
+    {
+      "key": "datasf_assessor_rolls",
+      "name": "DataSF: Assessor Historical Secured Property Tax Rolls",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/wv5m-vpq2",
+      "canonical_source": "sf_assessor",
+      "tier": "T1.1",
+      "requires_auth": false,
+      "notes": "price/value (Prop 13: NOT market price)",
+      "implemented": true
+    },
+    {
+      "key": "datasf_dev_pipeline",
+      "name": "DataSF: SF Development Pipeline",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "quarterly",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/6jgi-cpb4",
+      "canonical_source": "sf_dev_pipeline",
+      "tier": "T6.1",
+      "requires_auth": false,
+      "notes": "entitlement->construction pipeline w/ net units",
+      "implemented": true
+    },
+    {
+      "key": "datasf_planning_records",
+      "name": "DataSF: Planning Department Records - Projects (PPTS successor)",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/qvu5-m3a2",
+      "canonical_source": "sf_planning",
+      "tier": "T6.3",
+      "requires_auth": false,
+      "notes": "rezoning / change-of-use / entitlement applications",
+      "implemented": true
+    },
+    {
+      "key": "datasf_commercial_vacancy",
+      "name": "DataSF: Taxable Commercial Spaces (Prop-D Vacancy Tax)",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/rzkk-54yv",
+      "canonical_source": "sf_vacancy",
+      "tier": "T6.6",
+      "requires_auth": false,
+      "notes": "storefront vacancy signal (filed flag)",
+      "implemented": true
+    },
+    {
+      "key": "datasf_sfmta_projects",
+      "name": "DataSF: SFMTA Projects - Polygons",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "irregular",
+      "fmt": "geojson",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/6ibt-jpn7",
+      "canonical_source": "sf_transit_projects",
+      "tier": "T6.4",
+      "requires_auth": false,
+      "notes": "approved transit + road diets/closures",
+      "implemented": true
+    },
+    {
+      "key": "datasf_fire_ems_calls",
+      "name": "DataSF: Fire/EMS Dispatched Calls for Service",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/nuek-vuh3",
+      "canonical_source": "sf_fire_ems",
+      "tier": "T4.7",
+      "requires_auth": false,
+      "notes": "emergency response times (received->on-scene)",
+      "implemented": true
+    },
+    {
+      "key": "datasf_parking_meters",
+      "name": "DataSF: Parking Meters",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "irregular",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/8vzz-qzz9",
+      "canonical_source": "sf_parking_meters",
+      "tier": "T2.7",
+      "requires_auth": false,
+      "notes": "parking regime",
+      "implemented": true
+    },
+    {
+      "key": "datasf_rpp_zones",
+      "name": "DataSF: Residential Parking Permit Eligibility Parcels",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "irregular",
+      "fmt": "geojson",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/i886-hxz9",
+      "canonical_source": "sf_rpp",
+      "tier": "T2.7",
+      "requires_auth": false,
+      "notes": "permit-parking zones",
+      "implemented": true
+    },
+    {
+      "key": "datasf_street_trees",
+      "name": "DataSF: Street Tree List",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "daily",
+      "fmt": "csv",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/tkzw-k3nq",
+      "canonical_source": "sf_trees",
+      "tier": "T3.6",
+      "requires_auth": false,
+      "notes": "tree canopy city inventory",
+      "implemented": true
+    },
+    {
+      "key": "datasf_sfusd_boundaries",
+      "name": "DataSF: SFUSD School Attendance Areas 2024-25",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "geojson",
+      "license": "Open Data Commons PDDL / public domain (DataSF)",
+      "homepage": "https://data.sfgov.org/d/e6tr-sxwg",
+      "canonical_source": "sf_school_boundaries",
+      "tier": "T4.9",
+      "requires_auth": false,
+      "notes": "school attendance areas (bus eligibility, boundary snapshot)",
+      "implemented": true
+    },
+    {
+      "key": "ca_abc_licenses",
+      "name": "California ABC \u2014 Active License List (daily export)",
+      "geography": "california",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "daily",
+      "fmt": "zip",
+      "license": "California public record",
+      "homepage": "https://www.abc.ca.gov/licensing/licensing-reports/",
+      "canonical_source": "ca_abc",
+      "tier": "T6.10",
+      "requires_auth": false,
+      "notes": "Address-level; premises need geocoding. Diff dumps for license_issued/surrendered events.",
+      "implemented": true
+    },
+    {
+      "key": "ca_caaspp",
+      "name": "CDE CAASPP Smarter Balanced test results",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "zip",
+      "license": "CDE public research file",
+      "homepage": "https://caaspp-elpac.ets.org/caaspp/",
+      "canonical_source": "ca_caaspp",
+      "tier": "T1.2",
+      "requires_auth": false,
+      "notes": "Caret-delimited CSV in zip. School/district/county/state rows; ELA+Math g3-8,11. Deliberately the ALL-STUDENTS file (subgroup 1), NOT the all-subgroups file, to honor design constraint #2 (no protected-class breakdowns). Entities file maps codes->schools.",
+      "implemented": true
+    },
+    {
+      "key": "calfire_fhsz",
+      "name": "CAL FIRE Fire Hazard Severity Zones",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "irregular",
+      "fmt": "geojson",
+      "license": "CAL FIRE \u2014 no distribution restrictions (attribute CAL FIRE)",
+      "homepage": "https://gis.data.cnra.ca.gov/",
+      "canonical_source": "calfire_fhsz",
+      "tier": "T2.2",
+      "requires_auth": false,
+      "notes": "services.gis.ca.gov REST; layers 0=SRA 1=LRA. This service = 2007/2011 vintage; CURRENT 2024/25 FHSZ is auth-gated on CAL FIRE Hub (GAP).",
+      "implemented": true
+    },
+    {
+      "key": "ca_precinct_returns",
+      "name": "CA Statewide Database \u2014 precinct election returns (2024 General)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "per_election",
+      "fmt": "zip",
+      "license": "Academic/public \u2014 cite Statewide Database (UC Berkeley)",
+      "homepage": "https://statewidedatabase.org/d20/g24.html",
+      "canonical_source": "ca_precinct",
+      "tier": "T5",
+      "requires_auth": false,
+      "notes": "Precinct-level SOV, all 58 counties. G24=2024 General. Political composition (constraint 2 compliant: no protected-class).",
+      "implemented": true
+    },
+    {
+      "key": "ca_cannabis_retailers",
+      "name": "CA DCC \u2014 cannabis retailer licenses (statewide)",
+      "geography": "california",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "daily",
+      "fmt": "json",
+      "license": "California public record",
+      "homepage": "https://search.cannabis.ca.gov/",
+      "canonical_source": "ca_dcc",
+      "tier": "T6.10",
+      "requires_auth": false,
+      "notes": "RetailerLocationSearch bbox API (no auth). Retailers only. issueDate/statusDate embedded => diff dumps for license events.",
+      "implemented": true
+    },
+    {
+      "key": "census_tiger_ca",
+      "name": "Census TIGER/Line boundaries \u2014 California (places, tracts, county subdivisions, counties)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "shapefile",
+      "license": "US public domain",
+      "homepage": "https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html",
+      "canonical_source": "census_tiger",
+      "tier": "T2.5",
+      "requires_auth": false,
+      "notes": "Places=incorporated cities+CDPs; tracts=ACS join geometry; cousub + county(national, filter STATEFP=06) => jurisdiction (county minus union of places = unincorporated).",
+      "implemented": true
+    },
+    {
+      "key": "census_acs_ca",
+      "name": "Census ACS 5-year \u2014 California tracts (housing + tenure + turnover + age)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "csv",
+      "license": "US public domain",
+      "homepage": "https://www.census.gov/data/developers/data-sets/acs-5year.html",
+      "canonical_source": "census_acs",
+      "tier": "T5",
+      "requires_auth": true,
+      "notes": "Needs free CENSUS_API_KEY. Vars chosen to avoid protected classes: value/tenure/age/turnover only (constraint #2).",
+      "implemented": true
+    },
+    {
+      "key": "insideairbnb",
+      "name": "Inside Airbnb \u2014 San Francisco",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "quarterly",
+      "fmt": "csv",
+      "license": "Inside Airbnb (insideairbnb.com), CC BY 4.0",
+      "homepage": "https://insideairbnb.com/san-francisco/",
+      "canonical_source": "insideairbnb",
+      "tier": "T6.5",
+      "requires_auth": false,
+      "notes": "Quarterly snapshot; diff listings across snapshots for STR-density change; reviews.csv => review-velocity signal. Detailed tier has host PII (gitignored, never republished).",
+      "implemented": true
+    },
+    {
+      "key": "gtfs_ca_statewide_calitp",
+      "name": "Cal-ITP statewide GTFS (core tables)",
+      "geography": "california",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "monthly",
+      "fmt": "csv",
+      "license": "CC BY 4.0",
+      "homepage": "https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset",
+      "canonical_source": "gtfs_calitp",
+      "tier": "T1.4/T4.2/T4.3",
+      "requires_auth": false,
+      "notes": "Core tables only (stops/routes/trips/calendar/frequencies/agency/feed_info/gtfs_datasets). stop_times + shapes deferred (statewide = GB).",
+      "implemented": true
+    },
+    {
+      "key": "fema_nfhl_flood",
+      "name": "FEMA National Flood Hazard Layer \u2014 flood zones",
+      "geography": "san_francisco",
+      "temporal_shape": "reference_layer",
+      "cadence": "continuous",
+      "fmt": "geojson",
+      "license": "US public (FEMA)",
+      "homepage": "https://www.fema.gov/flood-maps/national-flood-hazard-layer",
+      "canonical_source": "fema_nfhl",
+      "tier": "T2.1",
+      "requires_auth": false,
+      "notes": "ArcGIS REST layer 28 (S_FLD_HAZ_AR); bbox-filtered. FLD_ZONE field = zone code (AE/X/VE...). NFHL updates rolling, so as_of = capture date.",
+      "implemented": true
+    },
+    {
+      "key": "epa_tri_ca",
+      "name": "EPA TRI \u2014 Toxics Release Inventory facilities (California)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "continuous",
+      "fmt": "json",
+      "license": "US public (EPA)",
+      "homepage": "https://www.epa.gov/toxics-release-inventory-tri-program",
+      "canonical_source": "epa_tri",
+      "tier": "T3.5",
+      "requires_auth": false,
+      "notes": "Envirofacts tri_facility (no key). facility_name + fac_latitude/longitude. The 'least-mapped nuisance' (industrial/odor); not in POI data.",
+      "implemented": true
+    },
+    {
+      "key": "overture_places",
+      "name": "Overture Maps Places \u2014 SF bbox extract",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "monthly",
+      "fmt": "parquet",
+      "license": "CDLA Permissive 2.0",
+      "homepage": "https://overturemaps.org",
+      "canonical_source": "overture",
+      "tier": "T4.4/T6.5/T6.6",
+      "requires_auth": false,
+      "notes": "Built in app/ingestion/overture.py (other chat). DuckDB bbox pushdown; captures every release still on S3 (they get pruned) = backfill/churn history.",
+      "implemented": true
+    },
+    {
+      "key": "osm_california",
+      "name": "OpenStreetMap California extract (Geofabrik)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "daily",
+      "fmt": "osm_pbf",
+      "license": "ODbL 1.0",
+      "homepage": "https://download.geofabrik.de/north-america/us/california.html",
+      "canonical_source": "osm",
+      "tier": "T1.4/T1.6/T3.10/T4.1",
+      "requires_auth": false,
+      "notes": "california-latest.osm.pbf ~1.32GB daily. Street network/sidewalks/routing => walk/commute scores computed by us, not bought from Walk Score.",
+      "implemented": false
+    },
+    {
+      "key": "fsq_os_places",
+      "name": "Foursquare OS Places (CA filter)",
+      "geography": "us",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "monthly",
+      "fmt": "parquet",
+      "license": "Apache-2.0",
+      "homepage": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+      "canonical_source": "fsq",
+      "tier": "T4.4/T6.5",
+      "requires_auth": true,
+      "notes": "Gated auto: needs free HF token to download. Latest dt=2026-07-09. Second POI witness vs Overture (cross-validation of churn).",
+      "implemented": false
+    },
+    {
+      "key": "gtfs_511_bayarea",
+      "name": "511 SF Bay Area GTFS (+ GTFS-Realtime)",
+      "geography": "sf_bay",
+      "temporal_shape": "reference_layer",
+      "cadence": "continuous",
+      "fmt": "gtfs_zip",
+      "license": "511.org open terms",
+      "homepage": "https://511.org/open-data/transit",
+      "canonical_source": "gtfs_511",
+      "tier": "T4.2/T4.3",
+      "requires_auth": true,
+      "notes": "Free api_key param. GTFS-RT is the one genuinely live (seconds-level) feed: service reliability.",
+      "implemented": false
+    }
+  ],
+  "taxonomy_coverage": {
+    "T1.1 price/value": {
+      "status": "planned",
+      "source": "county deed/transfer records + FHFA HPI + Zillow ZHVI; datasf_assessor_rolls acquired but Prop-13-capped (NOT market price)"
+    },
+    "T1.2 school quality": {
+      "status": "covered",
+      "source": "ca_caaspp"
+    },
+    "T1.3 crime/safety": {
+      "status": "covered",
+      "source": "datasf_crime (SF); other metros need each city's open data"
+    },
+    "T1.4 commute time": {
+      "status": "compute",
+      "source": "routing over osm_california + gtfs (planned inputs)"
+    },
+    "T1.5 property tax rate": {
+      "status": "covered",
+      "source": "datasf_assessor_rolls + county rate schedules"
+    },
+    "T1.6 walk/bike/transit score": {
+      "status": "compute",
+      "source": "recomputed from osm_california + gtfs; do NOT buy Walk Score"
+    },
+    "T2.1 flood zone": {
+      "status": "covered",
+      "source": "fema_nfhl_flood (SF bbox; --bbox ca for statewide)"
+    },
+    "T2.2 wildfire/WUI": {
+      "status": "covered",
+      "source": "calfire_fhsz (2011 vintage; current 2024/25 = gap); USFS WUI planned"
+    },
+    "T2.3 broadband": {
+      "status": "planned",
+      "source": "FCC BDC (federal agent verifying)"
+    },
+    "T2.4 parcel + adjacent zoning": {
+      "status": "covered",
+      "source": "datasf_zoning (SF); other metros = municipal GIS"
+    },
+    "T2.5 jurisdiction (city vs uninc.)": {
+      "status": "covered",
+      "source": "census_tiger_ca (places minus county = unincorporated)"
+    },
+    "T2.6 utilities septic/well/gas": {
+      "status": "gap",
+      "source": "per-county health/utility GIS; not yet sourced"
+    },
+    "T2.7 parking regime & permit zones": {
+      "status": "covered",
+      "source": "datasf_parking_meters (38.7k) + datasf_rpp_zones (83.5k parcels)"
+    },
+    "T2.8 cell coverage": {
+      "status": "planned",
+      "source": "FCC (federal agent)"
+    },
+    "T2.9 short-term rental rules": {
+      "status": "gap",
+      "source": "municipal code, hard to parse; insideairbnb gives ACTIVITY not the rules"
+    },
+    "T3.1 aircraft noise": {
+      "status": "planned",
+      "source": "FAA contours / ADS-B (federal agent)"
+    },
+    "T3.2 road/traffic noise": {
+      "status": "compute",
+      "source": "model from DOT AADT + FHWA TNM (inputs planned)"
+    },
+    "T3.3 air quality/freeway": {
+      "status": "planned",
+      "source": "EPA AQS (federal agent) + PurpleAir"
+    },
+    "T3.4 freight rail/horn zones": {
+      "status": "planned",
+      "source": "FRA crossing inventory (federal agent)"
+    },
+    "T3.5 industrial/landfill/TRI": {
+      "status": "covered",
+      "source": "epa_tri_ca (5.1k CA toxic-release facilities w/ coords); FRS for landfill/wastewater still available if needed"
+    },
+    "T3.6 tree canopy": {
+      "status": "covered",
+      "source": "datasf_street_trees city inventory (198k); NLCD canopy-% raster remains catalog for continuous cover"
+    },
+    "T3.7 elevation/slope/view": {
+      "status": "catalog",
+      "source": "USGS 3DEP (TNM API / S3, bbox on demand)"
+    },
+    "T3.8 microclimate (fog/sun/heat)": {
+      "status": "catalog",
+      "source": "PRISM (endpoint verified) + Landsat thermal (STAC)"
+    },
+    "T3.9 light pollution": {
+      "status": "catalog",
+      "source": "VIIRS (EOG/NASA, needs free auth)"
+    },
+    "T3.10 sidewalks & lighting": {
+      "status": "planned",
+      "source": "osm_california (sidewalks); city lighting assets patchy"
+    },
+    "T3.11 siren corridors": {
+      "status": "compute",
+      "source": "derive from fire-station / facility locations (HIFLD, federal agent)"
+    },
+    "T3.12 noise ordinances vs 311": {
+      "status": "covered",
+      "source": "datasf_threeoneone (complaint layer); ordinance/legal layer = gap"
+    },
+    "T4.1 door-to-door commute at peak": {
+      "status": "compute",
+      "source": "routing over osm + gtfs (= T1.4)"
+    },
+    "T4.2 rail station proximity": {
+      "status": "covered",
+      "source": "gtfs_ca_statewide_calitp (stops/routes/trips); gtfs_511 for RT"
+    },
+    "T4.3 service frequency/reliability": {
+      "status": "covered",
+      "source": "gtfs_ca_statewide_calitp (frequencies/calendar/trips); GTFS-RT reliability still planned (511)"
+    },
+    "T4.4 grocery/pharmacy access": {
+      "status": "covered",
+      "source": "overture_places (SF bbox); fsq_os_places = 2nd witness (planned)"
+    },
+    "T4.5 urgent care/ER": {
+      "status": "planned",
+      "source": "HIFLD (federal agent) + state facility files"
+    },
+    "T4.6 chain-retail proxies": {
+      "status": "covered",
+      "source": "overture_places; fsq_os_places (planned)"
+    },
+    "T4.7 emergency response times": {
+      "status": "covered",
+      "source": "datasf_fire_ems_calls (received->on-scene timestamps, 2.9GB)"
+    },
+    "T4.8 airport access": {
+      "status": "compute",
+      "source": "routing to airport POIs (osm); no dataset"
+    },
+    "T4.9 school bus eligibility": {
+      "status": "covered",
+      "source": "datasf_sfusd_boundaries (58 attendance-area polygons; annual)"
+    },
+    "T5.1 political composition": {
+      "status": "covered",
+      "source": "ca_precinct_returns"
+    },
+    "T5.2 tenure & turnover rate": {
+      "status": "planned",
+      "source": "census_acs_ca (needs free CENSUS_API_KEY)"
+    },
+    "T5.3 age mix": {
+      "status": "planned",
+      "source": "census_acs_ca (needs free CENSUS_API_KEY)"
+    },
+    "T6.1 approved construction/view-light": {
+      "status": "covered",
+      "source": "datasf_permits + datasf_dev_pipeline (1.9k projects, net units); view/light loss also needs 3DEP terrain (catalog)"
+    },
+    "T6.2 school boundary changes": {
+      "status": "gap",
+      "source": "board agendas (unstructured); datasf_sfusd_boundaries gives the snapshot, diffing annual snapshots catches changes but not the proposal process"
+    },
+    "T6.3 rezoning/upzoning applications": {
+      "status": "covered",
+      "source": "datasf_planning_records (54k entitlement/land-use records, daily)"
+    },
+    "T6.4 approved transit": {
+      "status": "covered",
+      "source": "datasf_sfmta_projects (98 project polygons); regional capital plans still manual"
+    },
+    "T6.5 business open/close velocity": {
+      "status": "covered",
+      "source": "datasf_business_locations + overture/fsq (planned)"
+    },
+    "T6.6 storefront vacancy trend": {
+      "status": "covered",
+      "source": "datasf_commercial_vacancy (Prop-D vacancy-tax roll, 21.9k spaces)"
+    },
+    "T6.7 large entitlements (CEQA/EIR)": {
+      "status": "planned",
+      "source": "CEQAnet (CA OPR/LCI) -- NO api/bulk exists; scrape sitemap->SCH record pages (Firecrawl)"
+    },
+    "T6.8 road diets/closures/works": {
+      "status": "covered",
+      "source": "datasf_sfmta_projects (shared w/ T6.4)"
+    },
+    "T6.9 CIP + passed bond measures": {
+      "status": "gap",
+      "source": "city budget/capital-plan docs (unstructured PDFs); needs extraction"
+    },
+    "T6.10 liquor & cannabis licenses": {
+      "status": "covered",
+      "source": "ca_abc_licenses (liquor, daily) + ca_cannabis_retailers (1.9k, daily API)"
+    }
+  }
+}

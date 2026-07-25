@@ -178,6 +178,20 @@ class Snapshot:
             )
         )
 
+    def record_file(self, name: str, *, url: str | None = None) -> FileResult:
+        """Register a file already written into the snapshot dir (e.g. by DuckDB COPY)."""
+        out_path = self.dir / name
+        if not out_path.exists():
+            return self._record(FileResult(name=name, url=url, error="file not found after write"))
+        data = out_path.read_bytes()
+        return self._record(
+            FileResult(
+                name=name, url=url, status="ok",
+                output_path=str(out_path.relative_to(DATA_DIR)),
+                bytes=len(data), sha256=hashlib.sha256(data).hexdigest(),
+            )
+        )
+
     def write_json(self, name: str, obj: Any, *, source_url: str | None = None) -> FileResult:
         data = json.dumps(obj).encode("utf-8")
         out_path = self.dir / name
@@ -266,12 +280,15 @@ def fetch_arcgis_geojson(
     page_size: int = 1000,
     timeout: int = DEFAULT_TIMEOUT,
     max_records: int | None = None,
+    bbox: tuple[float, float, float, float] | None = None,
 ) -> dict:
     """Fetch every feature from an ArcGIS REST layer as one GeoJSON FeatureCollection.
 
     Handles the server-side transfer cap (usually 1000-2000 records) by paging with
     resultOffset until the server stops returning full pages. `layer_url` is the layer
     endpoint (e.g. https://.../FeatureServer/0), NOT the /query path.
+    `bbox` = (W, S, E, N) in WGS84 restricts to an intersecting envelope (for large
+    national layers like FEMA NFHL where we only want one metro).
     """
     query_url = layer_url.rstrip("/") + "/query"
     features: list[dict] = []
@@ -285,6 +302,13 @@ def fetch_arcgis_geojson(
             "resultOffset": offset,
             "resultRecordCount": page_size,
         }
+        if bbox is not None:
+            params.update({
+                "geometry": ",".join(str(c) for c in bbox),
+                "geometryType": "esriGeometryEnvelope",
+                "inSR": 4326,
+                "spatialRel": "esriSpatialRelIntersects",
+            })
         resp = requests.get(query_url, params=params, headers=DEFAULT_HEADERS, timeout=timeout)
         resp.raise_for_status()
         payload = resp.json()
@@ -336,6 +360,11 @@ def socrata_as_of(domain: str, resource_id: str, *, timeout: int = 30) -> date |
 def socrata_bulk_csv_url(domain: str, resource_id: str) -> str:
     """Full-dataset streaming CSV export (not the 1000-row SODA default)."""
     return f"https://{domain}/api/views/{resource_id}/rows.csv?accessType=DOWNLOAD"
+
+
+def socrata_bulk_geojson_url(domain: str, resource_id: str) -> str:
+    """Full-dataset GeoJSON export -- for spatial datasets (polygon reference layers)."""
+    return f"https://{domain}/api/views/{resource_id}/rows.geojson?accessType=DOWNLOAD"
 
 
 # --- CKAN (data.ca.gov and other CKAN portals) -------------------------------

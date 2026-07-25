@@ -1,0 +1,59 @@
+# Canary deployment — two services behind Caddy.
+#
+#   web  Caddy: serves the React bundle and reverse-proxies /api -> api:8000.
+#        Terminates TLS (auto-HTTPS once SITE_ADDRESS is a real domain).
+#   api  FastAPI/uvicorn: reads the derived layer (canary.duckdb) read-only.
+#
+# The raw archive (data/raw, 3.2GB+) and the pipeline are NOT part of this stack.
+# Only the derived artifact canary.duckdb is shipped to the server (see deploy/push-duckdb.sh).
+#
+#   cp .env.example .env   # fill in values, then:
+#   docker compose up -d --build
+
+services:
+  api:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      # Serving reads the derived DB read-only…
+      CANARY_DUCKDB: /data/canary.duckdb
+      # …and is the ONLY place that touches Supabase (user contributions write).
+      # Keys live here, server-side — never in the frontend bundle.
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_KEY: ${SUPABASE_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:-}
+      # LLM keys for future server-side endpoints (e.g. /api/explain — plain-English
+      # summaries of the data at request time). All optional (:- default empty), so
+      # the container runs fine with none set; fill in whichever provider you use.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    volumes:
+      # The pushed artifact, mounted read-only. Nothing in this container writes it.
+      - ./backend/data/canary.duckdb:/data/canary.duckdb:ro
+    expose:
+      - "8000"
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        # Only the map-tile key is client-side. No DB creds reach the browser.
+        VITE_MAPTILER_KEY: ${VITE_MAPTILER_KEY}
+    restart: unless-stopped
+    environment:
+      # ":80" (default) -> serves HTTP on the bare IP.
+      # "canary.example.com" -> Caddy provisions a Let's Encrypt cert automatically.
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+
+volumes:
+  caddy_data:
+  caddy_config:

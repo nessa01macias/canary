@@ -31,10 +31,26 @@ from pathlib import Path
 
 import requests
 
+from app.ingestion import base
+
 CITY_PATH = "united-states/ca/san-francisco"
 CITY_LABEL = "San Francisco, California, United States"
 GET_DATA_URL = "https://insideairbnb.com/get-the-data/"
 ATTRIBUTION = "Inside Airbnb (insideairbnb.com), CC BY 4.0"
+
+SPEC = base.SourceSpec(
+    key="insideairbnb",
+    name="Inside Airbnb — San Francisco",
+    geography="san_francisco",
+    temporal_shape="recurring_snapshot",
+    cadence="quarterly",
+    fmt="csv",
+    license=ATTRIBUTION,
+    homepage="https://insideairbnb.com/san-francisco/",
+    canonical_source="insideairbnb",
+    tier="T6.5",
+    notes="Quarterly snapshot; diff listings across snapshots for STR-density change; reviews.csv => review-velocity signal. Detailed tier has host PII (gitignored, never republished).",
+)
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 RAW_DIR = BACKEND_DIR / "data" / "raw" / "insideairbnb"

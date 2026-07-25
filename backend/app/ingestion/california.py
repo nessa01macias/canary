@@ -11,8 +11,13 @@ standard dated-snapshot shape via base.Snapshot.
 import argparse
 from datetime import date
 
+import requests
+
 from app.ingestion import base
 from app.ingestion.base import SourceSpec
+
+# California bounding box (minLon, minLat, maxLon, maxLat)
+CA_BBOX = (-124.48, 32.53, -114.13, 42.01)
 
 # --- CA ABC alcoholic-beverage licenses --------------------------------------
 # Full daily dump of active licenses w/ premises addresses. Change derived by diffing
@@ -146,14 +151,57 @@ def fetch_precinct(*, force: bool = False) -> None:
     snap.finalize(extra={"election": PRECINCT_ELECTION})
 
 
+# --- CA DCC cannabis retailer licenses ---------------------------------------
+# Undocumented public JSON API behind search.cannabis.ca.gov (no auth, updated daily).
+# RetailerLocationSearch(bbox) is the working endpoint (the generic /Search is server-broken).
+# Retailers only -- the area-relevant subset (storefront/nightlife signal, T6.10).
+CANNABIS = SourceSpec(
+    key="ca_cannabis_retailers",
+    name="CA DCC — cannabis retailer licenses (statewide)",
+    geography="california",
+    temporal_shape="recurring_snapshot",
+    cadence="daily",
+    fmt="json",
+    license="California public record",
+    homepage="https://search.cannabis.ca.gov/",
+    canonical_source="ca_dcc",
+    tier="T6.10",
+    notes="RetailerLocationSearch bbox API (no auth). Retailers only. issueDate/statusDate embedded => diff dumps for license events.",
+)
+CANNABIS_URL = "https://as-dcc-pub-cann-w-p-002.azurewebsites.net/licenses/RetailerLocationSearch"
+
+
+def fetch_cannabis(*, force: bool = False) -> None:
+    as_of = base.today()  # live API, updated daily; no snapshot date exposed
+    as_of_str = as_of.isoformat()
+    if not force and base.snapshot_exists(CANNABIS.key, as_of_str):
+        print(f"[current] {CANNABIS.key}: already have snapshot as_of {as_of_str}")
+        return
+    lon_min, lat_min, lon_max, lat_max = CA_BBOX
+    resp = requests.get(
+        CANNABIS_URL,
+        params={"minLatitude": lat_min, "maxLatitude": lat_max, "minLongitude": lon_min, "maxLongitude": lon_max},
+        headers=base.DEFAULT_HEADERS,
+        timeout=90,
+    )
+    resp.raise_for_status()
+    payload = resp.json()
+    total = payload.get("metadata", {}).get("totalCount")
+    print(f"[pull] {CANNABIS.key} as_of {as_of_str}: {total} retailer licenses")
+    snap = _new_snapshot(CANNABIS, as_of_str)
+    snap.write_json("dcc_retailers_ca.json", payload, source_url=CANNABIS_URL)
+    snap.finalize(extra={"total_count": total, "bbox": CA_BBOX, "note": "retailers only; live daily API"})
+
+
 # --- shared helpers ----------------------------------------------------------
 
-SPECS = [ABC, CAASPP, FHSZ, PRECINCT]
+SPECS = [ABC, CAASPP, FHSZ, PRECINCT, CANNABIS]
 FETCHERS = {
     "abc": fetch_abc,
     "caaspp": fetch_caaspp,
     "fhsz": fetch_fhsz,
     "precinct": fetch_precinct,
+    "cannabis": fetch_cannabis,
 }
 
 

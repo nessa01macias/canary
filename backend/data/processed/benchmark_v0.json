@@ -1,0 +1,625 @@
+{
+ "name": "Canary area ground-truth benchmark v0 (San Francisco)",
+ "generated_at": "2026-07-25T05:00:37.167802+00:00",
+ "pipeline_version": "861209d",
+ "provenance": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+ "question_count": 46,
+ "questions": [
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "question": "I'm considering moving to the Tenderloin in San Francisco. Is crime there getting better or worse as of mid-2026?",
+   "expected": "decrease",
+   "ground_truth": {
+    "victim_reported_pct": -0.08,
+    "enforcement_pct": 0.436,
+    "note": "total incidents +11% is an enforcement surge; victimization fell"
+   },
+   "scoring_note": "correct = says crime/victimization is falling, or explicitly distinguishes enforcement activity from victimization",
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q001"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "question": "Is crime rising or falling in Bernal Heights, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 877.0,
+    "prior_12mo": 1532.0,
+    "pct_change": -0.428
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q002"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Japantown",
+   "question": "Is crime rising or falling in Japantown, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 254.0,
+    "prior_12mo": 406.0,
+    "pct_change": -0.374
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q003"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Outer Mission",
+   "question": "Is crime rising or falling in Outer Mission, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 602.0,
+    "prior_12mo": 903.0,
+    "pct_change": -0.333
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q004"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Golden Gate Park",
+   "question": "Is crime rising or falling in Golden Gate Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 306.0,
+    "prior_12mo": 456.0,
+    "pct_change": -0.329
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q005"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Financial District/South Beach",
+   "question": "Is crime rising or falling in Financial District/South Beach, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 2464.0,
+    "prior_12mo": 3644.0,
+    "pct_change": -0.324
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q006"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Excelsior",
+   "question": "Is crime rising or falling in Excelsior, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 832.0,
+    "prior_12mo": 1223.0,
+    "pct_change": -0.32
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q007"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Oceanview/Merced/Ingleside",
+   "question": "Is crime rising or falling in Oceanview/Merced/Ingleside, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 440.0,
+    "prior_12mo": 642.0,
+    "pct_change": -0.315
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q008"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Treasure Island",
+   "question": "Is crime rising or falling in Treasure Island, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 168.0,
+    "prior_12mo": 242.0,
+    "pct_change": -0.306
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q009"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Glen Park",
+   "question": "Is crime rising or falling in Glen Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 227.0,
+    "prior_12mo": 325.0,
+    "pct_change": -0.302
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q010"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "question": "Are more or fewer new businesses opening in Western Addition, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 213.0,
+    "prior_12mo": 166.0,
+    "pct_change": 0.283
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q011"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Visitacion Valley",
+   "question": "Are more or fewer new businesses opening in Visitacion Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 66.0,
+    "prior_12mo": 89.0,
+    "pct_change": -0.258
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q012"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Presidio Heights",
+   "question": "Are more or fewer new businesses opening in Presidio Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 127.0,
+    "prior_12mo": 162.0,
+    "pct_change": -0.216
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q013"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Mission",
+   "question": "Are more or fewer new businesses opening in Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 785.0,
+    "prior_12mo": 969.0,
+    "pct_change": -0.19
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q014"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Bernal Heights",
+   "question": "Are more or fewer new businesses opening in Bernal Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 214.0,
+    "prior_12mo": 258.0,
+    "pct_change": -0.171
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q015"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Noe Valley",
+   "question": "Are more or fewer new businesses opening in Noe Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 196.0,
+    "prior_12mo": 236.0,
+    "pct_change": -0.169
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q016"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Outer Mission",
+   "question": "Are more or fewer new businesses opening in Outer Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 164.0,
+    "prior_12mo": 142.0,
+    "pct_change": 0.155
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q017"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Potrero Hill",
+   "question": "Are more or fewer new businesses opening in Potrero Hill, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 226.0,
+    "prior_12mo": 267.0,
+    "pct_change": -0.154
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q018"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bayview Hunters Point",
+   "question": "Are eviction notices in Bayview Hunters Point, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 48.0,
+    "prior_12mo": 31.0,
+    "pct_change": 0.548
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q019"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Castro/Upper Market",
+   "question": "Are eviction notices in Castro/Upper Market, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 45.0,
+    "prior_12mo": 33.0,
+    "pct_change": 0.364
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q020"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Western Addition",
+   "question": "Are eviction notices in Western Addition, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 53.0,
+    "prior_12mo": 40.0,
+    "pct_change": 0.325
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q021"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Mission Bay",
+   "question": "Are eviction notices in Mission Bay, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 41.0,
+    "prior_12mo": 53.0,
+    "pct_change": -0.226
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q022"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Hayes Valley",
+   "question": "Are eviction notices in Hayes Valley, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 44.0,
+    "prior_12mo": 36.0,
+    "pct_change": 0.222
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q023"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_noise",
+   "area": "Oceanview/Merced/Ingleside",
+   "question": "Are 311 noise complaints in Oceanview/Merced/Ingleside, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 885.0,
+    "prior_12mo": 281.0,
+    "pct_change": 2.149
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q024"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_noise",
+   "area": "Western Addition",
+   "question": "Are 311 noise complaints in Western Addition, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 1004.0,
+    "prior_12mo": 343.0,
+    "pct_change": 1.927
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q025"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_noise",
+   "area": "Mission Bay",
+   "question": "Are 311 noise complaints in Mission Bay, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 708.0,
+    "prior_12mo": 268.0,
+    "pct_change": 1.642
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q026"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_noise",
+   "area": "Treasure Island",
+   "question": "Are 311 noise complaints in Treasure Island, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 72.0,
+    "prior_12mo": 30.0,
+    "pct_change": 1.4
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q027"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_noise",
+   "area": "Tenderloin",
+   "question": "Are 311 noise complaints in Tenderloin, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 3008.0,
+    "prior_12mo": 1289.0,
+    "pct_change": 1.334
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q028"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "question": "Is the number of new housing units approved in Lone Mountain/USF, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 244.0,
+    "prior_12mo": 38.0,
+    "pct_change": 5.421
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q029"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "question": "Is the number of new housing units approved in Nob Hill, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 987.0,
+    "prior_12mo": 289.0,
+    "pct_change": 2.415
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q030"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "question": "Is the number of new housing units approved in West of Twin Peaks, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 776.0,
+    "prior_12mo": 260.0,
+    "pct_change": 1.985
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q031"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Tenderloin",
+   "question": "Is the number of new housing units approved in Tenderloin, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": -125.0,
+    "prior_12mo": 475.0,
+    "pct_change": -1.263
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q032"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "South of Market",
+   "question": "Is the number of new housing units approved in South of Market, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 419.0,
+    "prior_12mo": 6082.0,
+    "pct_change": -0.931
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q033"
+  },
+  {
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "question": "Which San Francisco neighborhood had the biggest increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Japantown",
+   "ground_truth": {
+    "pct_change": 0.38
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q034"
+  },
+  {
+   "type": "superlative",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "question": "Which San Francisco neighborhood saw the largest drop in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "Bernal Heights",
+   "ground_truth": {
+    "pct_change": -0.428
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q035"
+  },
+  {
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "question": "Which San Francisco neighborhood had the largest increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "pct_change": 1.562
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q036"
+  },
+  {
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "question": "Which San Francisco neighborhood had the largest rise in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "pct_change": 8.2
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q037"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Nob Hill, San Francisco, in the 12 months before July 2026?",
+   "expected": 1319,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q038"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Hayes Valley",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Hayes Valley, San Francisco, in the 12 months before July 2026?",
+   "expected": 1206,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q039"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Mission",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Mission, San Francisco, in the 12 months before July 2026?",
+   "expected": 1172,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q040"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "question": "Roughly how many net new housing units were approved (permits issued) in West of Twin Peaks, San Francisco, in the 12 months before July 2026?",
+   "expected": 934,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q041"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "South of Market",
+   "question": "Roughly how many net new housing units were approved (permits issued) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "expected": 511,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q042"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Western Addition",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Western Addition, San Francisco, in the 12 months before July 2026?",
+   "expected": 482,
+   "tolerance_pct": 25,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q043"
+  },
+  {
+   "type": "fact",
+   "metric": "permits",
+   "area": "Treasure Island",
+   "question": "Has any major new residential building been approved recently in Treasure Island, San Francisco? If so, roughly how large?",
+   "expected": "yes; ~150 units (~$79,391,871)",
+   "ground_truth": {
+    "units": 150,
+    "cost": 79391871.0,
+    "permit": "202506209120",
+    "description": "to erect 6 stories, no basement, type i-a & ii-a, 150 units residential units with child development center (warmshell),"
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q044"
+  },
+  {
+   "type": "fact",
+   "metric": "permits",
+   "area": "Mission",
+   "question": "Has any major new residential building been approved recently in Mission, San Francisco? If so, roughly how large?",
+   "expected": "yes; ~94 units (~$70,205,789)",
+   "ground_truth": {
+    "units": 94,
+    "cost": 70205789.0,
+    "permit": "202412035997",
+    "description": "mayors directive 13-01: construction of a 17-story type i-a, 94 units of 100% affordable housing. 17 total stories of oc"
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q045"
+  },
+  {
+   "type": "fact",
+   "metric": "permits",
+   "area": "Hayes Valley",
+   "question": "Has any major new residential building been approved recently in Hayes Valley, San Francisco? If so, roughly how large?",
+   "expected": "yes; ~203 units (~$71,252,700)",
+   "ground_truth": {
+    "units": 203,
+    "cost": 71252700.0,
+    "permit": "201912179800",
+    "description": "to erect 5 stories type iii-a over 3 stories type i-a mixed use 8 story building, with 203 residential dwelling units an"
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
+   "id": "q046"
+  }
+ ]
+}

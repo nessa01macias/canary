@@ -1,0 +1,284 @@
+{
+ "provider": "openai:gpt-4o",
+ "benchmark": "Canary area ground-truth benchmark v0 (San Francisco)",
+ "pipeline_version": "861209d",
+ "ran_at": "20260725T051612Z",
+ "answers": [
+  {
+   "id": "q001",
+   "question": "I'm considering moving to the Tenderloin in San Francisco. Is crime there getting better or worse as of mid-2026?",
+   "answer": "As of my last update, I can't provide real-time data for mid-2026. However, historically, the Tenderloin has had higher crime rates compared to other San Francisco neighborhoods. Efforts have been made to improve safety, but it's best to check the latest local crime reports or community updates for the most current information.",
+   "status": "ok"
+  },
+  {
+   "id": "q002",
+   "question": "Is crime rising or falling in Bernal Heights, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco neighborhoods like Bernal Heights can fluctuate. As of my last update, Bernal Heights was generally considered a relatively safe neighborhood with lower crime rates compared to other areas in San Francisco. For the most accurate and current information, checking local police reports or community updates would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q003",
+   "question": "Is crime rising or falling in Japantown, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, crime trends in San Francisco neighborhoods, including Japantown, have fluctuated. Historically, crime rates in San Francisco have varied, with some periods of increase and others of decrease. For the most current information, checking local police reports or city crime statistics would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q004",
+   "question": "Is crime rising or falling in Outer Mission, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, crime trends in San Francisco neighborhoods, including Outer Mission, have fluctuated. Generally, crime rates can vary year by year due to various factors. For the most accurate and up-to-date information, I recommend checking local crime reports or the San Francisco Police Department's latest statistics.",
+   "status": "ok"
+  },
+  {
+   "id": "q005",
+   "question": "Is crime rising or falling in Golden Gate Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in areas like Golden Gate Park can fluctuate. It's best to check the latest reports from the San Francisco Police Department or local news sources for the most current information. Generally, crime in San Francisco has seen periods of both increase and decrease, so local updates are crucial for the latest trend.",
+   "status": "ok"
+  },
+  {
+   "id": "q006",
+   "question": "Is crime rising or falling in Financial District/South Beach, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco, including the Financial District/South Beach area, have fluctuated. As of my last update, there was a general concern about crime in urban areas, but specific trends can vary. For the most accurate and current information, checking local police reports or city crime statistics would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q007",
+   "question": "Is crime rising or falling in Excelsior, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco neighborhoods like Excelsior can fluctuate. Generally, it's best to check the latest local police reports or city crime statistics for the most accurate and current information.",
+   "status": "ok"
+  },
+  {
+   "id": "q008",
+   "question": "Is crime rising or falling in Oceanview/Merced/Ingleside, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco neighborhoods like Oceanview/Merced/Ingleside can fluctuate. As of my last update, crime rates in these areas were relatively stable with some efforts to improve community safety. For the most accurate and current information, checking local police reports or community updates would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q009",
+   "question": "Is crime rising or falling in Treasure Island, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco, including areas like Treasure Island, have fluctuated. For the most accurate and up-to-date information, I recommend checking local news sources or the San Francisco Police Department's crime statistics closer to your time of interest.",
+   "status": "ok"
+  },
+  {
+   "id": "q010",
+   "question": "Is crime rising or falling in Glen Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, crime trends in San Francisco neighborhoods like Glen Park can fluctuate. As of my last update, Glen Park was generally considered a relatively safe neighborhood compared to other areas in San Francisco. For the most accurate and current information, checking local police reports or community resources would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q011",
+   "question": "Are more or fewer new businesses opening in Western Addition, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, Western Addition has seen a trend of gradual business openings, particularly in the Fillmore District, with a focus on small businesses and eateries. However, the pace of new business openings can fluctuate due to economic conditions and local developments. For the most accurate and current information, checking local business registries or news sources would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q012",
+   "question": "Are more or fewer new businesses opening in Visitacion Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, Visitacion Valley has seen gradual growth in new businesses due to ongoing development projects and community initiatives. If trends have continued, it's likely that more new businesses have opened compared to the previous year. However, for the most accurate information, checking local business registries or community reports would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q013",
+   "question": "Are more or fewer new businesses opening in Presidio Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, Presidio Heights is a more residential and affluent neighborhood with fewer commercial spaces compared to other parts of San Francisco. Generally, the area sees a stable but limited number of new businesses due to its residential nature. For the most accurate and current information, checking local business registries or community news would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q014",
+   "question": "Are more or fewer new businesses opening in Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, the Mission District has been a vibrant area with a dynamic business environment. As of the latest data up to 2023, the trend was generally positive with new businesses opening, especially in the food and retail sectors. For the most accurate and current information, checking local business reports or city economic data would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q015",
+   "question": "Are more or fewer new businesses opening in Bernal Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, Bernal Heights has seen a steady interest in small businesses due to its community-oriented atmosphere. If trends from previous years continue, it's likely that the number of new businesses opening would be stable or slightly increasing, reflecting broader economic conditions in San Francisco.",
+   "status": "ok"
+  },
+  {
+   "id": "q016",
+   "question": "Are more or fewer new businesses opening in Noe Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, Noe Valley has been experiencing a stable business environment with a mix of openings and closures. Historically, the area has seen a trend of small, locally-owned businesses opening, but the exact number compared to the previous year would require current data. Generally, Noe Valley remains a desirable neighborhood for new businesses due to its residential appeal and community support.",
+   "status": "ok"
+  },
+  {
+   "id": "q017",
+   "question": "Are more or fewer new businesses opening in Outer Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, the trend in Outer Mission, like many parts of San Francisco, was seeing a gradual recovery in new business openings following the pandemic. Generally, areas like Outer Mission have been experiencing a slow but steady increase in new businesses as the economy recovers. For the most accurate and current information, checking local business reports or city economic data would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q018",
+   "question": "Are more or fewer new businesses opening in Potrero Hill, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, Potrero Hill has been experiencing a steady interest from new businesses, particularly in the tech and creative sectors. Historically, the area has seen a gradual increase in new business openings, but for the most current trend, you would need to check local business reports or news sources.",
+   "status": "ok"
+  },
+  {
+   "id": "q019",
+   "question": "Are eviction notices in Bayview Hunters Point, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, eviction trends in neighborhoods like Bayview Hunters Point can fluctuate due to various factors such as economic conditions, housing policies, and local developments. To get the most accurate and current information, you would need to consult local housing reports or city data closer to that time.",
+   "status": "ok"
+  },
+  {
+   "id": "q020",
+   "question": "Are eviction notices in Castro/Upper Market, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, eviction trends in San Francisco, including neighborhoods like Castro/Upper Market, have fluctuated based on economic conditions, housing policies, and tenant protections. As of my last update, San Francisco had been implementing stronger tenant protections, which could contribute to a decrease in eviction notices. However, for the most accurate and current information, checking local housing reports or city data would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q021",
+   "question": "Are eviction notices in Western Addition, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, eviction trends in San Francisco have fluctuated due to changes in housing policies, economic conditions, and tenant protections. To get the most accurate and current information, you should check local government reports or housing advocacy groups that track eviction notices in the area.",
+   "status": "ok"
+  },
+  {
+   "id": "q022",
+   "question": "Are eviction notices in Mission Bay, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, eviction trends in San Francisco, including areas like Mission Bay, have been influenced by factors such as housing policies, economic conditions, and tenant protections. As of my last update, there was a general trend toward stronger tenant protections, which could contribute to a decrease in eviction notices. However, for the most accurate and current information, checking local government or housing advocacy group reports would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q023",
+   "question": "Are eviction notices in Hayes Valley, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, eviction trends in San Francisco, including neighborhoods like Hayes Valley, have been influenced by factors such as housing policies, economic conditions, and tenant protections. As of my last update, there was a general trend towards stronger tenant protections, which could contribute to a decrease in eviction notices. However, for the most accurate and current information, checking local housing reports or city data would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q024",
+   "question": "Are 311 noise complaints in Oceanview/Merced/Ingleside, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, noise complaints in San Francisco neighborhoods like Oceanview/Merced/Ingleside have generally fluctuated due to various factors such as changes in population density and local activities. To get the most accurate and current information, checking the latest reports from the San Francisco 311 service or local government sources would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q025",
+   "question": "Are 311 noise complaints in Western Addition, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, noise complaints in San Francisco neighborhoods, including Western Addition, have generally fluctuated with changes in population density and nightlife activity. Historically, Western Addition has seen periods of both increases and decreases in noise complaints. For the most accurate and current information, checking the latest 311 data or city reports would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q026",
+   "question": "Are 311 noise complaints in Mission Bay, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, noise complaints in areas like Mission Bay can fluctuate due to various factors such as construction, events, and population changes. Historically, such complaints have been rising in many parts of San Francisco due to increased urban activity. For the most accurate and current information, checking the latest 311 data from the city's open data portal would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q027",
+   "question": "Are 311 noise complaints in Treasure Island, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, I can't provide specific trends for 311 noise complaints in Treasure Island. Generally, noise complaints can fluctuate based on local events, construction, and changes in population density. For the most accurate and current information, checking the San Francisco 311 data portal or local government reports would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q028",
+   "question": "Are 311 noise complaints in Tenderloin, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, the Tenderloin has been a neighborhood with a high volume of noise complaints. Trends can vary, but if the area continues to experience similar conditions, it's possible that noise complaints could remain high or increase. Checking the latest city reports or local news sources would provide the most current information.",
+   "status": "ok"
+  },
+  {
+   "id": "q029",
+   "question": "Is the number of new housing units approved in Lone Mountain/USF, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "I don't have data specifically for mid-2026, but as of my last update, the trend in new housing unit approvals in San Francisco has generally been influenced by city-wide policies and economic conditions. If the trend from recent years continues, approvals might be stable or slightly increasing due to ongoing efforts to address housing shortages. However, for the most accurate and current information, checking local government or planning department reports would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q030",
+   "question": "Is the number of new housing units approved in Nob Hill, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, the number of new housing units approved in areas like Nob Hill can fluctuate based on city planning decisions, economic conditions, and local opposition. As of my last update, San Francisco has been pushing for more housing development, but specific trends for Nob Hill would require checking the latest city planning reports or local news sources. Generally, the trend in San Francisco has been towards increasing housing approvals, but local variations can occur.",
+   "status": "ok"
+  },
+  {
+   "id": "q031",
+   "question": "Is the number of new housing units approved in West of Twin Peaks, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "As of my last update in October 2023, I do not have data for mid-2026. However, historically, the number of new housing units approved in West of Twin Peaks has been relatively low compared to other areas in San Francisco due to zoning and neighborhood preferences. For the most accurate and current data, you would need to check the latest reports from the San Francisco Planning Department or local government sources.",
+   "status": "ok"
+  },
+  {
+   "id": "q032",
+   "question": "Is the number of new housing units approved in Tenderloin, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "As of my last update in October 2023, I don't have data specifically for mid-2026. However, historically, the Tenderloin has seen efforts to increase housing, particularly affordable units, due to city initiatives. For the most accurate and current trend, you would need to check the latest reports from the San Francisco Planning Department or local news sources.",
+   "status": "ok"
+  },
+  {
+   "id": "q033",
+   "question": "Is the number of new housing units approved in South of Market, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, the South of Market (SoMa) area has seen fluctuations in housing approvals due to economic conditions and city planning decisions. As of my last update, there was a trend towards increasing approvals in SoMa due to ongoing development projects and city efforts to increase housing. However, for the most accurate and current information, checking with the San Francisco Planning Department or recent city reports would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q034",
+   "question": "Which San Francisco neighborhood had the biggest increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but as of my last update, neighborhoods like the Mission District and SoMa were experiencing significant growth in new business openings. These areas have been popular for startups and new ventures due to their vibrant communities and relatively lower commercial rents compared to other parts of the city.",
+   "status": "ok"
+  },
+  {
+   "id": "q035",
+   "question": "Which San Francisco neighborhood saw the largest drop in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data or projections for mid-2026. However, historically, neighborhoods like the Mission District and Tenderloin have seen significant efforts to reduce crime, which could potentially lead to noticeable drops in crime rates. For the most accurate and current information, checking local crime reports or city data closer to that time would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q036",
+   "question": "Which San Francisco neighborhood had the largest increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, neighborhoods like Mission Bay and Dogpatch have seen significant increases in building permits due to ongoing development and revitalization efforts. These areas have been focal points for new construction and urban development in recent years.",
+   "status": "ok"
+  },
+  {
+   "id": "q037",
+   "question": "Which San Francisco neighborhood had the largest rise in eviction filings over the past year (as of mid-2026)?",
+   "answer": "I don't have real-time data for mid-2026, but historically, neighborhoods like the Mission District and SoMa have experienced significant changes in eviction filings due to gentrification and housing pressures. For the most current information, checking local housing reports or city data would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q038",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Nob Hill, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have access to real-time data, but historically, Nob Hill has not seen a large number of new housing units compared to other neighborhoods in San Francisco. It's likely that the number of net new housing units approved in the 12 months before July 2026 would be relatively low, possibly in the range of a few dozen units. For precise figures, checking the San Francisco Planning Department's reports or databases would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q039",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Hayes Valley, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have access to real-time data or future events, but historically, Hayes Valley has seen moderate development activity. If trends continue, you might expect a few dozen net new housing units to be approved in a year. For precise numbers, checking the latest reports from the San Francisco Planning Department or local news sources closer to the date would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q040",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have real-time data or projections for 2026. However, historically, the Mission District has seen varying levels of new housing unit approvals each year, often influenced by local policies and community responses. For the most accurate and up-to-date information, checking the San Francisco Planning Department's reports or local government announcements would be necessary.",
+   "status": "ok"
+  },
+  {
+   "id": "q041",
+   "question": "Roughly how many net new housing units were approved (permits issued) in West of Twin Peaks, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have access to real-time data or future events, so I can't provide the exact number of net new housing units approved in West of Twin Peaks in the 12 months before July 2026. However, historically, West of Twin Peaks has seen relatively low levels of new housing development compared to other parts of San Francisco due to its residential character and zoning restrictions. For the most accurate and current information, checking with the San Francisco Planning Department or local government sources would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q042",
+   "question": "Roughly how many net new housing units were approved (permits issued) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have real-time data or projections for 2026, but historically, the South of Market area has been a focus for new housing development in San Francisco. In recent years, the city has approved several hundred to over a thousand new units annually in this area. For the most accurate and up-to-date information, checking the San Francisco Planning Department's reports or local government announcements would be advisable.",
+   "status": "ok"
+  },
+  {
+   "id": "q043",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Western Addition, San Francisco, in the 12 months before July 2026?",
+   "answer": "I don't have access to real-time data or future events, but historically, the Western Addition has seen modest development compared to other parts of San Francisco. For the most accurate and up-to-date information, you would need to check the San Francisco Planning Department's records or recent city reports on housing permits.",
+   "status": "ok"
+  },
+  {
+   "id": "q044",
+   "question": "Has any major new residential building been approved recently in Treasure Island, San Francisco? If so, roughly how large?",
+   "answer": "Yes, a major new residential development has been approved for Treasure Island. The project is part of a larger redevelopment plan that includes approximately 8,000 new homes.",
+   "status": "ok"
+  },
+  {
+   "id": "q045",
+   "question": "Has any major new residential building been approved recently in Mission, San Francisco? If so, roughly how large?",
+   "answer": "Yes, a major new residential building has been approved in the Mission District. One notable project is the development at 2588 Mission Street, which includes plans for approximately 75 residential units. This project is part of ongoing efforts to increase housing availability in the area.",
+   "status": "ok"
+  },
+  {
+   "id": "q046",
+   "question": "Has any major new residential building been approved recently in Hayes Valley, San Francisco? If so, roughly how large?",
+   "answer": "Yes, a major new residential building has been approved in Hayes Valley. The project at 555 Fulton Street includes approximately 139 residential units.",
+   "status": "ok"
+  }
+ ]
+}

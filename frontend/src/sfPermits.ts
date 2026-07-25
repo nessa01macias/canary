@@ -1,42 +1,45 @@
 import type { ChangePoint } from './samplePoints'
 
-const SF_PERMITS_URL =
-  'https://data.sfgov.org/resource/i98e-djp9.json?$limit=300&$order=permit_creation_date DESC'
+// The frontend does NO direct data-source work. It asks our own backend
+// (/api/changes) for located change events; the backend is the only thing that
+// touches DuckDB. Same-origin /api/* → FastAPI (Vite proxy in dev, Caddy in prod).
 
-type RawPermit = {
-  permit_number: string
-  permit_type_definition?: string
-  description?: string
-  street_number?: string
-  street_name?: string
-  street_suffix?: string
-  status?: string
-  estimated_cost?: string
-  neighborhoods_analysis_boundaries?: string
-  location?: { type: string; coordinates: [number, number] }
+// SF bounding box (permits currently live for SF). minLng,minLat,maxLng,maxLat.
+const SF_BBOX = '-122.52,37.70,-122.35,37.83'
+
+// Shape the API returns (subset we use). See backend app/api/schemas.py ChangePoint.
+type ApiChange = {
+  id: string
+  lat: number
+  lon: number
+  category: string
+  event_type: string
+  headline: string
+  detail: string | null
+  citation: { source: string; source_as_of: string | null; record_key: string | null }
+}
+
+// Map the API's category vocabulary to the map's marker kinds.
+function toKind(c: ApiChange): ChangePoint['kind'] {
+  if (c.event_type === 'place_closed') return 'closure'
+  if (c.event_type === 'place_opened') return 'opening'
+  return 'construction'
 }
 
 export async function fetchSfPermits(): Promise<ChangePoint[]> {
-  const res = await fetch(SF_PERMITS_URL)
-  if (!res.ok) throw new Error(`DataSF request failed: ${res.status}`)
-  const raw: RawPermit[] = await res.json()
+  const url = `/api/changes?bbox=${SF_BBOX}&category=construction&limit=300`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`/api/changes failed: ${res.status}`)
+  const raw: ApiChange[] = await res.json()
 
-  return raw
-    .filter((p) => p.location?.coordinates)
-    .map((p) => {
-      const [lng, lat] = p.location!.coordinates
-      const address = [p.street_number, p.street_name, p.street_suffix].filter(Boolean).join(' ')
-      return {
-        id: `sf-${p.permit_number}`,
-        lng,
-        lat,
-        city: 'San Francisco',
-        headline: p.permit_type_definition ?? 'Building permit filed',
-        detail: `${address} — ${p.description ?? 'no description'} (status: ${p.status ?? 'unknown'}${
-          p.estimated_cost ? `, est. $${Number(p.estimated_cost).toLocaleString()}` : ''
-        })`,
-        source: `DataSF Building Permits · ${p.neighborhoods_analysis_boundaries ?? 'SF'}`,
-        kind: 'construction' as const,
-      }
-    })
+  return raw.map((c) => ({
+    id: c.id,
+    lng: c.lon,
+    lat: c.lat,
+    city: 'San Francisco',
+    headline: c.headline,
+    detail: c.detail ?? '',
+    source: c.citation.source + (c.citation.source_as_of ? ` · ${c.citation.source_as_of}` : ''),
+    kind: toKind(c),
+  }))
 }

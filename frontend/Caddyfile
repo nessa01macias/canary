@@ -1,0 +1,22 @@
+# {$SITE_ADDRESS} defaults to :80 so the app works on the bare server IP out of the
+# box. Set SITE_ADDRESS=canary.example.com in the compose env to get automatic HTTPS.
+{$SITE_ADDRESS::80} {
+	encode gzip zstd
+
+	# API — proxied to the FastAPI container. The frontend calls same-origin /api/*
+	# so there's no CORS and no hardcoded backend host.
+	# NOTE: `handle` (not `handle_path`) so the /api prefix is PRESERVED upstream —
+	# FastAPI mounts its routes at /api/* (app/api/routes.py), and this keeps the
+	# path identical in local dev and behind Caddy. Stripping here would 404.
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	# Everything else is the React SPA. try_files falls back to index.html so
+	# client-side routes resolve.
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}

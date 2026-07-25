@@ -122,3 +122,66 @@ Three different ingestion cadences, not one pipeline:
    doesn't exist.
 
 Say the word and I'll build #1 first — it's the piece that makes the trajectory thesis real.
+
+---
+
+# ACQUISITION STATUS (2026-07-25) — California first
+
+Machine-readable source of truth: **`backend/data/sources_registry.json`** (regenerate with
+`python -m app.ingestion.registry --export`). This section is the human companion.
+
+## Fetch protocol (how the engine is organized)
+Every source is one module under `backend/app/ingestion/` exposing a `SourceSpec` and a
+`fetch()`. `fetch()` produces **L0**: `data/raw/<key>/<source_as_of>/` + `metadata.json`
+(two-date rule: `source_as_of` = the source's own freshness, `fetched_at` = our pull) +
+an append to `data/raw/manifest.jsonl`, with sha256 per file. Re-running is idempotent and
+date-driven — a new snapshot dir appears only when the source itself advances. `stage()`
+(L0 → L1 parquet, H3 assignment, row-level `event_time`/`source_as_of`/`ingested_at`) is the
+mapping/processing layer's job, not the fetch layer's. Shared machinery: `app/ingestion/base.py`
+(Snapshot, ArcGIS-REST paginated GeoJSON, Socrata, CKAN, freshness probes).
+
+## Acquired (on disk now, all dated)
+| key | geography | temporal shape | as_of | note |
+|---|---|---|---|---|
+| datasf_permits | SF | event_stream | 2026-07-24 | 672MB — forward layer / construction |
+| datasf_business_locations | SF | recurring_snapshot | 2026-07-24 | 113MB — biz churn, decades of backfill |
+| datasf_crime | SF | event_stream | 2026-07-24 | 416MB |
+| datasf_threeoneone | SF | event_stream | 2026-07-24 | multi-GB (since 2008) |
+| datasf_evictions / zoning / assessor_rolls | SF | mixed | 2026-07-24 | assessor is Prop-13-capped (NOT market price) |
+| ca_abc_licenses | CA | recurring_snapshot | 2026-07-24 | **daily** — liquor licenses, address-level |
+| ca_caaspp | CA | reference_layer | 2024-10-09 | all-students file only (constraint #2: no protected-class subgroups) |
+| calfire_fhsz | CA | reference_layer | 2011-01-01 | 2007/2011 vintage; **current 2024/25 FHSZ is a gap** (auth-gated) |
+| ca_precinct_returns | CA | reference_layer | 2025-11-19 | 2024 General, precinct-level |
+| census_tiger_ca | CA | reference_layer | 2025-09-22 | places+tracts+cousub+county → areas-builder crosswalk |
+| insideairbnb | SF | recurring_snapshot | 2026-06-14 | quarterly; STR density + review velocity |
+
+## Verified, fetch pending (planned in registry)
+Overture Places (bbox extract via DuckDB, monthly, backfill loop = archive answer) · OSM
+California (Geofabrik, daily, 1.32GB) · Foursquare OS Places (needs free HF token) · Cal-ITP
+statewide GTFS (data.ca.gov CKAN) · 511 Bay Area GTFS + GTFS-RT (needs free api_key).
+**Federal cluster (FEMA NFHL flood, FCC BDC broadband, EPA AQS/TRI/FRS, FRA crossings, FAA
+noise, HIFLD facilities, USFS WUI)** — endpoints being verified; wire after.
+
+## Needs a free key/token before it can run
+- `census_acs_ca` → `CENSUS_API_KEY` in `.env` (tenure/turnover/age/value; no protected classes)
+- `fsq_os_places` → Hugging Face token · `gtfs_511_bayarea` → 511.org api_key
+
+## Forecasting target variable (for the property-value vision) — the real open-data pinch
+Trajectory *features* are well-covered above. The *target* for a price model is the gap,
+because Prop 13 makes CA assessor rolls useless as market price. Open paths to ground truth:
+- **County deed/transfer records** — actual sale prices, public record, clunky per-county portals (property-level; ingest per committed metro).
+- **FHFA House Price Index** — open, tract-level, repeat-sales, annual — good for validating area-level trajectory→price.
+- **Zillow ZHVI** — free download, **license needs checking for commercial use**.
+MLS and rent series stay gated. Fair-housing guardrail (24 CFR 100.85): forecast features
+must carry no protected-class data or proxies — enforce as written model governance.
+
+## True gaps (no open source wired yet)
+utilities septic/well/gas (per-county health GIS) · parking regime (SF has datasets, not added) ·
+STR *rules* vs activity (municipal code) · road/traffic noise (compute from DOT AADT + FHWA TNM).
+Catalog-only rasters (fetch on demand, bbox-clip, never snapshot): NLCD canopy, USGS 3DEP,
+PRISM, VIIRS, Landsat thermal.
+
+## Ops (flagged by the architecture, not yet done)
+`data/raw/` is the irreplaceable moat (the ratchet) and is gitignored — **back it up
+off-laptop** (rclone → B2/S3; a few GB, pennies). A dead laptop should cost a rebuild, not
+the accumulated history.

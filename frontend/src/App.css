@@ -248,3 +248,98 @@ html, body, #root, #app {
   border-top: 1px solid #f0f0f0;
   padding-top: 12px;
 }
+
+/* ── Contribute (give-to-get moat) ───────────────────────────── */
+.contribute-btn {
+  background: #FF6624;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  margin-left: 12px;
+  transition: background 0.12s ease;
+}
+.contribute-btn:hover { background: #e85510; }
+
+.contribute-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(20, 16, 14, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contribute-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  animation: slide-up 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.contribute-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  margin: 14px 0 6px;
+}
+
+.contribute-input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.contribute-input:focus { outline: 2px solid #FF6624; border-color: transparent; }
+
+.contribute-q { margin-top: 4px; }
+.contribute-scale { display: flex; gap: 8px; }
+
+.scale-dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.scale-dot:hover { border-color: #FF6624; }
+.scale-dot.on { background: #FF6624; color: #fff; border-color: #FF6624; }
+
+.contribute-submit {
+  width: 100%;
+  margin-top: 20px;
+  background: #2329A8;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.contribute-submit:disabled { background: #bbb; cursor: not-allowed; }
+
+.contribute-error { color: #c1443c; font-size: 13px; margin-top: 12px; }
+.contribute-done { text-align: center; padding: 20px 0; }
+.contribute-done h3 { font-size: 22px; margin: 0 0 10px; }
+.contribute-done p { font-size: 14px; color: #555; line-height: 1.5; margin: 0 0 20px; }
