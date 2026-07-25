@@ -1,3 +1,22 @@
+// The kind drives the three-way color legend (construction / closure / opening).
+export type ChangeKind = 'construction' | 'closure' | 'opening'
+
+// The *pipeline stage* is a certainty axis, not a value judgment:
+// filed (someone's proposing) → approved → issued (it's actually happening).
+export type Stage = 'filed' | 'approved' | 'issued' | 'unknown'
+
+// What KIND of change a permit represents — the trajectory signal, derived from
+// the before→after fields DataSF ships but the old UI threw away.
+export type ChangeType =
+  | 'densify'     // proposed units > existing units
+  | 'convert'     // existing use ≠ proposed use
+  | 'taller'      // proposed stories > existing stories
+  | 'adu'         // accessory dwelling unit added
+  | 'newbuild'    // new construction
+  | 'alteration'  // routine work, no structural change detected
+  | 'closure'
+  | 'opening'
+
 export type ChangePoint = {
   id: string
   lng: number
@@ -6,7 +25,22 @@ export type ChangePoint = {
   headline: string
   detail: string
   source: string
-  kind: 'construction' | 'closure' | 'opening'
+  kind: ChangeKind
+
+  // ── Trajectory fields (present on real permits; optional on flavor points) ──
+  neighborhood?: string
+  cost?: number
+  stage?: Stage
+  changeType?: ChangeType
+  changeLabel?: string     // the before→after delta, e.g. "1 → 2 units"
+  existingUse?: string
+  proposedUse?: string
+  existingUnits?: number
+  proposedUnits?: number
+  existingStories?: number
+  proposedStories?: number
+  netUnits?: number        // proposedUnits − existingUnits
+  status?: string
 }
 
 // Flavor points across California outside SF (SF itself is live from DataSF).
@@ -21,6 +55,11 @@ export const samplePoints: ChangePoint[] = [
     detail: '6-story mixed-use building approved within 300m — 120 residential units + ground-floor retail.',
     source: 'LADBS Building Permits (sample)',
     kind: 'construction',
+    changeType: 'densify',
+    changeLabel: '0 → 120 units',
+    stage: 'approved',
+    cost: 48_000_000,
+    netUnits: 120,
   },
   {
     id: 'sd-1',
@@ -31,6 +70,8 @@ export const samplePoints: ChangePoint[] = [
     detail: '3 storefronts closed, 2 opened in the last 90 days — above the neighborhood baseline turnover rate.',
     source: 'Overture Places monthly diff (sample)',
     kind: 'closure',
+    changeType: 'closure',
+    changeLabel: '−1 net storefront',
   },
   {
     id: 'sac-1',
@@ -41,6 +82,9 @@ export const samplePoints: ChangePoint[] = [
     detail: 'Parcel rezoned from industrial to mixed-use — signals corridor-wide redevelopment pressure.',
     source: 'City of Sacramento Zoning (sample)',
     kind: 'construction',
+    changeType: 'convert',
+    changeLabel: 'industrial → mixed-use',
+    stage: 'approved',
   },
   {
     id: 'oak-1',
@@ -51,6 +95,8 @@ export const samplePoints: ChangePoint[] = [
     detail: 'New full-service grocery opened — correlated historically with ~0.5% area home-price lift (HBS/Luca Starbucks study).',
     source: 'Foursquare OS Places (sample)',
     kind: 'opening',
+    changeType: 'opening',
+    changeLabel: '+1 anchor tenant',
   },
   {
     id: 'fre-1',
@@ -61,5 +107,9 @@ export const samplePoints: ChangePoint[] = [
     detail: '85,000 sq ft distribution facility permitted — first industrial filing in this tract in 3 years.',
     source: 'City of Fresno Permits (sample)',
     kind: 'construction',
+    changeType: 'newbuild',
+    changeLabel: 'new 85k sq ft facility',
+    stage: 'filed',
+    cost: 12_000_000,
   },
 ]
