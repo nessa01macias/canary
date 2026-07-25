@@ -1650,6 +1650,144 @@ html, body, #root, #app {
    bottom sheets that slide over the map.
    ══════════════════════════════════════════════════════════════════ */
 
+/* ── Floating mobile header (Google-Maps style) ──────────────────────
+   Only rendered on phones (the @640 block flips display:block and hides
+   the desktop .topbar). Elements float as individual pills over the map;
+   gaps are pointer-transparent so the map stays pannable underneath. */
+.mtopbar {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 10px 10px 0;
+  pointer-events: none; /* children re-enable it; gaps pass through to the map */
+}
+.mtopbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.mtopbar-brand {
+  pointer-events: auto;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: #111;
+  text-transform: lowercase;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 15px;
+  border-radius: 99px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
+}
+.mtopbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+.mlive-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+  padding: 7px 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+.mlive-chip:disabled { opacity: 0.7; }
+.mlive-chip.is-flashing {
+  border-color: #ff6624;
+  box-shadow: 0 0 0 3px rgba(255, 102, 36, 0.18);
+}
+.mlive-chip.is-flashing .live-dot { background: #ff6624; }
+.mmenu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
+  cursor: pointer;
+  color: #333;
+}
+.mmenu-btn.is-open { background: #fff; }
+.mmenu-dots { font-size: 22px; line-height: 1; font-weight: 800; margin-top: -6px; }
+
+/* The segmented Area/Permits control floats, centered, just below the row. */
+.mtopbar-toggle {
+  pointer-events: auto;
+  width: max-content;
+  max-width: calc(100% - 8px);
+  margin: 10px auto 0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+}
+
+/* Overflow menu: tap-away scrim + dropdown of the secondary actions. */
+.mmenu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  pointer-events: auto;
+}
+.mmenu {
+  position: absolute;
+  top: 54px;
+  right: 10px;
+  z-index: 25;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 214px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+  animation: news-in 0.16s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mmenu-item {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 9px;
+  padding: 12px 13px;
+  cursor: pointer;
+}
+.mmenu-item:hover { background: #f3ede8; }
+.mmenu-item.is-primary {
+  margin-top: 4px;
+  text-align: center;
+  color: #fff;
+  background: #ff6624;
+  box-shadow: 0 2px 8px rgba(255, 102, 36, 0.3);
+}
+
 /* Tablet / small laptop: reclaim horizontal room before anything wraps. */
 @media (max-width: 860px) {
   .topbar { padding: 0 16px; }
@@ -1662,55 +1800,14 @@ html, body, #root, #app {
 
 /* Phones: topbar becomes multi-row, side cards become bottom sheets. */
 @media (max-width: 640px) {
-  .topbar {
-    height: auto;
-    min-height: 52px;
-    flex-wrap: wrap;
-    row-gap: 8px;
-    padding: 9px 12px;
-  }
-  /* Three clean stacked rows: brand · actions · mode toggle. Each action row
-     is full-width and wraps internally so nothing overflows the viewport. */
-  .topbar-left { order: 1; flex: 1 1 100%; min-width: 0; }
-  .topbar-right {
-    order: 2;
-    flex: 1 1 100%;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 6px;
-    min-width: 0;
-  }
-  .mode-toggle {
-    order: 3;
-    flex-basis: 100%;
-    justify-content: center;
-  }
-  .mode-toggle button { flex: 1; min-width: 0; }
+  /* The solid desktop bar is replaced by the floating .mtopbar over the map. */
+  .topbar { display: none; }
+  .mtopbar { display: block; }
 
-  .live-badge,
-  .research-btn,
-  .contribute-btn {
-    font-size: 12px;
-    padding: 6px 11px;
-    margin-left: 0;
-    max-width: 100%;
-  }
-
-  /* Preferences panel: top-anchored full-width card (safe clearance
-     under the wrapped topbar), capped height with its own scroll. */
-  .prefs-panel {
-    top: auto;
-    bottom: 52px;
-    left: 8px;
-    right: 8px;
-    width: auto;
-    max-height: 46vh;
-    overflow-y: auto;
-  }
-
-  /* Detail cards (neighborhood news + address report) are hosted inside the
-     draggable <MobileSheet> — the sheet owns positioning, chrome and scroll, so
-     the cards themselves become plain flow content. */
+  /* The prefs panel, neighborhood news and address report are all hosted inside
+     the draggable <MobileSheet> — the sheet owns positioning, chrome and scroll,
+     so the cards themselves become plain flow content. */
+  .msheet .prefs-panel,
   .msheet .news-card,
   .msheet .report-card {
     position: static;
@@ -1724,6 +1821,7 @@ html, body, #root, #app {
     border-radius: 0;
     box-shadow: none;
     animation: none;
+    opacity: 1; /* prefs-panel starts at opacity:0 for its fade-in; sheet skips it */
     overflow: visible;
     padding: 2px 14px 10px;
   }
@@ -1744,15 +1842,9 @@ html, body, #root, #app {
   .research-body { padding: 22px 18px 20px; }
   .docs-tabs { padding: 14px 18px 0; }
 
-  /* Legend: compact, single line, drop the verbose descriptor. */
-  .legend-strip {
-    gap: 12px;
-    padding: 0 12px;
-    height: 44px;
-    font-size: 11px;
-  }
-  .legend-strip .legend-item:not(.legend-ramp) { display: none; }
-  .ramp-bar { width: 90px; }
+  /* Legend hidden on phones — the persistent "Looking for" peek sheet owns the
+     bottom edge, and the map's color meaning is carried by that sheet's context. */
+  .legend-strip { display: none; }
 
   /* Pinch to zoom on touch — the +/− buttons collide with the sheet. */
   .maplibregl-ctrl-bottom-right { display: none; }
@@ -1949,7 +2041,7 @@ html, body, #root, #app {
 }
 .agents-title { font-size: 30px; line-height: 1.2; margin: 0 0 12px; color: #1c1a17; }
 .agents-title em { font-style: italic; color: #2329A8; }
-.agents-sub { font-size: 15.5px; line-height: 1.6; color: #45403a; max-width: 640px; margin: 0 0 26px; }
+.agents-sub { font-size: 15.5px; line-height: 1.6; color: #45403a; margin: 0 0 26px; }
 
 .agents-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
 .agents-stat {
@@ -1977,7 +2069,7 @@ html, body, #root, #app {
   border-radius: 10px; padding: 16px 18px;
   font-size: 12.5px; line-height: 1.55; overflow-x: auto;
 }
-.agents-provenance { font-size: 14px; color: #45403a; max-width: 640px; }
+.agents-provenance { font-size: 14px; color: #45403a; }
 
 .agents-cta { display: flex; align-items: center; gap: 16px; margin: 26px 0 8px; flex-wrap: wrap; }
 .agents-cta-btn {
@@ -1994,3 +2086,80 @@ html, body, #root, #app {
   .agents-page { padding: 34px 24px; }
   .agents-title { font-size: 24px; }
 }
+
+/* ── Navbar v2: address search centerpiece + quiet doc links ─────── */
+.addr-search {
+  position: relative;
+  flex: 1;
+  max-width: 460px;
+  margin: 0 24px;
+}
+.addr-search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #FF6624;
+  font-size: 15px;
+  pointer-events: none;
+}
+.addr-search-input {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 99px;
+  background: #fff;
+  padding: 8px 16px 8px 34px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.addr-search-input:focus {
+  outline: none;
+  border-color: rgba(255,102,36,0.6);
+  box-shadow: 0 2px 10px rgba(255,102,36,0.15);
+}
+.addr-search-input::placeholder { color: #a39889; }
+.addr-search-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.14);
+}
+.addr-search-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13px;
+  color: #222;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.addr-search-item:hover, .addr-search-item.is-active { background: #fff3ec; }
+
+.nav-quiet {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+.nav-quiet:hover { color: #111; background: rgba(0,0,0,0.05); }

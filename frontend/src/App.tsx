@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { ChangePoint, ChangeType, Stage } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
-import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
+import { fetchNeighborhoods } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
 import { Docs } from './Docs'
@@ -15,6 +15,7 @@ import { MobileSheet } from './MobileSheet'
 import { neighborhoodHeadlines } from './headlines'
 import ContributeModal from './ContributeModal'
 import { fetchSfBusinessChanges } from './bizChanges'
+import { AddressSearch } from './AddressSearch'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -222,13 +223,14 @@ function buildSfMask(geo: FeatureCollection): Feature<Polygon> {
   const PAD = 1.12 // ~12% ≈ a ~1.5 km ring of visible water around SF
   const sfHole: Position[] = hull.map(([x, y]) => [cx + (x - cx) * PAD, cy + (y - cy) * PAD])
 
-  // Outer ring — comfortably larger than maxBounds so it always fills the viewport.
+  // Outer ring — the WHOLE world, so every zoom level outside SF reads as the
+  // blank white globe (the mask hides the basemap everywhere but the SF hole).
   const outer: Position[] = [
-    [-124.6, 36.3],
-    [-120.4, 36.3],
-    [-120.4, 39.5],
-    [-124.6, 39.5],
-    [-124.6, 36.3],
+    [-180, -85],
+    [180, -85],
+    [180, 85],
+    [-180, 85],
+    [-180, -85],
   ]
   // A hole must wind opposite the exterior or earcut fills it instead of cutting it.
   const outerSign = Math.sign(ringArea2(outer))
@@ -399,7 +401,6 @@ function App() {
   const [researchOpen, setResearchOpen] = useState(false)
   const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
   const [agentsOpen, setAgentsOpen] = useState(false)
-  const [traj, setTraj] = useState<NbhdTrajectory[]>([])
   // One layer, zoom as the axis: past STREET_ZOOM the map is about individual
   // permits/businesses; below it, area trajectory. Replaces the old mode toggle.
   const [zoomedIn, setZoomedIn] = useState(false)
@@ -435,12 +436,8 @@ function App() {
       })
     | null
   >(null)
-  // "Neighborhoods changing" flash (badge toggle).
-  const [flashing, setFlashing] = useState(false)
-  const flashRafRef = useRef<number | null>(null)
   // Mobile only: the "⋯" menu that holds the secondary header actions.
   const [menuOpen, setMenuOpen] = useState(false)
-  const flashIdsRef = useRef<number[]>([])
 
   // Onboarding: add/remove a field from the shortlist (activating it on add). The
   // MAX_PICKS cap applies to shortlist membership.
@@ -527,21 +524,25 @@ function App() {
       style: MAPTILER_KEY
         ? `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MAPTILER_KEY}`
         : 'https://demotiles.maplibre.org/style.json',
-      // Frame on the San Francisco peninsula. This is the furthest-out view the
-      // map should ever show — never the whole California/world map.
+      // Open on the San Francisco peninsula, but let the user zoom all the way
+      // out: the world renders as a blank white globe with SF as the only lit
+      // patch — the coverage map IS the story (one metro colored in, more coming).
       center: [-122.44, 37.75],
       zoom: 12.3,
-      // Lock the zoom-out floor to the SF framing so the world is never rendered.
-      minZoom: 12.3,
-      // Keep panning inside the SF Bay Area so users can't drift off to the
-      // world. Kept wider than the viewport so it never overrides the zoom above.
-      maxBounds: [
-        [-123.2, 37.1], // south-west
-        [-121.5, 38.6], // north-east
-      ],
+      minZoom: 1,
       pitch: 50,
       bearing: -10,
       maxPitch: 85,
+    })
+
+    // Real globe when zoomed out (MapLibre v5+). Guarded: if a style swap ever
+    // drops projection support, the map silently stays mercator.
+    map.once('style.load', () => {
+      try {
+        map.setProjection({ type: 'globe' })
+      } catch {
+        /* mercator fallback is fine */
+      }
     })
 
     map.addControl(new maplibregl.NavigationControl(), 'bottom-right')
@@ -580,10 +581,9 @@ function App() {
       )
     }
 
-    const buildChoropleth = (geo: FeatureCollection, trajectory: NbhdTrajectory[]) => {
+    const buildChoropleth = (geo: FeatureCollection) => {
       // Trajectory stats are already baked into each feature's properties by the
       // backend (/api/sf/neighborhoods); we only render + rank here.
-      setTraj([...trajectory].sort((a, b) => b.intensity - a.intensity))
 
       // Assign stable numeric ids so feature-state (hover + preference fit) has a
       // reliable key, and remember the id ↔ neighborhood mapping for the effect.
@@ -715,31 +715,6 @@ function App() {
         }) as maplibregl.LineLayerSpecification['paint']
       map.addLayer({ id: 'nbhd-glow-halo', type: 'line', source: 'nbhd', paint: glowOn(11, 6, 0.6) })
       map.addLayer({ id: 'nbhd-glow-core', type: 'line', source: 'nbhd', paint: glowOn(2.5, 0.6, 1) })
-
-      // "Neighborhoods changing" flash — white fill + outline that blink over the
-      // changing neighborhoods when the badge is toggled. Both ride the `flash`
-      // feature-state (0..1) animated by the badge's rAF; invisible until then.
-      map.addLayer({
-        id: 'nbhd-flash-fill',
-        type: 'fill',
-        source: 'nbhd',
-        paint: {
-          'fill-color': '#ffffff',
-          'fill-opacity': ['*', 0.72, ['coalesce', ['feature-state', 'flash'], 0]] as
-            maplibregl.DataDrivenPropertyValueSpecification<number>,
-        },
-      })
-      map.addLayer({
-        id: 'nbhd-flash-line',
-        type: 'line',
-        source: 'nbhd',
-        paint: {
-          'line-color': '#ffffff',
-          'line-width': 2.5,
-          'line-opacity': ['coalesce', ['feature-state', 'flash'], 0] as
-            maplibregl.DataDrivenPropertyValueSpecification<number>,
-        },
-      })
 
       // Hover: highlight + neutral verdict popup.
       let hoveredId: number | string | null = null
@@ -878,7 +853,7 @@ function App() {
         .then(([permits, nbhd]) => {
           permits.forEach(addPoint)
           setSfCount(permits.length)
-          if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection, nbhd.trajectory)
+          if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection)
         })
         .catch((err) => console.error('SF data failed:', err))
 
@@ -914,14 +889,9 @@ function App() {
     }
     // The news card belongs to the area scale — drop it once the user flies in.
     if (zoomedIn) setSelectedNbhd(null)
-    // The "changing" flash belongs to the area scale too.
-    if (!showArea || zoomedIn) {
-      stopFlash()
-      if (flashing) setFlashing(false)
-    }
     if (showArea && !zoomedIn && priorities.size === 0) startPulse()
     else stopPulse()
-  }, [zoomedIn, sfCount, priorities, onboardingOpen, flashing])
+  }, [zoomedIn, sfCount, priorities, onboardingOpen])
 
   // Repaint the area overlay. Default (no preferences) = the pulsing trajectory
   // view (blue improving, red worsening); with preferences picked = a static
@@ -975,46 +945,6 @@ function App() {
     )
   }, [priorities, zoomedIn, sfCount, onboardingOpen])
 
-  // "Neighborhoods changing" flash: blink a white highlight on every neighborhood
-  // with recent permit activity (the set the badge counts). Ported from Kat's branch.
-  const stopFlash = () => {
-    if (flashRafRef.current != null) {
-      cancelAnimationFrame(flashRafRef.current)
-      flashRafRef.current = null
-    }
-    const map = mapRef.current
-    if (map) for (const id of flashIdsRef.current) map.setFeatureState({ source: 'nbhd', id }, { flash: 0 })
-    flashIdsRef.current = []
-  }
-  const startFlash = () => {
-    const map = mapRef.current
-    if (!map || !map.getLayer('nbhd-flash-fill')) return
-    const ids = traj
-      .filter((t) => t.permits > 0)
-      .map((t) => nbhdMetaRef.current.get(t.nhood)?.id)
-      .filter((id): id is number => id != null)
-    if (!ids.length) return
-    flashIdsRef.current = ids
-    const speed = 0.006 // rad/ms → ~1s per blink; the flat trough reads as "off"
-    const tick = (ts: number) => {
-      const v = Math.max(0, Math.sin(ts * speed)) // 0..1, on/off blink
-      for (const id of ids) map.setFeatureState({ source: 'nbhd', id }, { flash: v })
-      flashRafRef.current = requestAnimationFrame(tick)
-    }
-    flashRafRef.current = requestAnimationFrame(tick)
-  }
-  const toggleFlash = () => {
-    if (flashing) {
-      setFlashing(false)
-      stopFlash()
-    } else {
-      zoomToCity() // the flash reads against the area overlay
-      setFlashing(true)
-      startFlash()
-    }
-  }
-
-  const activeNbhds = traj.filter((t) => t.permits > 0).length
   const matchActive = priorities.size > 0
 
   return (
@@ -1027,26 +957,14 @@ function App() {
           <span className="brand-sub">Real-world place intelligence for upwards mobility</span>
         </div>
 
+        {/* The centerpiece: the product's promise as a control. */}
+        <AddressSearch onPick={(lat, lng) => openReportRef.current?.(lat, lng)} />
+
         <div className="topbar-right">
-          <button
-            type="button"
-            className={`live-badge${flashing ? ' is-flashing' : ''}`}
-            onClick={toggleFlash}
-            disabled={sfCount === null || activeNbhds === 0}
-            aria-pressed={flashing}
-            title={flashing ? 'Stop highlighting' : 'Highlight the changing neighborhoods on the map'}
-          >
-            <span className="live-dot" />
-            {sfCount === null
-              ? 'Loading…'
-              : zoomedIn
-                ? `${sfCount} live permits`
-                : `${activeNbhds} neighborhoods changing`}
+          <button className="nav-quiet" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
+            Docs
           </button>
-          <button className="research-btn" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
-            Documentation
-          </button>
-          <button className="agents-btn" onClick={() => setAgentsOpen(true)}>
+          <button className="nav-quiet" onClick={() => setAgentsOpen(true)}>
             For AI apps
           </button>
           <button className="contribute-btn" onClick={() => setContributing(true)}>
@@ -1062,20 +980,6 @@ function App() {
         <div className="mtopbar-row">
           <span className="mtopbar-brand">canary</span>
           <div className="mtopbar-actions">
-            <button
-              type="button"
-              className={`mlive-chip${flashing ? ' is-flashing' : ''}`}
-              onClick={toggleFlash}
-              disabled={sfCount === null || activeNbhds === 0}
-              aria-pressed={flashing}
-            >
-              <span className="live-dot" />
-              {sfCount === null
-                ? 'Loading…'
-                : zoomedIn
-                  ? `${sfCount} permits`
-                  : `${activeNbhds} changing`}
-            </button>
             <button
               type="button"
               className={`mmenu-btn${menuOpen ? ' is-open' : ''}`}
