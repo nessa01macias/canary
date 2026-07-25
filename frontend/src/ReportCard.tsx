@@ -145,14 +145,18 @@ export function ReportCard({ report, loading, onClose }: Props) {
             )}
           </div>
 
-          {/* Reference attributes (flood/fire/school… appear as the pipeline stages them) */}
+          {/* Reference attributes — the neighborhood's fixed facts (flood, EMS,
+              schools, transit…), served with provenance by the backend. */}
           {Object.keys(report.attributes).length > 0 && (
-            <div className="rc-section rc-attrs">
-              {Object.entries(report.attributes).map(([k, v]) => (
-                <span key={k} className="rc-attr">
-                  {k.replace(/_/g, ' ')}: <b>{String(v)}</b>
-                </span>
-              ))}
+            <div className="rc-section">
+              <p className="rc-section-title">The fixed facts</p>
+              <div className="rc-attrs">
+                {Object.entries(report.attributes).map(([k, v]) => (
+                  <span key={k} className="rc-attr">
+                    {k.replace(/_/g, ' ')}: <b>{String(v)}</b>
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 

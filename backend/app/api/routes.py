@@ -16,7 +16,7 @@ from datetime import date, datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 
-from . import db, sf_live, store
+from . import db, nbhd_attributes, sf_live, store
 from .schemas import (
     AddressReport,
     AreaRef,
@@ -120,7 +120,18 @@ def get_report(
     ]
     changes = [_to_change_point(r) for r in change_rows]
 
-    display_name = next((r["neighborhood"] for r in change_rows if r.get("neighborhood")), None)
+    # Containing neighborhood from the H3 spine — names the report and keys the
+    # neighborhood-level reference attributes below.
+    spine_nbhd = None
+    try:
+        spine_rows = db.query("SELECT neighborhood FROM areas WHERE h3_9 = ?", [h3_9])
+        spine_nbhd = spine_rows[0]["neighborhood"] if spine_rows else None
+    except Exception:  # noqa: BLE001 — spine miss → report still serves
+        pass
+
+    display_name = next(
+        (r["neighborhood"] for r in change_rows if r.get("neighborhood")), None
+    ) or spine_nbhd
 
     trajectories: list[Trajectory] = []
     for metric in REPORT_METRICS:
@@ -138,10 +149,17 @@ def get_report(
         None,
     )
 
+    # Reference attributes: neighborhood-level facts (L0 precompute, cited),
+    # overridden by any finer hex-level columns the pipeline stages into `areas`.
+    attr_display, attr_cites = nbhd_attributes.report_attributes(spine_nbhd)
+    attributes = {**attr_display, **db.area_attributes(h3_9)}
+
     distinct_sources = {c.citation.source for c in changes} | {
         t.citation.source for t in trajectories
     }
-    sources = [Citation(source=s) for s in sorted(distinct_sources)]
+    sources = [Citation(source=s) for s in sorted(distinct_sources)] + [
+        Citation(**c) for c in attr_cites if c["source"] not in distinct_sources
+    ]
 
     return AddressReport(
         query=AreaRef(
@@ -152,7 +170,7 @@ def get_report(
         pipeline_version=pipeline_version,
         changes=changes,
         trajectories=trajectories,
-        attributes=db.area_attributes(h3_9),
+        attributes=attributes,
         sources=sources,
     )
 

@@ -328,5 +328,61 @@ def load() -> dict | None:
         return None
 
 
+# --- per-address report enrichment -------------------------------------------
+# The report card renders `attributes` as flat "key: String(value)" chips, so we
+# emit pre-formatted, unit-carrying display values (neighborhood-level facts for
+# the containing area — hex-level values from the pipeline's areas table override
+# these on key collision, being finer-grained).
+_REPORT_FORMATS: list[tuple[str, str, Any]] = [
+    # (display key, attribute, formatter)
+    ("school_scores", "school_pct_met", lambda v: f"{v:.0f}% met standard (CAASPP)"),
+    ("flood_zone", "flood_zone_share", lambda v: f"{v * 100:.0f}% of neighborhood in FEMA flood zone"),
+    ("ems_response", "ems_response_median_mins", lambda v: f"{v:.1f} min median (fire/EMS)"),
+    ("transit_stops", "transit_stops", lambda v: int(v)),
+    ("street_trees_per_km2", "trees_per_km2", lambda v: int(round(v))),
+    ("grocery_stores", "grocery_stores", lambda v: int(v)),
+    ("industrial_facilities", "tri_facilities", lambda v: int(v)),
+    ("cannabis_retailers", "cannabis_retailers", lambda v: int(v)),
+    ("storefront_vacancy", "storefront_vacancy_rate", lambda v: f"{v * 100:.1f}% (Prop-D roll)"),
+    ("transport_projects", "sfmta_projects", lambda v: int(v)),
+    ("permit_parking_parcels", "rpp_parcels", lambda v: int(v)),
+]
+
+
+def _leading_date(as_of: str | None):
+    """Best-effort ISO date from an as_of string (handles composite ones like
+    '2024-10-09 (scores) / 2026-05-19 (locations)')."""
+    from datetime import date as _date
+
+    try:
+        return _date.fromisoformat((as_of or "")[:10])
+    except ValueError:
+        return None
+
+
+def report_attributes(neighborhood: str | None) -> tuple[dict[str, Any], list[dict]]:
+    """(flat display attributes, citation dicts) for the containing neighborhood.
+
+    Values are neighborhood-level (the H3 spine maps hex -> neighborhood); nulls
+    (e.g. no public school in the area) are simply omitted, never zero-filled.
+    """
+    data = load() if neighborhood else None
+    if not data:
+        return {}, []
+    vals = data.get("attributes", {}).get(neighborhood, {})
+    meta = data.get("attribute_meta", {})
+    out: dict[str, Any] = {}
+    cites: dict[str, dict] = {}
+    for key, attr, fmt in _REPORT_FORMATS:
+        v = vals.get(attr)
+        if v is None:
+            continue
+        out[key] = fmt(v)
+        m = meta.get(attr, {})
+        src = m.get("source") or attr
+        cites.setdefault(src, {"source": src, "source_as_of": _leading_date(m.get("source_as_of"))})
+    return out, list(cites.values())
+
+
 if __name__ == "__main__":
     build()
