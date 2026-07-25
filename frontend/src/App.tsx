@@ -869,12 +869,22 @@ function App() {
     modeRef.current = mode
     const map = mapRef.current
     applyMarkerVisibility(markerElsRef.current, mode, map?.getZoom() ?? 0)
+    // Keep the trajectory overlay dark behind the onboarding modal — it only
+    // lights up once the user dismisses onboarding ("Show my map").
+    const showArea = mode === 'areas' && !onboardingOpen
     if (map?.getLayer('nbhd-fill')) {
-      map.setLayoutProperty('nbhd-fill', 'visibility', mode === 'areas' ? 'visible' : 'none')
+      map.setLayoutProperty('nbhd-fill', 'visibility', showArea ? 'visible' : 'none')
     }
-    if (mode === 'areas' && priorities.size === 0) startPulse()
+    // The news card belongs to the area view — drop it when the parcels leave.
+    if (mode !== 'areas') setSelectedNbhd(null)
+    // The "changing" flash belongs to the area view too — stand it down otherwise.
+    if (!showArea) {
+      stopFlash()
+      if (flashing) setFlashing(false)
+    }
+    if (showArea && priorities.size === 0) startPulse()
     else stopPulse()
-  }, [mode, sfCount, priorities])
+  }, [mode, sfCount, priorities, onboardingOpen, flashing])
 
   // Repaint the area overlay. Default (no preferences) = the pulsing trajectory
   // view (blue improving, red worsening); with preferences picked = a static
@@ -893,8 +903,9 @@ function App() {
       map.setPaintProperty('nbhd-fill', 'fill-opacity', trajectoryOpacity())
       matchInfoRef.current = { active: false, count: 0 }
       setMatchTop([])
-      // Breathe only while the trajectory overlay is actually the visible view.
-      if (mode === 'areas') startPulse()
+      // Breathe only while the trajectory overlay is actually the visible view
+      // (area mode, onboarding dismissed).
+      if (mode === 'areas' && !onboardingOpen) startPulse()
       else stopPulse()
       return
     }
@@ -925,7 +936,7 @@ function App() {
     setMatchTop(
       [...scored].sort((a, b) => b.fit - a.fit).slice(0, 3).map((s) => s.nhood).filter(Boolean),
     )
-  }, [priorities, mode, sfCount])
+  }, [priorities, mode, sfCount, onboardingOpen])
 
   // "Neighborhoods changing" flash: blink a white highlight on every neighborhood
   // with recent permit activity (the set the badge counts). Ported from Kat's branch.
@@ -1104,14 +1115,25 @@ function App() {
       {/* Map */}
       <div ref={mapContainer} id="map" />
 
-      {/* Preferences panel — a shorthand summary of what onboarding picked */}
+      {/* Preferences panel — a shorthand summary of what onboarding picked.
+          Hidden until the onboarding is dismissed ("Show my map"), so it never
+          peeks out behind the picker on first load or during an edit. */}
+      {!onboardingOpen && (
       <aside className="prefs-panel">
         <div className="prefs-head">
           <p className="prefs-eyebrow">Looking for</p>
           {shortlist.length > 0 && (
-            <button type="button" className="prefs-edit" onClick={() => setOnboardingOpen(true)}>
-              Edit
-            </button>
+            <div className="prefs-head-actions">
+              {priorities.size > 0 && (
+                <button type="button" className="prefs-clear" onClick={() => setPriorities(new Set())}>
+                  Clear
+                </button>
+              )}
+              {/* Dashed, no-fill empty-state button that reopens the picker */}
+              <button type="button" className="prefs-edit-ghost" onClick={() => setOnboardingOpen(true)}>
+                Edit
+              </button>
+            </div>
           )}
         </div>
         {shortlist.length === 0 ? (
@@ -1172,6 +1194,7 @@ function App() {
           </>
         )}
       </aside>
+      )}
 
       {/* Onboarding — centered picker across the full tiered field catalog */}
       {onboardingOpen && (
@@ -1184,8 +1207,8 @@ function App() {
         >
           <div className="onboarding-card">
             <button className="ob-close" onClick={() => setOnboardingOpen(false)} aria-label="Close">×</button>
-            <p className="prefs-eyebrow">Looking for</p>
-            <h2 className="ob-title">What matters most to you?</h2>
+            <p className="prefs-eyebrow">Welcome</p>
+            <h2 className="ob-title">Hey! Let’s find the best parcel for you.</h2>
             <p className="ob-sub">
               Pick up to {MAX_PICKS}. We’ll rank every San Francisco neighborhood by how well it fits.
             </p>

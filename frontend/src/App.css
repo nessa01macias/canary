@@ -1605,3 +1605,40 @@ html, body, #root, #app {
 }
 .headline-src { font-weight: 700; color: #5a4d44; }
 .headline-dot { opacity: 0.6; }
+.prefs-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prefs-clear {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.2px;
+}
+.prefs-clear:hover { text-decoration: underline; }
+
+/* Dashed, no-fill "empty state" button — reopens the preference picker. */
+.prefs-edit-ghost {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: 2px dotted rgba(255, 102, 36, 0.55);
+  border-radius: 99px;
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: border-color 0.14s ease, background 0.14s ease, transform 0.1s ease;
+}
+.prefs-edit-ghost:hover {
+  border-color: #FF6624;
+  background: rgba(255, 102, 36, 0.06);
+  transform: translateY(-1px);
+}
