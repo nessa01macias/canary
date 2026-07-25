@@ -5,3 +5,5 @@ __pycache__/
 data/raw/
 data/staged/
 data/*.duckdb
+# third-party reference docs — not ours to redistribute (repo is public)
+app/benchmark/*.pdf

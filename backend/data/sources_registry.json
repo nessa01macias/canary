@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T05:10:19.902750+00:00",
+  "generated_at": "2026-07-25T06:11:07.745393+00:00",
   "sources": [
     {
       "key": "datasf_permits",
@@ -407,6 +407,36 @@
       "implemented": true
     },
     {
+      "key": "fsq_os_places",
+      "name": "Foursquare OS Places \u2014 SF bbox extract",
+      "geography": "san_francisco",
+      "temporal_shape": "recurring_snapshot",
+      "cadence": "monthly",
+      "fmt": "parquet",
+      "license": "Apache-2.0",
+      "homepage": "https://huggingface.co/datasets/foursquare/fsq-os-places",
+      "canonical_source": "fsq",
+      "tier": "T4.4/T6.5",
+      "requires_auth": true,
+      "notes": "2nd POI witness vs Overture (same SF bbox). date_created/date_closed native. Needs HF_TOKEN.",
+      "implemented": true
+    },
+    {
+      "key": "osm_california",
+      "name": "OpenStreetMap California extract (Geofabrik)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "daily",
+      "fmt": "osm_pbf",
+      "license": "ODbL 1.0",
+      "homepage": "https://download.geofabrik.de/north-america/us/california.html",
+      "canonical_source": "osm",
+      "tier": "T1.4/T1.6/T3.10/T4.1/T4.8",
+      "requires_auth": false,
+      "notes": "~1.3GB. Substrate for computed walk/commute/sidewalk/airport-access variables. norcal/socal sub-extracts exist if the full state is too big.",
+      "implemented": true
+    },
+    {
       "key": "overture_places",
       "name": "Overture Maps Places \u2014 SF bbox extract",
       "geography": "san_francisco",
@@ -420,36 +450,6 @@
       "requires_auth": false,
       "notes": "Built in app/ingestion/overture.py (other chat). DuckDB bbox pushdown; captures every release still on S3 (they get pruned) = backfill/churn history.",
       "implemented": true
-    },
-    {
-      "key": "osm_california",
-      "name": "OpenStreetMap California extract (Geofabrik)",
-      "geography": "california",
-      "temporal_shape": "reference_layer",
-      "cadence": "daily",
-      "fmt": "osm_pbf",
-      "license": "ODbL 1.0",
-      "homepage": "https://download.geofabrik.de/north-america/us/california.html",
-      "canonical_source": "osm",
-      "tier": "T1.4/T1.6/T3.10/T4.1",
-      "requires_auth": false,
-      "notes": "california-latest.osm.pbf ~1.32GB daily. Street network/sidewalks/routing => walk/commute scores computed by us, not bought from Walk Score.",
-      "implemented": false
-    },
-    {
-      "key": "fsq_os_places",
-      "name": "Foursquare OS Places (CA filter)",
-      "geography": "us",
-      "temporal_shape": "recurring_snapshot",
-      "cadence": "monthly",
-      "fmt": "parquet",
-      "license": "Apache-2.0",
-      "homepage": "https://huggingface.co/datasets/foursquare/fsq-os-places",
-      "canonical_source": "fsq",
-      "tier": "T4.4/T6.5",
-      "requires_auth": true,
-      "notes": "Gated auto: needs free HF token to download. Latest dt=2026-07-09. Second POI witness vs Overture (cross-validation of churn).",
-      "implemented": false
     },
     {
       "key": "gtfs_511_bayarea",
@@ -590,15 +590,15 @@
     },
     "T4.4 grocery/pharmacy access": {
       "status": "covered",
-      "source": "overture_places (SF bbox); fsq_os_places = 2nd witness (planned)"
+      "source": "overture_places + fsq_os_places (2 POI witnesses, SF bbox)"
     },
     "T4.5 urgent care/ER": {
       "status": "planned",
-      "source": "HIFLD (federal agent) + state facility files"
+      "source": "HIFLD redundant w/ Overture POIs; use overture_places hospital category, or HIFLD for bed/trauma metadata"
     },
     "T4.6 chain-retail proxies": {
       "status": "covered",
-      "source": "overture_places; fsq_os_places (planned)"
+      "source": "overture_places + fsq_os_places"
     },
     "T4.7 emergency response times": {
       "status": "covered",
@@ -617,12 +617,12 @@
       "source": "ca_precinct_returns"
     },
     "T5.2 tenure & turnover rate": {
-      "status": "planned",
-      "source": "census_acs_ca (needs free CENSUS_API_KEY)"
+      "status": "covered",
+      "source": "census_acs_ca (9,129 CA tracts)"
     },
     "T5.3 age mix": {
-      "status": "planned",
-      "source": "census_acs_ca (needs free CENSUS_API_KEY)"
+      "status": "covered",
+      "source": "census_acs_ca (9,129 CA tracts)"
     },
     "T6.1 approved construction/view-light": {
       "status": "covered",
@@ -642,7 +642,7 @@
     },
     "T6.5 business open/close velocity": {
       "status": "covered",
-      "source": "datasf_business_locations + overture/fsq (planned)"
+      "source": "datasf_business_locations + overture_places + fsq_os_places (3-way churn cross-validation)"
     },
     "T6.6 storefront vacancy trend": {
       "status": "covered",

@@ -1,0 +1,283 @@
+{
+ "provider": "perplexity:sonar-pro",
+ "judge_model": "claude-sonnet-4-5",
+ "run_file": "perplexity_sonar-pro_20260725T052124Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is 'trending better' and 'improving' with specific decreases cited (robbery -15%, total crimes -13%), matching ground truth of decreasing victimization."
+  },
+  {
+   "id": "q002",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states crime is 'modestly rising' with ~13% increase, but ground truth shows a 42.8% decrease (877 vs 1532 incidents)."
+  },
+  {
+   "id": "q003",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant states crime is 'rising modestly' and 'up about 40%' in Japantown, but ground truth shows a 37.4% decrease (254 vs 406 incidents)."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' which matches ground truth decrease of -33.3% (602 vs 903 incidents)"
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'Crime in Golden Gate Park is generally falling over the past couple of years' which aligns with ground truth showing 33% decrease (306 vs 456 incidents). Despite mentioning short-term bumps, the primary commitment is to falling crime."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' and 'decreasing year-over-year' which matches ground truth decrease of -32.4%"
+  },
+  {
+   "id": "q007",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states crime is 'slightly rising' with '12% increase' but ground truth shows a 32% decrease (832 vs 1223 incidents)."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime falling in Oceanview/Merced/Ingleside, matching the ground truth decrease of -31.5%."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling overall' which matches ground truth decrease of -30.6%; the homicide caveat is district-level context that doesn't contradict the neighborhood-level decrease."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime falling in Glen Park over the past year, matching the ground truth decrease of -30.2% (227 vs 325 incidents)."
+  },
+  {
+   "id": "q011",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'slightly fewer' openings when ground truth shows a 28.3% increase (213 vs 166)."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'fewer' openings, matching ground truth decrease from 89 to 66 (-25.8%)"
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 'More new businesses opened' but ground truth shows decrease from 162 to 127 openings (-21.6%)"
+  },
+  {
+   "id": "q014",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant claims 'more' new businesses opening with higher activity, but ground truth shows 19% decrease (785 vs 969 openings)"
+  },
+  {
+   "id": "q015",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'More' (increase) when ground truth shows decrease from 258 to 214 openings (-17.1%), with no meaningful hedging despite disclaimer about incomplete data."
+  },
+  {
+   "id": "q016",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer confidently states 'more new businesses are opening' and 'year-over-year increase', directly contradicting ground truth showing 17% decrease (196 vs 236 openings)."
+  },
+  {
+   "id": "q017",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Ground truth shows 164 openings in last 12 months vs 142 prior (15.5% increase), but assistant confidently states 'Fewer new businesses are likely opening' and describes 'decelerating' activity with no meaningful hedging."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'Fewer new businesses' and 'trend is slightly down', which matches ground truth of decrease from 267 to 226 openings."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'Increasing' which matches ground truth direction of 'increase' (48 vs 31, +54.8%), though uses citywide proxy data rather than neighborhood-specific figures."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states Castro/Upper Market evictions are 'roughly flat to slightly down' when ground truth shows a 36.4% increase (33\u219245 notices)."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing' which matches ground truth direction of increase (53 vs 40, +32.5%)."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states Mission Bay evictions are increasing, but ground truth shows a 22.6% decrease (41 vs 53 notices)."
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states Hayes Valley evictions are 'roughly stable' and 'roughly flat year-over-year', but ground truth shows a 22.2% increase (36\u219244 notices), which is a clear increase."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'noise complaints are up' which matches ground truth direction of 'increase'"
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'up/higher' which matches ground truth direction of 'increase' (1004 vs 343, +193%)"
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'up over the past year' which matches ground truth increase (164% rise from 268 to 708 complaints)."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'up' (increase) for Treasure Island noise complaints, matching ground truth of increase from 30 to 72 complaints (+140%)."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'up over the past year' which matches ground truth of 'increase' (133% rise from 1289 to 3008 complaints)"
+  },
+  {
+   "id": "q029",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'almost certainly down' when ground truth shows a large increase (38 to 244 units, +542%), with no meaningful hedging despite the confident language."
+  },
+  {
+   "id": "q030",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'Down' when ground truth shows a clear increase (987 vs 289 units, +241.5%)"
+  },
+  {
+   "id": "q031",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states West of Twin Peaks approvals are 'effectively flat or near zero' and 'not meaningfully higher,' but ground truth shows a 198.5% increase (776 vs 260 units), a clear and substantial rise."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'flat to down' and 'flat to slightly declining' which aligns with ground truth showing decrease from 475 to -125 units approved."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'probably going up' when ground truth shows a 93% decrease (419 vs 6082 units); no meaningful hedging despite the confident directional claim."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission District with specific numbers and no hedging, but ground truth shows Japantown had the biggest increase."
+  },
+  {
+   "id": "q035",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Japantown with 46% decrease; ground truth is Bernal Heights with 42.8% decrease."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission District as the neighborhood with largest increase, but ground truth shows Lakeshore had the largest increase."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Tenderloin as the neighborhood with largest rise in eviction filings, but ground truth shows Lakeshore had the largest rise (8.2% increase)."
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 50-100 units, ground truth is 1319 units (tolerance 989-1649); answer shows no hedging on the low estimate."
+  },
+  {
+   "id": "q039",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 4 net new units vs ground truth of 1206 (\u00b125%), off by ~300x with no hedging on the magnitude"
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 350-450 units, which is far below the ground truth of 1172 (tolerance range 879-1465); no meaningful hedging present."
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'fewer than 20' and 'quite possibly close to zero' units, but ground truth is 934 units (tolerance 700-1168); no meaningful hedging present."
+  },
+  {
+   "id": "q042",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 11 net new units (or somewhat lower), ground truth is 511 \u00b125%; no meaningful hedging present."
+  },
+  {
+   "id": "q043",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 40-80 units, ground truth is 482 units (tolerance 361-603); answer is far below acceptable range with no hedging."
+  },
+  {
+   "id": "q044",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer mentions 148 units at 490 Avenue of the Palms, which matches ground truth of ~150 units within tolerance; also provides context about other projects"
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer cites 2588 Mission (181 units, market-rate, May 2025) as the most notable recent approval, but ground truth shows a 94-unit 100% affordable 17-story building (permit 202412035997) approved in December 2024 as the verified major new residential approval."
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Ground truth is a 203-unit building (permit 201912179800, ~$71M). Assistant confidently cites 10 South Van Ness with 1,112 units and other projects (671 homes, 64 units at 78 Haight) but never mentions the verified 203-unit project."
+  }
+ ]
+}

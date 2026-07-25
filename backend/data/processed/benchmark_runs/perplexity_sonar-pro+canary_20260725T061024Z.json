@@ -1,0 +1,285 @@
+{
+ "provider": "perplexity:sonar-pro+canary",
+ "grounded": true,
+ "benchmark": "Canary area ground-truth benchmark v0 (San Francisco)",
+ "pipeline_version": "861209d",
+ "ran_at": "20260725T061024Z",
+ "answers": [
+  {
+   "id": "q001",
+   "question": "I'm considering moving to the Tenderloin in San Francisco. Is crime there getting better or worse as of mid-2026?",
+   "answer": "**Worse overall, but only slightly on victim-reported crime; the clearer story is that the Tenderloin still remains very high-crime.** In the past 12 months, **crime incidents** rose to 13,464 from 12,114 (+11%), and **crime victim reported** fell to 4,207 from 4,574 (-8%); because raw incidents can include enforcement activity, the victim-reported measure is the better read on experienced crime, and it\u2019s *improving modestly* rather than worsening.[1]  \n\nAt the same time, **crime enforcement** jumped 44%, which suggests a bigger police crackdown, and 311 noise/cleaning complaints also rose, so conditions and enforcement intensity remain elevated.[1] If your question is simply \u201cis it getting better or worse?\u201d the best direct answer is: **slightly better on resident-experienced crime, but still bad overall.**[1][2][3]",
+   "status": "ok"
+  },
+  {
+   "id": "q002",
+   "question": "Is crime rising or falling in Bernal Heights, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime is **falling** in Bernal Heights, based on the resident-experienced measure: **crime_victim_reported** dropped **42.8%** year over year, from **1,532** to **877** in the trailing 12 months.[1] The broader **crime_incidents** total also fell **32.1%** (from **2,234** to **1,517**), which is consistent with a downward trend, though that raw total should not be used alone to judge whether crime is rising.[1]\n\nSome caution: **crime_enforcement** was basically flat, up **1.5%**, so this does not look like a crackdown-driven change.[1] ",
+   "status": "ok"
+  },
+  {
+   "id": "q003",
+   "question": "Is crime rising or falling in Japantown, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Japantown is falling** year\u2011over\u2011year as of mid\u20112026, based on both your Canary metrics and external neighborhood data.\n\nFrom your data:\n- **Crime victim reported** dropped from 406 to 254 incidents (about a **37% decrease**), which is the best single indicator of crime as experienced by residents.  \n- **Total crime incidents** fell from 543 to 377 (about a **31% decrease**).  \n- **Crime enforcement** (police crackdowns) also decreased modestly, suggesting no major surge in police activity masking higher crime.\n\nExternal sources focused on Japantown/Lower Pacific Heights similarly describe the area as generally **safe with a \u201cB\u201d safety grade**, and citywide dashboards show Japantown with roughly **46% fewer incidents than the prior 12 months**.[2][4]",
+   "status": "ok"
+  },
+  {
+   "id": "q004",
+   "question": "Is crime rising or falling in Outer Mission, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Outer Mission is falling overall** in the past year versus the year before, based on resident-reported measures: **crime_victim_reported is down 33%** and **crime_incidents are down 25%** year over year.[1] The caution is that **crime_enforcement is up 23%**, which reflects more proactive police activity rather than more crime, so it should not be used as a crime-rising signal.[1]\n\nSeparately, **311 complaints are down** in total and for cleaning/encampment, which is more consistent with a neighborhood that is *not* worsening overall.[1]",
+   "status": "ok"
+  },
+  {
+   "id": "q005",
+   "question": "Is crime rising or falling in Golden Gate Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "**Falling.** In Golden Gate Park, victim-reported crime fell from **456** to **306** over the past year, a drop of about **33%**, and total crime incidents also fell from **823** to **578**[1]. The sharp drop in **crime enforcement** activity suggests less police crackdown, not more crime, so the clearest signal here is that crime is down[1].",
+   "status": "ok"
+  },
+  {
+   "id": "q006",
+   "question": "Is crime rising or falling in Financial District/South Beach, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Financial District/South Beach is clearly falling** over the past year compared with the year before, based on both local neighborhood data and citywide trends.\n\nFrom the Canary metrics you provided, **crime as experienced by residents (crime_victim_reported)** is down about **32%** (2464 vs 3644, \\(\u22120.32\\) change), and **overall incidents (crime_incidents)** are down about **24%** (4182 vs 5485, \\(\u22120.24\\) change). At the same time, **proactive police activity (crime_enforcement)** is slightly lower (\u22126%), which suggests the drop is not just due to a crackdown pattern shift. Citywide data for 2025\u20132026 show similar declines in violent and property crime, with most categories down roughly 20\u201325% year\u2011over\u2011year, reinforcing that this neighborhood\u2019s crime decrease fits into a broader downward trend in San Francisco.",
+   "status": "ok"
+  },
+  {
+   "id": "q007",
+   "question": "Is crime rising or falling in Excelsior, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Excelsior is falling** year-over-year as of mid\u20112026, both in terms of what residents report and overall incidents.  \n\nFrom your Canary data:\n- **Crime as experienced by residents (crime_victim_reported)** is down from 1,223 to 832, a drop of about **32%**.\n- **Total crime incidents (crime_incidents)** are down from 1,870 to 1,443, about **23%** lower.\n- Police **crime_enforcement** activity is slightly up (+4%), which suggests a modest increase in proactive policing rather than more crime.  \n\nTaken together, this points to a **meaningful decline in crime in Excelsior over the past 12 months compared to the prior year**, with no sign in the data of a local crime surge.",
+   "status": "ok"
+  },
+  {
+   "id": "q008",
+   "question": "Is crime rising or falling in Oceanview/Merced/Ingleside, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime is **falling** in Oceanview/Merced/Ingleside over the past year compared with the year before. Both resident\u2011experienced crime and overall incidents are down.\n\nFrom your Canary data:\n- **crime_victim_reported** dropped from 642 to 440, a **31% decrease**, meaning fewer crimes as experienced and reported by residents.\n- **crime_incidents** (victim reports plus enforcement-related incidents) fell from 956 to 736, a **23% decrease**.\n- **crime_enforcement** is roughly flat (62 \u2192 60), so the decline is not just a policing-activity artifact.\n\nCombined with external data showing Oceanview/Merced/Ingleside among the **lowest-crime areas in San Francisco** as of 2026, this strongly indicates crime is trending downward, not up.[2][11]",
+   "status": "ok"
+  },
+  {
+   "id": "q009",
+   "question": "Is crime rising or falling in Treasure Island, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Treasure Island is falling** year\u2011over\u2011year as of mid\u20112026, based on victim\u2011reported data.\n\n- **Crime as experienced by residents:** victim\u2011reported crime is down about **31%** (from 242 to 168 reports in the last 12 months vs. the prior 12).  \n- **Overall incidents:** total crime incidents (victim reports plus enforcement) are also down about **31%** (410 \u2192 284), reinforcing a clear downward trend.  \n- **Enforcement:** crime enforcement actions are down modestly (34 \u2192 28, about **18%**), which suggests the drop is not just a result of an aggressive crackdown.  \n- Citywide context: SF overall is seeing broad declines in both violent and property crime in 2026 compared with 2025, which is consistent with what you see on Treasure Island.",
+   "status": "ok"
+  },
+  {
+   "id": "q010",
+   "question": "Is crime rising or falling in Glen Park, San Francisco, as of mid-2026 (past year vs the year before)?",
+   "answer": "Crime in **Glen Park is falling**, based on both resident\u2011reported crime and total incidents over the past year versus the year before. Victim\u2011reported crime is down about **30%** (325 \u2192 227), and overall crime incidents are down about **24%** (459 \u2192 348), while police **enforcement activity is up** (30 \u2192 22), consistent with a safer area plus some targeted crackdowns.\n\n- **Resident\u2011experienced crime:** `crime_victim_reported` fell by ~30%, which is the clearest indicator of how much crime neighbors are actually experiencing.\n- **Overall incidents:** `crime_incidents` (victim reports + enforcement) fell by ~24%, reinforcing that crime volume is lower.\n- **Policing pattern:** `crime_enforcement` rose ~36%, suggesting more proactive police operations, not more crime.\n- Citywide context: external sources also rate Glen Park as one of San Francisco\u2019s safer neighborhoods with an **A safety grade** in 2026, safer than most of the city.[2][10]",
+   "status": "ok"
+  },
+  {
+   "id": "q011",
+   "question": "Are more or fewer new businesses opening in Western Addition, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "More new businesses are opening in **Western Addition** this past year compared to the year before.  \n\nThe Canary data show **213 business openings** in the last 12 months versus **166** in the prior 12 months, a roughly **28% increase** in new openings. Biz closings also rose (from 150 to 173), but the net change is still positive, indicating more new businesses starting up than the year before.",
+   "status": "ok"
+  },
+  {
+   "id": "q012",
+   "question": "Are more or fewer new businesses opening in Visitacion Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in **Visitacion Valley** this past year compared to the year before. Business openings fell from **89 to 66**, a decrease of about **26% year\u2011over\u2011year**.  \n\nSo as of mid\u20112026, Visitacion Valley is seeing a **drop in new business openings**, not growth.",
+   "status": "ok"
+  },
+  {
+   "id": "q013",
+   "question": "Are more or fewer new businesses opening in Presidio Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in **Presidio Heights** this past year compared to the year before.  \n\nThe Canary data show **biz_openings** fell from 162 to 127 year-over-year, a drop of about **21.6%**, meaning noticeably fewer new business registrations than in the prior 12 months. Biz_closings also fell (131 to 116), but because openings declined more sharply, the area is seeing *less* new business activity overall.",
+   "status": "ok"
+  },
+  {
+   "id": "q014",
+   "question": "Are more or fewer new businesses opening in Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "**Fewer new businesses are opening in the Mission compared to the year before.**\n\nThe Canary data show **biz_openings fell from 969 to 785**, a drop of about **19% year-over-year** (pct_change \u2248 -0.19), indicating a clear decline in new business formations in the Mission over the past 12 months versus the prior 12.",
+   "status": "ok"
+  },
+  {
+   "id": "q015",
+   "question": "Are more or fewer new businesses opening in Bernal Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "**Fewer** new businesses are opening in Bernal Heights this past year than in the year before. Business openings fell from **258** to **214** over the trailing 12 months, a **17.1% decrease**[data].",
+   "status": "ok"
+  },
+  {
+   "id": "q016",
+   "question": "Are more or fewer new businesses opening in Noe Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in **Noe Valley** over the past year compared with the year before.  \n\nThe Canary data show **business openings fell from 236 to 196**, a drop of about **17% year over year** (236 \u2192 196, \u22120.17), while business closings also dipped slightly (211 \u2192 198, about \u22126%). This points to a net slowdown in new business formation in Noe Valley as of mid\u20112026.",
+   "status": "ok"
+  },
+  {
+   "id": "q017",
+   "question": "Are more or fewer new businesses opening in Outer Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "**More** new businesses are opening in Outer Mission this past year than in the year before. The data show **biz_openings** rose from **142** in the prior 12 months to **164** in the last 12 months, a **15.5% increase**[1].",
+   "status": "ok"
+  },
+  {
+   "id": "q018",
+   "question": "Are more or fewer new businesses opening in Potrero Hill, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in **Potrero Hill** in the past 12 months compared with the prior year. \n\nThe Canary data shows **biz_openings** fell from 267 to 226, a drop of about **15% year over year**. Biz_closings ticked up slightly (194 to 205), which means the neighborhood saw both fewer openings and a bit more churn, pointing to a modest cooling in new business formation rather than growth.",
+   "status": "ok"
+  },
+  {
+   "id": "q019",
+   "question": "Are eviction notices in Bayview Hunters Point, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "Eviction notices in **Bayview Hunters Point are increasing**: they rose from **31 to 48** filings in the past 12 months compared with the prior year, about a **55% jump**.  \n\nThis Canary metric for **evictions_filed** shows a pct_change of **+0.55**, which is a substantial increase even though the z\u2011score is near zero (meaning this rise is not an extreme outlier compared with other areas in the city.",
+   "status": "ok"
+  },
+  {
+   "id": "q020",
+   "question": "Are eviction notices in Castro/Upper Market, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "Eviction notices in **Castro/Upper Market are increasing** over the past year compared with the year before.  \n\nFrom the Canary data, **evictions_filed** rose from **33 to 45** in the trailing 12 months, a **36% increase** year-over-year, which clearly indicates a rising trend in eviction notices for this neighborhood.",
+   "status": "ok"
+  },
+  {
+   "id": "q021",
+   "question": "Are eviction notices in Western Addition, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "Eviction notices in **Western Addition are increasing** year-over-year as of mid\u20112026.  \n\nFrom the Canary data, **evictions_filed rose from 40 to 53 in the past 12 months**, a **32.5% increase** (40 \u2192 53, +0.325). This local pattern matches citywide trends, where San Francisco eviction notices and filings have climbed sharply since 2023, with Western Addition listed among the neighborhoods seeing some of the **sharpest increases in eviction notices** in recent data reports.[1][3]",
+   "status": "ok"
+  },
+  {
+   "id": "q022",
+   "question": "Are eviction notices in Mission Bay, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "**Decreasing.** In Mission Bay, **evictions filed** fell from **53** in the prior 12 months to **41** in the last 12 months, a **22.6% decline**[context].  \n\nFor context, that neighborhood-specific metric is the best match to your question about eviction notices; citywide reporting shows San Francisco eviction notices rose in 2025\u20132026 overall, but Mission Bay\u2019s own recent trend is down[1][3].",
+   "status": "ok"
+  },
+  {
+   "id": "q023",
+   "question": "Are eviction notices in Hayes Valley, San Francisco, increasing or decreasing as of mid-2026 (past year vs the year before)?",
+   "answer": "**Increasing.** In Hayes Valley, **evictions filed** rose from **36** in the prior 12 months to **44** in the last 12 months, a **22% increase**[context]. The change is modest in absolute terms, but the direction is clearly upward.",
+   "status": "ok"
+  },
+  {
+   "id": "q024",
+   "question": "Are 311 noise complaints in Oceanview/Merced/Ingleside, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 noise complaints in **Oceanview/Merced/Ingleside are up** over the past year.  \n\nOverall **311 noise cases** more than tripled, from 281 to 885 (up about **215%**), and the more targeted **\u201cnoise_specific\u201d complaints** also rose from 77 to 126 (up about **64%**).",
+   "status": "ok"
+  },
+  {
+   "id": "q025",
+   "question": "Are 311 noise complaints in Western Addition, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 noise complaints in **Western Addition are up over the past year**.\n\nTotal **311 noise** cases jumped from 343 to 1,004, an increase of about **193% year over year**. The more narrowly defined **311 noise_specific** complaints also rose, from 210 to 253, about a **20% increase**, so by both measures noise reporting is clearly rising.",
+   "status": "ok"
+  },
+  {
+   "id": "q026",
+   "question": "Are 311 noise complaints in Mission Bay, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "**Up sharply.** Mission Bay\u2019s 311 noise complaints rose from **268** in the prior 12 months to **708** in the latest 12 months, a **164% increase** over the year ending mid-2026.[1]\n\nThis is also reflected in the related **311 noise-specific** metric, which doubled from **187** to **374** complaints.[1]",
+   "status": "ok"
+  },
+  {
+   "id": "q027",
+   "question": "Are 311 noise complaints in Treasure Island, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 noise complaints on **Treasure Island are up over the past year**.  \n\nTotal 311 noise complaints rose from **30 to 72** (about a **140% increase**), and more specific noise complaints doubled from **21 to 42** year-over-year, indicating a clear upward trend in reported noise issues.",
+   "status": "ok"
+  },
+  {
+   "id": "q028",
+   "question": "Are 311 noise complaints in Tenderloin, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "**Up**. Tenderloin **311 noise complaints** rose from **1,289** in the prior 12 months to **3,008** in the last 12 months, a **+133%** increase as of the mid-2026 data window you provided. That means residents filed *much more* noise-related 311 reports over the past year, though this measures **reporting** rather than the underlying noise level.",
+   "status": "ok"
+  },
+  {
+   "id": "q029",
+   "question": "Is the number of new housing units approved in Lone Mountain/USF, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "**Up** \u2014 Lone Mountain/USF had **244 net approved housing units** in the last 12 months versus **38** in the prior 12 months, a very large increase of about **542%**.[1]\n\nThat means the pace of approved new housing units is clearly rising in this neighborhood, based on the Canary API metric **units_approved_net**.[1]",
+   "status": "ok"
+  },
+  {
+   "id": "q030",
+   "question": "Is the number of new housing units approved in Nob Hill, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of **new housing units approved in Nob Hill is going up sharply** over the past 12 months compared with the 12 months before.  \n\nFrom the Canary data, **net units approved jumped from 289 to 987**, a **~242% increase** (2.42\u00d7 higher), which is a very strong surge in new housing approvals in Nob Hill.",
+   "status": "ok"
+  },
+  {
+   "id": "q031",
+   "question": "Is the number of new housing units approved in West of Twin Peaks, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of **new housing units approved in West of Twin Peaks is going up sharply** over the past 12 months compared with the prior year. Units approved rose from **260 to 776**, roughly a **200% increase** (about triple).  \n\nThat strong jump in **units_approved_net** suggests a significant recent wave of housing approvals in West of Twin Peaks, even though overall SF production remains concentrated more on the east side of the city.[0][6]",
+   "status": "ok"
+  },
+  {
+   "id": "q032",
+   "question": "Is the number of new housing units approved in Tenderloin, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of **new housing units approved in the Tenderloin is going down sharply** over the past 12 months compared with the 12 months before.  \n\nFrom the Canary data, **units_approved_net** fell from **+475** in the prior 12 months to **\u2013125** in the last 12 months, a drop of about **126%**, meaning the neighborhood shifted from substantial net new housing to a net loss of units on issued permits.",
+   "status": "ok"
+  },
+  {
+   "id": "q033",
+   "question": "Is the number of new housing units approved in South of Market, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of **new housing units approved in South of Market is sharply down** over the past 12 months compared with the prior year. Net units approved fell from **6,082** to **419**, a drop of about **93%**.\n\nThat \u201cunits_approved_net\u201d metric reflects net housing units on issued permits, so it directly measures new housing approvals rather than just applications or citywide trends. In South of Market specifically, this indicates a steep slowdown in new housing entering the pipeline, even though citywide permit activity has been rising.",
+   "status": "ok"
+  },
+  {
+   "id": "q034",
+   "question": "Which San Francisco neighborhood had the biggest increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "The **Japantown** neighborhood had the biggest increase in new business openings over the past year.  \n\nFrom your Canary data, Japantown\u2019s business openings rose from **50 to 69**, a **38% increase**, with the highest z\u2011score in the city (2.90), indicating the strongest outperformance versus other neighborhoods. The next\u2011largest increases are Western Addition (+28%), Outer Mission (+15%), and Tenderloin/Sunset/Parkside (around +14\u201315%), but none are close to Japantown\u2019s growth.",
+   "status": "ok"
+  },
+  {
+   "id": "q035",
+   "question": "Which San Francisco neighborhood saw the largest drop in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "**Bernal Heights** saw the largest drop in reported crime victimization over the past year, with about a **43% decrease** in victim-reported incidents (from 1,532 to 877).  \n\nFrom the Canary data, Bernal Heights has the most negative pct_change (\u22120.4275), larger than other big decliners like Outer Mission (\u22120.3333), Financial District/South Beach (\u22120.3238), Excelsior (\u22120.3197), and Oceanview/Merced/Ingleside (\u22120.3146), making it the neighborhood with the steepest year-over-year drop in crime as experienced by residents.",
+   "status": "ok"
+  },
+  {
+   "id": "q036",
+   "question": "Which San Francisco neighborhood had the largest increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "Lakeshore had the largest increase in building permits issued, with permits up about **156% year-over-year** (from 80 to 205).  \n\nThe next-biggest jumps were in **Japantown** (up about 65%) and **Treasure Island** (up about 38%), but both are smaller markets in absolute permit counts than Lakeshore.",
+   "status": "ok"
+  },
+  {
+   "id": "q037",
+   "question": "Which San Francisco neighborhood had the largest rise in eviction filings over the past year (as of mid-2026)?",
+   "answer": "**Lakeshore** had the largest rise in eviction filings over the past year, with filings jumping from **5** to **46**\u2014an increase of **820%**.[Canary data]\n\nThe next-largest increases in the provided data were **North Beach** (+178%), **Chinatown** (+95%), and **Presidio Heights** (+89%).",
+   "status": "ok"
+  },
+  {
+   "id": "q038",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Nob Hill, San Francisco, in the 12 months before July 2026?",
+   "answer": "Based on the Canary data, **roughly 1,000 net new housing units** were approved in Nob Hill in the 12 months before July 2026.  \n\nThe `units_approved_net` metric shows **987** units in the last 12 months versus 289 in the prior 12 months, so you can treat it as \u201cabout a thousand\u201d new units approved on issued permits in that period.",
+   "status": "ok"
+  },
+  {
+   "id": "q039",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Hayes Valley, San Francisco, in the 12 months before July 2026?",
+   "answer": "Roughly **1,200 net new housing units** were approved in Hayes Valley in the 12 months before July 2026.[user data]\n\nThe Canary metric for **units_approved_net** shows **1,206** for the trailing 12 months versus 3,463 in the prior 12 months, so the best estimate is about **1.2k units**.[user data]",
+   "status": "ok"
+  },
+  {
+   "id": "q040",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "Based on the Canary metrics, roughly **1,200 net new housing units** were approved in the Mission over the 12 months before July 2026.\n\nThe `units_approved_net` metric for Mission shows **1,192** units in the trailing 12 months, versus **681** in the prior 12 months, indicating about **1.2k net new units approved** on issued permits in that period.",
+   "status": "ok"
+  },
+  {
+   "id": "q041",
+   "question": "Roughly how many net new housing units were approved (permits issued) in West of Twin Peaks, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **776 net new housing units** were approved via permits issued in West of Twin Peaks in the 12 months before July 2026.  \n\nThat figure comes directly from the **units_approved_net** metric for \u201clast12,\u201d which is defined as net housing units on issued permits over the trailing 12 months, and is 776 for West of Twin Peaks.",
+   "status": "ok"
+  },
+  {
+   "id": "q042",
+   "question": "Roughly how many net new housing units were approved (permits issued) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "answer": "Roughly **419 net new housing units** were approved in South of Market in the 12 months before July 2026.[1] This is based on the Canary metric **units_approved_net**, which is defined as net housing units on issued permits.[1]\n\n",
+   "status": "ok"
+  },
+  {
+   "id": "q043",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Western Addition, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **250 net new housing units** were approved on issued permits in Western Addition in the 12 months before July 2026.\n\nFrom the Canary data, the **units_approved_net** metric for Western Addition shows **252** units in the last 12 months and **491** in the prior 12 months; your question asks for the 12 months before July 2026, which corresponds to the **last12 value of 252 units**, i.e., roughly 250 net new housing units approved.",
+   "status": "ok"
+  },
+  {
+   "id": "q044",
+   "question": "Has any major new residential building been approved recently in Treasure Island, San Francisco? If so, roughly how large?",
+   "answer": "Yes. The Canary data shows **net housing units approved** in Treasure Island dropped to **100** in the last 12 months from **768** in the prior 12 months, which suggests there was a much larger residential approval period recently but **not a single huge spike in the latest year**.[data]\n\nFor scale, **100 net approved units** is still a substantial project-sized amount, but it is **far smaller** than the prior-year pace on the island.[data] The broader Treasure Island / Yerba Buena Island redevelopment is a long-running major project, and SF Planning describes it as a new neighborhood development.[5]",
+   "status": "ok"
+  },
+  {
+   "id": "q045",
+   "question": "Has any major new residential building been approved recently in Mission, San Francisco? If so, roughly how large?",
+   "answer": "Yes. In the last year the Mission has seen approval of at least one **major new residential building**: a **10\u2011story, 181\u2011unit** apartment project at **2588 Mission Street** (22nd & Mission), approved by the Planning Commission on May 15 after nearly a decade of delays.[1][4][5][6][7][10]\n\nYour Canary data shows **net units approved jumped from 681 to 1,192 year\u2011over\u2011year (+75%)**, indicating that 2588 Mission plus a handful of other projects together added roughly **500 net units** of new housing approvals in the Mission over the past 12 months.[0]",
+   "status": "ok"
+  },
+  {
+   "id": "q046",
+   "question": "Has any major new residential building been approved recently in Hayes Valley, San Francisco? If so, roughly how large?",
+   "answer": "Yes. Hayes Valley had a **very large wave of approvals in the prior 12 months**, but only modest new approvals in the most recent year.\n\nFrom the Canary data, **net units approved dropped from 3,463 to 1,206 year-over-year**, a roughly **65% decline**, which implies that one or more **major residential projects (on the order of several hundred units total)** were approved in the earlier period, while the latest 12 months still saw **over 1,200 net units** approved but spread across smaller or mid-sized projects rather than a single blockbuster building.",
+   "status": "ok"
+  }
+ ]
+}

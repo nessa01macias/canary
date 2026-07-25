@@ -1,0 +1,12 @@
+# Serving-only deps for the deployed API image. Deliberately a SUBSET of
+# requirements.txt (which also carries pipeline/benchmark deps like supabase,
+# firecrawl, uvicorn[standard]'s websockets — none of which the server needs).
+# Keeping this minimal avoids the supabase<->websockets version conflict and
+# yields a smaller, faster image. store.py talks to Supabase over plain httpx,
+# so no supabase SDK is required here.
+fastapi==0.140.0
+uvicorn==0.51.0
+duckdb==1.5.5
+httpx==0.28.1
+pydantic==2.13.4
+python-dotenv==1.2.2

@@ -1,0 +1,283 @@
+{
+ "provider": "anthropic:claude-sonnet-4-5",
+ "judge_model": "claude-sonnet-4-5",
+ "run_file": "anthropic_claude-sonnet-4-5_20260725T051730Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant states it lacks 2026 data and cannot answer the question about mid-2026 trends, providing only historical context through early 2024"
+  },
+  {
+   "id": "q002",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have mid-2026 data and refuses to answer the specific question, instead providing general historical context and suggesting alternative sources."
+  },
+  {
+   "id": "q003",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit to a direction for mid-2026, citing knowledge cutoff and recommending checking current sources instead of answering the specific question asked."
+  },
+  {
+   "id": "q004",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges with 'if this trend continued' and 'would likely be' without committing to the actual mid-2026 direction, despite ground truth showing clear 33% decrease"
+  },
+  {
+   "id": "q005",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have access to mid-2026 data and only speculates about 'likely trend' without committing to a definitive answer about the actual direction."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is 'falling' which matches the ground truth of a decrease (-32.4%), though it hedges on the specific 2025-2026 timeframe."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is 'falling' which matches the ground truth of a 32% decrease, though it references 2024 data rather than mid-2026."
+  },
+  {
+   "id": "q008",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states it lacks 2025-2026 data and only speculates about likelihood based on older trends, refusing to commit to the current direction"
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have data from mid-2026 and provides only general context without committing to whether crime is rising or falling."
+  },
+  {
+   "id": "q010",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it doesn't have data from mid-2026 (treating it as future), rather than committing to whether crime is rising or falling in Glen Park."
+  },
+  {
+   "id": "q011",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to answer the specific question, citing lack of access to mid-2026 data and only providing general context about trends without committing to whether openings increased or decreased."
+  },
+  {
+   "id": "q012",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'modest increase' when ground truth shows 25.8% decrease (66 vs 89 openings)"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'fewer' new businesses opening, matching the ground truth decrease (-21.6%), though it lacks specific data and hedges about data access."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'fewer new business openings' which aligns with the ground truth showing a decrease (-19%) in new business openings, though it hedges by noting lack of real-time 2026 data."
+  },
+  {
+   "id": "q015",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer suggests 'similar or slightly increased' openings, but ground truth shows a 17.1% decrease (214 vs 258); however, answer hedges with 'I don't have access' and 'likely', so not confidently wrong"
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have access to mid-2026 data and only provides a hedged estimate ('likely flat to slightly fewer') without committing to a definitive answer about the actual comparison."
+  },
+  {
+   "id": "q017",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'slightly fewer' openings when ground truth shows 164 vs 142 (15.5% increase)"
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'fewer' new business openings, which aligns with the ground truth showing a decrease from 267 to 226 (-15.4%), though it hedges by not claiming specific knowledge of mid-2026 data."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states evictions were 'generally decreasing' based on 2024 patterns, but ground truth shows a 54.8% increase (31\u219248) in the past year vs prior year as of mid-2026, with no hedging about the specific timeframe asked."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'stable to slightly decreasing' when ground truth shows a 36.4% increase (45 vs 33 evictions)"
+  },
+  {
+   "id": "q021",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'decreasing' or 'stable to slightly decreasing' when ground truth shows a 32.5% increase (53 vs 40 evictions)."
+  },
+  {
+   "id": "q022",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges extensively ('don't have specific data', 'likely stable to slightly decreasing') without committing to the ground truth of decreasing evictions"
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'stable to slightly decreasing' when ground truth shows a 22.2% increase (44 vs 36 evictions)"
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states complaints were 'down' or 'stable/slight decreases' but ground truth shows a 215% increase (885 vs 281 complaints), making this confidently wrong with no hedging."
+  },
+  {
+   "id": "q025",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer estimates 'stable to slightly down' but ground truth shows dramatic increase (193% increase from 343 to 1004 complaints); however, answer hedges with 'I don't have access' and 'best estimate' qualifiers"
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'relatively stable or slightly down' when ground truth shows a 164% increase (708 vs 268 complaints)"
+  },
+  {
+   "id": "q027",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have access to the data and doesn't commit to whether complaints are up or down."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'down' trend when ground truth shows significant increase (133.4% rise from 1289 to 3008 complaints)"
+  },
+  {
+   "id": "q029",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'staying relatively flat or slightly down' when ground truth shows a massive increase (244 vs 38 units, +542%)"
+  },
+  {
+   "id": "q030",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'flat to slightly down' when ground truth shows a large increase (289\u2192987 units, +241%)"
+  },
+  {
+   "id": "q031",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'declining' approvals when ground truth shows a 198.5% increase (776 vs 260 units), with no meaningful hedging despite acknowledging lack of actual data."
+  },
+  {
+   "id": "q032",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'going up' when ground truth shows decrease from 475 to -125 units"
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'declining' which matches ground truth direction of 'decrease' (-93.1%), though acknowledges lack of actual 2026 data"
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission District when ground truth is Japantown; shows no hedging despite using 'likely'"
+  },
+  {
+   "id": "q035",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have access to mid-2026 data and refuses to answer the specific question, instead providing historical context and suggesting alternative sources."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission Bay/Dogpatch and Potrero Hill/Central Waterfront as having largest increases, but ground truth shows Lakeshore had the largest increase."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission District, Tenderloin, or SoMa as likely neighborhoods with largest eviction filing increases, but ground truth shows Lakeshore had the largest rise"
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 10-50 units based on 'historical patterns' when ground truth is 1,319 units (\u00b125%), showing no hedging about this specific timeframe despite acknowledging future date."
+  },
+  {
+   "id": "q039",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 50-150 units annually based on 'historical patterns' when ground truth shows 1206 units were approved in the 12-month period, which is 8-24x higher than the stated range with no hedging about future data uncertainty affecting the actual number."
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 100-300 units based on 'historical patterns' when ground truth shows 1172 units (nearly 4-12x higher); no meaningful hedging about the specific range given"
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 20-50 units when ground truth is 934 units (\u00b125%), showing no hedging about this specific numerical estimate despite acknowledging the future date."
+  },
+  {
+   "id": "q042",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to answer because it states 2026 is in the future beyond its knowledge cutoff, though it provides historical context without committing to the specific 2026 figure."
+  },
+  {
+   "id": "q043",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to answer, stating the date is beyond its training data cutoff."
+  },
+  {
+   "id": "q044",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer discusses the overall redevelopment plan (~8,000 units) rather than the specific recent major permit (~150 units, permit 202506209120) that the question asks about."
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer cites 1979 Mission (331 units) and 1515 South Van Ness (157 units) as recent approvals, but ground truth shows the recent major approval is permit 202412035997 for 94 units at an unspecified Mission location; no hedging present"
+  },
+  {
+   "id": "q046",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer identifies a major residential building with ~180 units, which is within reasonable tolerance of the ground truth's 203 units; the 8-story description matches the permit details."
+  }
+ ]
+}

@@ -15,7 +15,7 @@ import argparse
 import json
 from dataclasses import asdict
 
-from app.ingestion import base, california, census, datasf, federal, gtfs, insideairbnb
+from app.ingestion import base, california, census, datasf, federal, fsq, gtfs, insideairbnb, osm
 from app.ingestion.base import SourceSpec
 
 # --- implemented in this chat's modules (each exports SPEC/SPECS + fetch()) ---
@@ -26,6 +26,8 @@ IMPLEMENTED = [
     insideairbnb.SPEC,
     gtfs.SPEC,
     *federal.SPECS,
+    fsq.SPEC,
+    osm.SPEC,
 ]
 
 # --- implemented by modules that don't export a SPEC (other chat's overture.py) ---
@@ -42,22 +44,6 @@ EXTERNAL = [
 
 # --- verified endpoints, fetch() not yet built -------------------------------
 PLANNED = [
-    SourceSpec(
-        key="osm_california", name="OpenStreetMap California extract (Geofabrik)",
-        geography="california", temporal_shape="reference_layer", cadence="daily",
-        fmt="osm_pbf", license="ODbL 1.0",
-        homepage="https://download.geofabrik.de/north-america/us/california.html",
-        canonical_source="osm", tier="T1.4/T1.6/T3.10/T4.1",
-        notes="california-latest.osm.pbf ~1.32GB daily. Street network/sidewalks/routing => walk/commute scores computed by us, not bought from Walk Score.",
-    ),
-    SourceSpec(
-        key="fsq_os_places", name="Foursquare OS Places (CA filter)",
-        geography="us", temporal_shape="recurring_snapshot", cadence="monthly",
-        fmt="parquet", license="Apache-2.0",
-        homepage="https://huggingface.co/datasets/foursquare/fsq-os-places",
-        canonical_source="fsq", tier="T4.4/T6.5", requires_auth=True,
-        notes="Gated auto: needs free HF token to download. Latest dt=2026-07-09. Second POI witness vs Overture (cross-validation of churn).",
-    ),
     SourceSpec(
         key="gtfs_511_bayarea", name="511 SF Bay Area GTFS (+ GTFS-Realtime)",
         geography="sf_bay", temporal_shape="reference_layer", cadence="continuous",
@@ -115,22 +101,22 @@ TAXONOMY = {
     "T4.1 door-to-door commute at peak": ("compute", "routing over osm + gtfs (= T1.4)"),
     "T4.2 rail station proximity": ("covered", "gtfs_ca_statewide_calitp (stops/routes/trips); gtfs_511 for RT"),
     "T4.3 service frequency/reliability": ("covered", "gtfs_ca_statewide_calitp (frequencies/calendar/trips); GTFS-RT reliability still planned (511)"),
-    "T4.4 grocery/pharmacy access": ("covered", "overture_places (SF bbox); fsq_os_places = 2nd witness (planned)"),
-    "T4.5 urgent care/ER": ("planned", "HIFLD (federal agent) + state facility files"),
-    "T4.6 chain-retail proxies": ("covered", "overture_places; fsq_os_places (planned)"),
+    "T4.4 grocery/pharmacy access": ("covered", "overture_places + fsq_os_places (2 POI witnesses, SF bbox)"),
+    "T4.5 urgent care/ER": ("planned", "HIFLD redundant w/ Overture POIs; use overture_places hospital category, or HIFLD for bed/trauma metadata"),
+    "T4.6 chain-retail proxies": ("covered", "overture_places + fsq_os_places"),
     "T4.7 emergency response times": ("covered", "datasf_fire_ems_calls (received->on-scene timestamps, 2.9GB)"),
     "T4.8 airport access": ("compute", "routing to airport POIs (osm); no dataset"),
     "T4.9 school bus eligibility": ("covered", "datasf_sfusd_boundaries (58 attendance-area polygons; annual)"),
     # Tier 5 — composition
     "T5.1 political composition": ("covered", "ca_precinct_returns"),
-    "T5.2 tenure & turnover rate": ("planned", "census_acs_ca (needs free CENSUS_API_KEY)"),
-    "T5.3 age mix": ("planned", "census_acs_ca (needs free CENSUS_API_KEY)"),
+    "T5.2 tenure & turnover rate": ("covered", "census_acs_ca (9,129 CA tracts)"),
+    "T5.3 age mix": ("covered", "census_acs_ca (9,129 CA tracts)"),
     # Tier 6 — the forward layer (the differentiator)
     "T6.1 approved construction/view-light": ("covered", "datasf_permits + datasf_dev_pipeline (1.9k projects, net units); view/light loss also needs 3DEP terrain (catalog)"),
     "T6.2 school boundary changes": ("gap", "board agendas (unstructured); datasf_sfusd_boundaries gives the snapshot, diffing annual snapshots catches changes but not the proposal process"),
     "T6.3 rezoning/upzoning applications": ("covered", "datasf_planning_records (54k entitlement/land-use records, daily)"),
     "T6.4 approved transit": ("covered", "datasf_sfmta_projects (98 project polygons); regional capital plans still manual"),
-    "T6.5 business open/close velocity": ("covered", "datasf_business_locations + overture/fsq (planned)"),
+    "T6.5 business open/close velocity": ("covered", "datasf_business_locations + overture_places + fsq_os_places (3-way churn cross-validation)"),
     "T6.6 storefront vacancy trend": ("covered", "datasf_commercial_vacancy (Prop-D vacancy-tax roll, 21.9k spaces)"),
     "T6.7 large entitlements (CEQA/EIR)": ("planned", "CEQAnet (CA OPR/LCI) -- NO api/bulk exists; scrape sitemap->SCH record pages (Firecrawl)"),
     "T6.8 road diets/closures/works": ("covered", "datasf_sfmta_projects (shared w/ T6.4)"),

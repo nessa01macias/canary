@@ -1,0 +1,283 @@
+{
+ "provider": "openai:gpt-4o",
+ "judge_model": "claude-sonnet-4-5",
+ "run_file": "openai_gpt-4o_20260725T051612Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question about mid-2026 trends, citing inability to provide real-time data rather than committing to whether crime is getting better or worse."
+  },
+  {
+   "id": "q002",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, stating it lacks real-time data for mid-2026 and only provides general historical context without committing to whether crime is rising or falling."
+  },
+  {
+   "id": "q003",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, stating it lacks real-time data for mid-2026 and suggests checking other sources instead of committing to a direction."
+  },
+  {
+   "id": "q004",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and does not commit to any direction (rising or falling)."
+  },
+  {
+   "id": "q005",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, stating it doesn't have real-time data for mid-2026 and redirects to other sources without committing to whether crime is rising or falling."
+  },
+  {
+   "id": "q006",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and suggests checking other sources instead of committing to a direction."
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, citing lack of real-time data instead of providing information about the crime trend in Excelsior."
+  },
+  {
+   "id": "q008",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and does not commit to whether crime is rising or falling."
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and redirects to other sources instead of committing to whether crime is rising or falling."
+  },
+  {
+   "id": "q010",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, stating it lacks real-time data for mid-2026 and only provides general historical context without committing to whether crime is rising or falling."
+  },
+  {
+   "id": "q011",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about whether more or fewer businesses opened, citing lack of real-time data and suggesting alternative sources instead of committing to a direction."
+  },
+  {
+   "id": "q012",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer suggests 'likely that more new businesses have opened' (increase) while ground truth shows a decrease from 89 to 66 openings (-25.8%), but includes hedging language like 'likely' and 'if trends have continued'"
+  },
+  {
+   "id": "q013",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about business opening trends, citing lack of real-time data instead of providing the requested comparison."
+  },
+  {
+   "id": "q014",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 data, citing lack of real-time information and only providing historical context through 2023 without committing to a direction."
+  },
+  {
+   "id": "q015",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have real-time data for mid-2026 and only provides speculation about historical trends without committing to whether openings increased or decreased."
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have the data for mid-2026 and provides only general historical context without committing to whether openings increased or decreased."
+  },
+  {
+   "id": "q017",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 data, only providing general context about trends without committing to whether openings increased or decreased."
+  },
+  {
+   "id": "q018",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and does not commit to whether openings increased or decreased."
+  },
+  {
+   "id": "q019",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and does not commit to any direction (increase/decrease)."
+  },
+  {
+   "id": "q020",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 trends, citing lack of real-time data and suggesting checking other sources instead of committing to a direction."
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the question, stating it doesn't have real-time data for mid-2026 and suggests checking other sources instead of committing to a direction."
+  },
+  {
+   "id": "q022",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 trends, citing lack of real-time data and only providing general historical context without committing to whether evictions are increasing or decreasing."
+  },
+  {
+   "id": "q023",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about Hayes Valley eviction trends, citing lack of real-time data and suggesting checking local sources instead of committing to a direction."
+  },
+  {
+   "id": "q024",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and does not commit to any direction (increase or decrease)."
+  },
+  {
+   "id": "q025",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about the direction of change, stating it lacks real-time data and only provides general historical context without committing to whether complaints are up or down."
+  },
+  {
+   "id": "q026",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about Mission Bay noise complaints, citing lack of real-time data and suggesting to check the data portal instead of committing to a direction."
+  },
+  {
+   "id": "q027",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly refuses to answer, stating it lacks real-time data for mid-2026 and cannot provide specific trends for Treasure Island."
+  },
+  {
+   "id": "q028",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks real-time data for mid-2026 and only provides general historical context without committing to whether complaints are up or down."
+  },
+  {
+   "id": "q029",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about Lone Mountain/USF housing approvals, citing lack of data for mid-2026 and only providing general speculation about city-wide trends."
+  },
+  {
+   "id": "q030",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question, stating it lacks real-time data for mid-2026 and only provides general context without committing to whether approvals are going up or down in Nob Hill."
+  },
+  {
+   "id": "q031",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it lacks data for mid-2026 and does not commit to whether approvals are going up or down."
+  },
+  {
+   "id": "q032",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it lacks data for mid-2026 and does not commit to whether housing approvals are going up or down."
+  },
+  {
+   "id": "q033",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 trends, citing lack of real-time data and only providing general historical context without committing to a direction."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer names Mission District and SoMa instead of ground truth Japantown, but hedges with 'I don't have real-time data' disclaimer"
+  },
+  {
+   "id": "q035",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer by stating it lacks 2026 data and only provides historical context without committing to any specific neighborhood."
+  },
+  {
+   "id": "q036",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have the requested data for mid-2026 and provides only historical context without committing to any specific neighborhood for the time period in question."
+  },
+  {
+   "id": "q037",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer the specific question about mid-2026 data, instead providing only historical context and suggesting to check other sources."
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'a few dozen units' when ground truth is 1319 units (\u00b125%), showing no hedging about this specific estimate"
+  },
+  {
+   "id": "q039",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 'a few dozen' (implying ~20-60 units) when ground truth is 1206 units (acceptable range 905-1508), off by an order of magnitude with no hedging on the specific estimate"
+  },
+  {
+   "id": "q040",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to provide a specific number, citing lack of data for 2026, and suggests checking official sources instead."
+  },
+  {
+   "id": "q041",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to provide a number, citing lack of access to future data rather than committing to any value."
+  },
+  {
+   "id": "q042",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it doesn't have 2026 data and only provides historical context without committing to any specific number for the requested time period."
+  },
+  {
+   "id": "q043",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to answer, citing lack of access to data rather than providing the specific number requested."
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer cites ~8,000 homes from the broader Treasure Island redevelopment plan, not the specific recent permit for ~150 units verified in ground truth"
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 75 units at 2588 Mission Street, but ground truth shows 94 units under permit 202412035997; no hedging present"
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 139 units at 555 Fulton Street, but ground truth shows 203 units (permit 201912179800); no hedging present"
+  }
+ ]
+}

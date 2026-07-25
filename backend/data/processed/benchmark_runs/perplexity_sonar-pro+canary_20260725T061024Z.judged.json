@@ -1,0 +1,283 @@
+{
+ "provider": "perplexity:sonar-pro+canary",
+ "judge_model": "claude-sonnet-4-5",
+ "run_file": "perplexity_sonar-pro+canary_20260725T061024Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies victim-reported crime fell 8% (improving/better), distinguishes enforcement from victimization, and commits to 'slightly better on resident-experienced crime' matching ground truth direction."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling with accurate 42.8% decrease from 1,532 to 877, matching ground truth exactly."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'falling' crime, matching the ground truth decrease of -37.4% in crime_victim_reported."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling in Outer Mission with 33% decrease in crime_victim_reported, matching ground truth direction and percentage."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling with accurate numbers (456\u2192306, ~33% drop) matching ground truth."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' crime with ~32% decrease, matching ground truth direction (decrease) and percentage (-0.324)."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling in Excelsior with 32% decrease in crime_victim_reported (832 vs 1223), matching ground truth direction and numbers."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' which matches ground truth 'decrease' direction, and cites the correct 31% decrease from 642 to 440."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling and cites ~31% decrease matching ground truth -30.6% decline from 242 to 168 victim-reported incidents."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' crime with ~30% decrease in victim-reported crime (227 vs 325), matching ground truth direction and magnitude."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states 'more' new businesses opening, matching ground truth 'increase', with accurate numbers (213 vs 166) and percentage (28% vs 28.3%)."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states 'fewer' openings (decrease), with exact numbers 89\u219266 and ~26% decline matching ground truth."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'fewer' openings (127 vs 162, -21.6%), matching the ground truth direction of decrease."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'fewer' openings, matching the ground truth decrease direction, and accurately cites the numbers (969\u2192785, -19%)."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'fewer' (decrease) with accurate numbers matching ground truth: 214 vs 258, -17.1% change."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states fewer new businesses are opening, matching the ground truth decrease from 236 to 196 (-17%)."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'more' (increase) with accurate numbers (164 vs 142, 15.5% increase) matching ground truth."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states fewer openings (226 vs 267, ~15% decrease), matching the ground truth direction and numbers."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states evictions increased from 31 to 48 (55% jump), matching ground truth of 48 vs 31 (54.8% increase)."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'increasing' evictions, matching ground truth direction, with accurate numbers (33\u219245, 36% increase)."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing' which matches ground truth direction, and cites correct numbers (40\u219253, +32.5%)."
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'decreasing' evictions in Mission Bay, matching ground truth direction and exact numbers (53\u219241, -22.6%)."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'increasing' direction with accurate numbers (36\u219244, 22% increase) matching ground truth."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states noise complaints are up, with accurate numbers (281 to 885, ~215% increase) matching ground truth."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies noise complaints are up/increasing, with accurate numbers (343\u21921004, ~193% increase) matching ground truth."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states noise complaints increased (up) from 268 to 708, matching ground truth direction and numbers."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to 'up' (increase) with accurate numbers (30\u219272, 140% increase) matching ground truth."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states noise complaints increased (up) from 1,289 to 3,008, matching ground truth direction and numbers."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies increase (up) and provides accurate numbers (244 vs 38) matching ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states units approved are going up (increase from 289 to 987), matching ground truth direction of 'increase'"
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states units approved are 'going up sharply' from 260 to 776, matching the ground truth increase direction and exact numbers."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies the direction as 'going down sharply' which matches the ground truth expectation of 'decrease', and accurately cites the supporting numbers (-125 vs +475)."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies decrease direction and accurately cites the ground truth numbers (6,082 to 419, ~93% drop)."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Japantown as the neighborhood with the biggest increase in new business openings and cites the 38% increase matching the ground truth."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Bernal Heights as the neighborhood with the largest drop and accurately reports the ~43% decrease (ground truth: -0.428 or -42.8%)."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lakeshore as the neighborhood with the largest increase in building permits, matching the ground truth."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lakeshore as the neighborhood with the largest rise in eviction filings, matching the ground truth."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 987 units (rounded to ~1,000), which is within 25% tolerance of ground truth 1,319 (range: 989-1,649)."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to ~1,200 units, which matches ground truth of 1,206 within 25% tolerance"
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 1,200 (or 1,192) units, which is within 25% tolerance of ground truth 1,172 (range: 879-1,465)"
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 is within 25% tolerance of 934 (tolerance range: 700.5-1167.5)"
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within 25% tolerance of 511 (acceptable range: 383-639)"
+  },
+  {
+   "id": "q043",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 250 units (based on 252), but ground truth is 482 units (tolerance 361-603); no meaningful hedging present"
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 100 units approved in last 12 months, but ground truth shows a specific permit for ~150 units; answer incorrectly describes this as 'not a single huge spike' when the permit data shows a major new building approval."
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 181-unit building at 2588 Mission Street approved May 15, but ground truth shows 94-unit building (permit 202412035997) worth ~$70M; no hedging present."
+  },
+  {
+   "id": "q046",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer discusses aggregate approval trends and year-over-year changes but does not identify or commit to any specific major building or its size; ground truth asks about a specific ~203-unit project."
+  }
+ ]
+}

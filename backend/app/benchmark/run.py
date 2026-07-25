@@ -90,6 +90,43 @@ def ask_gemini(key: str, model: str, question: str) -> str:
     return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
 
 
+def build_grounding(item: dict, trajectory_rows: list[dict]) -> str:
+    """The slice of published Canary data one API call would return for this question.
+
+    direction/numeric/fact -> every metric for the question's area;
+    superlative            -> the question's metric across every area.
+    The benchmark file's own expected/ground_truth fields are never included --
+    the model sees only what a real Canary API response would contain.
+    """
+    if item["type"] == "superlative":
+        rows = [r for r in trajectory_rows if r["metric"] == item["metric"] and r.get("rankable")]
+    else:
+        rows = [r for r in trajectory_rows if r["area_id"] == item.get("area")]
+    keep = ("area_id", "metric", "last12", "prior12", "pct_change", "z", "source_as_of")
+    slim = [{k: r.get(k) for k in keep} for r in rows]
+    # Field documentation ships with every real API response (agent-legibility is a
+    # design constraint) -- without semantics, models misread enforcement surges as
+    # crime waves (verified: GPT-4o did exactly that on the undocumented payload).
+    metric_docs = (
+        "Metric definitions: crime_victim_reported = incidents reported by victims -- "
+        "the measure of crime as experienced by residents. crime_enforcement = "
+        "proactive police activity (drug/warrant/sweep operations); a surge means a "
+        "police crackdown, NOT necessarily more crime. crime_incidents = raw total of "
+        "both (do not use alone for 'is crime rising'). threeoneone_* = 311 complaint "
+        "counts (measure reporting, not conditions). biz_openings/closings = business "
+        "registry events; units_approved_net = net housing units on issued permits."
+    )
+    return (
+        "Context — response from the Canary API (San Francisco neighborhood change "
+        "metrics computed from public records; last12/prior12 = trailing-12-month totals "
+        "vs the 12 months before):\n"
+        + json.dumps(slim)
+        + "\n"
+        + metric_docs
+        + "\n\nUsing this data where relevant, answer the user's question.\n\n"
+    )
+
+
 def providers() -> dict[str, callable]:
     """provider name -> ask(question) for every configured key."""
     load_dotenv(core.BACKEND_DIR / ".env")
@@ -122,6 +159,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--provider", help="run only providers whose name contains this")
     parser.add_argument("--limit", type=int, help="only the first N questions (smoke test)")
+    parser.add_argument(
+        "--grounded",
+        action="store_true",
+        help="Canary ON: prepend the relevant slice of our published data to each "
+        "question (the ablation -- same models, plus one simulated Canary API call)",
+    )
     args = parser.parse_args()
 
     if not QUESTIONS.exists():
@@ -141,25 +184,37 @@ def main() -> None:
             "PERPLEXITY_API_KEY / XAI_API_KEY)."
         )
 
+    trajectory_rows: list[dict] = []
+    if args.grounded:
+        traj_path = core.PROCESSED_DIR / "neighborhood_trajectory.json"
+        if not traj_path.exists():
+            raise SystemExit("--grounded needs processed/neighborhood_trajectory.json (run publish --local)")
+        trajectory_rows = json.loads(traj_path.read_text())["rows"]
+
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     for name, ask in active.items():
-        print(f"\n=== {name}: {len(questions)} questions ===")
+        label = f"{name}+canary" if args.grounded else name
+        print(f"\n=== {label}: {len(questions)} questions ===")
         answers = []
         for item in questions:
+            prompt = item["question"]
+            if args.grounded:
+                prompt = build_grounding(item, trajectory_rows) + prompt
             try:
-                text = ask(item["question"])
+                text = ask(prompt)
                 status = "ok"
             except requests.RequestException as exc:
                 text, status = str(exc), "error"
             answers.append({"id": item["id"], "question": item["question"], "answer": text, "status": status})
             print(f"  [{status}] {item['id']} {item['question'][:60]}...")
-            time.sleep(0.3)
-        out = RUNS_DIR / f"{name.replace(':', '_').replace('/', '_')}_{stamp}.json"
+            time.sleep(0.1)
+        out = RUNS_DIR / f"{label.replace(':', '_').replace('/', '_')}_{stamp}.json"
         out.write_text(
             json.dumps(
                 {
-                    "provider": name,
+                    "provider": label,
+                    "grounded": args.grounded,
                     "benchmark": bench["name"],
                     "pipeline_version": bench["pipeline_version"],
                     "ran_at": stamp,

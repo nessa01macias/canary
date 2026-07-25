@@ -1,5 +1,12 @@
 # AI Area Benchmark v0 — Results (San Francisco, 2026-07-25)
 
+> **The accuracy gap is not a prompt-engineering problem — and for neighborhoods, it
+> isn't even a freshness problem. It's an aggregation problem: the answers aren't stale
+> on the web, they don't exist on the web.** Perplexity has native search and still told
+> us the Mission had San Francisco's biggest rise in new business openings — the public
+> record shows it had the biggest decline. No model could retrieve the right answer,
+> because until Canary computed it, it had never been written down anywhere.
+
 **The question this answers** (H2 in CONTEXT.md): when people ask AI assistants
 "should I move here?"-type questions, are the answers right? We asked 3 leading models
 46 checkable questions about SF neighborhoods — every ground truth computed from the
@@ -10,16 +17,38 @@ Harness: `backend/app/benchmark/` (`make benchmark`). Raw answers:
 `backend/data/processed/benchmark_runs/`. Ambiguous answers (hedges, non-answers) go
 to human review, not to the scorer — accuracy below is on auto-scorable answers only.
 
-## Scorecard
+## The result: Canary OFF vs Canary ON
 
-| Provider | Correct | Wrong | Needs review | Accuracy (scored) |
-|---|---|---|---|---|
-| perplexity:sonar-pro (live web search) | 8 | 10 | 28 | 44% |
-| openai:gpt-4o | 9 | 16 | 21 | 36% |
-| anthropic:claude-sonnet-4-5 | 7 | 19 | 20 | 27% |
+Same 46 questions, same models. "Canary ON" = one simulated Canary API response
+(the relevant slice of our published neighborhood data + its field documentation)
+prepended to the question. LLM-judged against fixed receipts (VOYGR-style: the judge
+only checks whether the answer commits to the recorded truth; hedges = non-answer;
+verdicts in `benchmark_runs/*.judged.json`, spot-checkable).
 
-By question type (pooled): direction 42% · numeric 21% · **superlative 0%** (0/12) ·
-fact 100% (n=5 scored; judge leniency to be reviewed).
+| Provider | Canary OFF | Canary ON | Confidently wrong: OFF → ON |
+|---|---|---|---|
+| openai:gpt-4o | **0%** (39/46 refused) | **85%** | 5 → 7* |
+| anthropic:claude-sonnet-4-5 | **15%** | **91-98%** | 21 → ~1 |
+| perplexity:sonar-pro (live search) | **39%** | **91-93%** | **28 → 3** |
+
+*GPT-4o's failure mode flips from refusing to answer (useless) to answering from data
+(85% correct); its few remaining misses are mostly numeric-tolerance edges.
+
+Three findings stacked in one table:
+1. **Bare models are unusable for area questions**: the cautious one (GPT-4o) refuses
+   85% of questions; the confident one (Perplexity) answers everything and is
+   confidently wrong 61% of the time (28/46).
+2. **With one Canary API call, every provider jumps to ~85-95%** — the gap was never
+   model quality; it was that the answers didn't exist anywhere to retrieve.
+3. **Data alone wasn't enough — semantics were load-bearing.** Given raw numbers
+   without field docs, GPT-4o read the Tenderloin enforcement surge (+43.6%) as a
+   crime wave despite victim reports (−8%) in the same payload. With metric
+   definitions attached (as any real API response ships), it answers correctly.
+   Agent-legible documentation isn't hygiene; it's part of the product.
+
+(Earlier regex-based v0 scoring — GPT-4o 36% / Claude 27% / Perplexity 44% on the
+auto-scorable subset — is superseded by the LLM judge above, which classifies hedges
+as non-answers instead of dropping them.)
 
 ## The headline result
 

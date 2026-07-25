@@ -88,35 +88,45 @@ ACS_VARS = {
 }
 
 
-def fetch_acs(*, force: bool = False) -> None:
+ACS_BACKFILL_VINTAGES = [2019, 2020, 2021, 2022, 2023]  # rolling 5-yr windows => tract trajectory
+
+
+def fetch_acs(*, vintage: int = ACS_VINTAGE, force: bool = False) -> None:
     key = os.environ.get("CENSUS_API_KEY")
     if not key:
         print(f"[skip] {ACS.key}: set CENSUS_API_KEY in .env to enable (free: https://api.census.gov/data/key_signup.html)")
         return
     import requests
 
+    as_of_str = f"{vintage}-12-31"  # ACS vintage = end of the 5-year window
+    if not force and base.snapshot_exists(ACS.key, as_of_str):
+        print(f"[current] {ACS.key} {vintage}: already have snapshot")
+        return
     get_vars = "NAME," + ",".join(ACS_VARS)
-    url = f"https://api.census.gov/data/{ACS_VINTAGE}/acs/acs5"
+    url = f"https://api.census.gov/data/{vintage}/acs/acs5"
     params = {"get": get_vars, "for": "tract:*", "in": f"state:{CA_FIPS}", "key": key}
     resp = requests.get(url, params=params, headers=base.DEFAULT_HEADERS, timeout=120)
     resp.raise_for_status()
     rows = resp.json()
-
-    as_of_str = f"{ACS_VINTAGE}-12-31"  # ACS vintage = end of the 5-year window
-    if not force and base.snapshot_exists(ACS.key, as_of_str):
-        print(f"[current] {ACS.key}: already have snapshot as_of {as_of_str}")
-        return
-    print(f"[pull] {ACS.key} (ACS5 {ACS_VINTAGE}) as_of {as_of_str}: {len(rows) - 1} tracts")
+    print(f"[pull] {ACS.key} (ACS5 {vintage}) as_of {as_of_str}: {len(rows) - 1} tracts")
     snap = base.Snapshot(
         ACS.key, as_of_str, geography=ACS.geography,
         source_name=ACS.name, license=ACS.license, homepage=ACS.homepage,
     )
     snap.write_json("acs5_ca_tracts.json", rows, source_url=resp.url.split("&key=")[0])
-    snap.finalize(extra={"vintage": ACS_VINTAGE, "variable_labels": ACS_VARS})
+    snap.finalize(extra={"vintage": vintage, "variable_labels": ACS_VARS})
+
+
+def backfill_acs(*, force: bool = False) -> None:
+    for vintage in ACS_BACKFILL_VINTAGES:
+        try:
+            fetch_acs(vintage=vintage, force=force)
+        except Exception as exc:  # noqa: BLE001
+            print(f"[error] acs {vintage}: {exc}")
 
 
 SPECS = [TIGER, ACS]
-FETCHERS = {"tiger": fetch_tiger, "acs": fetch_acs}
+FETCHERS = {"tiger": fetch_tiger, "acs": fetch_acs, "acs_backfill": backfill_acs}
 
 
 def main() -> None:

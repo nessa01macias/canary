@@ -2,7 +2,14 @@
 # these targets only consume finalized raw snapshots.
 PY := venv/bin/python
 
-.PHONY: pipeline stage areas build trajectory
+.PHONY: ingest pipeline stage areas build trajectory
+
+# Monthly capture -- MUST run at least monthly: Overture prunes old releases from S3,
+# so a skipped month is history lost forever (see app/ingestion/overture.py).
+# Idempotent: sources that haven't advanced are skipped.
+ingest:
+	$(PY) -m app.ingestion.datasf
+	$(PY) -m app.ingestion.overture
 
 pipeline: areas stage build trajectory   ## full refresh: spine, stage, rebuild db, score
 
