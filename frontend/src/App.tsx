@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { samplePoints, type ChangePoint, type ChangeType, type Stage } from './samplePoints'
+import type { ChangePoint, ChangeType, Stage } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
 import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
@@ -46,28 +46,26 @@ const MATCH_STOPS: Array<[number, string]> = [
   [1, '#ff6624'],
 ]
 
-// Per-(neighborhood, preference) fit in 0..1. PLACEHOLDER: a deterministic hash
-// so every neighborhood scores consistently and the ramp reads as varied. The
-// wiring that consumes this is real — swap this one function for live datasets
-// (crime, schools, transit proximity…) and the overlay works unchanged.
-function hashUnit(s: string): number {
-  let h = 2166136261
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return ((h >>> 0) % 1000) / 999
-}
-function tagScore(nhood: string, tag: string): number {
-  return hashUnit(`${nhood}::${tag}`)
+// REAL per-neighborhood signals, baked into the GeoJSON properties by the backend
+// (/api/sf/neighborhoods → DuckDB metrics, 12-vs-12-month trends, rank-normalized
+// 0..1). Captured at choropleth build into nbhdSignalsRef; consumed by the
+// trajectory overlay and the preference fit below. No placeholder hashes remain.
+type NbhdSignals = {
+  intensity: number      // permit-derived structural-change intensity (0..1)
+  crimeTrend: number     // higher = crime rising (real, DataSF via pipeline)
+  bizOpenTrend: number   // higher = business openings accelerating
+  bizCloseTrend: number  // higher = closings accelerating
+  evictionTrend: number  // higher = evictions rising
 }
 
-// Rising-crime signal in 0..1 (higher = crime climbing over the last few years).
-// PLACEHOLDER hash — swap for a real year-over-year crime dataset and the pulsing
-// trajectory overlay that consumes it works unchanged. Combined at build time with
-// the development investment we already track to decide improving vs worsening.
-function crimeTrend(nhood: string): number {
-  return hashUnit(`crime-trend::${nhood}`)
+// Preference chips we can GROUND in live data today → a real fit score in 0..1.
+// Chips not in this map are ignored by the fit ranking (never faked): their data
+// sources aren't wired yet, and a hash pretending otherwise is worse than honesty.
+const GROUNDED_TAGS: Record<string, (s: NbhdSignals) => number> = {
+  'Low crime':          (s) => 1 - s.crimeTrend,
+  'Business openings':  (s) => s.bizOpenTrend,
+  'Vacancy trend':      (s) => 1 - s.bizCloseTrend,
+  'New construction':   (s) => s.intensity,
 }
 
 // Fill paint expressions, shared by the initial layer and the mode/preference
@@ -326,6 +324,9 @@ function App() {
   // neighborhood name → its feature id + bounding box, so the Best-fit list can
   // glow the polygon on hover and fit the map to it on click.
   const nbhdMetaRef = useRef<Map<string, { id: number; bounds: [[number, number], [number, number]] }>>(new Map())
+  // neighborhood name → its REAL signals (from backend-baked GeoJSON properties),
+  // read by the preference-fit effect. See GROUNDED_TAGS.
+  const nbhdSignalsRef = useRef<Map<string, NbhdSignals>>(new Map())
   // Read by the (once-created) hover popup closure to append a fit line.
   const matchInfoRef = useRef<{ active: boolean; count: number }>({ active: false, count: 0 })
   // Per-polygon pulse phase (built with the choropleth) + the running rAF handle
@@ -498,15 +499,32 @@ function App() {
           { id: i, bounds: featureBounds(f) },
         ]),
       )
+      // Capture each neighborhood's REAL signals (baked in by the backend) for
+      // the preference-fit effect.
+      nbhdSignalsRef.current = new Map(
+        geo.features.map((f) => {
+          const pr = (f.properties ?? {}) as Partial<NbhdSignals> & { nhood?: string }
+          return [
+            String(pr.nhood ?? ''),
+            {
+              intensity: pr.intensity ?? 0,
+              crimeTrend: pr.crimeTrend ?? 0.5,
+              bizOpenTrend: pr.bizOpenTrend ?? 0.5,
+              bizCloseTrend: pr.bizCloseTrend ?? 0.5,
+              evictionTrend: pr.evictionTrend ?? 0.5,
+            },
+          ]
+        }),
+      )
 
-      // Trajectory overlay: rank neighborhoods by (investment we already track) −
-      // (rising crime), so the diverging red↔blue ramp always spans its full
-      // range, then write the score + its pulse amplitude onto each polygon.
+      // Trajectory overlay: rank neighborhoods by (investment, from live permits) −
+      // (rising crime, real 12-vs-12-month trend from the pipeline), so the
+      // diverging red↔blue ramp always spans its full range, then write the score
+      // + its pulse amplitude onto each polygon. Both inputs are now real data.
       const rawTraj = geo.features.map((f) => {
-        const nb = String((f.properties as { nhood?: string })?.nhood ?? '')
-        const pr = (f.properties ?? {}) as { netUnits?: number; densify?: number; taller?: number; totalCost?: number }
+        const pr = (f.properties ?? {}) as { netUnits?: number; densify?: number; taller?: number; totalCost?: number; crimeTrend?: number }
         const invest = (pr.netUnits ?? 0) * 3 + (pr.densify ?? 0) * 2 + (pr.taller ?? 0) * 2 + Math.log10((pr.totalCost ?? 0) + 1)
-        return { f, raw: invest * 0.12 - crimeTrend(nb) * 2 }
+        return { f, raw: invest * 0.12 - (pr.crimeTrend ?? 0.5) * 2 }
       })
       const orderTraj = [...rawTraj].sort((a, b) => a.raw - b.raw)
       const denom = Math.max(1, orderTraj.length - 1)
@@ -639,8 +657,9 @@ function App() {
         map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
       }
 
-      samplePoints.forEach(addPoint)
-
+      // Only real data draws on the map — live permits + pipeline trends. The old
+      // hardcoded CA "flavor points" are gone (LA/San Diego/etc. return when their
+      // metros get live feeds).
       Promise.all([fetchSfPermits(), fetchNeighborhoods().catch(() => null)])
         .then(([permits, nbhd]) => {
           permits.forEach(addPoint)
@@ -681,7 +700,9 @@ function App() {
     const map = mapRef.current
     if (!map || !map.getLayer('nbhd-fill')) return
     const items = nbhdIdsRef.current
-    const tags = [...priorities]
+    // Only preferences we can ground in REAL data rank the map (see GROUNDED_TAGS).
+    // Selected-but-unwired chips are ignored rather than faked.
+    const tags = [...priorities].filter((t) => t in GROUNDED_TAGS)
 
     if (tags.length === 0) {
       for (const it of items) map.setFeatureState({ source: 'nbhd', id: it.id }, { match: null })
@@ -699,11 +720,16 @@ function App() {
     stopPulse()
     // Mean fit across the chosen preferences, then min-max stretched across
     // neighborhoods so the ramp always uses its full contrast range.
-    const scored = items.map((it) => ({
-      nhood: it.nhood,
-      id: it.id,
-      fit: tags.reduce((sum, t) => sum + tagScore(it.nhood, t), 0) / tags.length,
-    }))
+    const scored = items.map((it) => {
+      const signals = nbhdSignalsRef.current.get(it.nhood)
+      return {
+        nhood: it.nhood,
+        id: it.id,
+        fit: signals
+          ? tags.reduce((sum, t) => sum + GROUNDED_TAGS[t](signals), 0) / tags.length
+          : 0,
+      }
+    })
     const lo = Math.min(...scored.map((s) => s.fit))
     const hi = Math.max(...scored.map((s) => s.fit))
     const span = Math.max(1e-6, hi - lo)

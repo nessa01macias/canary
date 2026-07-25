@@ -176,6 +176,31 @@ def metric_series(area_ids: list[str], area_level: str, metric: str, months: int
     return rows
 
 
+def neighborhood_trends(metrics: list[str]) -> list[dict]:
+    """Last-12-months vs prior-12-months sums per (neighborhood, metric), using
+    the latest complete period in the table as the anchor. Real change signal —
+    replaces the frontend's placeholder hashes."""
+    placeholders = ",".join(["?"] * len(metrics))
+    return query(
+        f"""
+        WITH bounds AS (
+          SELECT MAX(period) AS maxp FROM metrics WHERE area_level = 'neighborhood'
+        )
+        SELECT area_id, metric,
+               SUM(CASE WHEN period > maxp - INTERVAL 12 MONTH
+                        THEN value ELSE 0 END) AS last12,
+               SUM(CASE WHEN period <= maxp - INTERVAL 12 MONTH
+                         AND period >  maxp - INTERVAL 24 MONTH
+                        THEN value ELSE 0 END) AS prior12,
+               MAX(source_as_of) AS source_as_of
+        FROM metrics, bounds
+        WHERE area_level = 'neighborhood' AND metric IN ({placeholders})
+        GROUP BY area_id, metric
+        """,
+        metrics,
+    )
+
+
 def available_metrics() -> list[dict]:
     return query(
         """

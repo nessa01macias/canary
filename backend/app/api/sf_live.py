@@ -194,16 +194,66 @@ def _aggregate(points: list[dict]) -> dict[str, dict]:
     return out
 
 
+# --------------------------------------------------------------------------- #
+#  Real per-neighborhood trends from the pipeline's DuckDB metrics (replaces the
+#  frontend's placeholder hashes). Rank-normalized 0..1 across neighborhoods so
+#  the overlay's diverging ramp always spans its range.
+# --------------------------------------------------------------------------- #
+TREND_METRICS = {
+    "crime_incidents": "crimeTrend",       # higher = crime rising
+    "biz_openings": "bizOpenTrend",        # higher = openings accelerating
+    "biz_closings": "bizCloseTrend",       # higher = closings accelerating
+    "evictions_filed": "evictionTrend",    # higher = evictions rising
+}
+
+
+def _rank_normalize(pairs: list[tuple[str, float]]) -> dict[str, float]:
+    """area → rank position in 0..1 (robust to outliers, spans the full ramp)."""
+    if not pairs:
+        return {}
+    ordered = sorted(pairs, key=lambda kv: kv[1])
+    denom = max(1, len(ordered) - 1)
+    return {area: i / denom for i, (area, _) in enumerate(ordered)}
+
+
+def _neighborhood_trends() -> tuple[dict[str, dict[str, float]], str | None]:
+    """{nhood: {crimeTrend: 0..1, …}}, plus the source as-of date."""
+    from . import db  # local import: keep module importable without DuckDB
+
+    try:
+        rows = db.neighborhood_trends(list(TREND_METRICS))
+    except Exception:  # noqa: BLE001 — DuckDB absent → no trends, never a 500
+        return {}, None
+
+    as_of = max((str(r["source_as_of"]) for r in rows if r.get("source_as_of")), default=None)
+    out: dict[str, dict[str, float]] = {}
+    for metric, prop in TREND_METRICS.items():
+        pairs: list[tuple[str, float]] = []
+        for r in rows:
+            if r["metric"] != metric:
+                continue
+            last12, prior12 = r["last12"] or 0.0, r["prior12"] or 0.0
+            if last12 == 0 and prior12 == 0:
+                continue  # no signal for this area/metric
+            pct = (last12 - prior12) / prior12 if prior12 > 0 else 1.0
+            pairs.append((r["area_id"], pct))
+        for area, score in _rank_normalize(pairs).items():
+            out.setdefault(area, {})[prop] = round(score, 3)
+    return out, as_of
+
+
 async def get_neighborhoods() -> dict:
     """FeatureCollection with aggregate stats baked into each feature's
     properties, plus the trajectory list — everything the overlay needs."""
     permits = await get_permits()
     geo = await _cached("nbhd_geojson", NBHD_GEOJSON_URL)
     agg = _aggregate(permits)
+    trends, trends_as_of = _neighborhood_trends()
 
     for f in geo.get("features", []):
         nb = (f.get("properties") or {}).get("nhood")
         t = agg.get(nb) if nb else None
+        tr = trends.get(nb, {}) if nb else {}
         f["properties"] = {
             **(f.get("properties") or {}),
             "intensity": t["intensity"] if t else 0,
@@ -214,6 +264,13 @@ async def get_neighborhoods() -> dict:
             "convert": t["convert"] if t else 0,
             "taller": t["taller"] if t else 0,
             "descriptor": t["descriptor"] if t else "No recent permit activity",
+            # Real 12-vs-12-month trends from the pipeline (DuckDB), rank-normalized
+            # 0..1. These replace the frontend's old placeholder hashes.
+            "crimeTrend": tr.get("crimeTrend", 0.5),
+            "bizOpenTrend": tr.get("bizOpenTrend", 0.5),
+            "bizCloseTrend": tr.get("bizCloseTrend", 0.5),
+            "evictionTrend": tr.get("evictionTrend", 0.5),
+            "trendsAsOf": trends_as_of,
         }
 
     trajectory = sorted(agg.values(), key=lambda t: t["intensity"], reverse=True)
