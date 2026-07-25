@@ -205,14 +205,16 @@ async def post_contribution(body: ContributionIn) -> dict:
     row = body.model_dump(exclude_none=True)
     row.setdefault("ratings", {})
 
-    # Un-orphan the review: if the client sent only a place name, resolve it to a
-    # centroid + H3 cell server-side so it can join the k-anonymous aggregate
-    # (resident_layer_agg groups by h3_9). Best-effort — a failed resolution
-    # never blocks the save.
-    if row.get("place_label") and not row.get("h3_9"):
-        centroid = await sf_live.neighborhood_centroid(row["place_label"])
-        if centroid:
-            row["lat"], row["lon"] = centroid
+    # Un-orphan the review: attach h3_9 so it can join the k-anonymous aggregate.
+    # Geocoded lat/lon (the gate modal's verified address pick) wins; otherwise
+    # resolve the picked area name to its centroid. Best-effort — a failed
+    # resolution never blocks the save.
+    if not row.get("h3_9"):
+        if not (row.get("lat") and row.get("lon")) and row.get("place_label"):
+            centroid = await sf_live.neighborhood_centroid(row["place_label"])
+            if centroid:
+                row["lat"], row["lon"] = centroid
+        if row.get("lat") and row.get("lon"):
             try:
                 row["h3_9"] = db.hex_for_point(row["lat"], row["lon"])
             except Exception:  # noqa: BLE001 — DuckDB/h3 unavailable → save without hex

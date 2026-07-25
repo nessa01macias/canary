@@ -22,7 +22,7 @@ export type ContributionInput = {
 
 // One stable anonymous session id per browser, so anonymous submissions can be
 // deduped without a login (keeps the give-to-get low-friction).
-function sessionId(): string {
+export function sessionId(): string {
   const KEY = 'canary_session_id'
   let id = localStorage.getItem(KEY)
   if (!id) {

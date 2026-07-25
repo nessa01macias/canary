@@ -10,6 +10,8 @@ import { Docs } from './Docs'
 import { fetchResidentLayer, type ResidentAgg } from './residentLayer'
 import { fetchReport, type AddressReport } from './report'
 import { ReportCard } from './ReportCard'
+import { neighborhoodHeadlines } from './headlines'
+import ContributeModal from './ContributeModal'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -377,6 +379,8 @@ function App() {
   const [reportLoading, setReportLoading] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
   const reportPinRef = useRef<maplibregl.Marker | null>(null)
+  // Set inside the map closure; lets the news card's button open the report.
+  const openReportRef = useRef<((lat: number, lng: number) => void) | null>(null)
   const [researchOpen, setResearchOpen] = useState(false)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
   const [mode, setMode] = useState<Mode>('areas')
@@ -388,6 +392,30 @@ function App() {
   const [matchTop, setMatchTop] = useState<string[]>([])
   // Onboarding picker opens first so the user chooses what to rank neighborhoods by.
   const [onboardingOpen, setOnboardingOpen] = useState(true)
+  // The give-to-get gate (Kat's Glassdoor mechanic): tiers beyond Fundamentals are
+  // locked until the user contributes local intel once. Persisted so a returning
+  // contributor stays unlocked. Tapping a locked chip opens the ContributeModal.
+  const [gateUnlocked, setGateUnlocked] = useState(
+    () => localStorage.getItem('canary_gate_unlocked') === '1',
+  )
+  const [contribTag, setContribTag] = useState<string | null>(null)
+  const unlockGate = () => {
+    localStorage.setItem('canary_gate_unlocked', '1')
+    setGateUnlocked(true)
+  }
+  // News card: click a neighborhood (area mode) → its real-record "why" card.
+  const [selectedNbhd, setSelectedNbhd] = useState<
+    | (import('./headlines').NbhdNewsStats & {
+        traj: number
+        descriptor: string
+        clickLngLat: [number, number]
+      })
+    | null
+  >(null)
+  // "Neighborhoods changing" flash (badge toggle).
+  const [flashing, setFlashing] = useState(false)
+  const flashRafRef = useRef<number | null>(null)
+  const flashIdsRef = useRef<number[]>([])
 
   // Onboarding: add/remove a field from the shortlist (activating it on add). The
   // MAX_PICKS cap applies to shortlist membership.
@@ -657,6 +685,31 @@ function App() {
       map.addLayer({ id: 'nbhd-glow-halo', type: 'line', source: 'nbhd', paint: glowOn(11, 6, 0.6) })
       map.addLayer({ id: 'nbhd-glow-core', type: 'line', source: 'nbhd', paint: glowOn(2.5, 0.6, 1) })
 
+      // "Neighborhoods changing" flash — white fill + outline that blink over the
+      // changing neighborhoods when the badge is toggled. Both ride the `flash`
+      // feature-state (0..1) animated by the badge's rAF; invisible until then.
+      map.addLayer({
+        id: 'nbhd-flash-fill',
+        type: 'fill',
+        source: 'nbhd',
+        paint: {
+          'fill-color': '#ffffff',
+          'fill-opacity': ['*', 0.72, ['coalesce', ['feature-state', 'flash'], 0]] as
+            maplibregl.DataDrivenPropertyValueSpecification<number>,
+        },
+      })
+      map.addLayer({
+        id: 'nbhd-flash-line',
+        type: 'line',
+        source: 'nbhd',
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': 2.5,
+          'line-opacity': ['coalesce', ['feature-state', 'flash'], 0] as
+            maplibregl.DataDrivenPropertyValueSpecification<number>,
+        },
+      })
+
       // Hover: highlight + neutral verdict popup.
       let hoveredId: number | string | null = null
       const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: 'nb-popup', offset: 12 })
@@ -719,12 +772,8 @@ function App() {
         map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
       }
 
-      // The magic moment: click anywhere → the address report for that point.
-      // Marker/panel clicks are excluded (they have their own interactions).
-      map.on('click', (e) => {
-        const target = e.originalEvent.target as HTMLElement | null
-        if (target?.closest('.change-marker')) return
-        const { lat, lng } = e.lngLat
+      // The magic moment: the address report for a point (pin + flyTo + card).
+      const openReport = (lat: number, lng: number) => {
         reportPinRef.current?.remove()
         const pin = document.createElement('div')
         pin.className = 'report-pin'
@@ -746,6 +795,43 @@ function App() {
             reportPinRef.current?.remove()
           })
           .finally(() => setReportLoading(false))
+      }
+      openReportRef.current = openReport
+
+      // Click routing, fused (Kat's news card + the report):
+      //  - AREA mode, click a neighborhood → its news card (real-record "why");
+      //    the card's button opens the full report for the clicked point.
+      //  - AREA mode, click water/outside SF → dismiss the card.
+      //  - PERMITS mode, click anywhere (non-marker) → report directly.
+      map.on('click', (e) => {
+        const target = e.originalEvent.target as HTMLElement | null
+        if (target?.closest('.change-marker')) return
+        const { lat, lng } = e.lngLat
+        if (modeRef.current === 'areas') {
+          const hits = map.queryRenderedFeatures(e.point, { layers: ['nbhd-fill'] })
+          if (hits.length) {
+            const p = hits[0].properties as Record<string, number | string>
+            setSelectedNbhd({
+              nhood: String(p.nhood),
+              traj: Number(p.traj) || 0,
+              descriptor: String(p.descriptor),
+              permits: Number(p.permits) || 0,
+              netUnits: Number(p.netUnits) || 0,
+              totalCost: Number(p.totalCost) || 0,
+              crimeTrend: Number(p.crimeTrend),
+              bizOpenTrend: Number(p.bizOpenTrend),
+              noiseTrend: Number(p.noiseTrend),
+              evictionTrend: Number(p.evictionTrend),
+              vacancyRate: Number(p.vacancyRate),
+              trendsAsOf: (p.trendsAsOf as string) ?? null,
+              clickLngLat: [lng, lat],
+            })
+          } else {
+            setSelectedNbhd(null)
+          }
+        } else {
+          openReport(lat, lng)
+        }
       })
 
       // The resident layer loads independently — reviews appearing (or not)
@@ -841,6 +927,45 @@ function App() {
     )
   }, [priorities, mode, sfCount])
 
+  // "Neighborhoods changing" flash: blink a white highlight on every neighborhood
+  // with recent permit activity (the set the badge counts). Ported from Kat's branch.
+  const stopFlash = () => {
+    if (flashRafRef.current != null) {
+      cancelAnimationFrame(flashRafRef.current)
+      flashRafRef.current = null
+    }
+    const map = mapRef.current
+    if (map) for (const id of flashIdsRef.current) map.setFeatureState({ source: 'nbhd', id }, { flash: 0 })
+    flashIdsRef.current = []
+  }
+  const startFlash = () => {
+    const map = mapRef.current
+    if (!map || !map.getLayer('nbhd-flash-fill')) return
+    const ids = traj
+      .filter((t) => t.permits > 0)
+      .map((t) => nbhdMetaRef.current.get(t.nhood)?.id)
+      .filter((id): id is number => id != null)
+    if (!ids.length) return
+    flashIdsRef.current = ids
+    const speed = 0.006 // rad/ms → ~1s per blink; the flat trough reads as "off"
+    const tick = (ts: number) => {
+      const v = Math.max(0, Math.sin(ts * speed)) // 0..1, on/off blink
+      for (const id of ids) map.setFeatureState({ source: 'nbhd', id }, { flash: v })
+      flashRafRef.current = requestAnimationFrame(tick)
+    }
+    flashRafRef.current = requestAnimationFrame(tick)
+  }
+  const toggleFlash = () => {
+    if (flashing) {
+      setFlashing(false)
+      stopFlash()
+    } else {
+      if (mode !== 'areas') setMode('areas') // the flash reads against the area overlay
+      setFlashing(true)
+      startFlash()
+    }
+  }
+
   const activeNbhds = traj.filter((t) => t.permits > 0).length
   const matchActive = priorities.size > 0
 
@@ -874,14 +999,21 @@ function App() {
         </div>
 
         <div className="topbar-right">
-          <span className="live-badge">
+          <button
+            type="button"
+            className={`live-badge${flashing ? ' is-flashing' : ''}`}
+            onClick={toggleFlash}
+            disabled={sfCount === null || activeNbhds === 0}
+            aria-pressed={flashing}
+            title={flashing ? 'Stop highlighting' : 'Highlight the changing neighborhoods on the map'}
+          >
             <span className="live-dot" />
             {sfCount === null
               ? 'Loading…'
               : mode === 'areas'
                 ? `${activeNbhds} neighborhoods changing`
                 : `${sfCount} live permits`}
-          </span>
+          </button>
           <button className="research-btn" onClick={() => setResearchOpen(true)}>
             Documentation
           </button>
@@ -899,6 +1031,62 @@ function App() {
           neighborhoods={nbhdIdsRef.current.map((n) => n.nhood).filter(Boolean).sort()}
         />
       )}
+
+      {/* Give-to-get gate: tap a locked chip → contribute local intel → unlock.
+          Submission really persists (POST /api/contributions) and really unlocks. */}
+      {contribTag && (
+        <ContributeModal
+          tag={contribTag}
+          onClose={() => setContribTag(null)}
+          onSubmitted={unlockGate}
+        />
+      )}
+
+      {/* News card — a neighborhood's "why", from the public record (area mode). */}
+      {selectedNbhd && !reportOpen && (() => {
+        const t = selectedNbhd.traj
+        const tone = t > 0.12 ? 'up' : t < -0.12 ? 'down' : 'flat'
+        const verdict = tone === 'up' ? 'Improving' : tone === 'down' ? 'Getting worse' : 'Holding steady'
+        const glyph = tone === 'up' ? '▲' : tone === 'down' ? '▼' : '▪'
+        const items = neighborhoodHeadlines(selectedNbhd)
+        return (
+          <aside className={`news-card news-${tone}`}>
+            <button className="news-close" onClick={() => setSelectedNbhd(null)} aria-label="Close">×</button>
+            <span className={`news-verdict news-verdict-${tone}`}>{glyph} {verdict}</span>
+            <h3 className="news-nbhd">{selectedNbhd.nhood}</h3>
+            <p className="news-sub">{selectedNbhd.descriptor}</p>
+            <div className="news-stats">
+              <span><b>{selectedNbhd.permits}</b> permits</span>
+              <span><b>+{selectedNbhd.netUnits}</b> net units</span>
+              <span><b>${(selectedNbhd.totalCost / 1e6).toFixed(1)}M</b></span>
+            </div>
+            <p className="news-eyebrow">Why — from the public record</p>
+            <div className="news-list">
+              {items.map((h, i) => (
+                <article className="headline-card" key={i}>
+                  <p className="headline-title">{h.title}</p>
+                  <p className="headline-cite">
+                    <span className="headline-src">{h.source}</span>
+                    <span className="headline-dot">·</span>
+                    <time>{h.date}</time>
+                  </p>
+                </article>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="news-report-btn"
+              onClick={() => {
+                const [lng, lat] = selectedNbhd.clickLngLat
+                setSelectedNbhd(null)
+                openReportRef.current?.(lat, lng)
+              }}
+            >
+              What's changing at this spot →
+            </button>
+          </aside>
+        )
+      })()}
 
       {reportOpen && (
         <ReportCard
@@ -1003,30 +1191,37 @@ function App() {
             </p>
 
             <div className="ob-tiers">
-              {PREFERENCE_TIERS.map((tier) => (
-                <section key={tier.title} className="ob-tier">
-                  <p className="ob-tier-title">{tier.title}</p>
-                  <div className="prefs-tags">
-                    {tier.fields.map((f) => {
-                      const sel = shortlist.includes(f.label)
-                      const atCap = shortlist.length >= MAX_PICKS && !sel
-                      return (
-                        <button
-                          key={f.label}
-                          type="button"
-                          className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}`}
-                          aria-pressed={sel}
-                          disabled={!f.available || atCap}
-                          onClick={() => toggleShortlist(f.label)}
-                        >
-                          {f.label}
-                          {!f.available && <span className="soon">soon</span>}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </section>
-              ))}
+              {PREFERENCE_TIERS.map((tier, ti) => {
+                // The give-to-get gate: only Fundamentals is open on first visit;
+                // deeper tiers blur and tease until the user contributes local
+                // intel once (tap a locked chip → ContributeModal → unlock).
+                const locked = ti > 0 && !gateUnlocked
+                return (
+                  <section key={tier.title} className={`ob-tier${locked ? ' is-locked' : ''}`}>
+                    <p className="ob-tier-title">{tier.title}</p>
+                    <div className="prefs-tags">
+                      {tier.fields.map((f) => {
+                        const sel = shortlist.includes(f.label)
+                        const atCap = shortlist.length >= MAX_PICKS && !sel
+                        return (
+                          <button
+                            key={f.label}
+                            type="button"
+                            className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}${locked ? ' is-locked' : ''}`}
+                            aria-pressed={locked ? undefined : sel}
+                            aria-label={locked ? `Add local info about ${f.label} to unlock` : undefined}
+                            disabled={!locked && (!f.available || atCap)}
+                            onClick={() => (locked ? setContribTag(f.label) : toggleShortlist(f.label))}
+                          >
+                            <span className="tag-label">{f.label}</span>
+                            {!f.available && <span className="soon">soon</span>}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </section>
+                )
+              })}
             </div>
 
             <div className="ob-footer">

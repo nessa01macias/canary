@@ -209,6 +209,9 @@ class ContributionIn(BaseModel):
     ratings: dict[str, float] = Field(default_factory=dict)
     comment: str | None = None
     session_id: str | None = None
+    # Structured give-to-get answers (exit-interview tags, block knowledge,
+    # directional calibration). Free-form JSON — schema-on-read, like events.attrs.
+    answers: dict[str, object] | None = None
 
 
 # --------------------------------------------------------------------------- #

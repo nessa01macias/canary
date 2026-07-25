@@ -30,6 +30,8 @@ create table if not exists contributions (
   -- WHAT they said — structured stays queryable, free text optional.
   moving_out    boolean,                 -- true = reviewing the place they're leaving
   ratings       jsonb not null default '{}'::jsonb,  -- {safety:4, noise:2, trajectory:5}
+  answers       jsonb,                   -- give-to-get gate answers (exit interview,
+                                         -- block knowledge, directional calibration)
   comment       text,
 
   -- provenance discipline mirrors the pipeline (two-date rule).

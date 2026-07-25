@@ -1166,3 +1166,442 @@ html, body, #root, #app {
   margin: 8px 0 0;
   line-height: 1.5;
 }
+
+/* bridge from the news card to the address report (fusion of her card + our report) */
+.news-report-btn {
+  width: 100%;
+  margin-top: 12px;
+  background: #2329A8;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.news-report-btn:hover { background: #1a1f85; }
+
+/* ═══ Ported from katerina 2bb9c0a: give-to-get gate, contribute modal, news card, flash ═══ */
+
+/* Active = currently blinking the changing neighborhoods on the map. */
+.live-badge.is-flashing {
+  border-color: #FF6624;
+  box-shadow: 0 0 0 3px rgba(255,102,36,0.18);
+}
+.live-badge.is-flashing .live-dot {
+  background: #FF6624;
+}
+
+
+.ob-tiers .prefs-tags { gap: clamp(5px, 0.9vh, 8px); }
+.ob-tiers .prefs-tag {
+  padding: clamp(3.5px, 0.7vh, 6px) clamp(10px, 1.3vw, 13px);
+  font-size: clamp(12px, 1.6vh, 12.5px);
+}
+
+/* Locked tiers (everything below Fundamentals): the section TITLE stays crisp,
+   but the chips go inert and their labels blur — a teaser for more to come. */
+.prefs-tag .tag-label { display: inline-block; }
+.prefs-tag.is-locked {
+  cursor: pointer;                 /* tap to contribute local intel + unlock */
+  background: #fff;
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: none;
+}
+.prefs-tag.is-locked:hover {
+  border-color: rgba(255, 102, 36, 0.55);
+  transform: translateY(-1px);
+}
+.prefs-tag.is-locked:hover .tag-label { filter: blur(2px); } /* hint it's reachable */
+.prefs-tag.is-locked .tag-label {
+  filter: blur(3.5px);
+  opacity: 0.8;
+  user-select: none;
+  transition: filter 0.16s ease;
+}
+.prefs-tag.is-locked .soon { display: none; }
+
+
+/* ── Contribute modal (resident give-to-get) ─────────────────── */
+.contrib-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;                     /* above the onboarding modal it opens from */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(28, 20, 14, 0.34);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: ob-fade 0.2s ease;
+}
+.contrib-card {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 28px 30px 24px;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.30);
+  animation: ob-rise 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.contrib-field { margin-top: 18px; }
+.contrib-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.contrib-note {
+  display: block;
+  font-size: 11.5px;
+  color: #8a8078;
+  margin: -4px 0 10px;
+  line-height: 1.35;
+}
+
+/* Directional calibration grid — one metric per row, More / Same / Less */
+.dir-grid { display: flex; flex-direction: column; gap: 8px; }
+.dir-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dir-metric {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.3;
+}
+.dir-seg {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 99px;
+}
+.dir-opt {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #777;
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.dir-opt:hover { color: #333; }
+.dir-opt.is-on {
+  color: #fff;
+  background: #FF6624;
+}
+
+/* Address input + autocomplete dropdown */
+.addr-wrap { position: relative; }
+.addr-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+  color: #111;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 12px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.addr-input::placeholder { color: #a49a92; }
+.addr-input:focus {
+  border-color: rgba(255, 102, 36, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 102, 36, 0.14);
+}
+.addr-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  max-height: 220px;
+  overflow-y: auto;
+}
+.addr-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13px;
+  color: #333;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+.addr-item:hover,
+.addr-item.is-active { background: #f3ede8; color: #111; }
+
+/* Non-selectable dropdown rows: loading + "no match" guidance. */
+.addr-note {
+  font-size: 12.5px;
+  color: #999;
+  padding: 9px 10px;
+  line-height: 1.4;
+}
+
+/* Verified pick — the input turns green and shows a check, and the enforcement
+   hint appears while a typed value hasn't been confirmed against the geocoder. */
+.addr-wrap.is-verified .addr-input {
+  border-color: #3f8f5c;
+  box-shadow: 0 0 0 3px rgba(63, 143, 92, 0.14);
+  padding-right: 40px;
+}
+.addr-check {
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3f8f5c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.addr-hint {
+  font-size: 12px;
+  color: #b8430e;
+  margin: 7px 2px 0;
+  line-height: 1.35;
+}
+
+/* Success state */
+.contrib-done {
+  text-align: center;
+  padding: 22px 8px 8px;
+}
+.contrib-check {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #3f8f5c;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contrib-done .ob-sub { margin: 0 auto 18px; }
+.contrib-done .ob-done { margin: 0 auto; }
+
+.ob-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: clamp(10px, 1.8vh, 20px);
+  padding-top: clamp(10px, 1.5vh, 16px);
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.ob-count {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #777;
+  font-variant-numeric: tabular-nums;
+}
+.ob-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; /* keep actions right-aligned even without a footer label */
+}
+.ob-clear {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 8px;
+}
+.ob-clear:hover { color: #333; }
+.ob-done {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #FF6624;
+  border: none;
+  border-radius: 99px;
+  padding: 10px 22px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(255,102,36,0.35);
+  transition: transform 0.1s ease, background 0.14s ease;
+}
+.ob-done:hover:not(:disabled) { transform: translateY(-1px); }
+.ob-done:disabled {
+  background: #e7d9d0;
+  color: #b7a79c;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding, .onboarding-card { animation-duration: 0.01ms; }
+}
+
+
+/* ── Neighborhood news card (click a parcel) ─────────────────── */
+.news-card {
+  position: absolute;
+  top: 76px;
+  right: 20px;
+  z-index: 16;
+  width: 340px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding: 16px 18px 18px;
+  background: rgba(242, 231, 225, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  animation: news-in 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@keyframes news-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .news-card { animation-duration: 0.01ms; }
+}
+
+.news-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: #8a7c72;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.news-close:hover { background: rgba(0,0,0,0.06); color: #333; }
+
+.news-verdict {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+.news-verdict-up   { background: #355cf5; }
+.news-verdict-down { background: #ff6624; }
+.news-verdict-flat { background: #9a8c81; }
+
+.news-nbhd {
+  margin: 8px 0 2px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #17120f;
+}
+.news-sub {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6a5d54;
+}
+.news-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 11.5px;
+  color: #6a5d54;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.news-stats b { color: #17120f; font-weight: 700; }
+
+.news-eyebrow {
+  margin: 12px 0 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #9a8c81;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.headline-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-left: 3px solid #9a8c81;
+  border-radius: 10px;
+  padding: 9px 11px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: box-shadow 0.14s ease, transform 0.14s ease;
+}
+.headline-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.10); transform: translateY(-1px); }
+.news-up   .headline-card { border-left-color: #355cf5; }
+.news-down .headline-card { border-left-color: #ff6624; }
+
+.headline-title {
+  margin: 0 0 5px;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.32;
+  color: #1c1712;
+}
+.headline-cite {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #8a7c72;
+}
+.headline-src { font-weight: 700; color: #5a4d44; }
+.headline-dot { opacity: 0.6; }
