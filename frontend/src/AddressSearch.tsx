@@ -34,8 +34,10 @@ export function AddressSearch({ onPick }: { onPick: (lat: number, lng: number) =
       const ctl = new AbortController()
       abortRef.current = ctl
       fetch(
+        // Same params as the ContributeModal's proven geocoder: autocomplete=true
+        // is what makes it real-time (prefix matches while typing).
         `https://api.maptiler.com/geocoding/${encodeURIComponent(query)}.json` +
-          `?key=${MAPTILER_KEY}&bbox=${SF_BBOX}&limit=5&types=address,street,poi`,
+          `?key=${MAPTILER_KEY}&autocomplete=true&limit=5&country=us&types=address&bbox=${SF_BBOX}`,
         { signal: ctl.signal },
       )
         .then((r) => r.json())
