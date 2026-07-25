@@ -6,16 +6,18 @@ import remarkGfm from 'remark-gfm'
 // to drift. CONTEXT.md (strategy) and DEPLOY.md (ops) are deliberately NOT shipped.
 import aboutMd from '../../ABOUT.md?raw'
 import researchMd from '../../RESEARCH.md?raw'
-import benchmarkMd from '../../BENCHMARK.md?raw'
 import validationMd from '../../VALIDATION.md?raw'
 import dataSourcesMd from '../../DATA_SOURCES.md?raw'
 
+// Each tab has ONE job — no two tabs repeat each other:
+//   about      plain-language, for everyone (summarizes, links down)
+//   research   the full AI study: method, results table, conclusions
+//   validation the trajectory signal's receipts (is OUR data right?)
+//   sources    reference: where every number comes from
+// (BENCHMARK.md is a repo-side results snapshot, superseded by research — not shipped.)
 const DOCS: { key: string; label: string; body: string }[] = [
-  // Plain-language first: a normal visitor should understand Canary without ever
-  // meeting a technical tab. The research/validation tabs back it up with receipts.
   { key: 'about', label: 'What is Canary?', body: aboutMd },
   { key: 'research', label: 'Research', body: researchMd },
-  { key: 'benchmark', label: 'Benchmark results', body: benchmarkMd },
   { key: 'validation', label: 'Validation', body: validationMd },
   { key: 'sources', label: 'Data sources', body: dataSourcesMd },
 ]
