@@ -1838,15 +1838,81 @@ html, body, #root, #app {
   .drawer-card { padding: 24px 20px 20px; max-height: 78vh; overflow-y: auto; }
 
   /* Centered modals: tighter gutters + padding, keep them scrollable. */
-  .onboarding, .contribute-overlay, .contrib-overlay, .research-overlay {
+  .contribute-overlay, .contrib-overlay, .research-overlay {
     padding: 12px;
   }
-  .onboarding-card, .contribute-card, .contrib-card {
+  .contribute-card, .contrib-card {
     padding: 22px 18px 18px;
     max-height: 92vh;
   }
-  .research-card { max-height: 92vh; }
-  .research-body { padding: 22px 18px 20px; }
+  /* Documentation → full-screen on phones. The tab bar stays pinned at the top
+     and the × with it; only the body scrolls. */
+  .research-overlay { padding: 0; align-items: stretch; }
+  .research-card {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+  .docs-tabs { padding: 14px 46px 0 16px; } /* right room clears the × */
+  .research-body { padding: 18px 18px 26px; }
+  .research-card .drawer-close { top: 12px; right: 12px; }
+
+  /* For AI apps → full-screen on phones. This page is one scroll container, so
+     the × is pinned to the viewport (fixed) — otherwise it scrolls away and the
+     page can't be closed. */
+  .agents-overlay { padding: 0; align-items: stretch; }
+  .agents-page {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    padding: 22px 18px 34px;
+  }
+  .agents-page .drawer-close {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+  }
+
+  /* Onboarding picker → full-screen sheet on phones. The header (× close) is
+     pinned at the top and the footer ("Show my map") at the bottom; only the
+     middle tier list scrolls, so you can always close it and always reach Done —
+     the tall centered card used to push both off-screen. */
+  .onboarding { padding: 0; align-items: stretch; }
+  .onboarding-card {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh; /* dodge the mobile URL bar so the footer stays visible */
+    max-height: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px 18px 0;
+  }
+  .onboarding-card .ob-title { font-size: 20px; padding-right: 40px; }
+  .onboarding-card .ob-sub { font-size: 13px; }
+  .ob-tiers {
+    flex: 1 1 auto;
+    min-height: 0; /* let the scroll area actually shrink & scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 14px 0 0;
+  }
+  .onboarding-card .ob-footer {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 12px 0 16px;
+    background: rgba(242, 231, 225, 0.96);
+  }
+  .ob-close { top: 12px; right: 12px; }
   .docs-tabs { padding: 14px 18px 0; }
 
   /* Legend hidden on phones — the persistent "Looking for" peek sheet owns the

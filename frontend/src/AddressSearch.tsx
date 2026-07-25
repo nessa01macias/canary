@@ -17,6 +17,9 @@ type Props = {
   onPick: (picked: PickedAddress) => void
   /** Fired when the user edits the text after a pick — the field is no longer verified. */
   onClear?: () => void
+  /** OMNIBOX mode: Enter without picking a suggestion sends the text as a
+      natural-language question (the map answers). Address picks still win. */
+  onAsk?: (question: string) => void
   placeholder?: string
   /** 'navbar' = compact pill; 'form' = full-width field (ContributeModal). */
   variant?: 'navbar' | 'form'
@@ -27,6 +30,7 @@ type Props = {
 export function AddressSearch({
   onPick,
   onClear,
+  onAsk,
   placeholder = 'Search any SF address — what’s changing there?',
   variant = 'navbar',
   showVerified = false,
@@ -112,6 +116,18 @@ export function AddressSearch({
       setOpen(false)
       return
     }
+    if (e.key === 'Enter') {
+      if (open && activeIdx >= 0 && suggestions[activeIdx]) {
+        e.preventDefault()
+        pick(suggestions[activeIdx])
+      } else if (onAsk && q.trim().length >= 2) {
+        // No suggestion chosen → this is a QUESTION for the map, not an address.
+        e.preventDefault()
+        setOpen(false)
+        onAsk(q.trim())
+      }
+      return
+    }
     if (!open || suggestions.length === 0) return
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -119,9 +135,6 @@ export function AddressSearch({
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setActiveIdx((i) => Math.max(i - 1, 0))
-    } else if (e.key === 'Enter' && activeIdx >= 0) {
-      e.preventDefault()
-      pick(suggestions[activeIdx])
     }
   }
 
