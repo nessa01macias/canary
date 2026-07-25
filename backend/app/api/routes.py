@@ -86,9 +86,16 @@ def get_changes(
         raise HTTPException(400, "bbox must be 'minLng,minLat,maxLng,maxLat'")
     event_types = db.event_types_for_category(category.value) if category else None
     try:
-        rows = db.changes_in_bbox(
-            min_lng, min_lat, max_lng, max_lat, since, limit, event_types
-        )
+        if category == Category.business:
+            # Dedicated path: joins the registered business NAME (events only
+            # carry NAICS) and clamps out the registry's future-dated dirt.
+            rows = db.business_changes_in_bbox(
+                min_lng, min_lat, max_lng, max_lat, since, limit
+            )
+        else:
+            rows = db.changes_in_bbox(
+                min_lng, min_lat, max_lng, max_lat, since, limit, event_types
+            )
     except FileNotFoundError as e:
         raise HTTPException(503, str(e))
     return [_to_change_point(r) for r in rows]

@@ -1642,3 +1642,355 @@ html, body, #root, #app {
   background: rgba(255, 102, 36, 0.06);
   transform: translateY(-1px);
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   Responsive — the app is a full-screen map with absolute overlays.
+   On narrow screens the fixed-width topbar, side panels and legend
+   overflow, so we let the topbar wrap and turn the side cards into
+   bottom sheets that slide over the map.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Tablet / small laptop: reclaim horizontal room before anything wraps. */
+@media (max-width: 860px) {
+  .topbar { padding: 0 16px; }
+  .brand-sub { display: none; }
+  .brand-sep { display: none; }
+  .mode-toggle button { padding: 5px 11px; font-size: 12px; }
+  .contribute-btn { margin-left: 8px; }
+  .legend-hint { display: none; }
+}
+
+/* Phones: topbar becomes multi-row, side cards become bottom sheets. */
+@media (max-width: 640px) {
+  .topbar {
+    height: auto;
+    min-height: 52px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: 9px 12px;
+  }
+  /* Three clean stacked rows: brand · actions · mode toggle. Each action row
+     is full-width and wraps internally so nothing overflows the viewport. */
+  .topbar-left { order: 1; flex: 1 1 100%; min-width: 0; }
+  .topbar-right {
+    order: 2;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 6px;
+    min-width: 0;
+  }
+  .mode-toggle {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+  .mode-toggle button { flex: 1; min-width: 0; }
+
+  .live-badge,
+  .research-btn,
+  .contribute-btn {
+    font-size: 12px;
+    padding: 6px 11px;
+    margin-left: 0;
+    max-width: 100%;
+  }
+
+  /* Preferences panel: top-anchored full-width card (safe clearance
+     under the wrapped topbar), capped height with its own scroll. */
+  .prefs-panel {
+    top: auto;
+    bottom: 52px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 46vh;
+    overflow-y: auto;
+  }
+
+  /* Detail cards (neighborhood news + address report) are hosted inside the
+     draggable <MobileSheet> — the sheet owns positioning, chrome and scroll, so
+     the cards themselves become plain flow content. */
+  .msheet .news-card,
+  .msheet .report-card {
+    position: static;
+    inset: auto;
+    width: auto;
+    max-height: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+    overflow: visible;
+    padding: 2px 14px 10px;
+  }
+
+  /* Bottom drawer (change detail): give the card breathing room from edges. */
+  .drawer { padding: 0 10px 58px; align-items: flex-end; }
+  .drawer-card { padding: 24px 20px 20px; max-height: 78vh; overflow-y: auto; }
+
+  /* Centered modals: tighter gutters + padding, keep them scrollable. */
+  .onboarding, .contribute-overlay, .contrib-overlay, .research-overlay {
+    padding: 12px;
+  }
+  .onboarding-card, .contribute-card, .contrib-card {
+    padding: 22px 18px 18px;
+    max-height: 92vh;
+  }
+  .research-card { max-height: 92vh; }
+  .research-body { padding: 22px 18px 20px; }
+  .docs-tabs { padding: 14px 18px 0; }
+
+  /* Legend: compact, single line, drop the verbose descriptor. */
+  .legend-strip {
+    gap: 12px;
+    padding: 0 12px;
+    height: 44px;
+    font-size: 11px;
+  }
+  .legend-strip .legend-item:not(.legend-ramp) { display: none; }
+  .ramp-bar { width: 90px; }
+
+  /* Pinch to zoom on touch — the +/− buttons collide with the sheet. */
+  .maplibregl-ctrl-bottom-right { display: none; }
+}
+
+/* ── Draggable bottom sheet (Google-Maps style, phones only) ─────────
+   Hidden by default; the .msheet element only exists on mobile (the
+   MobileSheet component is a pass-through on desktop). */
+.msheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transition: height 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+/* The grab handle is the only drag surface, so the body below scrolls freely. */
+.msheet-handle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 6px;
+  cursor: grab;
+  touch-action: none;
+}
+.msheet-handle:active { cursor: grabbing; }
+.msheet-grip {
+  width: 40px;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.msheet-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-bottom: 12px;
+}
+/* The card's own close button is redundant with drag-down-to-dismiss, but keep
+   it as a larger touch target inside the sheet. */
+.msheet .news-close { top: 4px; right: 10px; width: 34px; height: 34px; }
+
+/* Very small phones: shrink the mode toggle text a touch more. */
+@media (max-width: 380px) {
+  .mode-toggle button { font-size: 11px; padding: 5px 8px; }
+  .brand { font-size: 18px; }
+}
+
+/* ---- arXiv-style paper rendering for the research note ---------------------
+   Serif, justified, centered title block, epigraph quote, booktabs tables, and
+   the rotated red identifier in the left margin. Applied via .research-body.paper */
+.research-body.paper {
+  font-family: Charter, 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  color: #1c1a17;
+  font-size: 15px;
+  line-height: 1.72;
+  text-align: justify;
+  hyphens: auto;
+  padding: 44px 60px 44px 72px;
+  position: relative;
+}
+/* the rotated identifier, arXiv's signature */
+.research-body.paper::before {
+  content: 'canary · research note v0 · 2026-07-25';
+  position: absolute;
+  top: 190px;
+  left: 26px;
+  transform-origin: 0 0;
+  transform: rotate(90deg) translateY(-100%);
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #8f1d1d;
+  white-space: nowrap;
+}
+.research-body.paper h1 {
+  text-align: center;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 10px 0 2px;
+}
+/* subtitle (###) directly under the title, then the author/date lines */
+.research-body.paper h3 {
+  text-align: center;
+  font-weight: 400;
+  font-style: italic;
+  color: #45403a;
+  font-size: 15px;
+  margin: 2px 0 14px;
+}
+.research-body.paper h1 + h3 + p,
+.research-body.paper h1 + h3 + p + p {
+  text-align: center;
+  margin: 2px 0;
+}
+.research-body.paper h2 {
+  font-size: 16.5px;
+  font-weight: 700;
+  margin: 26px 0 8px;
+  text-align: left;
+}
+/* epigraph: centered italic, no sidebar */
+.research-body.paper blockquote {
+  border: none;
+  background: transparent;
+  margin: 20px auto;
+  padding: 0 28px;
+  max-width: 92%;
+  text-align: center;
+  font-style: italic;
+}
+/* booktabs tables: heavy top/bottom rules, light header rule, no verticals */
+.research-body.paper table {
+  margin: 16px auto;
+  width: auto;
+  min-width: 80%;
+  border-collapse: collapse;
+  border-top: 2px solid #1c1a17;
+  border-bottom: 2px solid #1c1a17;
+  font-size: 13px;
+  text-align: left;
+}
+.research-body.paper th, .research-body.paper td {
+  border: none;
+  padding: 6px 14px;
+  background: transparent;
+}
+.research-body.paper th { border-bottom: 1px solid #1c1a17; font-weight: 700; }
+.research-body.paper a { color: #1a4b8b; }
+.research-body.paper hr { border: none; border-top: 1px solid #d9d2c7; margin: 24px auto; width: 40%; }
+.research-body.paper code { background: #f4f0e9; font-size: 12.5px; }
+.research-body.paper pre { background: #f8f4ee; color: #1c1a17; border: 1px solid #e6ddd0; }
+.research-body.paper pre code { color: inherit; }
+@media (max-width: 700px) {
+  .research-body.paper { padding: 34px 26px; text-align: left; }
+  .research-body.paper::before { display: none; }
+}
+
+/* ---- "For AI apps & agents" — the B2B door -------------------------------- */
+.agents-btn {
+  background: #2329A8;
+  border: 1px solid #2329A8;
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.agents-btn:hover { background: #1a1f85; }
+
+.agents-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  background: rgba(20, 16, 14, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.agents-page {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 46px 54px 38px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+  animation: slide-up 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.agents-eyebrow {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #FF6624;
+  margin: 0 0 10px;
+}
+.agents-title { font-size: 30px; line-height: 1.2; margin: 0 0 12px; color: #1c1a17; }
+.agents-title em { font-style: italic; color: #2329A8; }
+.agents-sub { font-size: 15.5px; line-height: 1.6; color: #45403a; max-width: 640px; margin: 0 0 26px; }
+
+.agents-stats { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.agents-stat {
+  flex: 1 1 200px;
+  background: #faf5ef;
+  border: 1px solid #eee2d8;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.agents-stat-num { display: block; font-size: 24px; font-weight: 800; color: #2329A8; }
+.agents-stat-label { display: block; font-size: 12.5px; line-height: 1.45; color: #6b6560; margin-top: 6px; }
+
+.agents-research-link {
+  background: none; border: none; color: #2329A8;
+  font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 4px 0;
+}
+.agents-research-link:hover { text-decoration: underline; }
+
+.agents-h2 { font-size: 17px; margin: 26px 0 10px; color: #1c1a17; }
+.agents-list { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.65; color: #2a2622; }
+.agents-list li { margin-bottom: 8px; }
+
+.agents-sample {
+  background: #201c19; color: #f2e7e1;
+  border-radius: 10px; padding: 16px 18px;
+  font-size: 12.5px; line-height: 1.55; overflow-x: auto;
+}
+.agents-provenance { font-size: 14px; color: #45403a; max-width: 640px; }
+
+.agents-cta { display: flex; align-items: center; gap: 16px; margin: 26px 0 8px; flex-wrap: wrap; }
+.agents-cta-btn {
+  background: #FF6624; color: #fff; text-decoration: none;
+  border-radius: 10px; padding: 13px 22px;
+  font-size: 15px; font-weight: 700;
+  transition: background 0.12s ease;
+}
+.agents-cta-btn:hover { background: #e5551a; }
+.agents-cta-note { font-size: 12.5px; color: #6b6560; }
+.agents-footnote { font-size: 12.5px; color: #8a837c; border-top: 1px solid #eee2d8; padding-top: 14px; margin-top: 18px; }
+
+@media (max-width: 700px) {
+  .agents-page { padding: 34px 24px; }
+  .agents-title { font-size: 24px; }
+}

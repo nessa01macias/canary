@@ -15,17 +15,19 @@ import dataSourcesMd from '../../DATA_SOURCES.md?raw'
 //   validation the trajectory signal's receipts (is OUR data right?)
 //   sources    reference: where every number comes from
 // (BENCHMARK.md is a repo-side results snapshot, superseded by research — not shipped.)
-const DOCS: { key: string; label: string; body: string }[] = [
+const DOCS: { key: string; label: string; body: string; paper?: boolean }[] = [
   { key: 'about', label: 'What is Canary?', body: aboutMd },
-  { key: 'research', label: 'Research', body: researchMd },
+  // paper: true renders the research note with arXiv-style typography (serif,
+  // centered title block, epigraph, booktabs tables, margin identifier).
+  { key: 'research', label: 'Research', body: researchMd, paper: true },
   { key: 'validation', label: 'Validation', body: validationMd },
   { key: 'sources', label: 'Data sources', body: dataSourcesMd },
 ]
 
-type Props = { onClose: () => void }
+type Props = { onClose: () => void; initialTab?: string }
 
-export function Docs({ onClose }: Props) {
-  const [active, setActive] = useState(DOCS[0].key)
+export function Docs({ onClose, initialTab }: Props) {
+  const [active, setActive] = useState(initialTab ?? DOCS[0].key)
   const doc = DOCS.find((d) => d.key === active) ?? DOCS[0]
 
   return (
@@ -47,7 +49,7 @@ export function Docs({ onClose }: Props) {
           ))}
         </nav>
 
-        <div className="research-body" key={doc.key}>
+        <div className={doc.paper ? 'research-body paper' : 'research-body'} key={doc.key}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{

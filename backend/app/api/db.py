@@ -158,6 +158,36 @@ def changes_in_hexes(hexes: list[str], since: date | None, limit: int) -> list[d
     return query(sql, params)
 
 
+def business_changes_in_bbox(
+    min_lng: float,
+    min_lat: float,
+    max_lng: float,
+    max_lat: float,
+    since: date | None,
+    limit: int,
+) -> list[dict]:
+    """Business open/close events with the REGISTERED NAME joined from places
+    (events carry only NAICS in detail). Clamped to <= today: the registry has
+    future/typo dates (e.g. 'opened 2028') that would otherwise surface."""
+    sql = """
+        SELECT e.source, e.event_type, e.event_time, e.h3_9, e.lat, e.lon,
+               e.neighborhood, COALESCE(p.name, e.detail) AS detail,
+               e.value, e.units_delta, e.record_key, e.source_as_of
+        FROM events e
+        LEFT JOIN places p ON p.place_key = e.record_key
+        WHERE e.lon BETWEEN ? AND ? AND e.lat BETWEEN ? AND ?
+          AND e.event_type IN ('place_opened', 'place_closed')
+          AND e.event_time <= CURRENT_DATE
+    """
+    params: list = [min_lng, max_lng, min_lat, max_lat]
+    if since is not None:
+        sql += " AND e.event_time >= ?"
+        params.append(since)
+    sql += " ORDER BY e.event_time DESC LIMIT ?"
+    params.append(limit)
+    return query(sql, params)
+
+
 def biggest_construction_in_hexes(hexes: list[str], since: date | None, limit: int = 5) -> list[dict]:
     """The most consequential approved construction in the ring — by net housing
     units, then dollars. The report's hero fact ('what's approved to be built

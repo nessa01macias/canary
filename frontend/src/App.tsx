@@ -7,11 +7,14 @@ import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
 import { Docs } from './Docs'
+import { ForAgents } from './ForAgents'
 import { fetchResidentLayer, type ResidentAgg } from './residentLayer'
 import { fetchReport, type AddressReport } from './report'
 import { ReportCard } from './ReportCard'
+import { MobileSheet } from './MobileSheet'
 import { neighborhoodHeadlines } from './headlines'
 import ContributeModal from './ContributeModal'
+import { fetchSfBusinessChanges } from './bizChanges'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -382,6 +385,8 @@ function App() {
   // Set inside the map closure; lets the news card's button open the report.
   const openReportRef = useRef<((lat: number, lng: number) => void) | null>(null)
   const [researchOpen, setResearchOpen] = useState(false)
+  const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
+  const [agentsOpen, setAgentsOpen] = useState(false)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
   const [mode, setMode] = useState<Mode>('areas')
   const [priorities, setPriorities] = useState<Set<string>>(new Set())
@@ -850,6 +855,12 @@ function App() {
           if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection, nbhd.trajectory)
         })
         .catch((err) => console.error('SF data failed:', err))
+
+      // Business openings/closures (green/red) — the "block alive or dying"
+      // layer next to the construction markers. Loads independently.
+      fetchSfBusinessChanges()
+        .then((biz) => biz.forEach(addPoint))
+        .catch((err) => console.error('business changes failed:', err))
     })
 
     return () => {
@@ -1025,8 +1036,11 @@ function App() {
                 ? `${activeNbhds} neighborhoods changing`
                 : `${sfCount} live permits`}
           </button>
-          <button className="research-btn" onClick={() => setResearchOpen(true)}>
+          <button className="research-btn" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
             Documentation
+          </button>
+          <button className="agents-btn" onClick={() => setAgentsOpen(true)}>
+            For AI apps
           </button>
           <button className="contribute-btn" onClick={() => setContributing(true)}>
             + Review a neighborhood
@@ -1034,7 +1048,14 @@ function App() {
         </div>
       </header>
 
-      {researchOpen && <Docs onClose={() => setResearchOpen(false)} />}
+      {researchOpen && <Docs onClose={() => setResearchOpen(false)} initialTab={docsTab} />}
+
+      {agentsOpen && (
+        <ForAgents
+          onClose={() => setAgentsOpen(false)}
+          onOpenResearch={() => { setAgentsOpen(false); setDocsTab('research'); setResearchOpen(true) }}
+        />
+      )}
 
       {contributing && (
         <Contribute
@@ -1061,6 +1082,7 @@ function App() {
         const glyph = tone === 'up' ? '▲' : tone === 'down' ? '▼' : '▪'
         const items = neighborhoodHeadlines(selectedNbhd)
         return (
+          <MobileSheet onClose={() => setSelectedNbhd(null)}>
           <aside className={`news-card news-${tone}`}>
             <button className="news-close" onClick={() => setSelectedNbhd(null)} aria-label="Close">×</button>
             <span className={`news-verdict news-verdict-${tone}`}>{glyph} {verdict}</span>
@@ -1096,20 +1118,30 @@ function App() {
               What's changing at this spot →
             </button>
           </aside>
+          </MobileSheet>
         )
       })()}
 
       {reportOpen && (
-        <ReportCard
-          report={report}
-          loading={reportLoading}
+        <MobileSheet
           onClose={() => {
             setReportOpen(false)
             setReport(null)
             reportPinRef.current?.remove()
             reportPinRef.current = null
           }}
-        />
+        >
+          <ReportCard
+            report={report}
+            loading={reportLoading}
+            onClose={() => {
+              setReportOpen(false)
+              setReport(null)
+              reportPinRef.current?.remove()
+              reportPinRef.current = null
+            }}
+          />
+        </MobileSheet>
       )}
 
       {/* Map */}
@@ -1277,8 +1309,14 @@ function App() {
               <span className="legend-dot" style={{ background: KIND_COLOR.construction }} />
               Permit · Construction
             </div>
-            {/* closure/opening rows return when /api/changes?category=business
-                markers are actually rendered — legend only advertises what's drawn */}
+            <div className="legend-item">
+              <span className="legend-dot" style={{ background: KIND_COLOR.opening }} />
+              Business Opening
+            </div>
+            <div className="legend-item">
+              <span className="legend-dot" style={{ background: KIND_COLOR.closure }} />
+              Business Closure
+            </div>
             <div className="legend-item legend-size">
               <span className="legend-dot sz-s" style={{ background: '#999' }} />
               <span className="legend-dot sz-l" style={{ background: '#999' }} />

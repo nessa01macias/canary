@@ -1,16 +1,27 @@
 # Do AI assistants know how neighborhoods are changing?
 ### An area-level ground-truth benchmark with a grounding ablation — v0, San Francisco
 
-**Canary · 2026-07-25 · working note (v0)**
-Companion docs: [BENCHMARK.md](BENCHMARK.md) (results one-pager) · [VALIDATION.md](VALIDATION.md) (ground-truth validation) · harness: `backend/app/benchmark/`
-
-> **The accuracy gap is not a prompt-engineering problem — and for neighborhoods, it
-> isn't even a freshness problem. It's an aggregation problem: the answers aren't stale
-> on the web, they don't exist on the web.**
+**Melany Macías · Katerina Tchilinguirov — Canary**
+*Working note v0 · July 25, 2026 · San Francisco*
 
 ---
 
-## The short version, in plain language
+## Abstract
+
+People increasingly ask AI assistants where to live. We tested whether three frontier
+assistants (GPT-4o, Claude Sonnet 4.5, Perplexity sonar-pro with live web search) can
+answer **checkable, area-level questions** about San Francisco — is crime rising in
+this neighborhood, where are businesses opening, how much housing was just approved —
+where every ground truth is computed from public records and carries a citation.
+Bare, the models scored **0-39%**, with two distinct failure modes: refusal (GPT-4o
+declined 39/46 questions) and confident error (Perplexity answered all 46, was wrong
+on 28, without hedging). All three gave the *identical* wrong answer to the flagship
+question. With **one simulated Canary API response** prepended — the same models, same
+questions — accuracy rose to **85-98%**. The failure is not model capability and not
+web freshness; it is that area-level answers had never been computed and published
+anywhere, so no amount of retrieval could find them.
+
+## Lay summary
 
 **We asked three leading AI assistants 46 questions about San Francisco neighborhoods** —
 the kind anyone deciding where to live asks: *Is crime getting better here? Where are
@@ -39,22 +50,9 @@ the physical world, for humans and for AIs.
 *(Early result: one city, 46 questions, three models — the full method, numbers, and
 limitations follow below.)*
 
----
-
-## Abstract
-
-People increasingly ask AI assistants where to live. We tested whether three frontier
-assistants (GPT-4o, Claude Sonnet 4.5, Perplexity sonar-pro with live web search) can
-answer **checkable, area-level questions** about San Francisco — is crime rising in
-this neighborhood, where are businesses opening, how much housing was just approved —
-where every ground truth is computed from public records and carries a citation.
-Bare, the models scored **0-39%**, with two distinct failure modes: refusal (GPT-4o
-declined 39/46 questions) and confident error (Perplexity answered all 46, was wrong
-on 28, without hedging). All three gave the *identical* wrong answer to the flagship
-question. With **one simulated Canary API response** prepended — the same models, same
-questions — accuracy rose to **85-98%**. The failure is not model capability and not
-web freshness; it is that area-level answers had never been computed and published
-anywhere, so no amount of retrieval could find them.
+> **The accuracy gap is not a prompt-engineering problem — and for neighborhoods, it
+> isn't even a freshness problem. It's an aggregation problem: the answers aren't stale
+> on the web, they don't exist on the web.**
 
 ## 1. Motivation
 
@@ -224,3 +222,17 @@ Add Gemini/Grok columns · human audit of a judge-verdict sample · second metro
 larger question set incl. forward-layer facts with permit-level grounding · publish
 as a recurring report (the VOYGR playbook, area edition) · use as the opener for
 H3/H4 outreach to AI real-estate and answer-engine teams.
+
+## How to cite
+
+```bibtex
+@techreport{canary2026areabenchmark,
+  title       = {Do AI assistants know how neighborhoods are changing?
+                 An area-level ground-truth benchmark with a grounding ablation},
+  author      = {Mac{\'i}as, Melany and Tchilinguirov, Katerina},
+  institution = {Canary},
+  year        = {2026},
+  month       = {July},
+  note        = {Working note v0, San Francisco. Data snapshot 2026-07-24.}
+}
+```
