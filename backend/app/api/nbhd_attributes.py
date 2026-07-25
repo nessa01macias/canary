@@ -259,19 +259,24 @@ def build() -> dict:
         rows = con.execute(
             f"""
             WITH dir AS (
-              SELECT CDSCode AS cds, Latitude AS lat, Longitude AS lon
-              FROM read_csv_auto('{dd}/pubschls.txt', delim='\t', ignore_errors=true, quote='')
-              WHERE StatusType = 'Active' AND Latitude IS NOT NULL AND Longitude IS NOT NULL
+              -- lpad handles CDSCode arriving as number OR string
+              SELECT lpad(CAST(CDSCode AS VARCHAR), 14, '0') AS cds, geom
+              FROM ST_Read('{dd}/schools.geojson')
+              WHERE Status = 'Active'
             ),
             scores AS (
               -- school-level rows, all grades (13), ELA(1)+Math(2), weighted by tested count
-              SELECT "County Code" || "District Code" || "School Code" AS cds,
-                     sum("Percentage Standard Met and Above" * "Total Students Tested with Scores")
-                       / sum("Total Students Tested with Scores") AS pct_met,
-                     sum("Total Students Tested with Scores") AS n_scores
+              -- '*' = small-n suppression in CAASPP files -> columns parse as VARCHAR; try_cast nulls them out
+              SELECT lpad(CAST("County Code" AS VARCHAR), 2, '0')
+                     || lpad(CAST("District Code" AS VARCHAR), 5, '0')
+                     || lpad(CAST("School Code" AS VARCHAR), 7, '0') AS cds,
+                     sum(try_cast("Percentage Standard Met and Above" AS DOUBLE)
+                         * try_cast("Total Students Tested with Scores" AS DOUBLE))
+                       / sum(try_cast("Total Students Tested with Scores" AS DOUBLE)) AS pct_met,
+                     sum(try_cast("Total Students Tested with Scores" AS DOUBLE)) AS n_scores
               FROM read_csv_auto('{scores_txt}', delim='^', ignore_errors=true)
               WHERE "School Code" <> '0000000' AND Grade = 13 AND "Test ID" IN (1, 2)
-                AND "Percentage Standard Met and Above" IS NOT NULL
+                AND try_cast("Percentage Standard Met and Above" AS DOUBLE) IS NOT NULL
               GROUP BY 1
             )
             SELECT n.nhood,
@@ -279,7 +284,7 @@ def build() -> dict:
                    count(*) AS n_schools
             FROM scores s
             JOIN dir d ON s.cds = d.cds
-            JOIN nbhd n ON ST_Contains(n.geom, ST_Point(d.lon, d.lat))
+            JOIN nbhd n ON ST_Contains(n.geom, d.geom)
             GROUP BY n.nhood
             """
         ).fetchall()

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-07-25T07:04:56.017637+00:00",
+ "generated_at": "2026-07-25T07:16:23.636551+00:00",
  "neighborhood_property": "nhood",
  "attributes": {
   "Western Addition": {
@@ -12,7 +12,8 @@
    "sfmta_projects": 4,
    "rpp_parcels": 2027,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.1
+   "ems_response_median_mins": 7.1,
+   "school_pct_met": 39.5
   },
   "West of Twin Peaks": {
    "trees_per_km2": 1965.5611014071762,
@@ -24,7 +25,8 @@
    "sfmta_projects": 6,
    "rpp_parcels": 5135,
    "storefront_vacancy_rate": 0.0036101083032490976,
-   "ems_response_median_mins": 8.85
+   "ems_response_median_mins": 8.85,
+   "school_pct_met": 56.4
   },
   "Visitacion Valley": {
    "trees_per_km2": 908.6323051630834,
@@ -36,7 +38,8 @@
    "sfmta_projects": 8,
    "rpp_parcels": 0,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 11.166666666666666
+   "ems_response_median_mins": 11.166666666666666,
+   "school_pct_met": 33.8
   },
   "Twin Peaks": {
    "trees_per_km2": 422.94845243250563,
@@ -48,7 +51,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 92,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 9.016666666666667
+   "ems_response_median_mins": 9.016666666666667,
+   "school_pct_met": 56.3
   },
   "South of Market": {
    "trees_per_km2": 2250.4617482275316,
@@ -60,7 +64,8 @@
    "sfmta_projects": 9,
    "rpp_parcels": 3172,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 8.583333333333334
+   "ems_response_median_mins": 8.583333333333334,
+   "school_pct_met": 11.7
   },
   "Treasure Island": {
    "trees_per_km2": 3.4744936421435058,
@@ -72,7 +77,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 0,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 9.066666666666666
+   "ems_response_median_mins": 9.066666666666666,
+   "school_pct_met": 14.7
   },
   "Presidio Heights": {
    "trees_per_km2": 2903.54422138948,
@@ -84,7 +90,8 @@
    "sfmta_projects": 0,
    "rpp_parcels": 2425,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.6083333333333325
+   "ems_response_median_mins": 7.6083333333333325,
+   "school_pct_met": 68.0
   },
   "Presidio": {
    "trees_per_km2": 18.126747030486733,
@@ -96,7 +103,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 15,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 10.566666666666666
+   "ems_response_median_mins": 10.566666666666666,
+   "school_pct_met": null
   },
   "Potrero Hill": {
    "trees_per_km2": 1934.8609697965408,
@@ -108,7 +116,8 @@
    "sfmta_projects": 7,
    "rpp_parcels": 2696,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 8.283333333333333
+   "ems_response_median_mins": 8.283333333333333,
+   "school_pct_met": 42.9
   },
   "Portola": {
    "trees_per_km2": 1225.8064591964996,
@@ -120,7 +129,8 @@
    "sfmta_projects": 9,
    "rpp_parcels": 0,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.3
+   "ems_response_median_mins": 9.3,
+   "school_pct_met": 37.3
   },
   "Pacific Heights": {
    "trees_per_km2": 3205.966550920913,
@@ -132,7 +142,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 5792,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.166666666666667
+   "ems_response_median_mins": 7.166666666666667,
+   "school_pct_met": 44.6
   },
   "Outer Richmond": {
    "trees_per_km2": 1491.3826297391981,
@@ -144,7 +155,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 410,
    "storefront_vacancy_rate": 0.020833333333333332,
-   "ems_response_median_mins": 8.15
+   "ems_response_median_mins": 8.15,
+   "school_pct_met": 65.1
   },
   "Outer Mission": {
    "trees_per_km2": 1442.4483050568083,
@@ -156,7 +168,8 @@
    "sfmta_projects": 6,
    "rpp_parcels": 1559,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.1
+   "ems_response_median_mins": 9.1,
+   "school_pct_met": 33.9
   },
   "Sunset/Parkside": {
    "trees_per_km2": 1145.963109734436,
@@ -168,7 +181,8 @@
    "sfmta_projects": 3,
    "rpp_parcels": 688,
    "storefront_vacancy_rate": 0.011834319526627219,
-   "ems_response_median_mins": 8.983333333333333
+   "ems_response_median_mins": 8.983333333333333,
+   "school_pct_met": 70.1
   },
   "Oceanview/Merced/Ingleside": {
    "trees_per_km2": 1560.616216086562,
@@ -180,7 +194,8 @@
    "sfmta_projects": 3,
    "rpp_parcels": 1966,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.2
+   "ems_response_median_mins": 9.2,
+   "school_pct_met": 52.7
   },
   "North Beach": {
    "trees_per_km2": 2467.941779875237,
@@ -192,7 +207,8 @@
    "sfmta_projects": 7,
    "rpp_parcels": 2386,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 8.133333333333333
+   "ems_response_median_mins": 8.133333333333333,
+   "school_pct_met": 47.8
   },
   "Noe Valley": {
    "trees_per_km2": 3581.4874141264786,
@@ -204,7 +220,8 @@
    "sfmta_projects": 0,
    "rpp_parcels": 2370,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.383333333333334
+   "ems_response_median_mins": 7.383333333333334,
+   "school_pct_met": 28.8
   },
   "Lone Mountain/USF": {
    "trees_per_km2": 2202.596663802671,
@@ -216,7 +233,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 3080,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.583333333333333
+   "ems_response_median_mins": 7.583333333333333,
+   "school_pct_met": 62.8
   },
   "Lincoln Park": {
    "trees_per_km2": 21.514795140075382,
@@ -228,7 +246,8 @@
    "sfmta_projects": 0,
    "rpp_parcels": 0,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 9.833333333333334
+   "ems_response_median_mins": 9.833333333333334,
+   "school_pct_met": null
   },
   "Seacliff": {
    "trees_per_km2": 2678.0631686256497,
@@ -240,7 +259,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 62,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 7.85
+   "ems_response_median_mins": 7.85,
+   "school_pct_met": null
   },
   "Nob Hill": {
    "trees_per_km2": 2546.8290332335714,
@@ -252,7 +272,8 @@
    "sfmta_projects": 3,
    "rpp_parcels": 5632,
    "storefront_vacancy_rate": 0.043478260869565216,
-   "ems_response_median_mins": 7.016666666666667
+   "ems_response_median_mins": 7.016666666666667,
+   "school_pct_met": 26.6
   },
   "Mission Bay": {
    "trees_per_km2": 1380.2756844908527,
@@ -264,7 +285,8 @@
    "sfmta_projects": 4,
    "rpp_parcels": 617,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 8.266666666666667
+   "ems_response_median_mins": 8.266666666666667,
+   "school_pct_met": null
   },
   "Mission": {
    "trees_per_km2": 3315.328137773412,
@@ -276,7 +298,8 @@
    "sfmta_projects": 15,
    "rpp_parcels": 6159,
    "storefront_vacancy_rate": 0.007155635062611807,
-   "ems_response_median_mins": 7.683333333333334
+   "ems_response_median_mins": 7.683333333333334,
+   "school_pct_met": 24.9
   },
   "Russian Hill": {
    "trees_per_km2": 2494.4783156384883,
@@ -288,7 +311,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 4880,
    "storefront_vacancy_rate": 0.03333333333333333,
-   "ems_response_median_mins": 7.6
+   "ems_response_median_mins": 7.6,
+   "school_pct_met": 60.2
   },
   "Marina": {
    "trees_per_km2": 1820.786999011651,
@@ -300,7 +324,8 @@
    "sfmta_projects": 4,
    "rpp_parcels": 5650,
    "storefront_vacancy_rate": 0.013986013986013986,
-   "ems_response_median_mins": 7.916666666666667
+   "ems_response_median_mins": 7.916666666666667,
+   "school_pct_met": 58.9
   },
   "Lakeshore": {
    "trees_per_km2": 125.30131373285423,
@@ -312,7 +337,8 @@
    "sfmta_projects": 4,
    "rpp_parcels": 39,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 9.85
+   "ems_response_median_mins": 9.85,
+   "school_pct_met": 66.3
   },
   "Tenderloin": {
    "trees_per_km2": 2387.1996982610617,
@@ -324,7 +350,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 444,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.65
+   "ems_response_median_mins": 7.65,
+   "school_pct_met": 20.9
   },
   "McLaren Park": {
    "trees_per_km2": 125.40393895726368,
@@ -336,7 +363,8 @@
    "sfmta_projects": 8,
    "rpp_parcels": 0,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 10.608333333333334
+   "ems_response_median_mins": 10.608333333333334,
+   "school_pct_met": 14.0
   },
   "Japantown": {
    "trees_per_km2": 3995.218372286935,
@@ -348,7 +376,8 @@
    "sfmta_projects": 4,
    "rpp_parcels": 363,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.75
+   "ems_response_median_mins": 7.75,
+   "school_pct_met": null
   },
   "Inner Sunset": {
    "trees_per_km2": 1749.8206283614513,
@@ -360,7 +389,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 2658,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 8.266666666666667
+   "ems_response_median_mins": 8.266666666666667,
+   "school_pct_met": 72.5
   },
   "Hayes Valley": {
    "trees_per_km2": 4508.406463166606,
@@ -372,7 +402,8 @@
    "sfmta_projects": 6,
    "rpp_parcels": 4070,
    "storefront_vacancy_rate": 0.025,
-   "ems_response_median_mins": 7.416666666666667
+   "ems_response_median_mins": 7.416666666666667,
+   "school_pct_met": 50.8
   },
   "Haight Ashbury": {
    "trees_per_km2": 3727.800381777827,
@@ -384,7 +415,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 2494,
    "storefront_vacancy_rate": 0.004694835680751174,
-   "ems_response_median_mins": 7.416666666666667
+   "ems_response_median_mins": 7.416666666666667,
+   "school_pct_met": 78.7
   },
   "Golden Gate Park": {
    "trees_per_km2": 21.7135105208956,
@@ -396,7 +428,8 @@
    "sfmta_projects": 3,
    "rpp_parcels": 4,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 8.7
+   "ems_response_median_mins": 8.7,
+   "school_pct_met": null
   },
   "Inner Richmond": {
    "trees_per_km2": 1959.1338046673757,
@@ -408,7 +441,8 @@
    "sfmta_projects": 1,
    "rpp_parcels": 3574,
    "storefront_vacancy_rate": 0.013289036544850499,
-   "ems_response_median_mins": 7.716666666666667
+   "ems_response_median_mins": 7.716666666666667,
+   "school_pct_met": 70.8
   },
   "Glen Park": {
    "trees_per_km2": 2257.005902231743,
@@ -420,7 +454,8 @@
    "sfmta_projects": 0,
    "rpp_parcels": 859,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.4
+   "ems_response_median_mins": 9.4,
+   "school_pct_met": 50.3
   },
   "Financial District/South Beach": {
    "trees_per_km2": 2246.78669455517,
@@ -432,7 +467,8 @@
    "sfmta_projects": 23,
    "rpp_parcels": 4934,
    "storefront_vacancy_rate": 0,
-   "ems_response_median_mins": 8.716666666666667
+   "ems_response_median_mins": 8.716666666666667,
+   "school_pct_met": null
   },
   "Excelsior": {
    "trees_per_km2": 1360.1425853630642,
@@ -444,7 +480,8 @@
    "sfmta_projects": 8,
    "rpp_parcels": 26,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.683333333333334
+   "ems_response_median_mins": 9.683333333333334,
+   "school_pct_met": 28.7
   },
   "Chinatown": {
    "trees_per_km2": 1785.5402068267895,
@@ -456,7 +493,8 @@
    "sfmta_projects": 11,
    "rpp_parcels": 1151,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 7.466666666666667
+   "ems_response_median_mins": 7.466666666666667,
+   "school_pct_met": 62.3
   },
   "Castro/Upper Market": {
    "trees_per_km2": 3628.1601195056055,
@@ -468,7 +506,8 @@
    "sfmta_projects": 2,
    "rpp_parcels": 5104,
    "storefront_vacancy_rate": 0.0625,
-   "ems_response_median_mins": 7.783333333333333
+   "ems_response_median_mins": 7.783333333333333,
+   "school_pct_met": 23.5
   },
   "Bernal Heights": {
    "trees_per_km2": 3191.3672594208906,
@@ -480,7 +519,8 @@
    "sfmta_projects": 6,
    "rpp_parcels": 756,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 8.566666666666666
+   "ems_response_median_mins": 8.566666666666666,
+   "school_pct_met": 19.5
   },
   "Bayview Hunters Point": {
    "trees_per_km2": 1014.8357778700992,
@@ -492,7 +532,8 @@
    "sfmta_projects": 21,
    "rpp_parcels": 64,
    "storefront_vacancy_rate": 0.0,
-   "ems_response_median_mins": 9.633333333333333
+   "ems_response_median_mins": 9.633333333333333,
+   "school_pct_met": 22.1
   }
  },
  "attribute_meta": {
@@ -545,11 +586,15 @@
    "source": "datasf_fire_ems_calls",
    "source_as_of": "2026-07-24",
    "note": "Median minutes received->on-scene, fire/EMS calls, trailing 12 months"
+  },
+  "school_pct_met": {
+   "source": "ca_caaspp + ca_school_directory",
+   "source_as_of": "2024-10-09 (scores) / 2026-05-19 (locations)",
+   "note": "CAASPP % met-or-exceeded standard (ELA+Math, all grades, all students), tested-count weighted across public schools located in the neighborhood. Null = no public school in the area."
   }
  },
  "skipped": [
   "fire_hazard: CAL FIRE FHSZ has no severity zones inside SF proper \u2014 attribute would be uniformly empty",
-  "good_schools: needs school-location join (CAASPP has no coordinates) \u2014 deferred",
   "rezoning_apps: datasf_planning_records has no coordinates in the export \u2014 needs geocoding/staging",
   "political_lean: precinct returns landed but chip is a founder decision (constraint #2 adjacency)"
  ]

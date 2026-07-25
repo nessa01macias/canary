@@ -209,35 +209,43 @@ def fetch_cannabis(*, force: bool = False) -> None:
     snap.finalize(extra={"total_count": total, "rows": len(records), "bbox": CA_BBOX, "note": "retailers only; live daily API; paginated"})
 
 
-# --- CDE public school directory (the coordinate join for CAASPP) -------------
-# pubschls.txt: every CA public school with CDSCode + Latitude/Longitude + StatusType.
-# CAASPP research files carry scores but no coordinates; this is the missing half.
+# --- CA public school locations (the coordinate join for CAASPP) --------------
+# CDE's pubschls.txt download sits behind a Radware CAPTCHA for headless clients;
+# the state's ArcGIS SchoolSites layer (gis.data.ca.gov, CDEGIS) carries the same
+# CDSCode + Latitude/Longitude + Status and is verified fetchable.
 SCHOOLS_DIR = SourceSpec(
     key="ca_school_directory",
-    name="CDE California public school directory (pubschls)",
+    name="CA public school sites 2024-25 (CDE GIS SchoolSites)",
     geography="california",
     temporal_shape="reference_layer",
-    cadence="continuous",  # CDE maintains it rolling; as_of = capture date
-    fmt="tsv",
+    cadence="annual",
+    fmt="geojson",
     license="CDE public record",
-    homepage="https://www.cde.ca.gov/schooldirectory/",
-    canonical_source="cde_directory",
+    homepage="https://gis.data.ca.gov/datasets/CDEGIS::california-public-schools-2024-25",
+    canonical_source="cde_schoolsites",
     tier="T1.2",
-    notes="Tab-delimited. CDSCode joins CAASPP scores -> lat/lon. Filter StatusType='Active' at compute time.",
+    notes="ArcGIS FeatureServer; CDSCode joins CAASPP scores -> coordinates. Filter Status='Active' at compute time.",
 )
-SCHOOLS_DIR_URL = "https://www.cde.ca.gov/SchoolDirectory/report?rid=dl1&tp=txt"
+SCHOOLS_DIR_LAYER = (
+    "https://services3.arcgis.com/fdvHcZVgB2QSRNkL/arcgis/rest/services/SchoolSites2425/FeatureServer/0"
+)
 
 
 def fetch_schools_dir(*, force: bool = False) -> None:
-    as_of = base.today().isoformat()  # rolling directory; capture date is the honest as_of
-    if not force and base.snapshot_exists(SCHOOLS_DIR.key, as_of):
-        print(f"[current] {SCHOOLS_DIR.key}: already captured today ({as_of})")
+    as_of = base.arcgis_layer_as_of(SCHOOLS_DIR_LAYER) or base.today()
+    as_of_str = as_of.isoformat()
+    if not force and base.snapshot_exists(SCHOOLS_DIR.key, as_of_str):
+        print(f"[current] {SCHOOLS_DIR.key}: already have snapshot as_of {as_of_str}")
         return
-    print(f"[pull] {SCHOOLS_DIR.key} as_of {as_of}")
-    snap = _new_snapshot(SCHOOLS_DIR, as_of)
-    # CDE serves an HTML error page to unknown User-Agents — use a plain one.
-    snap.download("pubschls.txt", SCHOOLS_DIR_URL, headers={"User-Agent": "python-requests"})
-    snap.finalize()
+    n = base.arcgis_count(SCHOOLS_DIR_LAYER)
+    print(f"[pull] {SCHOOLS_DIR.key} as_of {as_of_str} ({n} school sites)")
+    fc = base.fetch_arcgis_geojson(
+        SCHOOLS_DIR_LAYER,
+        out_fields="CDSCode,SchoolName,DistrictName,Status,Latitude,Longitude",
+    )
+    snap = _new_snapshot(SCHOOLS_DIR, as_of_str)
+    snap.write_json("schools.geojson", fc, source_url=SCHOOLS_DIR_LAYER)
+    snap.finalize(extra={"n_sites": len(fc["features"])})
 
 
 # --- shared helpers ----------------------------------------------------------
