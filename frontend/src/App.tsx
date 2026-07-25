@@ -794,7 +794,12 @@ function App() {
         </div>
       </header>
 
-      {contributing && <Contribute onClose={() => setContributing(false)} />}
+      {contributing && (
+        <Contribute
+          onClose={() => setContributing(false)}
+          neighborhoods={nbhdIdsRef.current.map((n) => n.nhood).filter(Boolean).sort()}
+        />
+      )}
 
       {/* Map */}
       <div ref={mapContainer} id="map" />
@@ -942,14 +947,8 @@ function App() {
               <span className="legend-dot" style={{ background: KIND_COLOR.construction }} />
               Permit · Construction
             </div>
-            <div className="legend-item">
-              <span className="legend-dot" style={{ background: KIND_COLOR.closure }} />
-              Business Closure
-            </div>
-            <div className="legend-item">
-              <span className="legend-dot" style={{ background: KIND_COLOR.opening }} />
-              Business Opening
-            </div>
+            {/* closure/opening rows return when /api/changes?category=business
+                markers are actually rendered — legend only advertises what's drawn */}
             <div className="legend-item legend-size">
               <span className="legend-dot sz-s" style={{ background: '#999' }} />
               <span className="legend-dot sz-l" style={{ background: '#999' }} />

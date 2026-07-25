@@ -240,6 +240,35 @@ def _neighborhood_trends() -> tuple[dict[str, dict[str, float]], str | None]:
     return out, as_of
 
 
+def _geometry_centroid(geometry: dict) -> tuple[float, float] | None:
+    """(lat, lon) bbox-center of a Polygon/MultiPolygon — cheap and good enough
+    to anchor a neighborhood-level contribution to the H3 spine."""
+    coords = geometry.get("coordinates") or []
+    rings = coords if geometry.get("type") == "Polygon" else [r for poly in coords for r in poly]
+    pts = [pt for ring in rings for pt in ring]
+    if not pts:
+        return None
+    lons = [p[0] for p in pts]
+    lats = [p[1] for p in pts]
+    return (min(lats) + max(lats)) / 2, (min(lons) + max(lons)) / 2
+
+
+async def neighborhood_centroid(name: str) -> tuple[float, float] | None:
+    """Resolve a neighborhood name (case-insensitive) to its centroid, so a
+    contribution labeled 'Hayes Valley' gets real lat/lon + h3_9 attached
+    server-side — without it, reviews can't join the k-anonymous aggregate."""
+    try:
+        geo = await _cached("nbhd_geojson", NBHD_GEOJSON_URL)
+    except Exception:  # noqa: BLE001 — DataSF hiccup → contribution still saves, just ungeo'd
+        return None
+    wanted = name.strip().lower()
+    for f in geo.get("features", []):
+        nhood = str((f.get("properties") or {}).get("nhood", ""))
+        if nhood.strip().lower() == wanted and f.get("geometry"):
+            return _geometry_centroid(f["geometry"])
+    return None
+
+
 async def get_neighborhoods() -> dict:
     """FeatureCollection with aggregate stats baked into each feature's
     properties, plus the trajectory list — everything the overlay needs."""

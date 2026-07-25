@@ -865,3 +865,19 @@ html, body, #root, #app {
 .contribute-done { text-align: center; padding: 20px 0; }
 .contribute-done h3 { font-size: 22px; margin: 0 0 10px; }
 .contribute-done p { font-size: 14px; color: #555; line-height: 1.5; margin: 0 0 20px; }
+
+/* relation toggle in the Contribute form */
+.relation-btn {
+  flex: 1;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.relation-btn:hover { border-color: #FF6624; }
+.relation-btn.on { background: #FF6624; color: #fff; border-color: #FF6624; }

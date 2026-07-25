@@ -194,6 +194,20 @@ async def post_contribution(body: ContributionIn) -> dict:
         raise HTTPException(503, "Contributions store not configured on the server.")
     row = body.model_dump(exclude_none=True)
     row.setdefault("ratings", {})
+
+    # Un-orphan the review: if the client sent only a place name, resolve it to a
+    # centroid + H3 cell server-side so it can join the k-anonymous aggregate
+    # (resident_layer_agg groups by h3_9). Best-effort — a failed resolution
+    # never blocks the save.
+    if row.get("place_label") and not row.get("h3_9"):
+        centroid = await sf_live.neighborhood_centroid(row["place_label"])
+        if centroid:
+            row["lat"], row["lon"] = centroid
+            try:
+                row["h3_9"] = db.hex_for_point(row["lat"], row["lon"])
+            except Exception:  # noqa: BLE001 — DuckDB/h3 unavailable → save without hex
+                pass
+
     try:
         await store.insert_contribution(row)
     except RuntimeError as e:
