@@ -26,11 +26,14 @@ COPY frontend/ ./
 COPY *.md /app/
 RUN npm run build
 
-# MapLibre v6 loads its render worker from /assets/maplibre-gl-worker.mjs at runtime,
-# but picks the filename dynamically so rollup can't emit it — the file is missing
-# from dist and the SPA fallback serves index.html for it (wrong MIME) => blank map.
-# The package ships a self-contained prod worker; drop it where the app requests it.
-RUN cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs dist/assets/
+# MapLibre v6 loads its render worker from /assets/maplibre-gl-worker.mjs at
+# runtime, choosing the filename dynamically, so rollup never emits it into dist —
+# and the worker in turn imports ./maplibre-gl-shared.mjs (one more runtime chunk).
+# Missing either file = the worker dies silently = blank map. Ship the full set
+# (worker + shared, prod and dev variants) next to the hashed assets.
+RUN cp node_modules/maplibre-gl/dist/maplibre-gl-worker*.mjs \
+       node_modules/maplibre-gl/dist/maplibre-gl-shared*.mjs \
+       dist/assets/
 
 FROM caddy:2-alpine
 COPY --from=build /app/frontend/dist /srv
