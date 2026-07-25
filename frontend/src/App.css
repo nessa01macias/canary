@@ -881,3 +881,90 @@ html, body, #root, #app {
 }
 .relation-btn:hover { border-color: #FF6624; }
 .relation-btn.on { background: #FF6624; color: #fff; border-color: #FF6624; }
+
+/* Research overlay — the benchmark writeup (RESEARCH.md), rendered in-app.
+   Mirrors the contribute overlay's chrome; wider card, document typography. */
+.research-btn {
+  background: transparent;
+  border: 1px solid rgba(35, 41, 168, 0.35);
+  color: #2329A8;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.research-btn:hover { background: rgba(35, 41, 168, 0.08); }
+
+.research-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(20, 16, 14, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.research-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  animation: slide-up 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  display: flex;
+}
+
+.research-body {
+  padding: 34px 38px 30px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #2a2622;
+}
+.research-body h1 { font-size: 22px; line-height: 1.25; margin: 0 0 4px; }
+.research-body h3 { font-size: 15px; color: #6b6560; font-weight: 600; margin: 0 0 14px; }
+.research-body h2 { font-size: 17px; margin: 26px 0 8px; }
+.research-body blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 3px solid #FF6624;
+  background: #fdf3ec;
+  border-radius: 0 8px 8px 0;
+}
+.research-body blockquote p { margin: 0; }
+.research-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.research-body th, .research-body td {
+  border: 1px solid #eee2d8;
+  padding: 7px 10px;
+  text-align: left;
+}
+.research-body th { background: #f9f1ea; font-weight: 700; }
+.research-body code {
+  background: #f5efe9;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12.5px;
+}
+.research-body pre {
+  background: #201c19;
+  color: #f2e7e1;
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 12.5px;
+}
+.research-body pre code { background: transparent; color: inherit; padding: 0; }
+.research-body a { color: #2329A8; }
+.research-body hr { border: none; border-top: 1px solid #eee2d8; margin: 22px 0; }
