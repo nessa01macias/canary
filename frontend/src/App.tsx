@@ -3,7 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { samplePoints, type ChangePoint, type ChangeType, type Stage } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
-import { aggregate, fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
+import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
 import './App.css'
@@ -480,25 +480,10 @@ function App() {
       )
     }
 
-    const buildChoropleth = (permits: ChangePoint[], geo: FeatureCollection) => {
-      const agg = aggregate(permits)
-      // Join trajectory stats onto each polygon's properties.
-      for (const f of geo.features) {
-        const nb = (f.properties as { nhood?: string })?.nhood
-        const t = nb ? agg.get(nb) : undefined
-        f.properties = {
-          ...f.properties,
-          intensity: t?.intensity ?? 0,
-          permits: t?.permits ?? 0,
-          netUnits: t?.netUnits ?? 0,
-          totalCost: t?.totalCost ?? 0,
-          densify: t?.densify ?? 0,
-          convert: t?.convert ?? 0,
-          taller: t?.taller ?? 0,
-          descriptor: t?.descriptor ?? 'No recent permit activity',
-        }
-      }
-      setTraj([...agg.values()].sort((a, b) => b.intensity - a.intensity))
+    const buildChoropleth = (geo: FeatureCollection, trajectory: NbhdTrajectory[]) => {
+      // Trajectory stats are already baked into each feature's properties by the
+      // backend (/api/sf/neighborhoods); we only render + rank here.
+      setTraj([...trajectory].sort((a, b) => b.intensity - a.intensity))
 
       // Assign stable numeric ids so feature-state (hover + preference fit) has a
       // reliable key, and remember the id ↔ neighborhood mapping for the effect.
@@ -519,8 +504,8 @@ function App() {
       // range, then write the score + its pulse amplitude onto each polygon.
       const rawTraj = geo.features.map((f) => {
         const nb = String((f.properties as { nhood?: string })?.nhood ?? '')
-        const t = agg.get(nb)
-        const invest = t ? t.netUnits * 3 + t.densify * 2 + t.taller * 2 + Math.log10(t.totalCost + 1) : 0
+        const pr = (f.properties ?? {}) as { netUnits?: number; densify?: number; taller?: number; totalCost?: number }
+        const invest = (pr.netUnits ?? 0) * 3 + (pr.densify ?? 0) * 2 + (pr.taller ?? 0) * 2 + Math.log10((pr.totalCost ?? 0) + 1)
         return { f, raw: invest * 0.12 - crimeTrend(nb) * 2 }
       })
       const orderTraj = [...rawTraj].sort((a, b) => a.raw - b.raw)
@@ -657,10 +642,10 @@ function App() {
       samplePoints.forEach(addPoint)
 
       Promise.all([fetchSfPermits(), fetchNeighborhoods().catch(() => null)])
-        .then(([permits, geo]) => {
+        .then(([permits, nbhd]) => {
           permits.forEach(addPoint)
           setSfCount(permits.length)
-          if (geo) buildChoropleth(permits, geo as unknown as FeatureCollection)
+          if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection, nbhd.trajectory)
         })
         .catch((err) => console.error('SF data failed:', err))
     })

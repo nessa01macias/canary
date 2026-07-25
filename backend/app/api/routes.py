@@ -16,7 +16,7 @@ from datetime import date, datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 
-from . import db, store
+from . import db, sf_live, store
 from .schemas import (
     AddressReport,
     AreaRef,
@@ -160,6 +160,26 @@ def get_trajectory(
         raise HTTPException(404, f"No series for metric={metric} area={area_id}")
     cite = Citation(source=rows[-1].get("source") or metric, source_as_of=rows[-1].get("source_as_of"))
     return build_trajectory(metric, area_id, area_level, rows, cite)
+
+
+@router.get("/sf/permits")
+async def get_sf_permits() -> list[dict]:
+    """SF permits, enriched server-side (change-story, stage, units, cost).
+    The frontend renders this directly — no DataSF access from the browser."""
+    try:
+        return await sf_live.get_permits()
+    except Exception as e:  # noqa: BLE001 - upstream DataSF hiccup → 502
+        raise HTTPException(502, f"DataSF permits fetch failed: {e}")
+
+
+@router.get("/sf/neighborhoods")
+async def get_sf_neighborhoods() -> dict:
+    """SF neighborhood polygons with trajectory aggregates baked into each
+    feature's properties, plus the ranked trajectory list."""
+    try:
+        return await sf_live.get_neighborhoods()
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(502, f"DataSF neighborhoods fetch failed: {e}")
 
 
 @router.post("/contributions", status_code=201)
