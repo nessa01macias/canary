@@ -163,6 +163,15 @@ class AddressReport(BaseModel):
     trajectories: list[Trajectory] = Field(
         default_factory=list, description="Metric trajectories for the query area."
     )
+    attributes: dict[str, object] = Field(
+        default_factory=dict,
+        description=(
+            "Reference-layer attributes for the query hex (flood zone, fire "
+            "hazard, school area, parking regime…). Dynamic pass-through of the "
+            "areas table's non-spine columns — populates automatically as the "
+            "pipeline stages each reference layer (data contract pattern 3)."
+        ),
+    )
     sources: list[Citation] = Field(
         default_factory=list, description="Distinct sources contributing to this report."
     )

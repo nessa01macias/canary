@@ -41,6 +41,7 @@ REPORT_METRICS = [
     "biz_openings",
     "biz_closings",
     "crime_incidents",
+    "threeoneone_noise",   # forum-validated fear #3, staged 2026-07-25
     "evictions_filed",
 ]
 
@@ -141,6 +142,7 @@ def get_report(
         pipeline_version=pipeline_version,
         changes=changes,
         trajectories=trajectories,
+        attributes=db.area_attributes(h3_9),
         sources=sources,
     )
 

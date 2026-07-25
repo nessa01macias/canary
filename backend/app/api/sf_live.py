@@ -204,6 +204,7 @@ TREND_METRICS = {
     "biz_openings": "bizOpenTrend",        # higher = openings accelerating
     "biz_closings": "bizCloseTrend",       # higher = closings accelerating
     "evictions_filed": "evictionTrend",    # higher = evictions rising
+    "threeoneone_noise": "noiseTrend",     # higher = noise complaints rising
 }
 
 
@@ -217,7 +218,8 @@ def _rank_normalize(pairs: list[tuple[str, float]]) -> dict[str, float]:
 
 
 def _neighborhood_trends() -> tuple[dict[str, dict[str, float]], str | None]:
-    """{nhood: {crimeTrend: 0..1, …}}, plus the source as-of date."""
+    """{nhood: {crimeTrend: 0..1, …}}, plus the source as-of date. Reads the
+    pipeline's precomputed L3 trajectory table (pct_change per area/metric)."""
     from . import db  # local import: keep module importable without DuckDB
 
     try:
@@ -228,15 +230,11 @@ def _neighborhood_trends() -> tuple[dict[str, dict[str, float]], str | None]:
     as_of = max((str(r["source_as_of"]) for r in rows if r.get("source_as_of")), default=None)
     out: dict[str, dict[str, float]] = {}
     for metric, prop in TREND_METRICS.items():
-        pairs: list[tuple[str, float]] = []
-        for r in rows:
-            if r["metric"] != metric:
-                continue
-            last12, prior12 = r["last12"] or 0.0, r["prior12"] or 0.0
-            if last12 == 0 and prior12 == 0:
-                continue  # no signal for this area/metric
-            pct = (last12 - prior12) / prior12 if prior12 > 0 else 1.0
-            pairs.append((r["area_id"], pct))
+        pairs = [
+            (r["area_id"], r["pct_change"])
+            for r in rows
+            if r["metric"] == metric and r.get("pct_change") is not None
+        ]
         for area, score in _rank_normalize(pairs).items():
             out.setdefault(area, {})[prop] = round(score, 3)
     return out, as_of
@@ -270,6 +268,7 @@ async def get_neighborhoods() -> dict:
             "bizOpenTrend": tr.get("bizOpenTrend", 0.5),
             "bizCloseTrend": tr.get("bizCloseTrend", 0.5),
             "evictionTrend": tr.get("evictionTrend", 0.5),
+            "noiseTrend": tr.get("noiseTrend", 0.5),
             "trendsAsOf": trends_as_of,
         }
 

@@ -177,28 +177,31 @@ def metric_series(area_ids: list[str], area_level: str, metric: str, months: int
 
 
 def neighborhood_trends(metrics: list[str]) -> list[dict]:
-    """Last-12-months vs prior-12-months sums per (neighborhood, metric), using
-    the latest complete period in the table as the anchor. Real change signal —
-    replaces the frontend's placeholder hashes."""
+    """Per-(neighborhood, metric) change signal, read from the pipeline's
+    precomputed L3 `trajectory` table (last12/prior12/pct_change/z, provenance
+    included) — the single source of truth for 'is this rising or falling'.
+    Only `rankable` rows (enough active months to trust the comparison)."""
     placeholders = ",".join(["?"] * len(metrics))
     return query(
         f"""
-        WITH bounds AS (
-          SELECT MAX(period) AS maxp FROM metrics WHERE area_level = 'neighborhood'
-        )
-        SELECT area_id, metric,
-               SUM(CASE WHEN period > maxp - INTERVAL 12 MONTH
-                        THEN value ELSE 0 END) AS last12,
-               SUM(CASE WHEN period <= maxp - INTERVAL 12 MONTH
-                         AND period >  maxp - INTERVAL 24 MONTH
-                        THEN value ELSE 0 END) AS prior12,
-               MAX(source_as_of) AS source_as_of
-        FROM metrics, bounds
-        WHERE area_level = 'neighborhood' AND metric IN ({placeholders})
-        GROUP BY area_id, metric
+        SELECT area_id, metric, last12, prior12, pct_change, z, source_as_of
+        FROM trajectory
+        WHERE area_level = 'neighborhood' AND rankable AND metric IN ({placeholders})
         """,
         metrics,
     )
+
+
+def area_attributes(h3_9: str) -> dict:
+    """Reference-layer attributes for one hex — every non-spine column on its
+    `areas` row (flood zone, fire hazard, school area, parking regime… as the
+    pipeline stages them). Dynamic pass-through: new columns appear here with
+    zero API changes (FRONTEND_DATA_CONTRACT pattern 3)."""
+    rows = query("SELECT * FROM areas WHERE h3_9 = ?", [h3_9])
+    if not rows:
+        return {}
+    spine = {"h3_9", "h3_8", "h3_7", "neighborhood"}
+    return {k: v for k, v in rows[0].items() if k not in spine and v is not None}
 
 
 def available_metrics() -> list[dict]:

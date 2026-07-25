@@ -56,6 +56,7 @@ type NbhdSignals = {
   bizOpenTrend: number   // higher = business openings accelerating
   bizCloseTrend: number  // higher = closings accelerating
   evictionTrend: number  // higher = evictions rising
+  noiseTrend: number     // higher = 311 noise complaints rising
 }
 
 // Preference chips we can GROUND in live data today → a real fit score in 0..1.
@@ -66,6 +67,7 @@ const GROUNDED_TAGS: Record<string, (s: NbhdSignals) => number> = {
   'Business openings':  (s) => s.bizOpenTrend,
   'Vacancy trend':      (s) => 1 - s.bizCloseTrend,
   'New construction':   (s) => s.intensity,
+  'Quiet':              (s) => 1 - s.noiseTrend, // real 311 noise-complaint trend
 }
 
 // Fill paint expressions, shared by the initial layer and the mode/preference
@@ -512,6 +514,7 @@ function App() {
               bizOpenTrend: pr.bizOpenTrend ?? 0.5,
               bizCloseTrend: pr.bizCloseTrend ?? 0.5,
               evictionTrend: pr.evictionTrend ?? 0.5,
+              noiseTrend: pr.noiseTrend ?? 0.5,
             },
           ]
         }),
