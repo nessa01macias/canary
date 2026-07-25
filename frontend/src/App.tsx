@@ -116,24 +116,33 @@ const trajectoryColor = () =>
 // flat neighborhood nearly disappears into the cream), plus a gentle breathing
 // swing that only the strong movers get (`pulseAmp` is 0 for the calm majority).
 // Hover still wins for legibility.
+// Zoom continuum: full strength at city scale, melted to a whisper past
+// STREET_ZOOM so the markers own the street view. ['zoom'] must be the
+// top-level interpolate, with the data expression at each stop.
+const zoomFade = (expr: unknown) =>
+  ['interpolate', ['linear'], ['zoom'],
+    STREET_ZOOM - 1.2, expr,
+    STREET_ZOOM + 0.8, ['*', 0.1, expr],
+  ] as maplibregl.DataDrivenPropertyValueSpecification<number>
+
 const trajectoryOpacity = () =>
-  ['case',
+  zoomFade(['case',
     ['boolean', ['feature-state', 'hover'], false], 0.9,
     ['+',
       ['+', 0.1, ['*', 0.28, ['abs', ['coalesce', ['get', 'traj'], 0]]]],
       ['*', ['coalesce', ['feature-state', 'pulse'], 0],
         ['*', 0.2, ['coalesce', ['get', 'pulseAmp'], 0]]]],
-  ] as maplibregl.DataDrivenPropertyValueSpecification<number>
+  ])
 const matchColor = () =>
   ['interpolate', ['linear'], ['coalesce', ['feature-state', 'match'], 0], ...MATCH_STOPS.flat()] as
     maplibregl.DataDrivenPropertyValueSpecification<string>
 // match may legitimately be 0 (worst fit), so presence is tested against a
 // sentinel (-1) rather than truthiness — a 0-fit area still shows, just lightest.
 const matchOpacity = () =>
-  ['case', ['==', ['coalesce', ['feature-state', 'match'], -1], -1],
+  zoomFade(['case', ['==', ['coalesce', ['feature-state', 'match'], -1], -1],
     0.06,
     ['case', ['boolean', ['feature-state', 'hover'], false], 0.9, 0.72],
-  ] as maplibregl.DataDrivenPropertyValueSpecification<number>
+  ])
 
 // Axis-aligned bounds [[w,s],[e,n]] of a polygon/multipolygon feature — used to
 // fit the map to a neighborhood when it's clicked in the Best-fit list.
@@ -259,19 +268,23 @@ function markerSize(cost?: number): number {
   return Math.round(9 + Math.max(0, Math.min(1, t)) * 13) // 9..22px
 }
 
-type Mode = 'areas' | 'permits'
+// ONE LAYER, ZOOM AS THE AXIS (no mode toggle). At city scale you care about
+// areas — the trajectory choropleth. Fly past STREET_ZOOM and the story becomes
+// individual permits and businesses: the choropleth melts to a faint tint while
+// the markers fade up. What used to be two tabs is now just… zooming.
+const STREET_ZOOM = 14
 
-// Routine "OTC alteration" permits are low-signal noise at city zoom — reveal
-// them only once the user is close enough for street detail to matter.
+// Routine "OTC alteration" permits are low-signal noise even at street zoom —
+// reveal them only once the user is close enough for parcel detail to matter.
 const ALTERATION_MIN_ZOOM = 15
 
-// Central marker visibility: markers show only in permits mode, and routine
-// (`.minor`) alterations additionally require zooming past the gate above.
-function applyMarkerVisibility(els: HTMLElement[], mode: Mode, zoom: number) {
-  const showPermits = mode === 'permits'
+// Central marker visibility: markers appear past STREET_ZOOM; routine (`.minor`)
+// alterations additionally require zooming past the gate above.
+function applyMarkerVisibility(els: HTMLElement[], zoom: number) {
+  const showMarkers = zoom >= STREET_ZOOM
   for (const el of els) {
     const minor = el.classList.contains('minor')
-    el.style.display = showPermits && (!minor || zoom >= ALTERATION_MIN_ZOOM) ? '' : 'none'
+    el.style.display = showMarkers && (!minor || zoom >= ALTERATION_MIN_ZOOM) ? '' : 'none'
   }
 }
 
@@ -355,7 +368,6 @@ function App() {
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markerElsRef = useRef<HTMLElement[]>([])
   const popupRef = useRef<maplibregl.Popup | null>(null)
-  const modeRef = useRef<Mode>('areas')
   // Stable feature id ↔ neighborhood name, captured when the choropleth is built,
   // so the preference effect can write per-neighborhood fit into feature-state.
   const nbhdIdsRef = useRef<Array<{ id: number; nhood: string }>>([])
@@ -388,7 +400,13 @@ function App() {
   const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
   const [agentsOpen, setAgentsOpen] = useState(false)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
-  const [mode, setMode] = useState<Mode>('areas')
+  // One layer, zoom as the axis: past STREET_ZOOM the map is about individual
+  // permits/businesses; below it, area trajectory. Replaces the old mode toggle.
+  const [zoomedIn, setZoomedIn] = useState(false)
+  const zoomToCity = () => {
+    const map = mapRef.current
+    if (map && map.getZoom() >= STREET_ZOOM) map.easeTo({ zoom: 12.4, duration: 700 })
+  }
   const [priorities, setPriorities] = useState<Set<string>>(new Set())
   // The shortlist = the chips shown in the panel (chosen in onboarding). `priorities`
   // is the ACTIVE subset that drives the map. A chip toggled off in the panel leaves
@@ -420,6 +438,8 @@ function App() {
   // "Neighborhoods changing" flash (badge toggle).
   const [flashing, setFlashing] = useState(false)
   const flashRafRef = useRef<number | null>(null)
+  // Mobile only: the "⋯" menu that holds the secondary header actions.
+  const [menuOpen, setMenuOpen] = useState(false)
   const flashIdsRef = useRef<number[]>([])
 
   // Onboarding: add/remove a field from the shortlist (activating it on add). The
@@ -434,7 +454,7 @@ function App() {
       else next.add(tag)
       return next
     })
-    if (!inList) setMode('areas')
+    if (!inList) zoomToCity() // the fit overlay reads at area scale
   }
 
   // Panel: flip a shortlisted chip on/off. It stays in the shortlist either way, so
@@ -447,7 +467,7 @@ function App() {
       else next.add(tag)
       return next
     })
-    if (activating) setMode('areas')
+    if (activating) zoomToCity()
   }
 
   // Full reset from the onboarding "Clear" button.
@@ -528,7 +548,11 @@ function App() {
     mapRef.current = map
 
     // Reveal/hide routine alteration markers as the user crosses the zoom gate.
-    map.on('zoom', () => applyMarkerVisibility(markerElsRef.current, modeRef.current, map.getZoom()))
+    map.on('zoom', () => {
+      const z = map.getZoom()
+      applyMarkerVisibility(markerElsRef.current, z)
+      setZoomedIn(z >= STREET_ZOOM)
+    })
 
     const markers: maplibregl.Marker[] = []
 
@@ -547,7 +571,7 @@ function App() {
       if (point.changeType && point.changeType !== 'alteration') el.classList.add('structural')
       else if (point.changeType === 'alteration') el.classList.add('minor')
       // Respect the current mode + zoom so markers don't flash before the effects.
-      applyMarkerVisibility([el], modeRef.current, map.getZoom())
+      applyMarkerVisibility([el], map.getZoom())
       el.title = `${point.city} · ${point.changeLabel ?? point.headline}`
       el.addEventListener('click', () => setSelected(point))
       markerElsRef.current.push(el)
@@ -658,7 +682,9 @@ function App() {
         id: 'nbhd-fill',
         type: 'fill',
         source: 'nbhd',
-        layout: { visibility: modeRef.current === 'areas' ? 'visible' : 'none' },
+        // Start hidden; the visibility effect reveals it once onboarding is
+        // dismissed (the choropleth itself zoom-fades past STREET_ZOOM).
+        layout: { visibility: 'none' },
         paint: {
           'fill-color': trajectoryColor(),
           'fill-opacity': trajectoryOpacity(),
@@ -812,7 +838,7 @@ function App() {
         const target = e.originalEvent.target as HTMLElement | null
         if (target?.closest('.change-marker')) return
         const { lat, lng } = e.lngLat
-        if (modeRef.current === 'areas') {
+        if (map.getZoom() < STREET_ZOOM) {
           const hits = map.queryRenderedFeatures(e.point, { layers: ['nbhd-fill'] })
           if (hits.length) {
             const p = hits[0].properties as Record<string, number | string>
@@ -874,28 +900,28 @@ function App() {
     }
   }, [])
 
-  // Toggle markers ↔ choropleth when the mode changes, and run the trajectory
-  // "breathing" only while the default area overlay is actually on screen.
+  // The zoom continuum's bookkeeping. Marker visibility and the choropleth's
+  // opacity fade ride the zoom natively (listener + paint expression); this
+  // effect handles what they can't: onboarding gating, the news card and the
+  // "changing" flash standing down at street zoom, and the pulse.
   useEffect(() => {
-    modeRef.current = mode
     const map = mapRef.current
-    applyMarkerVisibility(markerElsRef.current, mode, map?.getZoom() ?? 0)
     // Keep the trajectory overlay dark behind the onboarding modal — it only
     // lights up once the user dismisses onboarding ("Show my map").
-    const showArea = mode === 'areas' && !onboardingOpen
+    const showArea = !onboardingOpen
     if (map?.getLayer('nbhd-fill')) {
       map.setLayoutProperty('nbhd-fill', 'visibility', showArea ? 'visible' : 'none')
     }
-    // The news card belongs to the area view — drop it when the parcels leave.
-    if (mode !== 'areas') setSelectedNbhd(null)
-    // The "changing" flash belongs to the area view too — stand it down otherwise.
-    if (!showArea) {
+    // The news card belongs to the area scale — drop it once the user flies in.
+    if (zoomedIn) setSelectedNbhd(null)
+    // The "changing" flash belongs to the area scale too.
+    if (!showArea || zoomedIn) {
       stopFlash()
       if (flashing) setFlashing(false)
     }
-    if (showArea && priorities.size === 0) startPulse()
+    if (showArea && !zoomedIn && priorities.size === 0) startPulse()
     else stopPulse()
-  }, [mode, sfCount, priorities, onboardingOpen, flashing])
+  }, [zoomedIn, sfCount, priorities, onboardingOpen, flashing])
 
   // Repaint the area overlay. Default (no preferences) = the pulsing trajectory
   // view (blue improving, red worsening); with preferences picked = a static
@@ -915,8 +941,8 @@ function App() {
       matchInfoRef.current = { active: false, count: 0 }
       setMatchTop([])
       // Breathe only while the trajectory overlay is actually the visible view
-      // (area mode, onboarding dismissed).
-      if (mode === 'areas' && !onboardingOpen) startPulse()
+      // (area scale, onboarding dismissed).
+      if (!zoomedIn && !onboardingOpen) startPulse()
       else stopPulse()
       return
     }
@@ -947,7 +973,7 @@ function App() {
     setMatchTop(
       [...scored].sort((a, b) => b.fit - a.fit).slice(0, 3).map((s) => s.nhood).filter(Boolean),
     )
-  }, [priorities, mode, sfCount, onboardingOpen])
+  }, [priorities, zoomedIn, sfCount, onboardingOpen])
 
   // "Neighborhoods changing" flash: blink a white highlight on every neighborhood
   // with recent permit activity (the set the badge counts). Ported from Kat's branch.
@@ -982,7 +1008,7 @@ function App() {
       setFlashing(false)
       stopFlash()
     } else {
-      if (mode !== 'areas') setMode('areas') // the flash reads against the area overlay
+      zoomToCity() // the flash reads against the area overlay
       setFlashing(true)
       startFlash()
     }
@@ -1001,25 +1027,6 @@ function App() {
           <span className="brand-sub">Real-world place intelligence for upwards mobility</span>
         </div>
 
-        <div className="mode-toggle" role="tablist" aria-label="View mode">
-          <button
-            role="tab"
-            aria-selected={mode === 'areas'}
-            className={mode === 'areas' ? 'active' : ''}
-            onClick={() => setMode('areas')}
-          >
-            Area trajectory
-          </button>
-          <button
-            role="tab"
-            aria-selected={mode === 'permits'}
-            className={mode === 'permits' ? 'active' : ''}
-            onClick={() => setMode('permits')}
-          >
-            Individual permits
-          </button>
-        </div>
-
         <div className="topbar-right">
           <button
             type="button"
@@ -1032,9 +1039,9 @@ function App() {
             <span className="live-dot" />
             {sfCount === null
               ? 'Loading…'
-              : mode === 'areas'
-                ? `${activeNbhds} neighborhoods changing`
-                : `${sfCount} live permits`}
+              : zoomedIn
+                ? `${sfCount} live permits`
+                : `${activeNbhds} neighborhoods changing`}
           </button>
           <button className="research-btn" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
             Documentation
@@ -1047,6 +1054,69 @@ function App() {
           </button>
         </div>
       </header>
+
+      {/* Mobile header — floating over the map (Google-Maps style). Shown only
+          on phones (CSS hides the desktop .topbar there and vice-versa). The
+          secondary actions collapse behind the "⋯" menu so the map stays clear. */}
+      <div className="mtopbar">
+        <div className="mtopbar-row">
+          <span className="mtopbar-brand">canary</span>
+          <div className="mtopbar-actions">
+            <button
+              type="button"
+              className={`mlive-chip${flashing ? ' is-flashing' : ''}`}
+              onClick={toggleFlash}
+              disabled={sfCount === null || activeNbhds === 0}
+              aria-pressed={flashing}
+            >
+              <span className="live-dot" />
+              {sfCount === null
+                ? 'Loading…'
+                : zoomedIn
+                  ? `${sfCount} permits`
+                  : `${activeNbhds} changing`}
+            </button>
+            <button
+              type="button"
+              className={`mmenu-btn${menuOpen ? ' is-open' : ''}`}
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+            >
+              <span className="mmenu-dots">⋯</span>
+            </button>
+          </div>
+        </div>
+
+        {menuOpen && (
+          <>
+            <div className="mmenu-scrim" onClick={() => setMenuOpen(false)} />
+            <div className="mmenu" role="menu">
+              <button
+                role="menuitem"
+                className="mmenu-item"
+                onClick={() => { setMenuOpen(false); setDocsTab(undefined); setResearchOpen(true) }}
+              >
+                Documentation
+              </button>
+              <button
+                role="menuitem"
+                className="mmenu-item"
+                onClick={() => { setMenuOpen(false); setAgentsOpen(true) }}
+              >
+                For AI apps
+              </button>
+              <button
+                role="menuitem"
+                className="mmenu-item is-primary"
+                onClick={() => { setMenuOpen(false); setContributing(true) }}
+              >
+                + Review a neighborhood
+              </button>
+            </div>
+          </>
+        )}
+      </div>
 
       {researchOpen && <Docs onClose={() => setResearchOpen(false)} initialTab={docsTab} />}
 
@@ -1151,6 +1221,7 @@ function App() {
           Hidden until the onboarding is dismissed ("Show my map"), so it never
           peeks out behind the picker on first load or during an edit. */}
       {!onboardingOpen && (
+      <MobileSheet initialSnap={0} dismissible={false} hidden={!!selectedNbhd || reportOpen}>
       <aside className="prefs-panel">
         <div className="prefs-head">
           <p className="prefs-eyebrow">Looking for</p>
@@ -1226,6 +1297,7 @@ function App() {
           </>
         )}
       </aside>
+      </MobileSheet>
       )}
 
       {/* Onboarding — centered picker across the full tiered field catalog */}
@@ -1303,7 +1375,7 @@ function App() {
 
       {/* Bottom legend strip — swaps with the mode */}
       <footer className="legend-strip">
-        {mode === 'permits' ? (
+        {zoomedIn ? (
           <>
             <div className="legend-item">
               <span className="legend-dot" style={{ background: KIND_COLOR.construction }} />
