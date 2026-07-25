@@ -13,5 +13,10 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:8000',
     },
+    // The Research page imports ../RESEARCH.md?raw from the repo root (single
+    // source of truth); allow the dev server to read one level up.
+    fs: {
+      allow: ['..'],
+    },
   },
 })

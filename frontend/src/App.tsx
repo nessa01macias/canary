@@ -6,6 +6,7 @@ import { fetchSfPermits } from './sfPermits'
 import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
+import { Research } from './Research'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -338,6 +339,7 @@ function App() {
   const [selected, setSelected] = useState<ChangePoint | null>(null)
   const [sfCount, setSfCount] = useState<number | null>(null)
   const [contributing, setContributing] = useState(false)
+  const [researchOpen, setResearchOpen] = useState(false)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
   const [mode, setMode] = useState<Mode>('areas')
   const [priorities, setPriorities] = useState<Set<string>>(new Set())
@@ -788,11 +790,16 @@ function App() {
                 ? `${activeNbhds} neighborhoods changing`
                 : `${sfCount} live permits`}
           </span>
+          <button className="research-btn" onClick={() => setResearchOpen(true)}>
+            Research
+          </button>
           <button className="contribute-btn" onClick={() => setContributing(true)}>
             + Review a neighborhood
           </button>
         </div>
       </header>
+
+      {researchOpen && <Research onClose={() => setResearchOpen(false)} />}
 
       {contributing && (
         <Contribute
