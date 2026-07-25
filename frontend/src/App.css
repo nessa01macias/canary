@@ -1848,6 +1848,20 @@ html, body, #root, #app {
 
   /* Pinch to zoom on touch — the +/− buttons collide with the sheet. */
   .maplibregl-ctrl-bottom-right { display: none; }
+
+  /* Touch-size the markers: keep the dot's visual size but grow the tap target
+     to ~44px with a transparent overlay. Clicks on it dispatch to the marker
+     element (which carries the click listener), so small $-value dots become
+     reliably tappable without looking bigger. */
+  .change-marker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* ── Draggable bottom sheet (Google-Maps style, phones only) ─────────
@@ -2163,3 +2177,28 @@ html, body, #root, #app {
   transition: color 0.12s ease, background 0.12s ease;
 }
 .nav-quiet:hover { color: #111; background: rgba(0,0,0,0.05); }
+
+/* AddressSearch form variant (ContributeModal) — full-width field, not a pill */
+.addr-search--form { max-width: none; margin: 0; }
+.addr-search--form .addr-search-input {
+  border-radius: 10px;
+  padding: 11px 34px 11px 34px;
+  font-size: 14px;
+}
+.addr-search--form.is-verified .addr-search-input {
+  border-color: rgba(63,143,92,0.55);
+}
+.addr-search-check {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #3f8f5c;
+  font-weight: 800;
+  pointer-events: none;
+}
+.addr-search-note {
+  font-size: 12.5px;
+  color: #999;
+  padding: 8px 10px;
+}

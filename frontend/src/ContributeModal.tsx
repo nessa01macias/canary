@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useState } from 'react'
 import { sessionId } from './lib/contributions'
+import { AddressSearch, type PickedAddress } from './AddressSearch'
 
-const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
 // The resident layer is the COMPLEMENT of the open-data registry: we only ask
 // what the engine can't compute. Three moat questions (per CONTEXT.md ranking):
@@ -56,12 +56,6 @@ const CONTRIB_QUESTIONS: Question[] = [
   },
 ]
 
-type Suggestion = { id: string; label: string; center?: [number, number] }
-type GeoFeature = { id?: string; place_name?: string; text?: string; center?: [number, number] }
-type GeoResponse = { features?: GeoFeature[] }
-
-// San Francisco bounding box, so autocomplete only surfaces local addresses.
-const SF_BBOX = '-122.55,37.70,-122.35,37.83'
 
 export default function ContributeModal({
   tag,
@@ -72,14 +66,9 @@ export default function ContributeModal({
   onClose: () => void
   onSubmitted?: () => void
 }) {
-  const [address, setAddress] = useState('')
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
-  const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [activeIdx, setActiveIdx] = useState(-1)
-  // The address the user actually PICKED from the geocoder — this is the proof it's
-  // a real place. Free-typed text never sets it, so it can't be submitted (below).
-  const [selected, setSelected] = useState<Suggestion | null>(null)
+  // The address the user actually PICKED from the geocoder (shared AddressSearch
+  // component) — the proof it's a real place. Free-typed text never sets it.
+  const [selected, setSelected] = useState<PickedAddress | null>(null)
   const [answers, setAnswers] = useState<Record<string, string[]>>({})
   // Per-question free-text "Other": whether its input is showing + the draft text.
   const [otherOpen, setOtherOpen] = useState<Record<string, boolean>>({})
@@ -88,77 +77,6 @@ export default function ContributeModal({
   const [submitted, setSubmitted] = useState(false)
   const [saving, setSaving] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const skipNextFetch = useRef(false)
-  const abortRef = useRef<AbortController | null>(null)
-
-  // Debounced address autocomplete against MapTiler's geocoder (real addresses).
-  useEffect(() => {
-    if (skipNextFetch.current) {
-      skipNextFetch.current = false
-      return
-    }
-    const q = address.trim()
-    if (!MAPTILER_KEY || q.length < 3) {
-      setSuggestions([])
-      setOpen(false)
-      setLoading(false)
-      return
-    }
-    setLoading(true)
-    setOpen(true)
-    const timer = setTimeout(() => {
-      abortRef.current?.abort()
-      const ac = new AbortController()
-      abortRef.current = ac
-      const url =
-        `https://api.maptiler.com/geocoding/${encodeURIComponent(q)}.json` +
-        `?key=${MAPTILER_KEY}&autocomplete=true&limit=5&country=us&types=address&bbox=${SF_BBOX}`
-      fetch(url, { signal: ac.signal })
-        .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
-        .then((data: GeoResponse) => {
-          const next = (data.features ?? []).map((f, i) => ({
-            id: f.id ?? `${i}`,
-            label: f.place_name ?? f.text ?? '',
-            center: f.center,
-          }))
-          setSuggestions(next)
-          setActiveIdx(-1)
-          setLoading(false)
-          setOpen(true)
-        })
-        .catch(() => {
-          if (ac.signal.aborted) return // a newer keystroke is already fetching
-          setSuggestions([])
-          setLoading(false)
-        })
-    }, 250)
-    return () => clearTimeout(timer)
-  }, [address])
-
-  useEffect(() => () => abortRef.current?.abort(), [])
-
-  const pick = (s: Suggestion) => {
-    skipNextFetch.current = true
-    setAddress(s.label)
-    setSelected(s) // marks the address VERIFIED — the only path that enables submit
-    setSuggestions([])
-    setOpen(false)
-    setActiveIdx(-1)
-  }
-
-  // Typing anything by hand un-verifies the field: a real pick must follow.
-  const onAddressChange = (v: string) => {
-    setAddress(v)
-    if (selected) setSelected(null)
-  }
-
-  const onAddressKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') { setOpen(false); return }
-    if (!open || suggestions.length === 0) return
-    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx((i) => Math.min(i + 1, suggestions.length - 1)) }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveIdx((i) => Math.max(i - 1, 0)) }
-    else if (e.key === 'Enter' && activeIdx >= 0) { e.preventDefault(); pick(suggestions[activeIdx]) }
-  }
 
   const toggleAnswer = (qid: string, opt: string) =>
     setAnswers((prev) => {
@@ -201,7 +119,7 @@ export default function ContributeModal({
   // Submit unlocks only once the address is a VERIFIED pick (not free-typed) AND
   // every question is answered (multi: ≥1 tag; direction: ≥1 metric rated) — a
   // complete, real contribution or nothing.
-  const addressVerified = selected !== null && selected.label === address.trim()
+  const addressVerified = selected !== null
   const canSubmit =
     addressVerified &&
     !saving &&
@@ -219,7 +137,7 @@ export default function ContributeModal({
     setSaving(true)
     setSubmitError(null)
     try {
-      const [lon, lat] = selected.center ?? [null, null]
+      const [lon, lat] = selected.center
       const resp = await fetch('/api/contributions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -274,52 +192,13 @@ export default function ContributeModal({
 
             <div className="contrib-field">
               <span className="contrib-label">Your address</span>
-              <div className={`addr-wrap${addressVerified ? ' is-verified' : ''}`}>
-                <input
-                  className="addr-input"
-                  type="text"
-                  placeholder="Start typing your address…"
-                  value={address}
-                  autoComplete="off"
-                  spellCheck={false}
-                  role="combobox"
-                  aria-expanded={open}
-                  aria-autocomplete="list"
-                  onChange={(e) => onAddressChange(e.target.value)}
-                  onKeyDown={onAddressKeyDown}
-                  onFocus={() => (suggestions.length > 0 || loading) && setOpen(true)}
-                  onBlur={() => setTimeout(() => setOpen(false), 120)}
-                />
-                {addressVerified && <span className="addr-check" aria-hidden="true">✓</span>}
-                {open && (loading || suggestions.length > 0 || address.trim().length >= 3) && (
-                  <ul className="addr-list" role="listbox">
-                    {loading && <li className="addr-note">Searching addresses…</li>}
-                    {!loading && suggestions.map((s, i) => (
-                      <li key={s.id}>
-                        <button
-                          type="button"
-                          className={`addr-item${i === activeIdx ? ' is-active' : ''}`}
-                          role="option"
-                          aria-selected={i === activeIdx}
-                          onMouseDown={(e) => e.preventDefault()}
-                          onMouseEnter={() => setActiveIdx(i)}
-                          onClick={() => pick(s)}
-                        >
-                          {s.label}
-                        </button>
-                      </li>
-                    ))}
-                    {!loading && suggestions.length === 0 && (
-                      <li className="addr-note">
-                        No match — include your street name (e.g. “915 Market St”).
-                      </li>
-                    )}
-                  </ul>
-                )}
-              </div>
-              {!addressVerified && address.trim().length > 0 && !open && (
-                <p className="addr-hint">Pick your address from the list so we can verify it.</p>
-              )}
+              <AddressSearch
+                variant="form"
+                showVerified
+                placeholder="Start typing your address…"
+                onPick={setSelected}
+                onClear={() => setSelected(null)}
+              />
             </div>
 
             {CONTRIB_QUESTIONS.map((q) =>

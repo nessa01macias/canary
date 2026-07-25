@@ -519,6 +519,12 @@ function App() {
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return
 
+    // On phones the 3D tilt + free rotation are a liability: one-finger pan,
+    // pinch-zoom and an accidental two-finger twist all fight each other. Open
+    // flat and north-up, and lock rotation/pitch gestures below.
+    const isMobileInit =
+      typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches
+
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: MAPTILER_KEY
@@ -530,10 +536,16 @@ function App() {
       center: [-122.44, 37.75],
       zoom: 12.3,
       minZoom: 1,
-      pitch: 50,
-      bearing: -10,
+      pitch: isMobileInit ? 0 : 50,
+      bearing: isMobileInit ? 0 : -10,
       maxPitch: 85,
     })
+
+    if (isMobileInit) {
+      map.dragRotate.disable()
+      map.touchZoomRotate.disableRotation()
+      map.touchPitch?.disable()
+    }
 
     // Real globe when zoomed out (MapLibre v5+). Guarded: if a style swap ever
     // drops projection support, the map silently stays mercator.
@@ -958,7 +970,7 @@ function App() {
         </div>
 
         {/* The centerpiece: the product's promise as a control. */}
-        <AddressSearch onPick={(lat, lng) => openReportRef.current?.(lat, lng)} />
+        <AddressSearch onPick={(s) => openReportRef.current?.(s.center[1], s.center[0])} />
 
         <div className="topbar-right">
           <button className="nav-quiet" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
