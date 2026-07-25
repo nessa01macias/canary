@@ -10,6 +10,37 @@ Companion docs: [BENCHMARK.md](BENCHMARK.md) (results one-pager) · [VALIDATION.
 
 ---
 
+## The short version, in plain language
+
+**We asked three leading AI assistants 46 questions about San Francisco neighborhoods** —
+the kind anyone deciding where to live asks: *Is crime getting better here? Where are
+new businesses actually opening? How much housing was just approved nearby?* Every
+question has a checkable answer in the city's own public records.
+
+**Without help, they failed.**
+- GPT-4o refused or dodged **39 of 46** questions. An assistant that won't answer is no help on moving day.
+- Perplexity — which searches the live web — answered every question, and got **28 of 46 wrong** while sounding completely sure.
+- All three gave the **same wrong answer** to the same question: asked which neighborhood had the biggest rise in new business openings, all said the Mission. City records show the Mission had the biggest **decline**. The real answer — Japantown — appeared nowhere.
+
+**Why they fail:** these answers aren't stale on the web — they were **never on the web
+at all**. No one had ever computed them from the millions of raw records the city
+publishes. An AI can't retrieve a sentence nobody has written.
+
+**Then we gave the same AIs one response from Canary's data.** Correctness jumped from
+**0-39% to 85-98%**. Same models, same questions — the only thing that changed was our
+data. The AIs were never the problem; the missing layer was.
+
+**One more thing we learned:** numbers alone weren't enough. Handed raw figures without
+explanations, one model read a police *crackdown* (enforcement up 44%) as a crime *wave*
+— even though crimes reported by victims were down 8%. Data has to ship with its
+meaning attached. That's what Canary builds: the measured, explained change layer of
+the physical world, for humans and for AIs.
+
+*(Early result: one city, 46 questions, three models — the full method, numbers, and
+limitations follow below.)*
+
+---
+
 ## Abstract
 
 People increasingly ask AI assistants where to live. We tested whether three frontier

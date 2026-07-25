@@ -21,8 +21,9 @@ RUN npm ci
 
 COPY frontend/ ./
 # Repo-root docs the Docs page imports via ../../*.md — placed at /app so the
-# relative import resolves during the build.
-COPY RESEARCH.md BENCHMARK.md VALIDATION.md DATA_SOURCES.md /app/
+# relative imports resolve during the build. Glob (not an explicit list) so newly
+# added root docs (ABOUT.md etc.) never break the build.
+COPY *.md /app/
 RUN npm run build
 
 # MapLibre v6 loads its render worker from /assets/maplibre-gl-worker.mjs at runtime,

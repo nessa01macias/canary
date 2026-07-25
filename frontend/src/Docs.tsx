@@ -4,12 +4,16 @@ import remarkGfm from 'remark-gfm'
 // The canonical documents live at the repo root (single source of truth — the same
 // files the pipeline and benchmark produce). Vite inlines them at build; no copies
 // to drift. CONTEXT.md (strategy) and DEPLOY.md (ops) are deliberately NOT shipped.
+import aboutMd from '../../ABOUT.md?raw'
 import researchMd from '../../RESEARCH.md?raw'
 import benchmarkMd from '../../BENCHMARK.md?raw'
 import validationMd from '../../VALIDATION.md?raw'
 import dataSourcesMd from '../../DATA_SOURCES.md?raw'
 
 const DOCS: { key: string; label: string; body: string }[] = [
+  // Plain-language first: a normal visitor should understand Canary without ever
+  // meeting a technical tab. The research/validation tabs back it up with receipts.
+  { key: 'about', label: 'What is Canary?', body: aboutMd },
   { key: 'research', label: 'Research', body: researchMd },
   { key: 'benchmark', label: 'Benchmark results', body: benchmarkMd },
   { key: 'validation', label: 'Validation', body: validationMd },

@@ -242,10 +242,62 @@ def build() -> dict:
         }
         print(f"  [ok] ems_response_median_mins  ({len(got)}/{len(names)} nbhds) src=datasf_fire_ems_calls@{as_of}")
 
+    # --- schools: CAASPP scores (CDS-coded, no coords) x CDE directory (coords) ---
+    caaspp_snap = _latest_snapshot("ca_caaspp")
+    dir_snap = _latest_snapshot("ca_school_directory")
+    if caaspp_snap and dir_snap:
+        import io
+        import zipfile
+
+        (cd, c_as_of), (dd, d_as_of) = caaspp_snap, dir_snap
+        # extract the caret-delimited scores file next to the zip (idempotent)
+        scores_txt = cd / "sb_scores.txt"
+        if not scores_txt.exists():
+            with zipfile.ZipFile(glob.glob(str(cd / "sb_ca*_1_csv_v1.zip"))[0]) as z:
+                member = [n for n in z.namelist() if "entities" not in n][0]
+                scores_txt.write_bytes(z.read(member))
+        rows = con.execute(
+            f"""
+            WITH dir AS (
+              SELECT CDSCode AS cds, Latitude AS lat, Longitude AS lon
+              FROM read_csv_auto('{dd}/pubschls.txt', delim='\t', ignore_errors=true, quote='')
+              WHERE StatusType = 'Active' AND Latitude IS NOT NULL AND Longitude IS NOT NULL
+            ),
+            scores AS (
+              -- school-level rows, all grades (13), ELA(1)+Math(2), weighted by tested count
+              SELECT "County Code" || "District Code" || "School Code" AS cds,
+                     sum("Percentage Standard Met and Above" * "Total Students Tested with Scores")
+                       / sum("Total Students Tested with Scores") AS pct_met,
+                     sum("Total Students Tested with Scores") AS n_scores
+              FROM read_csv_auto('{scores_txt}', delim='^', ignore_errors=true)
+              WHERE "School Code" <> '0000000' AND Grade = 13 AND "Test ID" IN (1, 2)
+                AND "Percentage Standard Met and Above" IS NOT NULL
+              GROUP BY 1
+            )
+            SELECT n.nhood,
+                   sum(s.pct_met * s.n_scores) / sum(s.n_scores) AS v,
+                   count(*) AS n_schools
+            FROM scores s
+            JOIN dir d ON s.cds = d.cds
+            JOIN nbhd n ON ST_Contains(n.geom, ST_Point(d.lon, d.lat))
+            GROUP BY n.nhood
+            """
+        ).fetchall()
+        got = {r[0]: round(r[1], 1) for r in rows}
+        for n in names:  # None, not 0 — a neighborhood without a public school has no score
+            attrs[n]["school_pct_met"] = got.get(n)
+        meta["school_pct_met"] = {
+            "source": "ca_caaspp + ca_school_directory",
+            "source_as_of": f"{c_as_of} (scores) / {d_as_of} (locations)",
+            "note": "CAASPP % met-or-exceeded standard (ELA+Math, all grades, all students), "
+                    "tested-count weighted across public schools located in the neighborhood. "
+                    "Null = no public school in the area.",
+        }
+        print(f"  [ok] school_pct_met           ({len(got)}/{len(names)} nbhds) src=caaspp@{c_as_of}+dir@{d_as_of}")
+
     # deliberately skipped, with reasons the serving layer can surface
     notes.extend([
         "fire_hazard: CAL FIRE FHSZ has no severity zones inside SF proper — attribute would be uniformly empty",
-        "good_schools: needs school-location join (CAASPP has no coordinates) — deferred",
         "rezoning_apps: datasf_planning_records has no coordinates in the export — needs geocoding/staging",
         "political_lean: precinct returns landed but chip is a founder decision (constraint #2 adjacency)",
     ])

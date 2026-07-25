@@ -145,12 +145,15 @@ class Snapshot:
         print(f"  [{result.status}] {result.name} -> {marker}")
         return result
 
-    def download(self, name: str, url: str, *, timeout: int = DEFAULT_TIMEOUT) -> FileResult:
+    def download(
+        self, name: str, url: str, *, timeout: int = DEFAULT_TIMEOUT,
+        headers: dict[str, str] | None = None,
+    ) -> FileResult:
         result = FileResult(name=name, url=url)
         out_path = self.dir / name
         try:
             sha = hashlib.sha256()
-            with requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout, stream=True) as resp:
+            with requests.get(url, headers=headers or DEFAULT_HEADERS, timeout=timeout, stream=True) as resp:
                 resp.raise_for_status()
                 with out_path.open("wb") as f:
                     for chunk in resp.iter_content(chunk_size=1 << 20):

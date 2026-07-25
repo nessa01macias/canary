@@ -209,15 +209,47 @@ def fetch_cannabis(*, force: bool = False) -> None:
     snap.finalize(extra={"total_count": total, "rows": len(records), "bbox": CA_BBOX, "note": "retailers only; live daily API; paginated"})
 
 
+# --- CDE public school directory (the coordinate join for CAASPP) -------------
+# pubschls.txt: every CA public school with CDSCode + Latitude/Longitude + StatusType.
+# CAASPP research files carry scores but no coordinates; this is the missing half.
+SCHOOLS_DIR = SourceSpec(
+    key="ca_school_directory",
+    name="CDE California public school directory (pubschls)",
+    geography="california",
+    temporal_shape="reference_layer",
+    cadence="continuous",  # CDE maintains it rolling; as_of = capture date
+    fmt="tsv",
+    license="CDE public record",
+    homepage="https://www.cde.ca.gov/schooldirectory/",
+    canonical_source="cde_directory",
+    tier="T1.2",
+    notes="Tab-delimited. CDSCode joins CAASPP scores -> lat/lon. Filter StatusType='Active' at compute time.",
+)
+SCHOOLS_DIR_URL = "https://www.cde.ca.gov/SchoolDirectory/report?rid=dl1&tp=txt"
+
+
+def fetch_schools_dir(*, force: bool = False) -> None:
+    as_of = base.today().isoformat()  # rolling directory; capture date is the honest as_of
+    if not force and base.snapshot_exists(SCHOOLS_DIR.key, as_of):
+        print(f"[current] {SCHOOLS_DIR.key}: already captured today ({as_of})")
+        return
+    print(f"[pull] {SCHOOLS_DIR.key} as_of {as_of}")
+    snap = _new_snapshot(SCHOOLS_DIR, as_of)
+    # CDE serves an HTML error page to unknown User-Agents — use a plain one.
+    snap.download("pubschls.txt", SCHOOLS_DIR_URL, headers={"User-Agent": "python-requests"})
+    snap.finalize()
+
+
 # --- shared helpers ----------------------------------------------------------
 
-SPECS = [ABC, CAASPP, FHSZ, PRECINCT, CANNABIS]
+SPECS = [ABC, CAASPP, FHSZ, PRECINCT, CANNABIS, SCHOOLS_DIR]
 FETCHERS = {
     "abc": fetch_abc,
     "caaspp": fetch_caaspp,
     "fhsz": fetch_fhsz,
     "precinct": fetch_precinct,
     "cannabis": fetch_cannabis,
+    "schools_dir": fetch_schools_dir,
 }
 
 
