@@ -185,10 +185,10 @@ the enforcement surge (+43.6%) as "crime getting worse" despite victim reports
    the part that is slow and hard to copy — and it is also where the benchmark's
    authority comes from.
 
-6. **Hypothesis-ledger status:** H2 ("AI area answers are wrong") is strongly
-   supported on our dimensions at v0 scale. H3/H4 (do AI product owners notice, and
-   would they pay) remain untested — this document is the designed instrument for
-   that outreach, not evidence of it.
+6. **What this study does and does not establish.** That AI assistants fail
+   area-level questions is demonstrated on our dimensions, at v0 scale. Whether AI
+   products will adopt external grounding for these questions is a market question:
+   this study is evidence of the gap, not of adoption.
 
 ## 8. Limitations
 
@@ -220,8 +220,7 @@ questions track the live record rather than fossilizing).
 
 Add Gemini/Grok columns · human audit of a judge-verdict sample · second metro ·
 larger question set incl. forward-layer facts with permit-level grounding · publish
-as a recurring report (the VOYGR playbook, area edition) · use as the opener for
-H3/H4 outreach to AI real-estate and answer-engine teams.
+as a recurring, versioned report so the numbers stay accountable over time.
 
 ## How to cite
 

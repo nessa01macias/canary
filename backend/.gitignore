@@ -7,3 +7,4 @@ data/staged/
 data/*.duckdb
 # third-party reference docs — not ours to redistribute (repo is public)
 app/benchmark/*.pdf
+data/*.log

@@ -48,7 +48,7 @@ DATASETS = [
     Dataset("crime", "wg3w-h783", "Police Incident Reports 2018-present", "crime/safety", "event_stream", "sf_police", "T1.3"),
     Dataset("threeoneone", "vw6y-z8j6", "311 Cases", "noise/blight complaints", "event_stream", "sf_311", "T3.12"),
     Dataset("zoning", "3i4a-hu95", "Zoning Map - Zoning Districts", "parcel/adjacent zoning", "reference_layer", "sf_zoning", "T2.4", fmt="geojson"),
-    Dataset("assessor_rolls", "wv5m-vpq2", "Assessor Historical Secured Property Tax Rolls", "price/value (Prop 13: NOT market price)", "reference_layer", "sf_assessor", "T1.1"),
+    Dataset("assessor_rolls", "wv5m-vpq2", "Assessor Historical Secured Property Tax Rolls", "price/value (Prop 13: NOT market price)", "reference_layer", "sf_assessor", "T1.1", cadence="monthly"),
     # --- forward layer (Tier 6) ---
     Dataset("dev_pipeline", "6jgi-cpb4", "SF Development Pipeline", "entitlement->construction pipeline w/ net units", "recurring_snapshot", "sf_dev_pipeline", "T6.1", cadence="quarterly"),
     Dataset("planning_records", "qvu5-m3a2", "Planning Department Records - Projects (PPTS successor)", "rezoning / change-of-use / entitlement applications", "event_stream", "sf_planning", "T6.3"),

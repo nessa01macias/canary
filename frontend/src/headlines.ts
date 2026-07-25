@@ -2,8 +2,14 @@
 // data we actually serve, each cited to its public source with its as-of date.
 // (Replaces the placeholder that fabricated headlines under real outlet names —
 // fake citations are the one thing this product can never do.)
+//
+// Each headline carries its OWN tone so the UI can color per-fact, not per-card:
+//   'up'      = favorable movement (noise quieting, crime falling)
+//   'down'    = unfavorable movement (evictions rising, vacancy high)
+//   'neutral' = activity facts (permits, units, $) — intensity, not a value judgment
 
-export type Headline = { title: string; source: string; date: string }
+export type HeadlineTone = 'up' | 'down' | 'neutral'
+export type Headline = { title: string; source: string; date: string; tone: HeadlineTone }
 
 // The real per-neighborhood stats the card already has on hand (from the
 // backend-baked GeoJSON properties captured on click).
@@ -26,7 +32,8 @@ const LO = 0.2
 export function neighborhoodHeadlines(s: NbhdNewsStats): Headline[] {
   const asOf = s.trendsAsOf ?? 'latest snapshot'
   const out: Headline[] = []
-  const push = (title: string, source: string) => out.push({ title, source, date: asOf })
+  const push = (title: string, source: string, tone: HeadlineTone = 'neutral') =>
+    out.push({ title, source, date: asOf, tone })
 
   if (s.permits > 0)
     push(
@@ -42,25 +49,25 @@ export function neighborhoodHeadlines(s: NbhdNewsStats): Headline[] {
     )
 
   if ((s.crimeTrend ?? 0.5) >= HI)
-    push('Police-reported incidents rising faster than most of SF, year over year', 'DataSF · Police reports')
+    push('Police-reported incidents rising faster than most of SF, year over year', 'DataSF · Police reports', 'down')
   else if ((s.crimeTrend ?? 0.5) <= LO)
-    push('Police-reported incidents falling faster than most of SF, year over year', 'DataSF · Police reports')
+    push('Police-reported incidents falling faster than most of SF, year over year', 'DataSF · Police reports', 'up')
 
   if ((s.bizOpenTrend ?? 0.5) >= HI)
-    push('Business openings accelerating vs the prior year', 'DataSF · Registered Businesses')
+    push('Business openings accelerating vs the prior year', 'DataSF · Registered Businesses', 'up')
   else if ((s.bizOpenTrend ?? 0.5) <= LO)
-    push('Business openings slowing vs the prior year', 'DataSF · Registered Businesses')
+    push('Business openings slowing vs the prior year', 'DataSF · Registered Businesses', 'down')
 
   if ((s.noiseTrend ?? 0.5) >= HI)
-    push('311 noise complaints climbing vs the prior year', 'DataSF · 311 cases')
+    push('311 noise complaints climbing vs the prior year', 'DataSF · 311 cases', 'down')
   else if ((s.noiseTrend ?? 0.5) <= LO)
-    push('311 noise complaints quieting vs the prior year', 'DataSF · 311 cases')
+    push('311 noise complaints quieting vs the prior year', 'DataSF · 311 cases', 'up')
 
   if ((s.evictionTrend ?? 0.5) >= HI)
-    push('Eviction filings rising vs the prior year', 'SF Rent Board · eviction notices')
+    push('Eviction filings rising vs the prior year', 'SF Rent Board · eviction notices', 'down')
 
   if ((s.vacancyRate ?? 0.5) >= HI)
-    push("Storefront vacancy among the city's highest", 'SF · commercial vacancy tax roll')
+    push("Storefront vacancy among the city's highest", 'SF · commercial vacancy tax roll', 'down')
 
   // Never an empty card: state the quiet truthfully.
   if (out.length === 0)

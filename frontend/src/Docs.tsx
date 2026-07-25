@@ -7,7 +7,9 @@ import remarkGfm from 'remark-gfm'
 import aboutMd from '../../ABOUT.md?raw'
 import researchMd from '../../RESEARCH.md?raw'
 import validationMd from '../../VALIDATION.md?raw'
-import dataSourcesMd from '../../DATA_SOURCES.md?raw'
+// SOURCES.md is the PUBLIC sources page. DATA_SOURCES.md is the internal working
+// registry (ops notes, gaps, backlog) and must never ship to the site.
+import sourcesMd from '../../SOURCES.md?raw'
 
 // Each tab has ONE job — no two tabs repeat each other:
 //   about      plain-language, for everyone (summarizes, links down)
@@ -21,7 +23,7 @@ const DOCS: { key: string; label: string; body: string; paper?: boolean }[] = [
   // centered title block, epigraph, booktabs tables, margin identifier).
   { key: 'research', label: 'Research', body: researchMd, paper: true },
   { key: 'validation', label: 'Validation', body: validationMd },
-  { key: 'sources', label: 'Data sources', body: dataSourcesMd },
+  { key: 'sources', label: 'Data sources', body: sourcesMd },
 ]
 
 type Props = { onClose: () => void; initialTab?: string }

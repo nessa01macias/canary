@@ -1591,7 +1591,7 @@ html, body, #root, #app {
   font-size: 12px;
   line-height: 1.35;
   text-align: center;
-  color: #b3a69b;               /* neutral activity facts stay quiet */
+  color: #9a8c81;               /* neutral activity facts stay quiet (matches verdict-flat) */
 }
 .headline-up   .headline-tick { color: #355cf5; } /* favorable — map's improving blue */
 .headline-down .headline-tick { color: #e05612; } /* unfavorable — deepened brand orange (AA on cream) */

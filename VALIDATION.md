@@ -1,18 +1,19 @@
 # Trajectory Signal Validation v0 — San Francisco, July 2026
 
-**What this is.** Test #1 from CONTEXT.md: is area trajectory computable from open data,
-and does it match ground truth? This is the first pass: 7 neighborhoods with documented
-2020-26 arcs, checked against the pipeline's per-dimension trajectory (trailing 12 months
-vs the 12 before, z-scored against all SF neighborhoods).
+**What this is.** Before grading anyone else's answers (see RESEARCH.md), we validate
+our own: is neighborhood trajectory computable from open data, and does it match
+ground truth? This is the first pass: 7 neighborhoods with documented 2020-26 arcs,
+checked against the pipeline's per-dimension trajectory (trailing 12 months vs the 12
+before, z-scored against all SF neighborhoods).
 
 **Method discipline.** Every claim has two layers: the *computed signal* (from
 `canary.duckdb`, DataSF snapshots as_of 2026-07-24) and the *receipt* (the underlying
 records themselves — permit numbers, business names, category decompositions). A signal
-without a receipt is not cited. External narratives below are widely documented; press
-citations should be attached (marked `[cite]`) before any external use.
+without a receipt is not cited. Where a row references an external narrative (a
+redevelopment program, a retail decline), it was widely reported at the time and is
+labeled as context, distinct from the record.
 
-**Reproduce:** `cd backend && make pipeline`, then the queries in `app/pipeline/trajectory.py`
-and the receipts queries in this doc's git history.
+**Reproduce:** `cd backend && make pipeline`, then the queries in `app/pipeline/trajectory.py`.
 
 ---
 
@@ -20,12 +21,12 @@ and the receipts queries in this doc's git history.
 
 | Neighborhood | Dimension | Computed | Receipt (our data) | External narrative | Verdict |
 |---|---|---|---|---|---|
-| Treasure Island | permits_issued | +38%, z+1.0 | $79.4M 6-story **150-unit** residential (issued 2026-07-01); $40M **100% affordable, 100 units** (2026-01-05); $31M new construction; 20,000 yd³ grading | Multi-phase island redevelopment program, ~8,000 homes planned `[cite]` | **CONFIRMED** |
+| Treasure Island | permits_issued | +38%, z+1.0 | $79.4M 6-story **150-unit** residential (issued 2026-07-01); $40M **100% affordable, 100 units** (2026-01-05); $31M new construction; 20,000 yd³ grading | Multi-phase island redevelopment program, ~8,000 homes planned | **CONFIRMED** |
 | Lakeshore | permits_issued | +156%, z+4.9 | Top permits: $6.5M golf maintenance building, $5M gatehouse, $1M parking expansion — **0 housing units** | Initially attributed to Stonestown redevelopment (~3,500 homes) — **wrong**: those permits aren't in the issued record yet | **CORRECTED** — signal real (capex surge), first narrative attribution false; caught by receipts |
-| Tenderloin | crime_incidents | +11%, z+2.5 (city −8%) | Decomposition: Drug Offense 1,790→2,824 (+58%), Warrant +35%, **Assault flat** (1,109→1,134) | 2025-26 TL drug-market enforcement crackdowns `[cite]` | **CONSISTENT** — but the correct claim is "enforcement surged," not "crime surged" |
-| Mission | biz_openings | −19%, z−1.3 | Named closures on record (retail, salons, labs — e.g. Beli SF, Boutique Salud Y Vida) | Documented Valencia St retail churn/closure wave `[cite]` | **CONSISTENT** |
-| Financial District/South Beach | biz net churn | +235 net (city's top) | 1,666 opens vs 1,431 closes | Downtown recovery push, return-to-office `[cite]` | **CONSISTENT** |
-| Bayview Hunters Point | permits_issued, biz net | −21.6% permits; −18 net biz (city's bottom) | — | Long-documented underinvestment pressure `[cite]` | **CONSISTENT** |
+| Tenderloin | crime_incidents | +11%, z+2.5 (city −8%) | Decomposition: Drug Offense 1,790→2,824 (+58%), Warrant +35%, **Assault flat** (1,109→1,134) | 2025-26 TL drug-market enforcement crackdowns | **CONSISTENT** — but the correct claim is "enforcement surged," not "crime surged" |
+| Mission | biz_openings | −19%, z−1.3 | Named closures on record (retail, salons, labs — e.g. Beli SF, Boutique Salud Y Vida) | Documented Valencia St retail churn/closure wave | **CONSISTENT** |
+| Financial District/South Beach | biz net churn | +235 net (city's top) | 1,666 opens vs 1,431 closes | Downtown recovery push, return-to-office | **CONSISTENT** |
+| Bayview Hunters Point | permits_issued, biz net | −21.6% permits; −18 net biz (city's bottom) | — | Long-documented underinvestment pressure | **CONSISTENT** |
 | Japantown | biz_openings | +38%, z+2.9 | Opened NAICS: mental-health practitioners (621330 ×7), physicians, restaurants | **No documented story found** | **LEAD** — model-surfaced, unverified; this category is the product |
 
 **Scorecard: 1 confirmed with hard receipts, 4 consistent, 1 corrected, 1 lead.**
@@ -33,7 +34,7 @@ and the receipts queries in this doc's git history.
 ## The two most important findings are the two failures
 
 1. **The Lakeshore correction.** The magnitude signal (+156%, z+4.9) was real, but the
-   obvious narrative I attached to it was wrong — the spend is golf-course capex, not
+   obvious narrative we attached to it was wrong — the spend is golf-course capex, not
    the famous mall redevelopment. Two lessons baked into the design now:
    (a) never ship a z-score without its underlying records — the receipt discipline is
    what separates us from vibes; (b) the per-dimension design already contained the
@@ -47,9 +48,9 @@ and the receipts queries in this doc's git history.
    headline**: Tenderloin `crime_victim_reported` **−8.0%** vs `crime_enforcement`
    **+43.6%** (citywide: −18.7% vs +29.7%). A product reporting "Tenderloin crime +11%"
    would have been wrong in the direction that matters to a resident — and this is
-   precisely the kind of error AI assistants answering from vibes will make, which
-   makes it a prime 50-question-benchmark item. User-facing crime trends use
-   `crime_victim_reported` only.
+   precisely the kind of error AI assistants answering from vibes make (it became one
+   of the benchmark's designed questions; see RESEARCH.md). User-facing crime trends
+   use `crime_victim_reported` only.
 
 ## Known limitations of v0
 
@@ -73,7 +74,7 @@ and the receipts queries in this doc's git history.
    - Stonestown-driven Lakeshore residential permits appear in the issued record within 12 months (units_approved_net spikes).
    - Tenderloin drug-offense counts fall back toward baseline if/when the operation winds down, while assault stays flat — distinguishing enforcement pulse from underlying change.
 2. **Price cross-check**: regress our 2023-24 trajectory dimensions against 2024-26 FHFA tract-level HPI once ingested (leakage-free via `source_as_of`).
-3. **The 50-question AI benchmark**: these receipts are checkable facts; draft questions directly from them ("How many housing units were approved on Treasure Island in the last 12 months?") and score ChatGPT/Gemini/Perplexity against the record.
+3. **The AI benchmark** — done: these receipts became its ground-truth questions, and the results are in RESEARCH.md.
 
 ---
 *Generated 2026-07-25 from pipeline snapshot 2026-07-24; per-dimension only — no composite

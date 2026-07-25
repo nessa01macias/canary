@@ -1,0 +1,348 @@
+{
+ "generated_at": "2026-07-25T09:47:33.671371+00:00",
+ "summary": {
+  "fresh": 21,
+  "due": 1,
+  "info": 6,
+  "overdue": 3,
+  "no_snapshot": 2
+ },
+ "sources": [
+  {
+   "source": "ca_abc_licenses",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T04:05:09.827983+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "ca_caaspp",
+   "source_as_of": "2024-10-09",
+   "fetched_at": "2026-07-25T04:05:12.679619+00:00",
+   "age_days": 654,
+   "cadence": "annual",
+   "temporal_shape": "reference_layer",
+   "status": "due"
+  },
+  {
+   "source": "ca_cannabis_retailers",
+   "source_as_of": "2026-07-25",
+   "fetched_at": "2026-07-25T09:47:13.013306+00:00",
+   "age_days": 0,
+   "cadence": "daily",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "ca_precinct_returns",
+   "source_as_of": "2025-11-19",
+   "fetched_at": "2026-07-25T04:07:39.533967+00:00",
+   "age_days": 248,
+   "cadence": "per_election",
+   "temporal_shape": "reference_layer",
+   "status": "info"
+  },
+  {
+   "source": "ca_school_directory",
+   "source_as_of": "2026-05-19",
+   "fetched_at": "2026-07-25T07:14:21.538688+00:00",
+   "age_days": 67,
+   "cadence": null,
+   "temporal_shape": null,
+   "status": "info"
+  },
+  {
+   "source": "calfire_fhsz",
+   "source_as_of": "2011-01-01",
+   "fetched_at": "2026-07-25T04:05:15.689477+00:00",
+   "age_days": 5684,
+   "cadence": "irregular",
+   "temporal_shape": "reference_layer",
+   "status": "info"
+  },
+  {
+   "source": "census_acs_ca",
+   "source_as_of": "2023-12-31",
+   "fetched_at": "2026-07-25T05:24:28.270489+00:00",
+   "age_days": 937,
+   "cadence": "annual",
+   "temporal_shape": "reference_layer",
+   "status": "overdue"
+  },
+  {
+   "source": "census_tiger_ca",
+   "source_as_of": "2025-09-22",
+   "fetched_at": "2026-07-25T04:08:19.206200+00:00",
+   "age_days": 306,
+   "cadence": "annual",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_assessor_rolls",
+   "source_as_of": "2026-06-26",
+   "fetched_at": "2026-07-25T04:46:31.634501+00:00",
+   "age_days": 29,
+   "cadence": "daily",
+   "temporal_shape": "reference_layer",
+   "status": "overdue"
+  },
+  {
+   "source": "datasf_business_locations",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:55:16.729518+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_commercial_vacancy",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T04:42:02.131649+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_crime",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:55:58.593228+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_dev_pipeline",
+   "source_as_of": "2026-06-17",
+   "fetched_at": "2026-07-25T04:41:50.146735+00:00",
+   "age_days": 38,
+   "cadence": "quarterly",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_evictions",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:55:54.170394+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_fire_ems_calls",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T04:50:10.325940+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_parking_meters",
+   "source_as_of": "2026-07-18",
+   "fetched_at": "2026-07-25T04:42:06.111525+00:00",
+   "age_days": 7,
+   "cadence": "irregular",
+   "temporal_shape": "reference_layer",
+   "status": "info"
+  },
+  {
+   "source": "datasf_permits",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:53:50.397741+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_planning_records",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T04:41:53.939230+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_rpp_zones",
+   "source_as_of": "2024-01-15",
+   "fetched_at": "2026-07-25T04:42:13.955048+00:00",
+   "age_days": 922,
+   "cadence": "irregular",
+   "temporal_shape": "reference_layer",
+   "status": "info"
+  },
+  {
+   "source": "datasf_sfmta_projects",
+   "source_as_of": "2025-09-02",
+   "fetched_at": "2026-07-25T04:42:04.504300+00:00",
+   "age_days": 326,
+   "cadence": "irregular",
+   "temporal_shape": "reference_layer",
+   "status": "info"
+  },
+  {
+   "source": "datasf_sfusd_boundaries",
+   "source_as_of": "2023-08-22",
+   "fetched_at": "2026-07-25T04:42:56.754939+00:00",
+   "age_days": 1068,
+   "cadence": "annual",
+   "temporal_shape": "reference_layer",
+   "status": "overdue"
+  },
+  {
+   "source": "datasf_street_trees",
+   "source_as_of": "2026-07-23",
+   "fetched_at": "2026-07-25T04:42:23.846663+00:00",
+   "age_days": 2,
+   "cadence": "daily",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_threeoneone",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:56:49.744606+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "event_stream",
+   "status": "fresh"
+  },
+  {
+   "source": "datasf_zoning",
+   "source_as_of": "2026-07-24",
+   "fetched_at": "2026-07-25T03:52:53.733071+00:00",
+   "age_days": 1,
+   "cadence": "daily",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "epa_tri_ca",
+   "source_as_of": "2026-07-25",
+   "fetched_at": "2026-07-25T05:10:00.117757+00:00",
+   "age_days": 0,
+   "cadence": "continuous",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "fema_nfhl_flood",
+   "source_as_of": "2026-07-25",
+   "fetched_at": "2026-07-25T04:59:43.247944+00:00",
+   "age_days": 0,
+   "cadence": "continuous",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "fsq_os_places",
+   "source_as_of": "2026-07-09",
+   "fetched_at": "2026-07-25T05:25:54.429901+00:00",
+   "age_days": 16,
+   "cadence": "monthly",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "gtfs_ca_statewide_calitp",
+   "source_as_of": "2026-07-21",
+   "fetched_at": "2026-07-25T04:51:18.360900+00:00",
+   "age_days": 4,
+   "cadence": "monthly",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "insideairbnb",
+   "source_as_of": "2026-06-14",
+   "fetched_at": null,
+   "age_days": 41,
+   "cadence": "quarterly",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "opportunity-atlas",
+   "status": "no_snapshot",
+   "cadence": null
+  },
+  {
+   "source": "osm_california",
+   "source_as_of": "2026-07-25",
+   "fetched_at": "2026-07-25T05:47:11.749616+00:00",
+   "age_days": 0,
+   "cadence": "daily",
+   "temporal_shape": "reference_layer",
+   "status": "fresh"
+  },
+  {
+   "source": "overture_places",
+   "source_as_of": "2026-07-22",
+   "fetched_at": "2026-07-25T04:49:08.909140+00:00",
+   "age_days": 3,
+   "cadence": "monthly",
+   "temporal_shape": "recurring_snapshot",
+   "status": "fresh"
+  },
+  {
+   "source": "safetipin",
+   "status": "no_snapshot",
+   "cadence": null
+  }
+ ],
+ "served_attributes": {
+  "trees_per_km2": {
+   "source": "datasf_street_trees",
+   "source_as_of": "2026-07-23"
+  },
+  "transit_stops": {
+   "source": "gtfs_ca_statewide_calitp",
+   "source_as_of": "2026-07-21"
+  },
+  "cannabis_retailers": {
+   "source": "ca_cannabis_retailers",
+   "source_as_of": "2026-07-25"
+  },
+  "tri_facilities": {
+   "source": "epa_tri_ca",
+   "source_as_of": "2026-07-25"
+  },
+  "grocery_stores": {
+   "source": "fsq_os_places",
+   "source_as_of": "2026-07-09"
+  },
+  "flood_zone_share": {
+   "source": "fema_nfhl_flood",
+   "source_as_of": "2026-07-25"
+  },
+  "sfmta_projects": {
+   "source": "datasf_sfmta_projects",
+   "source_as_of": "2025-09-02"
+  },
+  "rpp_parcels": {
+   "source": "datasf_rpp_zones",
+   "source_as_of": "2024-01-15"
+  },
+  "storefront_vacancy_rate": {
+   "source": "datasf_commercial_vacancy",
+   "source_as_of": "2026-07-24"
+  },
+  "ems_response_median_mins": {
+   "source": "datasf_fire_ems_calls",
+   "source_as_of": "2026-07-24"
+  },
+  "school_pct_met": {
+   "source": "ca_caaspp + ca_school_directory",
+   "source_as_of": "2024-10-09 (scores) / 2026-05-19 (locations)"
+  },
+  "_generated_at": "2026-07-25T09:47:22.980417+00:00"
+ }
+}

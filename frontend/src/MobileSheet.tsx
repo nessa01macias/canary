@@ -15,75 +15,93 @@ export function useIsMobile(query = '(max-width: 640px)') {
   return match
 }
 
-// Snap heights as a fraction of viewport height: peek · half · full.
-const SNAPS = [0.32, 0.58, 0.92]
-const DEFAULT_SNAP = 1 // open at "half", like a Google Maps place card
-const DISMISS_BELOW = 0.16 // drag under this fraction → close
+const CHROME_H = 34 // grab-handle strip + body bottom padding, added to content
+const MAX_VH = 0.88 // never taller than this fraction of the viewport
+const DISMISS_RATIO = 0.6 // drag below 60% of the resting height → close
 
 /**
- * Google-Maps-style draggable bottom sheet. On phones it wraps the given card
- * in a sheet with a grab handle that drags between snap points (and dismisses
- * when flung down). On larger screens it's a pass-through — `children` keep
- * their own desktop positioning, so nothing about the desktop UI changes.
+ * Google-Maps-style bottom sheet that *hugs its content* — the resting height is
+ * the content's natural height (capped at MAX_VH, with the body scrolling past
+ * that), so a short card is a short sheet with no empty space. Drag the handle
+ * down to dismiss (dismissible sheets) or it springs back. On non-phone widths
+ * it's a pass-through: `children` keep their own desktop positioning.
  */
 export function MobileSheet({
   children,
   onClose,
+  dismissible = true,
+  hidden = false,
 }: {
   children: ReactNode
   onClose?: () => void
+  /** When false, dragging down springs back instead of closing. */
+  dismissible?: boolean
+  /** Mobile-only: render nothing (e.g. yield the bottom to another sheet). */
+  hidden?: boolean
 }) {
   const isMobile = useIsMobile()
-  const [snap, setSnap] = useState(DEFAULT_SNAP)
+  const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800))
+  const [contentH, setContentH] = useState(0)
   const [dragH, setDragH] = useState<number | null>(null)
   const drag = useRef<{ startY: number; startH: number } | null>(null)
-  // Re-read viewport height on rotation/resize so snaps stay proportional.
-  const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800))
+  // Measure an inner wrapper whose height is ALWAYS just the content — never the
+  // scrolling body (that box stretches to the sheet height, which would feed the
+  // measurement back into the height and make the sheet grow on its own).
+  const contentRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const onResize = () => setVh(window.innerHeight)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  if (!isMobile) return <>{children}</>
+  // Measure the content so the sheet can hug it, and re-measure when it changes
+  // (chips added, report finishes loading, etc.).
+  useEffect(() => {
+    const el = contentRef.current
+    if (!el) return
+    const measure = () => setContentH(el.getBoundingClientRect().height)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [isMobile])
 
-  const height = dragH ?? SNAPS[snap] * vh
+  if (!isMobile) return <>{children}</>
+  if (hidden) return null
+
+  const maxH = vh * MAX_VH
+  const restH = contentH > 0 ? Math.min(contentH + CHROME_H, maxH) : null
+  const height = dragH != null ? dragH : restH // null → CSS `auto` (first paint)
 
   const onPointerDown = (e: PointerEvent) => {
-    drag.current = { startY: e.clientY, startH: height }
+    drag.current = { startY: e.clientY, startH: height ?? restH ?? 200 }
     e.currentTarget.setPointerCapture(e.pointerId)
   }
   const onPointerMove = (e: PointerEvent) => {
     if (!drag.current) return
-    const dy = drag.current.startY - e.clientY // dragging up is positive
-    setDragH(Math.min(vh * 0.94, Math.max(60, drag.current.startH + dy)))
+    const dy = drag.current.startY - e.clientY // up is positive
+    // Clamp UP to the resting height so you can never pull it taller than the
+    // content (that's the empty-space bug). Clamp DOWN to a small nub.
+    const upper = restH ?? maxH
+    setDragH(Math.min(upper, Math.max(48, drag.current.startH + dy)))
   }
   const onPointerUp = () => {
     if (!drag.current) return
-    const h = dragH ?? height
+    const h = dragH ?? height ?? restH ?? 0
     drag.current = null
     setDragH(null)
-    if (h < vh * DISMISS_BELOW && onClose) {
-      onClose()
-      return
-    }
-    // Snap to the nearest detent.
-    let best = 0
-    let bestDist = Infinity
-    SNAPS.forEach((s, i) => {
-      const d = Math.abs(s * vh - h)
-      if (d < bestDist) {
-        bestDist = d
-        best = i
-      }
-    })
-    setSnap(best)
+    if (dismissible && restH && h < restH * DISMISS_RATIO && onClose) onClose()
   }
 
   return (
     <div
       className="msheet"
-      style={{ height, transition: dragH == null ? undefined : 'none' }}
+      style={{
+        height: height != null ? height : undefined,
+        maxHeight: maxH,
+        transition: dragH == null ? undefined : 'none',
+      }}
     >
       <div
         className="msheet-handle"
@@ -96,7 +114,11 @@ export function MobileSheet({
       >
         <span className="msheet-grip" />
       </div>
-      <div className="msheet-body">{children}</div>
+      <div className="msheet-body">
+        <div className="msheet-content" ref={contentRef}>
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

@@ -22,6 +22,10 @@ publish-local:
 publish:
 	$(PY) -m app.pipeline.publish --push
 
+# NOTE: daily automation lives in scripts/refresh.sh + com.canary.refresh.plist
+# (app.ingestion.refresh orchestrates fetch -> pipeline -> publish -> freshness).
+# These Make targets are the manual primitives it composes.
+
 # The AI area benchmark: generate questions from the db, ask every LLM with a
 # configured key (see app/benchmark/run.py for the env var names), score answers.
 benchmark:

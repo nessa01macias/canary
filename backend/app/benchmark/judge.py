@@ -116,10 +116,13 @@ def main() -> None:
         n_ok = sum(1 for v in verdicts if v["verdict"] != "judge_error")
         print(f"        {n_ok}/{len(verdicts)} judged -> {judged_path.name}")
 
-    # ---- summary across all judged runs ----------------------------------------
-    print(f"\n{'provider':<40}{'correct':>8}{'wrong':>7}{'nonans':>7}{'conf-wrong':>11}{'acc(all)':>9}{'acc(committed)':>15}")
+    # ---- summary: LATEST judged run per provider (sorted glob -> last wins) ------
+    latest: dict[str, object] = {}
     for judged_path in sorted(RUNS_DIR.glob("*.judged.json")):
         j = json.loads(judged_path.read_text())
+        latest[j["provider"]] = j
+    print(f"\n{'provider':<40}{'correct':>8}{'wrong':>7}{'nonans':>7}{'conf-wrong':>11}{'acc(all)':>9}{'acc(committed)':>15}")
+    for j in latest.values():
         t: dict[str, int] = defaultdict(int)
         for v in j["verdicts"]:
             t[v["verdict"]] += 1
