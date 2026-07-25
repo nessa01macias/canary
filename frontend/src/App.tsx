@@ -7,6 +7,9 @@ import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
 import { Docs } from './Docs'
+import { fetchResidentLayer, type ResidentAgg } from './residentLayer'
+import { fetchReport, type AddressReport } from './report'
+import { ReportCard } from './ReportCard'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -69,6 +72,7 @@ const GROUNDED_TAGS: Record<string, (s: NbhdSignals) => number> = {
   'Vacancy trend':      (s) => 1 - s.bizCloseTrend,
   'New construction':   (s) => s.intensity,
   'Quiet':              (s) => 1 - s.noiseTrend, // real 311 noise-complaint trend
+  'Housing stability':  (s) => 1 - s.evictionTrend, // real eviction-filings trend
 }
 
 // Fill paint expressions, shared by the initial layer and the mode/preference
@@ -309,6 +313,7 @@ const PREFERENCE_TIERS: PrefTier[] = [
       { label: 'Transit expansion', available: true },
       { label: 'Business openings', available: true }, // business velocity
       { label: 'Vacancy trend', available: true },
+      { label: 'Housing stability', available: true }, // eviction-filings trend (real)
       { label: 'Road projects', available: true },
       { label: 'Liquor & cannabis', available: true },
     ],
@@ -330,6 +335,9 @@ function App() {
   // neighborhood name → its REAL signals (from backend-baked GeoJSON properties),
   // read by the preference-fit effect. See GROUNDED_TAGS.
   const nbhdSignalsRef = useRef<Map<string, NbhdSignals>>(new Map())
+  // neighborhood name → k-anonymised resident-review aggregates (the moat's read
+  // side, GET /api/resident-layer). Read lazily by the hover popup.
+  const residentRef = useRef<Map<string, ResidentAgg>>(new Map())
   // Read by the (once-created) hover popup closure to append a fit line.
   const matchInfoRef = useRef<{ active: boolean; count: number }>({ active: false, count: 0 })
   // Per-polygon pulse phase (built with the choropleth) + the running rAF handle
@@ -339,6 +347,11 @@ function App() {
   const [selected, setSelected] = useState<ChangePoint | null>(null)
   const [sfCount, setSfCount] = useState<number | null>(null)
   const [contributing, setContributing] = useState(false)
+  // The magic-moment report: click anywhere → what's changing within ~500 m.
+  const [report, setReport] = useState<AddressReport | null>(null)
+  const [reportLoading, setReportLoading] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
+  const reportPinRef = useRef<maplibregl.Marker | null>(null)
   const [researchOpen, setResearchOpen] = useState(false)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
   const [mode, setMode] = useState<Mode>('areas')
@@ -627,6 +640,13 @@ function App() {
           active && typeof st.match === 'number'
             ? `<div class="nb-pop-fit">${Math.round(st.match * 100)}% fit · ${count} filter${count > 1 ? 's' : ''}</div>`
             : ''
+        // Resident layer: attributed opinion (k ≥ 3 reviewers), rendered as what
+        // residents SAID — never our own quality label.
+        const res = residentRef.current.get(String(p.nhood))
+        const fmt = (v: number | null) => (v == null ? '–' : v.toFixed(1))
+        const resLine = res
+          ? `<div class="nb-pop-res">Residents (${res.n}): safety <b>${fmt(res.safety)}</b> · quiet <b>${fmt(res.noise)}</b> · getting better <b>${fmt(res.trajectory)}</b> <span class="nb-pop-res-scale">/5</span></div>`
+          : ''
         popup
           .setLngLat(e.lngLat)
           .setHTML(
@@ -639,6 +659,7 @@ function App() {
                  <span><b>+${p.netUnits}</b> net units</span>
                  <span><b>$${(Number(p.totalCost) / 1e6).toFixed(1)}M</b></span>
                </div>
+               ${resLine}
              </div>`,
           )
           .addTo(map)
@@ -661,6 +682,35 @@ function App() {
         })
         map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
       }
+
+      // The magic moment: click anywhere → the address report for that point.
+      // Marker/panel clicks are excluded (they have their own interactions).
+      map.on('click', (e) => {
+        const target = e.originalEvent.target as HTMLElement | null
+        if (target?.closest('.change-marker')) return
+        const { lat, lng } = e.lngLat
+        reportPinRef.current?.remove()
+        const pin = document.createElement('div')
+        pin.className = 'report-pin'
+        reportPinRef.current = new maplibregl.Marker({ element: pin }).setLngLat([lng, lat]).addTo(map)
+        setReportOpen(true)
+        setReportLoading(true)
+        setReport(null)
+        fetchReport(lat, lng)
+          .then((r) => setReport(r))
+          .catch((err) => {
+            console.error('report failed:', err)
+            setReportOpen(false)
+            reportPinRef.current?.remove()
+          })
+          .finally(() => setReportLoading(false))
+      })
+
+      // The resident layer loads independently — reviews appearing (or not)
+      // never blocks the map. Popup reads the ref lazily on hover.
+      fetchResidentLayer()
+        .then((byArea) => { residentRef.current = byArea })
+        .catch(() => {}) // no reviews yet / endpoint down → popup simply omits the line
 
       // Only real data draws on the map — live permits + pipeline trends. The old
       // hardcoded CA "flavor points" are gone (LA/San Diego/etc. return when their
@@ -805,6 +855,19 @@ function App() {
         <Contribute
           onClose={() => setContributing(false)}
           neighborhoods={nbhdIdsRef.current.map((n) => n.nhood).filter(Boolean).sort()}
+        />
+      )}
+
+      {reportOpen && (
+        <ReportCard
+          report={report}
+          loading={reportLoading}
+          onClose={() => {
+            setReportOpen(false)
+            setReport(null)
+            reportPinRef.current?.remove()
+            reportPinRef.current = null
+          }}
         />
       )}
 
