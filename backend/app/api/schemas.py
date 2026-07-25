@@ -239,6 +239,29 @@ class ResidentHexAgg(BaseModel):
     avg_trajectory: float | None = None
 
 
+# --------------------------------------------------------------------------- #
+#  Ask Canary — intent in, grounded answer + map actions out. The consumer face
+#  of the B2B grounding feed (rate-limited free tier).
+# --------------------------------------------------------------------------- #
+class AskIn(BaseModel):
+    question: str = Field(..., min_length=2, max_length=500)
+    history: list[dict] = Field(
+        default_factory=list,
+        description="Prior turns [{role: user|assistant, content}], last 6 kept.",
+    )
+
+
+class AskOut(BaseModel):
+    answer_md: str
+    neighborhoods: list[str] = Field(
+        default_factory=list, description="Real area names — frontend flies to them.")
+    chips: list[str] = Field(
+        default_factory=list, description="Grounded preference chips — frontend applies them.")
+    followups: list[str] = Field(default_factory=list)
+    grounded_on: dict = Field(default_factory=dict)
+    model: str = ""
+
+
 class ResidentLayer(BaseModel):
     """The unlockable give-to-get layer. Empty lists = not enough reviews yet
     (each group needs n ≥ 3 before it becomes visible — the k-anonymity floor)."""

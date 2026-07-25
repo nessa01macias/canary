@@ -117,6 +117,7 @@ backend host in either environment.
 | `GET /api/catalog` | DuckDB | machine-readable capability list (agent-legible) |
 | `POST /api/contributions` | Supabase | persists a user review (the moat, write side) |
 | `GET /api/resident-layer` | Supabase (k-anon views) + DuckDB (names) | aggregated reviews per area/hex, n ≥ 3 only (the moat, read side) |
+| `POST /api/ask` | Claude (server-side key) grounded on the cached neighborhoods payload | intent → cited answer + map actions (neighborhoods, chips); rate-limited free tier — the live demo of the B2B grounding feed |
 
 Everything is H3-native (global spine) and geography-agnostic — adding a metro
 changes data, never the contract.

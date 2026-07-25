@@ -16,6 +16,7 @@ import { neighborhoodHeadlines } from './headlines'
 import ContributeModal from './ContributeModal'
 import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
+import { AskCanary } from './AskCanary'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -481,6 +482,19 @@ function App() {
     if (!map || !meta || !map.getLayer('nbhd-glow-core')) return
     map.setFeatureState({ source: 'nbhd', id: meta.id }, { glow: on })
   }
+  // Ask Canary → the assistant drives the map: apply its suggested chips as the
+  // active preference set (union, capped at MAX_PICKS) and read at area scale.
+  const applyAssistantChips = (chips: string[]) => {
+    setShortlist((prev) => [...prev, ...chips.filter((c) => !prev.includes(c))].slice(0, MAX_PICKS))
+    setPriorities((prev) => {
+      const next = new Set(prev)
+      for (const c of chips) next.add(c)
+      return new Set([...next].slice(0, MAX_PICKS))
+    })
+    setOnboardingOpen(false)
+    zoomToCity()
+  }
+
   const zoomToNeighborhood = (nhood: string) => {
     const map = mapRef.current
     const meta = nbhdMetaRef.current.get(nhood)
@@ -558,6 +572,39 @@ function App() {
     })
 
     map.addControl(new maplibregl.NavigationControl(), 'bottom-right')
+
+    // "Take me home": the browser asks for location permission; on allow, fly to
+    // the user (blue dot). Their city may be blank white — that's the coverage
+    // story, not a bug. On deny/error nothing moves; the SF control below always
+    // offers the one lit-up city as home.
+    map.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: false },
+        fitBoundsOptions: { maxZoom: 12.5 },
+        trackUserLocation: false,
+        showUserLocation: true,
+      }),
+      'bottom-right',
+    )
+
+    // Fly back to the SF framing — the rescue hatch for anyone lost on the globe.
+    const homeControl = {
+      onAdd() {
+        const div = document.createElement('div')
+        div.className = 'maplibregl-ctrl maplibregl-ctrl-group'
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'home-sf-btn'
+        btn.textContent = 'SF'
+        btn.title = 'Back to San Francisco'
+        btn.onclick = () =>
+          map.flyTo({ center: [-122.44, 37.75], zoom: 12.3, pitch: 50, bearing: -10, duration: 2200 })
+        div.appendChild(btn)
+        return div
+      },
+      onRemove() {},
+    }
+    map.addControl(homeControl, 'bottom-right')
     mapRef.current = map
 
     // Reveal/hide routine alteration markers as the user crosses the zoom gate.
@@ -1080,15 +1127,19 @@ function App() {
               <span><b>${(selectedNbhd.totalCost / 1e6).toFixed(1)}M</b></span>
             </div>
             <p className="news-eyebrow">Why — from the public record</p>
-            <div className="news-list">
+            <div className="news-list" role="list">
               {items.map((h, i) => (
-                <article className="headline-card" key={i}>
-                  <p className="headline-title">{h.title}</p>
-                  <p className="headline-cite">
-                    <span className="headline-src">{h.source}</span>
-                    <span className="headline-dot">·</span>
-                    <time>{h.date}</time>
-                  </p>
+                <article className={`headline-row headline-${h.tone}`} role="listitem" key={i}>
+                  {/* per-FACT direction: shape + color together (never color alone) */}
+                  <span className="headline-tick" aria-hidden="true">
+                    {h.tone === 'up' ? '▴' : h.tone === 'down' ? '▾' : '·'}
+                  </span>
+                  <div>
+                    <p className="headline-title">{h.title}</p>
+                    <p className="headline-cite">
+                      {h.source} <span className="headline-sep">·</span> <time>{h.date}</time>
+                    </p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -1107,6 +1158,15 @@ function App() {
           </MobileSheet>
         )
       })()}
+
+      <AskCanary
+        onShowNeighborhood={(n) => {
+          zoomToNeighborhood(n)
+          glowNeighborhood(n, true)
+          setTimeout(() => glowNeighborhood(n, false), 2600)
+        }}
+        onApplyChips={applyAssistantChips}
+      />
 
       {reportOpen && (
         <MobileSheet
@@ -1137,7 +1197,7 @@ function App() {
           Hidden until the onboarding is dismissed ("Show my map"), so it never
           peeks out behind the picker on first load or during an edit. */}
       {!onboardingOpen && (
-      <MobileSheet initialSnap={0} dismissible={false} hidden={!!selectedNbhd || reportOpen}>
+      <MobileSheet dismissible={false} hidden={!!selectedNbhd || reportOpen}>
       <aside className="prefs-panel">
         <div className="prefs-head">
           <p className="prefs-eyebrow">Looking for</p>
