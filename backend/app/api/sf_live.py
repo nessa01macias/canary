@@ -18,6 +18,8 @@ from typing import Any
 
 import httpx
 
+from app.api import nbhd_attributes
+
 PERMITS_URL = (
     "https://data.sfgov.org/resource/i98e-djp9.json"
     "?$limit=300&$order=permit_creation_date DESC"
@@ -269,6 +271,41 @@ async def neighborhood_centroid(name: str) -> tuple[float, float] | None:
     return None
 
 
+def _attribute_signals() -> tuple[dict[str, dict[str, float]], str | None]:
+    """Rank-normalized (0..1) per-neighborhood signals from the L0 attribute
+    precompute (app.api.nbhd_attributes; rebuild with
+    `python -m app.api.nbhd_attributes`). Null attribute values (e.g. a
+    neighborhood with no public school) stay out of the ranking entirely, so
+    the frontend's 0.5 default applies — neutral, never a fake zero."""
+    data = nbhd_attributes.load()
+    if not data:
+        return {}, None
+    mapping = {  # raw attribute -> camelCase signal property (higher = more of it)
+        "school_pct_met": "schoolScore",
+        "transit_stops": "transitAccess",
+        "trees_per_km2": "treeCanopy",
+        "grocery_stores": "groceryAccess",
+        "tri_facilities": "industryPresence",
+        "flood_zone_share": "floodShare",
+        "rpp_parcels": "parkingPermits",
+        "sfmta_projects": "roadProjects",
+        "cannabis_retailers": "cannabisRetail",
+        "ems_response_median_mins": "emsMinutes",
+        "storefront_vacancy_rate": "vacancyRate",
+    }
+    out: dict[str, dict[str, float]] = {}
+    attrs = data.get("attributes", {})
+    for attr, prop in mapping.items():
+        vals = [(n, v[attr]) for n, v in attrs.items() if v.get(attr) is not None]
+        if len(vals) < 2:
+            continue
+        ranked = sorted(vals, key=lambda kv: kv[1])
+        denom = len(ranked) - 1
+        for i, (n, _) in enumerate(ranked):
+            out.setdefault(n, {})[prop] = round(i / denom, 4)
+    return out, data.get("generated_at")
+
+
 async def get_neighborhoods() -> dict:
     """FeatureCollection with aggregate stats baked into each feature's
     properties, plus the trajectory list — everything the overlay needs."""
@@ -276,6 +313,7 @@ async def get_neighborhoods() -> dict:
     geo = await _cached("nbhd_geojson", NBHD_GEOJSON_URL)
     agg = _aggregate(permits)
     trends, trends_as_of = _neighborhood_trends()
+    attr_signals, attrs_as_of = _attribute_signals()
 
     for f in geo.get("features", []):
         nb = (f.get("properties") or {}).get("nhood")
@@ -299,6 +337,11 @@ async def get_neighborhoods() -> dict:
             "evictionTrend": tr.get("evictionTrend", 0.5),
             "noiseTrend": tr.get("noiseTrend", 0.5),
             "trendsAsOf": trends_as_of,
+            # Rank-normalized attribute signals from L0 raw (schools, transit,
+            # trees, flood, TRI, parking, groceries, EMS, vacancy, cannabis,
+            # road projects) — see app/api/nbhd_attributes.py for provenance.
+            **(attr_signals.get(nb, {}) if nb else {}),
+            "attributesAsOf": attrs_as_of,
         }
 
     trajectory = sorted(agg.values(), key=lambda t: t["intensity"], reverse=True)

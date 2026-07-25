@@ -55,6 +55,29 @@ function fmtMoney(v: number | null): string {
   return v >= 1e6 ? `$${(v / 1e6).toFixed(1)}M` : `$${Math.round(v / 1e3)}k`
 }
 
+// Meters between two points (equirectangular — fine at neighborhood scale).
+function distanceM(aLat: number, aLon: number, bLat: number, bLon: number): number {
+  const dx = (bLon - aLon) * 111320 * Math.cos(((aLat + bLat) / 2) * (Math.PI / 180))
+  const dy = (bLat - aLat) * 110574
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
+// The HERO: the single most consequential approved construction nearby —
+// "what's approved to be built next to this address" is the #1 forum fear and
+// the differentiator. Biggest by net units, then by dollars.
+function findHero(report: AddressReport) {
+  const candidates = report.changes.filter(
+    (c) => c.category === 'construction' && ((c.units_delta ?? 0) > 0 || (c.value ?? 0) >= 500_000),
+  )
+  if (candidates.length === 0) return null
+  const score = (c: (typeof candidates)[number]) => (c.units_delta ?? 0) * 1e9 + (c.value ?? 0)
+  const best = candidates.reduce((a, b) => (score(b) > score(a) ? b : a))
+  return {
+    change: best,
+    meters: Math.round(distanceM(report.query.lat, report.query.lon, best.lat, best.lon)),
+  }
+}
+
 type Props = {
   report: AddressReport | null
   loading: boolean
@@ -78,6 +101,28 @@ export function ReportCard({ report, loading, onClose }: Props) {
             {report.query.display_name ?? 'This spot'}
             <span className="rc-sub"> · within ~500 m · last 24 months</span>
           </h3>
+
+          {/* THE HERO — the biggest thing approved to be built near this point */}
+          {(() => {
+            const hero = findHero(report)
+            if (!hero) return null
+            const c = hero.change
+            return (
+              <div className="rc-hero">
+                <div className="rc-hero-label">Approved to be built {hero.meters} m away</div>
+                <div className="rc-hero-fact">
+                  {(c.units_delta ?? 0) > 0
+                    ? `+${Math.round(c.units_delta!)} housing units`
+                    : c.headline}
+                  {c.value ? <span className="rc-hero-cost"> · {fmtMoney(c.value)}</span> : null}
+                </div>
+                <div className="rc-hero-meta">
+                  {c.detail?.split('—')[0]?.trim()} · {fmtDate(c.event_time)} ·{' '}
+                  {c.citation.source} #{c.citation.record_key}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Trajectories */}
           <div className="rc-section">
@@ -111,28 +156,52 @@ export function ReportCard({ report, loading, onClose }: Props) {
             </div>
           )}
 
-          {/* Recent changes, cited */}
-          <div className="rc-section">
-            <p className="rc-section-title">Most recent on record</p>
-            {report.changes.slice(0, 8).map((c) => (
-              <div key={c.id} className="rc-change">
-                <span className="rc-change-dot" style={{ background: CATEGORY_DOT[c.category] }} />
-                <div className="rc-change-body">
-                  <div className="rc-change-head">
-                    {c.headline}
-                    {c.value ? <span className="rc-change-cost"> {fmtMoney(c.value)}</span> : null}
+          {/* Recent changes — construction & business as a list (the gold);
+              safety/housing summarized as counts (the noise, still cited). */}
+          {(() => {
+            const listed = report.changes.filter(
+              (c) => c.category === 'construction' || c.category === 'business',
+            )
+            const counted = report.changes.filter(
+              (c) => c.category !== 'construction' && c.category !== 'business',
+            )
+            const counts = new Map<string, number>()
+            for (const c of counted) {
+              counts.set(c.event_type, (counts.get(c.event_type) ?? 0) + 1)
+            }
+            return (
+              <div className="rc-section">
+                <p className="rc-section-title">Most recent on record</p>
+                {listed.slice(0, 6).map((c) => (
+                  <div key={c.id} className="rc-change">
+                    <span className="rc-change-dot" style={{ background: CATEGORY_DOT[c.category] }} />
+                    <div className="rc-change-body">
+                      <div className="rc-change-head">
+                        {c.headline}
+                        {c.value ? <span className="rc-change-cost"> {fmtMoney(c.value)}</span> : null}
+                      </div>
+                      <div className="rc-change-meta">
+                        {fmtDate(c.event_time)} · {c.citation.source}
+                        {c.citation.record_key ? ` · #${c.citation.record_key}` : ''}
+                      </div>
+                    </div>
                   </div>
-                  <div className="rc-change-meta">
-                    {fmtDate(c.event_time)} · {c.citation.source}
-                    {c.citation.record_key ? ` · #${c.citation.record_key}` : ''}
-                  </div>
-                </div>
+                ))}
+                {listed.length === 0 && (
+                  <p className="rc-empty">No construction or business changes in the window.</p>
+                )}
+                {counts.size > 0 && (
+                  <p className="rc-counts">
+                    Also on record:{' '}
+                    {[...counts.entries()]
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([type, n]) => `${n} ${type.replace(/_/g, ' ')}${n > 1 ? 's' : ''}`)
+                      .join(' · ')}
+                  </p>
+                )}
               </div>
-            ))}
-            {report.changes.length === 0 && (
-              <p className="rc-empty">Nothing filed here in the window.</p>
-            )}
-          </div>
+            )
+          })()}
 
           <p className="rc-footer">
             {report.changes.length} records · sources: {report.sources.map((s) => s.source).join(', ')}

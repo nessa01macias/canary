@@ -61,6 +61,20 @@ type NbhdSignals = {
   bizCloseTrend: number  // higher = closings accelerating
   evictionTrend: number  // higher = evictions rising
   noiseTrend: number     // higher = 311 noise complaints rising
+  // Rank-normalized attribute signals (0..1, higher = more of it) baked in by the
+  // backend from L0 raw snapshots (backend/app/api/nbhd_attributes.py). 0.5 =
+  // neutral/no data (e.g. a neighborhood with no public school has no schoolScore).
+  schoolScore: number     // CAASPP % met-or-exceeded, tested-count weighted
+  transitAccess: number   // distinct transit stops (Cal-ITP GTFS)
+  treeCanopy: number      // street trees per km² (city inventory)
+  groceryAccess: number   // open grocery stores (Foursquare OS Places)
+  industryPresence: number// EPA TRI toxic-release facilities
+  floodShare: number      // share of area in FEMA SFHA flood zones
+  parkingPermits: number  // RPP-eligible parcels
+  roadProjects: number    // SFMTA projects intersecting
+  cannabisRetail: number  // licensed cannabis retailers (DCC)
+  emsMinutes: number      // median fire/EMS response, higher = slower
+  vacancyRate: number     // storefront vacancy share (Prop-D tax roll)
 }
 
 // Preference chips we can GROUND in live data today → a real fit score in 0..1.
@@ -69,10 +83,21 @@ type NbhdSignals = {
 const GROUNDED_TAGS: Record<string, (s: NbhdSignals) => number> = {
   'Low crime':          (s) => 1 - s.crimeTrend,
   'Business openings':  (s) => s.bizOpenTrend,
-  'Vacancy trend':      (s) => 1 - s.bizCloseTrend,
+  'Vacancy trend':      (s) => 1 - s.vacancyRate, // real Prop-D vacancy roll (was bizCloseTrend proxy)
   'New construction':   (s) => s.intensity,
   'Quiet':              (s) => 1 - s.noiseTrend, // real 311 noise-complaint trend
   'Housing stability':  (s) => 1 - s.evictionTrend, // real eviction-filings trend
+  // Attribute-grounded chips (L0 raw → nbhd_attributes.py → /api/sf/neighborhoods)
+  'Good schools':            (s) => s.schoolScore,
+  'Transit access':          (s) => s.transitAccess,
+  'Tree canopy':             (s) => s.treeCanopy,
+  'Groceries & retail':      (s) => s.groceryAccess,
+  'Away from industry':      (s) => 1 - s.industryPresence,
+  'Flood risk':              (s) => 1 - s.floodShare, // picking it = wanting LOW risk
+  'Parking':                 (s) => s.parkingPermits,
+  'Road projects':           (s) => s.roadProjects,
+  'Liquor & cannabis':       (s) => s.cannabisRetail,
+  'Fast emergency response': (s) => 1 - s.emsMinutes,
 }
 
 // Fill paint expressions, shared by the initial layer and the mode/preference
@@ -284,7 +309,7 @@ const PREFERENCE_TIERS: PrefTier[] = [
       { label: 'Tree canopy', available: true }, // tree inventory
       { label: 'Clean air' },                    // on-demand raster / federal
       { label: 'No rail noise' },
-      { label: 'Away from industry' },
+      { label: 'Away from industry', available: true }, // EPA TRI facilities
     ],
   },
   {
@@ -530,6 +555,17 @@ function App() {
               bizCloseTrend: pr.bizCloseTrend ?? 0.5,
               evictionTrend: pr.evictionTrend ?? 0.5,
               noiseTrend: pr.noiseTrend ?? 0.5,
+              schoolScore: pr.schoolScore ?? 0.5,
+              transitAccess: pr.transitAccess ?? 0.5,
+              treeCanopy: pr.treeCanopy ?? 0.5,
+              groceryAccess: pr.groceryAccess ?? 0.5,
+              industryPresence: pr.industryPresence ?? 0.5,
+              floodShare: pr.floodShare ?? 0.5,
+              parkingPermits: pr.parkingPermits ?? 0.5,
+              roadProjects: pr.roadProjects ?? 0.5,
+              cannabisRetail: pr.cannabisRetail ?? 0.5,
+              emsMinutes: pr.emsMinutes ?? 0.5,
+              vacancyRate: pr.vacancyRate ?? 0.5,
             },
           ]
         }),
@@ -693,6 +729,12 @@ function App() {
         const pin = document.createElement('div')
         pin.className = 'report-pin'
         reportPinRef.current = new maplibregl.Marker({ element: pin }).setLngLat([lng, lat]).addTo(map)
+        // Ease toward the point (leave room for the card on the right).
+        map.flyTo({
+          center: [lng + 0.004, lat],
+          zoom: Math.max(map.getZoom(), 14.2),
+          duration: 900,
+        })
         setReportOpen(true)
         setReportLoading(true)
         setReport(null)

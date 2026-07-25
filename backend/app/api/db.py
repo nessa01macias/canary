@@ -158,6 +158,28 @@ def changes_in_hexes(hexes: list[str], since: date | None, limit: int) -> list[d
     return query(sql, params)
 
 
+def biggest_construction_in_hexes(hexes: list[str], since: date | None, limit: int = 5) -> list[dict]:
+    """The most consequential approved construction in the ring — by net housing
+    units, then dollars. The report's hero fact ('what's approved to be built
+    next to this address'), which recency-ordered queries drown in 311 noise."""
+    placeholders = ",".join(["?"] * len(hexes))
+    sql = f"""
+        SELECT source, event_type, event_time, h3_9, lat, lon,
+               neighborhood, detail, value, units_delta, record_key, source_as_of
+        FROM events
+        WHERE h3_9 IN ({placeholders})
+          AND event_type IN ('permit_issued', 'permit_filed')
+          AND (units_delta > 0 OR value >= 500000)
+    """
+    params: list = list(hexes)
+    if since is not None:
+        sql += " AND event_time >= ?"
+        params.append(since)
+    sql += " ORDER BY units_delta DESC NULLS LAST, value DESC NULLS LAST LIMIT ?"
+    params.append(limit)
+    return query(sql, params)
+
+
 def metric_series(area_ids: list[str], area_level: str, metric: str, months: int) -> list[dict]:
     placeholders = ",".join(["?"] * len(area_ids))
     sql = f"""

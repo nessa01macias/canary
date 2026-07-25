@@ -111,6 +111,13 @@ def get_report(
         raise HTTPException(500, f"H3 resolution failed: {e}")
 
     change_rows = db.changes_in_hexes(hexes, since, limit=300)
+    # Recency-ordered rows drown big permits in 311/crime noise — merge in the
+    # most consequential construction (by units, then $) so the hero survives.
+    hero_rows = db.biggest_construction_in_hexes(hexes, since)
+    seen = {(r["source"], r.get("record_key"), r["event_type"]) for r in change_rows}
+    change_rows += [
+        r for r in hero_rows if (r["source"], r.get("record_key"), r["event_type"]) not in seen
+    ]
     changes = [_to_change_point(r) for r in change_rows]
 
     display_name = next((r["neighborhood"] for r in change_rows if r.get("neighborhood")), None)
