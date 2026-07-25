@@ -63,12 +63,29 @@ html, body, #root, #app {
 .topbar-right {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
+
+.nav-link {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #777;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  padding: 5px 4px;
+  cursor: pointer;
+  transition: color 0.14s ease;
+}
+
+.nav-link:hover { color: #111; }
 
 .live-badge {
   display: flex;
   align-items: center;
   gap: 7px;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   color: #111;
@@ -77,6 +94,23 @@ html, body, #root, #app {
   border-radius: 99px;
   border: 1px solid rgba(0,0,0,0.1);
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  appearance: none;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.live-badge:disabled {
+  cursor: default;
+}
+.live-badge:not(:disabled):hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+/* Active = currently blinking the changing neighborhoods on the map. */
+.live-badge.is-flashing {
+  border-color: #FF6624;
+  box-shadow: 0 0 0 3px rgba(255,102,36,0.18);
+}
+.live-badge.is-flashing .live-dot {
+  background: #FF6624;
 }
 
 .live-dot {
@@ -284,6 +318,31 @@ html, body, #root, #app {
   border-color: #FF6624;
   box-shadow: 0 2px 8px rgba(255, 102, 36, 0.32);
 }
+
+/* "Other" — dashed empty-state tag that expands into a free-text input. */
+.prefs-tag-other {
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #8a8078;
+}
+.prefs-tag-other:hover {
+  border-color: rgba(255, 102, 36, 0.7);
+  color: #FF6624;
+  background: transparent;
+}
+.prefs-tag-other-input {
+  box-sizing: border-box;
+  width: 150px;
+  background: #fff;
+  border-style: dashed;
+  border-color: rgba(255, 102, 36, 0.75);
+  color: #333;
+  cursor: text;
+  outline: none;
+}
+.prefs-tag-other-input:hover { transform: none; }
+.prefs-tag-other-input::placeholder { color: #b0a79f; font-weight: 600; }
 
 /* "Best fit" readout — appears once preferences are driving the overlay. */
 .prefs-result {
@@ -578,10 +637,15 @@ html, body, #root, #app {
 /* ── Preferences panel: head row, edit & CTA ─────────────────── */
 .prefs-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
 }
-.prefs-edit {
+.prefs-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prefs-clear {
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
@@ -592,7 +656,27 @@ html, body, #root, #app {
   padding: 0;
   letter-spacing: 0.2px;
 }
-.prefs-edit:hover { text-decoration: underline; }
+.prefs-clear:hover { text-decoration: underline; }
+
+/* Dashed, no-fill "empty state" button — reopens the preference picker. */
+.prefs-edit-ghost {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: 2px dotted rgba(255, 102, 36, 0.55);
+  border-radius: 99px;
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: border-color 0.14s ease, background 0.14s ease, transform 0.1s ease;
+}
+.prefs-edit-ghost:hover {
+  border-color: #FF6624;
+  background: rgba(255, 102, 36, 0.06);
+  transform: translateY(-1px);
+}
 
 .prefs-cta {
   font-family: inherit;
@@ -638,7 +722,7 @@ html, body, #root, #app {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: clamp(10px, 2vh, 24px);
   background: rgba(28, 20, 14, 0.30);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
@@ -648,11 +732,13 @@ html, body, #root, #app {
 
 .onboarding-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 660px;
-  max-height: 86vh;
-  overflow-y: auto;
-  padding: 28px 30px 24px;
+  /* Never taller than the viewport, so the footer + "Show my map" is always in view. */
+  max-height: calc(100dvh - clamp(20px, 4vh, 48px));
+  padding: clamp(16px, 2.6vh, 28px) clamp(20px, 3vw, 30px) clamp(14px, 2.2vh, 24px);
   background: rgba(242, 231, 225, 0.96);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -686,25 +772,33 @@ html, body, #root, #app {
 .ob-close:hover { color: #111; }
 
 .ob-title {
-  font-size: 23px;
+  font-size: clamp(18px, 2.5vh, 23px);
   font-weight: 800;
   letter-spacing: -0.5px;
   color: #111;
-  margin: 3px 0 5px;
+  margin: clamp(1px, 0.4vh, 3px) 0 clamp(3px, 0.6vh, 5px);
 }
 .ob-sub {
-  font-size: 13.5px;
+  font-size: clamp(12.5px, 1.7vh, 13.5px);
   color: #555;
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.4;
   max-width: 46ch;
 }
 
+/* The tiers are the flexible middle: they take the space left between the pinned
+   header and footer. Spacing scales with viewport height so the whole picker fits
+   without scrolling on normal screens; on very short ones this alone scrolls (as a
+   safety net) while the footer stays put. */
 .ob-tiers {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin: 20px 0 4px;
+  gap: clamp(6px, 1.3vh, 16px);
+  margin: clamp(8px, 1.5vh, 20px) 0 clamp(2px, 0.5vh, 4px);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 .ob-tier-title {
   font-size: 11px;
@@ -712,16 +806,245 @@ html, body, #root, #app {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #a08a7d;
-  margin: 0 0 9px;
+  margin: 0 0 clamp(3px, 0.7vh, 9px);
+}
+/* Compact the chips inside the picker only (not the side panel's chips). */
+.ob-tiers .prefs-tags { gap: clamp(5px, 0.9vh, 8px); }
+.ob-tiers .prefs-tag {
+  padding: clamp(3.5px, 0.7vh, 6px) clamp(10px, 1.3vw, 13px);
+  font-size: clamp(12px, 1.6vh, 12.5px);
 }
 
+/* Locked tiers (everything below Fundamentals): the section TITLE stays crisp,
+   but the chips go inert and their labels blur — a teaser for more to come. */
+.prefs-tag .tag-label { display: inline-block; }
+.prefs-tag.is-locked {
+  cursor: pointer;                 /* tap to contribute local intel + unlock */
+  background: #fff;
+  border-color: rgba(0,0,0,0.10);
+  box-shadow: none;
+}
+.prefs-tag.is-locked:hover {
+  border-color: rgba(255, 102, 36, 0.55);
+  transform: translateY(-1px);
+}
+.prefs-tag.is-locked:hover .tag-label { filter: blur(2px); } /* hint it's reachable */
+.prefs-tag.is-locked .tag-label {
+  filter: blur(3.5px);
+  opacity: 0.8;
+  user-select: none;
+  transition: filter 0.16s ease;
+}
+.prefs-tag.is-locked .soon { display: none; }
+
+/* ── Contribute modal (resident give-to-get) ─────────────────── */
+.contrib-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;                     /* above the onboarding modal it opens from */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(28, 20, 14, 0.34);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: ob-fade 0.2s ease;
+}
+.contrib-card {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 28px 30px 24px;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.30);
+  animation: ob-rise 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.contrib-field { margin-top: 18px; }
+.contrib-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.contrib-note {
+  display: block;
+  font-size: 11.5px;
+  color: #8a8078;
+  margin: -4px 0 10px;
+  line-height: 1.35;
+}
+
+/* Directional calibration grid — one metric per row, More / Same / Less */
+.dir-grid { display: flex; flex-direction: column; gap: 8px; }
+.dir-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dir-metric {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.3;
+}
+.dir-seg {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 99px;
+}
+.dir-opt {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #777;
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.dir-opt:hover { color: #333; }
+.dir-opt.is-on {
+  color: #fff;
+  background: #FF6624;
+}
+
+/* Address input + autocomplete dropdown */
+.addr-wrap { position: relative; }
+.addr-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+  color: #111;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-radius: 12px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.addr-input::placeholder { color: #a49a92; }
+.addr-input:focus {
+  border-color: rgba(255, 102, 36, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 102, 36, 0.14);
+}
+.addr-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  max-height: 220px;
+  overflow-y: auto;
+}
+.addr-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13px;
+  color: #333;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+.addr-item:hover,
+.addr-item.is-active { background: #f3ede8; color: #111; }
+
+/* Non-selectable dropdown rows: loading + "no match" guidance. */
+.addr-note {
+  font-size: 12.5px;
+  color: #999;
+  padding: 9px 10px;
+  line-height: 1.4;
+}
+
+/* Verified pick — the input turns green and shows a check, and the enforcement
+   hint appears while a typed value hasn't been confirmed against the geocoder. */
+.addr-wrap.is-verified .addr-input {
+  border-color: #3f8f5c;
+  box-shadow: 0 0 0 3px rgba(63, 143, 92, 0.14);
+  padding-right: 40px;
+}
+.addr-check {
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3f8f5c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.addr-hint {
+  font-size: 12px;
+  color: #b8430e;
+  margin: 7px 2px 0;
+  line-height: 1.35;
+}
+
+/* Success state */
+.contrib-done {
+  text-align: center;
+  padding: 22px 8px 8px;
+}
+.contrib-check {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #3f8f5c;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contrib-done .ob-sub { margin: 0 auto 18px; }
+.contrib-done .ob-done { margin: 0 auto; }
+
 .ob-footer {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: clamp(10px, 1.8vh, 20px);
+  padding-top: clamp(10px, 1.5vh, 16px);
   border-top: 1px solid rgba(0,0,0,0.08);
 }
 .ob-count {
@@ -734,6 +1057,7 @@ html, body, #root, #app {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto; /* keep actions right-aligned even without a footer label */
 }
 .ob-clear {
   font-family: inherit;
@@ -770,3 +1094,229 @@ html, body, #root, #app {
 @media (prefers-reduced-motion: reduce) {
   .onboarding, .onboarding-card { animation-duration: 0.01ms; }
 }
+
+/* ── Documentation overlay (near-full-screen popup) ──────────── */
+/* The overlay fills the viewport but keeps an even margin all around so the map
+   still shows through at the edges — the same "buffer" feel as the upper-left
+   card, expanded to the whole screen. No scrim, so the map reads clearly around
+   the card. The margin is uniform on every side. */
+.docs-overlay {
+  position: absolute;
+  /* Bound to the map region only — below the 56px top bar, above the 44px legend
+     strip — so the popup never overlaps the chrome. The buffer lives inside. */
+  top: 56px;
+  bottom: 44px;
+  left: 0;
+  right: 0;
+  z-index: 16;
+  display: flex;
+  padding: 20px;
+  animation: ob-fade 0.2s ease;
+}
+
+.docs-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+  overflow: hidden;
+  animation: ob-rise 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.docs-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  color: #666;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.docs-close:hover { color: #111; }
+
+.docs-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: clamp(28px, 5vh, 56px) clamp(24px, 6vw, 72px);
+}
+
+.docs-title {
+  font-size: clamp(22px, 3.4vh, 30px);
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: #111;
+  margin: 4px 0 0;
+}
+
+.docs-lead {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #444;
+  max-width: 640px;
+  margin: 14px 0 6px;
+}
+
+.docs-section {
+  max-width: 640px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.docs-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #111;
+  margin: 0 0 8px;
+}
+.docs-section p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+.docs-section strong { color: #333; font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-overlay, .docs-card { animation-duration: 0.01ms; }
+}
+
+/* ── Neighborhood news card (click a parcel) ─────────────────── */
+.news-card {
+  position: absolute;
+  top: 76px;
+  right: 20px;
+  z-index: 16;
+  width: 340px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding: 16px 18px 18px;
+  background: rgba(242, 231, 225, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  animation: news-in 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@keyframes news-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .news-card { animation-duration: 0.01ms; }
+}
+
+.news-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: #8a7c72;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.news-close:hover { background: rgba(0,0,0,0.06); color: #333; }
+
+.news-verdict {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+.news-verdict-up   { background: #355cf5; }
+.news-verdict-down { background: #ff6624; }
+.news-verdict-flat { background: #9a8c81; }
+
+.news-nbhd {
+  margin: 8px 0 2px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #17120f;
+}
+.news-sub {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6a5d54;
+}
+.news-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 11.5px;
+  color: #6a5d54;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.news-stats b { color: #17120f; font-weight: 700; }
+
+.news-eyebrow {
+  margin: 12px 0 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #9a8c81;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.headline-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-left: 3px solid #9a8c81;
+  border-radius: 10px;
+  padding: 9px 11px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: box-shadow 0.14s ease, transform 0.14s ease;
+}
+.headline-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.10); transform: translateY(-1px); }
+.news-up   .headline-card { border-left-color: #355cf5; }
+.news-down .headline-card { border-left-color: #ff6624; }
+
+.headline-title {
+  margin: 0 0 5px;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.32;
+  color: #1c1712;
+}
+.headline-cite {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #8a7c72;
+}
+.headline-src { font-weight: 700; color: #5a4d44; }
+.headline-dot { opacity: 0.6; }

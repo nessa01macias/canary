@@ -4,6 +4,8 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { samplePoints, type ChangePoint, type ChangeType, type Stage } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
 import { aggregate, fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
+import { neighborhoodHeadlines } from './headlines'
+import ContributeModal from './ContributeModal'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import './App.css'
 
@@ -331,9 +333,25 @@ function App() {
   // that drives the "breathing" trajectory overlay.
   const pulseMetaRef = useRef<Array<{ id: number; phase: number }>>([])
   const pulseRafRef = useRef<number | null>(null)
+  // Drives the "neighborhoods changing" flash: the rAF handle + the ids currently
+  // blinking, so it can be stood down cleanly.
+  const flashRafRef = useRef<number | null>(null)
+  const flashIdsRef = useRef<number[]>([])
   const [selected, setSelected] = useState<ChangePoint | null>(null)
+  // The neighborhood whose news card is open (click a parcel to set it). Carries
+  // just what the card renders — its name + the trajectory that picks the headlines.
+  const [selectedNbhd, setSelectedNbhd] = useState<{
+    nhood: string
+    traj: number
+    descriptor: string
+    permits: number
+    netUnits: number
+    totalCost: number
+  } | null>(null)
   const [sfCount, setSfCount] = useState<number | null>(null)
   const [traj, setTraj] = useState<NbhdTrajectory[]>([])
+  // Whether the top-right badge is currently blinking the changing neighborhoods.
+  const [flashing, setFlashing] = useState(false)
   const [mode, setMode] = useState<Mode>('areas')
   const [priorities, setPriorities] = useState<Set<string>>(new Set())
   // The shortlist = the chips shown in the panel (chosen in onboarding). `priorities`
@@ -343,6 +361,11 @@ function App() {
   const [matchTop, setMatchTop] = useState<string[]>([])
   // Onboarding picker opens first so the user chooses what to rank neighborhoods by.
   const [onboardingOpen, setOnboardingOpen] = useState(true)
+  // A locked (blurred) onboarding tag the user tapped to contribute local intel.
+  const [contribTag, setContribTag] = useState<string | null>(null)
+  // Documentation overlay — a near-full-screen popup with a margin so the map
+  // still peeks through around its edges.
+  const [docsOpen, setDocsOpen] = useState(false)
 
   // Onboarding: add/remove a field from the shortlist (activating it on add). The
   // MAX_PICKS cap applies to shortlist membership.
@@ -419,6 +442,46 @@ function App() {
       pulseRafRef.current = requestAnimationFrame(tick)
     }
     pulseRafRef.current = requestAnimationFrame(tick)
+  }
+
+  // "Neighborhoods changing" flash: blink a white highlight on every neighborhood
+  // with recent permit activity (the same set the badge counts). Toggled by the
+  // top-right badge; driven by the `flash` feature-state the white overlay reads.
+  const stopFlash = () => {
+    if (flashRafRef.current != null) {
+      cancelAnimationFrame(flashRafRef.current)
+      flashRafRef.current = null
+    }
+    const map = mapRef.current
+    if (map) for (const id of flashIdsRef.current) map.setFeatureState({ source: 'nbhd', id }, { flash: 0 })
+    flashIdsRef.current = []
+  }
+  const startFlash = () => {
+    const map = mapRef.current
+    if (!map || !map.getLayer('nbhd-flash-fill')) return
+    const ids = traj
+      .filter((t) => t.permits > 0)
+      .map((t) => nbhdMetaRef.current.get(t.nhood)?.id)
+      .filter((id): id is number => id != null)
+    if (!ids.length) return
+    flashIdsRef.current = ids
+    const speed = 0.006 // rad/ms → ~1s per blink; the flat trough reads as "off"
+    const tick = (ts: number) => {
+      const v = Math.max(0, Math.sin(ts * speed)) // 0..1, on/off blink
+      for (const id of ids) map.setFeatureState({ source: 'nbhd', id }, { flash: v })
+      flashRafRef.current = requestAnimationFrame(tick)
+    }
+    flashRafRef.current = requestAnimationFrame(tick)
+  }
+  const toggleFlash = () => {
+    if (flashing) {
+      setFlashing(false)
+      stopFlash()
+    } else {
+      if (mode !== 'areas') setMode('areas') // the flash reads against the area overlay
+      setFlashing(true)
+      startFlash()
+    }
   }
 
   useEffect(() => {
@@ -566,7 +629,9 @@ function App() {
         id: 'nbhd-fill',
         type: 'fill',
         source: 'nbhd',
-        layout: { visibility: modeRef.current === 'areas' ? 'visible' : 'none' },
+        // Start hidden; the mode effect reveals it once onboarding is dismissed and
+        // we're in area mode. This avoids a flash of overlay behind the modal.
+        layout: { visibility: 'none' },
         paint: {
           'fill-color': trajectoryColor(),
           'fill-opacity': trajectoryOpacity(),
@@ -597,6 +662,32 @@ function App() {
         }) as maplibregl.LineLayerSpecification['paint']
       map.addLayer({ id: 'nbhd-glow-halo', type: 'line', source: 'nbhd', paint: glowOn(11, 6, 0.6) })
       map.addLayer({ id: 'nbhd-glow-core', type: 'line', source: 'nbhd', paint: glowOn(2.5, 0.6, 1) })
+
+      // "Neighborhoods changing" flash — a white fill + crisp white outline that
+      // blink over the changing neighborhoods when the badge is clicked. Both ride
+      // the `flash` feature-state (0..1) the badge's rAF animates, so they're
+      // invisible until then. Topmost, so the highlight reads over the tinted fill.
+      map.addLayer({
+        id: 'nbhd-flash-fill',
+        type: 'fill',
+        source: 'nbhd',
+        paint: {
+          'fill-color': '#ffffff',
+          'fill-opacity': ['*', 0.72, ['coalesce', ['feature-state', 'flash'], 0]] as
+            maplibregl.DataDrivenPropertyValueSpecification<number>,
+        },
+      })
+      map.addLayer({
+        id: 'nbhd-flash-line',
+        type: 'line',
+        source: 'nbhd',
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': 2.5,
+          'line-opacity': ['coalesce', ['feature-state', 'flash'], 0] as
+            maplibregl.DataDrivenPropertyValueSpecification<number>,
+        },
+      })
 
       // Hover: highlight + neutral verdict popup.
       let hoveredId: number | string | null = null
@@ -639,6 +730,24 @@ function App() {
         hoveredId = null
         popup.remove()
       })
+
+      // Click a neighborhood → open its news card (social proof for the score).
+      map.on('click', 'nbhd-fill', (e) => {
+        if (!e.features?.length) return
+        const p = e.features[0].properties as Record<string, number | string>
+        setSelectedNbhd({
+          nhood: String(p.nhood),
+          traj: Number(p.traj) || 0,
+          descriptor: String(p.descriptor),
+          permits: Number(p.permits) || 0,
+          netUnits: Number(p.netUnits) || 0,
+          totalCost: Number(p.totalCost) || 0,
+        })
+      })
+      // Click empty map (water / outside SF) → dismiss the card.
+      map.on('click', (e) => {
+        if (!map.queryRenderedFeatures(e.point, { layers: ['nbhd-fill'] }).length) setSelectedNbhd(null)
+      })
       // The pulse is started by the paint effect once sfCount flips (layer ready).
     }
 
@@ -666,6 +775,8 @@ function App() {
     return () => {
       if (pulseRafRef.current != null) cancelAnimationFrame(pulseRafRef.current)
       pulseRafRef.current = null
+      if (flashRafRef.current != null) cancelAnimationFrame(flashRafRef.current)
+      flashRafRef.current = null
       popupRef.current?.remove()
       markers.forEach((m) => m.remove())
       markerElsRef.current = []
@@ -680,12 +791,22 @@ function App() {
     modeRef.current = mode
     const map = mapRef.current
     applyMarkerVisibility(markerElsRef.current, mode, map?.getZoom() ?? 0)
+    // Keep the trajectory overlay dark behind the onboarding modal — it only
+    // lights up once the user dismisses onboarding ("Show my map").
+    const showArea = mode === 'areas' && !onboardingOpen
     if (map?.getLayer('nbhd-fill')) {
-      map.setLayoutProperty('nbhd-fill', 'visibility', mode === 'areas' ? 'visible' : 'none')
+      map.setLayoutProperty('nbhd-fill', 'visibility', showArea ? 'visible' : 'none')
     }
-    if (mode === 'areas' && priorities.size === 0) startPulse()
+    // The news card belongs to the area view — drop it when the parcels leave.
+    if (mode !== 'areas') setSelectedNbhd(null)
+    // The "changing" flash belongs to the area view too — stand it down otherwise.
+    if (!showArea) {
+      stopFlash()
+      if (flashing) setFlashing(false)
+    }
+    if (showArea && priorities.size === 0) startPulse()
     else stopPulse()
-  }, [mode, sfCount, priorities])
+  }, [mode, sfCount, priorities, onboardingOpen, flashing])
 
   // Repaint the area overlay. Default (no preferences) = the pulsing trajectory
   // view (blue improving, red worsening); with preferences picked = a static
@@ -702,8 +823,9 @@ function App() {
       map.setPaintProperty('nbhd-fill', 'fill-opacity', trajectoryOpacity())
       matchInfoRef.current = { active: false, count: 0 }
       setMatchTop([])
-      // Breathe only while the trajectory overlay is actually the visible view.
-      if (mode === 'areas') startPulse()
+      // Breathe only while the trajectory overlay is actually the visible view
+      // (area mode, onboarding dismissed).
+      if (mode === 'areas' && !onboardingOpen) startPulse()
       else stopPulse()
       return
     }
@@ -729,7 +851,7 @@ function App() {
     setMatchTop(
       [...scored].sort((a, b) => b.fit - a.fit).slice(0, 3).map((s) => s.nhood).filter(Boolean),
     )
-  }, [priorities, mode, sfCount])
+  }, [priorities, mode, sfCount, onboardingOpen])
 
   const activeNbhds = traj.filter((t) => t.permits > 0).length
   const matchActive = priorities.size > 0
@@ -764,28 +886,49 @@ function App() {
         </div>
 
         <div className="topbar-right">
-          <span className="live-badge">
+          <button type="button" className="nav-link" onClick={() => setDocsOpen(true)}>
+            Documentation
+          </button>
+          <button
+            type="button"
+            className={`live-badge${flashing ? ' is-flashing' : ''}`}
+            onClick={toggleFlash}
+            disabled={sfCount === null || activeNbhds === 0}
+            aria-pressed={flashing}
+            title={flashing ? 'Stop highlighting' : 'Highlight the changing neighborhoods on the map'}
+          >
             <span className="live-dot" />
             {sfCount === null
               ? 'Loading…'
               : mode === 'areas'
                 ? `${activeNbhds} neighborhoods changing`
                 : `${sfCount} live permits`}
-          </span>
+          </button>
         </div>
       </header>
 
       {/* Map */}
       <div ref={mapContainer} id="map" />
 
-      {/* Preferences panel — a shorthand summary of what onboarding picked */}
+      {/* Preferences panel — a shorthand summary of what onboarding picked.
+          Hidden until the onboarding is dismissed ("Show my map"), so it never
+          peeks out behind the picker on first load or during an edit. */}
+      {!onboardingOpen && (
       <aside className="prefs-panel">
         <div className="prefs-head">
           <p className="prefs-eyebrow">Looking for</p>
           {shortlist.length > 0 && (
-            <button type="button" className="prefs-edit" onClick={() => setOnboardingOpen(true)}>
-              Edit
-            </button>
+            <div className="prefs-head-actions">
+              {priorities.size > 0 && (
+                <button type="button" className="prefs-clear" onClick={() => setPriorities(new Set())}>
+                  Clear
+                </button>
+              )}
+              {/* Dashed, no-fill empty-state button that reopens the picker */}
+              <button type="button" className="prefs-edit-ghost" onClick={() => setOnboardingOpen(true)}>
+                Edit
+              </button>
+            </div>
           )}
         </div>
         {shortlist.length === 0 ? (
@@ -846,6 +989,10 @@ function App() {
           </>
         )}
       </aside>
+      )}
+
+      {/* Resident give-to-get: tap a locked field to add local intel + unlock it */}
+      {contribTag && <ContributeModal tag={contribTag} onClose={() => setContribTag(null)} />}
 
       {/* Onboarding — centered picker across the full tiered field catalog */}
       {onboardingOpen && (
@@ -858,37 +1005,43 @@ function App() {
         >
           <div className="onboarding-card">
             <button className="ob-close" onClick={() => setOnboardingOpen(false)} aria-label="Close">×</button>
-            <p className="prefs-eyebrow">Looking for</p>
-            <h2 className="ob-title">What matters most to you?</h2>
+            <p className="prefs-eyebrow">Welcome</p>
+            <h2 className="ob-title">Hey! Let’s find the best parcel for you.</h2>
             <p className="ob-sub">
               Pick up to {MAX_PICKS}. We’ll rank every San Francisco neighborhood by how well it fits.
             </p>
 
             <div className="ob-tiers">
-              {PREFERENCE_TIERS.map((tier) => (
-                <section key={tier.title} className="ob-tier">
-                  <p className="ob-tier-title">{tier.title}</p>
-                  <div className="prefs-tags">
-                    {tier.fields.map((f) => {
-                      const sel = shortlist.includes(f.label)
-                      const atCap = shortlist.length >= MAX_PICKS && !sel
-                      return (
-                        <button
-                          key={f.label}
-                          type="button"
-                          className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}`}
-                          aria-pressed={sel}
-                          disabled={!f.available || atCap}
-                          onClick={() => toggleShortlist(f.label)}
-                        >
-                          {f.label}
-                          {!f.available && <span className="soon">soon</span>}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </section>
-              ))}
+              {PREFERENCE_TIERS.map((tier, ti) => {
+                // Only Fundamentals is usable on load; the rest tease — title stays
+                // crisp, but the chip labels blur and the chips go inert.
+                const locked = ti > 0
+                return (
+                  <section key={tier.title} className={`ob-tier${locked ? ' is-locked' : ''}`}>
+                    <p className="ob-tier-title">{tier.title}</p>
+                    <div className="prefs-tags">
+                      {tier.fields.map((f) => {
+                        const sel = shortlist.includes(f.label)
+                        const atCap = shortlist.length >= MAX_PICKS && !sel
+                        return (
+                          <button
+                            key={f.label}
+                            type="button"
+                            className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}${locked ? ' is-locked' : ''}`}
+                            aria-pressed={locked ? undefined : sel}
+                            aria-label={locked ? `Add local info about ${f.label}` : undefined}
+                            disabled={!locked && (!f.available || atCap)}
+                            onClick={() => (locked ? setContribTag(f.label) : toggleShortlist(f.label))}
+                          >
+                            <span className="tag-label">{f.label}</span>
+                            {!f.available && <span className="soon">soon</span>}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </section>
+                )
+              })}
             </div>
 
             <div className="ob-footer">
@@ -908,6 +1061,73 @@ function App() {
                   Show my map
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Documentation — near-full-screen overlay. The scrim leaves an even
+          margin all around so the map still peeks through at the edges, matching
+          the buffer of the upper-left card. */}
+      {docsOpen && (
+        <div
+          className="docs-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Documentation"
+          onClick={(e) => e.target === e.currentTarget && setDocsOpen(false)}
+        >
+          <div className="docs-card">
+            <button className="docs-close" onClick={() => setDocsOpen(false)} aria-label="Close">×</button>
+            <div className="docs-body">
+              <p className="prefs-eyebrow">Documentation</p>
+              <h2 className="docs-title">How canary works</h2>
+              <p className="docs-lead">
+                Canary turns permits, business filings, and civic signals into a live,
+                neighborhood-level read on where a place is heading — so you can find the
+                parcel that fits what matters to you.
+              </p>
+
+              <section className="docs-section">
+                <h3>Area trajectory</h3>
+                <p>
+                  The default map colors every San Francisco neighborhood by its trajectory
+                  over the last few years — <strong>blue is improving</strong>,{' '}
+                  <strong>orange is worsening</strong>, and cream is roughly flat. The
+                  strongest movers gently pulse so your eye lands on real change rather than
+                  routine activity.
+                </p>
+              </section>
+
+              <section className="docs-section">
+                <h3>Individual permits</h3>
+                <p>
+                  Switch to permit view to see each change as a point on the map. Dot size
+                  encodes the dollar value of the work; color separates construction,
+                  business closures, and openings. Zoom in to reveal routine alterations,
+                  and click any marker for the full before → after detail.
+                </p>
+              </section>
+
+              <section className="docs-section">
+                <h3>Ranking by what matters</h3>
+                <p>
+                  Pick up to {MAX_PICKS} priorities — schools, low crime, transit, and more —
+                  and the map re-shades every neighborhood by how well it fits, with a
+                  ranked best-fit list in the panel. Toggle any priority on or off to see
+                  the ranking update instantly.
+                </p>
+              </section>
+
+              <section className="docs-section">
+                <h3>Data sources</h3>
+                <p>
+                  Live permit and neighborhood data comes from San Francisco's open data
+                  feeds. Several preference signals are placeholders today and light up as
+                  their sources land — federal broadband, Census demographics, and deed
+                  records among them.
+                </p>
+              </section>
             </div>
           </div>
         </div>
@@ -1036,6 +1256,42 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Neighborhood news card — social proof for the score. Click a parcel to
+          open; headlines lean improving/worsening to match its trajectory. */}
+      {selectedNbhd && (() => {
+        const t = selectedNbhd.traj
+        const tone = t > 0.12 ? 'up' : t < -0.12 ? 'down' : 'flat'
+        const verdict = tone === 'up' ? 'Improving' : tone === 'down' ? 'Getting worse' : 'Holding steady'
+        const glyph = tone === 'up' ? '▲' : tone === 'down' ? '▼' : '▪'
+        const items = neighborhoodHeadlines(selectedNbhd.nhood, t)
+        return (
+          <aside className={`news-card news-${tone}`}>
+            <button className="news-close" onClick={() => setSelectedNbhd(null)} aria-label="Close">×</button>
+            <span className={`news-verdict news-verdict-${tone}`}>{glyph} {verdict}</span>
+            <h3 className="news-nbhd">{selectedNbhd.nhood}</h3>
+            <p className="news-sub">{selectedNbhd.descriptor}</p>
+            <div className="news-stats">
+              <span><b>{selectedNbhd.permits}</b> permits</span>
+              <span><b>+{selectedNbhd.netUnits}</b> net units</span>
+              <span><b>${(selectedNbhd.totalCost / 1e6).toFixed(1)}M</b></span>
+            </div>
+            <p className="news-eyebrow">Why — in the local press</p>
+            <div className="news-list">
+              {items.map((h, i) => (
+                <article className="headline-card" key={i}>
+                  <p className="headline-title">{h.title}</p>
+                  <p className="headline-cite">
+                    <span className="headline-src">{h.source}</span>
+                    <span className="headline-dot">·</span>
+                    <time>{h.date}</time>
+                  </p>
+                </article>
+              ))}
+            </div>
+          </aside>
+        )
+      })()}
     </div>
   )
 }
