@@ -36,7 +36,10 @@ services:
 
   web:
     build:
-      context: ./frontend
+      # Context is the repo root (not ./frontend) so the Docs page can import
+      # repo-root markdown (RESEARCH.md etc.) at build time. See frontend/Dockerfile.
+      context: .
+      dockerfile: frontend/Dockerfile
       args:
         # Only the map-tile key is client-side. No DB creds reach the browser.
         VITE_MAPTILER_KEY: ${VITE_MAPTILER_KEY}

@@ -1,0 +1,13 @@
+# Root build context (used by the `web` service, whose context is the repo root so
+# the frontend can import repo-root docs — RESEARCH.md etc. — at build time).
+# Keep this lean: never ship the data archive, deps, or secrets into an image.
+.git
+**/node_modules
+**/venv
+**/__pycache__
+backend/data
+data
+*.duckdb
+**/.env
+**/.env.*
+frontend/dist

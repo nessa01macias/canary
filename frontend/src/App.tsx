@@ -6,7 +6,7 @@ import { fetchSfPermits } from './sfPermits'
 import { fetchNeighborhoods, type NbhdTrajectory } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
-import { Research } from './Research'
+import { Docs } from './Docs'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
@@ -791,7 +791,7 @@ function App() {
                 : `${sfCount} live permits`}
           </span>
           <button className="research-btn" onClick={() => setResearchOpen(true)}>
-            Research
+            Documentation
           </button>
           <button className="contribute-btn" onClick={() => setContributing(true)}>
             + Review a neighborhood
@@ -799,7 +799,7 @@ function App() {
         </div>
       </header>
 
-      {researchOpen && <Research onClose={() => setResearchOpen(false)} />}
+      {researchOpen && <Docs onClose={() => setResearchOpen(false)} />}
 
       {contributing && (
         <Contribute
