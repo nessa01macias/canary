@@ -209,3 +209,37 @@ class ContributionIn(BaseModel):
     ratings: dict[str, float] = Field(default_factory=dict)
     comment: str | None = None
     session_id: str | None = None
+
+
+# --------------------------------------------------------------------------- #
+#  Resident layer — the READ side of the moat. k-anonymised (n ≥ 3) aggregates
+#  only; raw reviews are unreadable by design (RLS has no SELECT policy).
+# --------------------------------------------------------------------------- #
+class ResidentAreaAgg(BaseModel):
+    """One area's aggregated resident reviews (per-area view, k ≥ 3)."""
+
+    place_label: str
+    n_reviews: int
+    avg_safety: float | None = None
+    avg_noise: float | None = None
+    avg_trajectory: float | None = None
+
+
+class ResidentHexAgg(BaseModel):
+    """One hex's aggregated resident reviews (per-h3_9 view, k ≥ 3)."""
+
+    h3_9: str
+    neighborhood: str | None = Field(None, description="Display name, joined from the spine.")
+    n_reviews: int
+    avg_safety: float | None = None
+    avg_noise: float | None = None
+    avg_trajectory: float | None = None
+
+
+class ResidentLayer(BaseModel):
+    """The unlockable give-to-get layer. Empty lists = not enough reviews yet
+    (each group needs n ≥ 3 before it becomes visible — the k-anonymity floor)."""
+
+    areas: list[ResidentAreaAgg] = Field(default_factory=list)
+    hexes: list[ResidentHexAgg] = Field(default_factory=list)
+    k_floor: int = Field(3, description="Minimum reviews per group before it appears.")

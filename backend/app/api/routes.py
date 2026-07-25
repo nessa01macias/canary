@@ -26,6 +26,9 @@ from .schemas import (
     Citation,
     ContributionIn,
     MetricInfo,
+    ResidentAreaAgg,
+    ResidentHexAgg,
+    ResidentLayer,
     Trajectory,
 )
 from .trajectory import build_trajectory
@@ -213,6 +216,33 @@ async def post_contribution(body: ContributionIn) -> dict:
     except RuntimeError as e:
         raise HTTPException(502, str(e))
     return {"ok": True}
+
+
+@router.get("/resident-layer", response_model=ResidentLayer)
+async def get_resident_layer() -> ResidentLayer:
+    """
+    The give-to-get resident layer — k-anonymised (n ≥ 3) review aggregates per
+    area and per hex. Raw reviews are structurally unreadable (RLS); this is the
+    only shape they ever leave Supabase in. Empty lists = not enough reviews yet.
+    """
+    area_rows = await store.fetch_resident_layer("resident_layer_by_area")
+    hex_rows = await store.fetch_resident_layer("resident_layer_agg")
+
+    # Attach display names to hexes from the spine (best-effort).
+    hexes: list[ResidentHexAgg] = []
+    for r in hex_rows:
+        neighborhood = None
+        try:
+            match = db.query("SELECT neighborhood FROM areas WHERE h3_9 = ?", [r["h3_9"]])
+            neighborhood = match[0]["neighborhood"] if match else None
+        except Exception:  # noqa: BLE001 — DuckDB absent → names omitted, data still served
+            pass
+        hexes.append(ResidentHexAgg(**r, neighborhood=neighborhood))
+
+    return ResidentLayer(
+        areas=[ResidentAreaAgg(**r) for r in area_rows],
+        hexes=hexes,
+    )
 
 
 @router.get("/catalog", response_model=Catalog)

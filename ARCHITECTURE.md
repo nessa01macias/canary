@@ -115,7 +115,8 @@ backend host in either environment.
 | `GET /api/report` | DuckDB | address → k-ring → changes + trajectories + sources |
 | `GET /api/trajectory` | DuckDB | one metric's slope + direction + series |
 | `GET /api/catalog` | DuckDB | machine-readable capability list (agent-legible) |
-| `POST /api/contributions` | Supabase | persists a user review (the moat) |
+| `POST /api/contributions` | Supabase | persists a user review (the moat, write side) |
+| `GET /api/resident-layer` | Supabase (k-anon views) + DuckDB (names) | aggregated reviews per area/hex, n ≥ 3 only (the moat, read side) |
 
 Everything is H3-native (global spine) and geography-agnostic — adding a metro
 changes data, never the contract.

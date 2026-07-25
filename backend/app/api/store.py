@@ -38,6 +38,22 @@ def supabase_configured() -> bool:
     return bool(SUPABASE_URL and SUPABASE_KEY)
 
 
+async def fetch_resident_layer(view: str) -> list[dict]:
+    """Read one of the k-anonymised aggregate views (resident_layer_agg /
+    resident_layer_by_area). These are the ONLY readable shape of contributions
+    — raw reviews have no SELECT policy. Returns [] if the view doesn't exist
+    yet (schema.sql not re-run) so the endpoint degrades instead of erroring."""
+    if not supabase_configured():
+        return []
+    headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.get(f"{SUPABASE_URL}/rest/v1/{view}", headers=headers)
+    if resp.status_code == 404:  # view not created yet
+        return []
+    resp.raise_for_status()
+    return resp.json()
+
+
 async def insert_contribution(row: dict) -> None:
     """Insert one contribution row. Raises RuntimeError on any failure."""
     if not supabase_configured():

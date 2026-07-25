@@ -28,7 +28,8 @@ Status legend:
 | Neighborhood choropleth + descriptors | polygons + per-hood aggregates | `GET /api/sf/neighborhoods` | 🟢 |
 | Pulsing improving/declining overlay | investment + crime trend | live permits + `trajectory` table (`pct_change`, rank-normalized) | 🟢 real |
 | Preference **fit** overlay + best-fit list | per-hood score per chip | `GROUNDED_TAGS` over baked signals | 🟢 for **5** chips, rest ignored |
-| "Review a neighborhood" (moat) | contribution write path | `POST /api/contributions` → Supabase (RLS) | 🟢 |
+| "Review a neighborhood" (moat, write) | contribution write path | `POST /api/contributions` → Supabase (RLS) | 🟢 |
+| Resident layer (moat, read) | k-anon review aggregates | `GET /api/resident-layer` (per-area + per-hex, n ≥ 3) — **endpoint live, no UI yet** | 🟡 UI gap |
 | *(built, unused by UI)* address report | changes + trajectories + **attributes** for a point | `GET /api/report` — now includes the `attributes` block | 🟡 UI gap |
 | *(built, unused by UI)* biz open/close markers | located place events | `GET /api/changes?category=business` | 🟡 UI gap |
 
