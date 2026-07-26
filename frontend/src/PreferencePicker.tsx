@@ -86,6 +86,9 @@ const TOTAL_SIGNALS = PREFERENCE_TIERS.reduce((n, t) => n + t.fields.length, 0)
 type Props = {
   mission: string | null
   onMission: (id: string) => void
+  /** "Just exploring" is a SKIP, not a form: the picker closes and the map
+      itself (plus the city card's story) is the explorer's experience. */
+  onExplore: () => void
   picks: string[]              // the live shortlist (selection = membership)
   onToggle: (tag: string) => void
   onClear: () => void
@@ -95,15 +98,20 @@ type Props = {
 }
 
 export function PreferencePicker({
-  mission, onMission, picks, onToggle, onClear, onDone, onClose, firstRun,
+  mission, onMission, onExplore, picks, onToggle, onClear, onDone, onClose, firstRun,
 }: Props) {
-  // The catalog starts folded when a lens is focused; open when browsing free.
-  const [expanded, setExpanded] = useState(() => !mission || !MISSION_QUESTIONS[mission])
+  // The catalog is always opt-in (the accordion) — the least-invested user
+  // must never meet the biggest form.
+  const [expanded, setExpanded] = useState(false)
   const q = mission ? MISSION_QUESTIONS[mission] : undefined
 
   const selectTab = (id: string) => {
+    if (id === 'exploring') {
+      onExplore()
+      return
+    }
     onMission(id)
-    setExpanded(!MISSION_QUESTIONS[id]) // focused lens folds the catalog; exploring opens it
+    setExpanded(false)
   }
 
   const chip = (f: PrefField) => {

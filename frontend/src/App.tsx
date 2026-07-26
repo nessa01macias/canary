@@ -387,6 +387,17 @@ function App() {
       openScope({ kind: 'city' }, { fromAsk: true })
     }
   }
+  // "Just exploring" is a SKIP, not a form — the least-invested user gets the
+  // lightest path: straight to the breathing map, with the city card telling
+  // the story (what's rising, what's under pressure) instead of asking for input.
+  const exploreInstead = () => {
+    localStorage.setItem('canary_mission', 'exploring')
+    setMission('exploring')
+    setPickerOpen(false)
+    setFirstRunPicker(false)
+    setCityIntro('This is San Francisco changing — blues rising, oranges under pressure. Tap any area to read it, or ask anything.')
+    openScope({ kind: 'city' }, { fromAsk: true })
+  }
 
   // The ask flow. Questions carry the current scope as CONTEXT ("here" = the
   // place the card is about); action blocks auto-execute on the map below.
@@ -1272,6 +1283,7 @@ function App() {
         <PreferencePicker
           mission={mission}
           onMission={handleMissionTab}
+          onExplore={exploreInstead}
           picks={shortlist}
           onToggle={toggleShortlist}
           onClear={clearAll}
