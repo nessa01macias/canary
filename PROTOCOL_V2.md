@@ -119,6 +119,15 @@ channel artifact), the correction is implemented inside the verification
 script and justified inline. A reviewer must be able to check any answer from
 the city's records alone.
 
+The verification script runs **at freeze time**, before any model query, and
+its report plus archived API responses join the registered artifact set; any
+expected answer it fails to confirm is corrected or dropped before the freeze.
+Geometric predicates (address rings) are additionally unit-tested against
+hand-computed distances before generation. Both requirements are lessons from
+v1, where post-hoc verification confirmed 42 of 43 answers but exposed a
+coordinate axis-order bug that had turned 500 m rings into ellipses
+(RESEARCH.md, verification section).
+
 ## 7. Judging
 
 A **three-judge panel** from three different vendors (none the same model as
@@ -126,8 +135,12 @@ any tested system; vendor overlap with tested systems is unavoidable and
 disclosed), each receiving the question, the ground truth with receipt, and
 the model's answer, classifying commitment to the recorded truth: correct,
 wrong, or nonanswer, with a confident-wrong flag on unhedged wrong answers.
-The panel verdict is the majority. Parse failures are retried once, then
-excluded and reported (as in v1).
+The panel verdict is the majority. Judge responses get a token budget sized
+well above the longest observed verdict (v1's 200-token cap truncated 19
+verdicts mid-JSON); parse failures are retried up to three times, residual
+holes are completed by a repair pass that grades only missing verdicts and
+flags them in the artifacts, and any verdict still unparsed is excluded and
+reported.
 
 **Human audit:** two human annotators independently grade a stratified 15%
 sample of panel verdicts (stratified by model, condition, block, and verdict).
