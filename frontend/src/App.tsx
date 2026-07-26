@@ -1146,8 +1146,11 @@ function App() {
           <button className="nav-quiet" onClick={() => setAgentsOpen(true)}>
             For AI apps
           </button>
-          <button className="contribute-btn" onClick={() => setContributing(true)}>
-            + Review a neighborhood
+          {/* Quiet on purpose: ONE primary CTA on the resting screen ("Choose
+              what matters"). The review ask converts inside the cards, where
+              the gate gives it context — not as a competing orange button. */}
+          <button className="nav-quiet" onClick={() => setContributing(true)}>
+            Review a neighborhood
           </button>
         </div>
       </header>

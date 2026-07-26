@@ -134,55 +134,58 @@ export function PreferencePicker({
     >
       <div className="picker-card">
         <button className="ob-close" onClick={onClose} aria-label="Close">×</button>
-        <p className="prefs-eyebrow">{firstRun ? 'Welcome to Canary' : 'Your lens'}</p>
-        <h2 className="ob-title">What matters to you?</h2>
+
+        <header className="picker-head">
+          <p className="prefs-eyebrow">{firstRun ? 'Welcome to Canary' : 'Your lens'}</p>
+          <h2 className="ob-title">What matters to you?</h2>
+          <p className="picker-sub">Every pick re-ranks all 41 neighborhoods, live.</p>
+        </header>
 
         {/* The mission is a TAB, not a step — tap one and the list refocuses. */}
-        <div className="picker-tabs" role="tablist" aria-label="I'm…">
-          {MISSIONS.map((m) => (
-            <button
-              key={m.id}
-              role="tab"
-              aria-selected={mission === m.id}
-              className={`picker-tab${mission === m.id ? ' is-active' : ''}`}
-              onClick={() => selectTab(m.id)}
-            >
-              <span aria-hidden="true">{m.icon}</span> {m.label}
-            </button>
-          ))}
-        </div>
+        <section className="picker-section">
+          <p className="picker-label">I’m here…</p>
+          <div className="picker-tabs" role="tablist" aria-label="I'm here…">
+            {MISSIONS.map((m) => (
+              <button
+                key={m.id}
+                role="tab"
+                aria-selected={mission === m.id}
+                className={`picker-tab${mission === m.id ? ' is-active' : ''}`}
+                onClick={() => selectTab(m.id)}
+              >
+                <span aria-hidden="true">{m.icon}</span> {m.label}
+              </button>
+            ))}
+          </div>
+        </section>
 
-        {q ? (
-          <>
+        {q && (
+          <section className="picker-section">
             <p className="picker-question">{q.question}</p>
             <div className="prefs-tags picker-spotlight">
               {q.chips.map((c) => chip({ label: c, available: true }))}
             </div>
-          </>
-        ) : (
-          <p className="ob-sub">
-            Pick who you are for a focused list — or browse everything below.
-            Every pick re-ranks all 41 neighborhoods live.
-          </p>
+          </section>
         )}
 
-        <button type="button" className="picker-browse" onClick={() => setExpanded((v) => !v)}>
-          {expanded ? 'fold the catalog ▴' : `or browse all ${TOTAL_SIGNALS} signals ▾`}
-        </button>
+        <section className="picker-section picker-section--catalog">
+          <button type="button" className="picker-browse" onClick={() => setExpanded((v) => !v)}>
+            {expanded ? 'Show less ▴' : `Browse all ${TOTAL_SIGNALS} signals ▾`}
+          </button>
+          {expanded && (
+            <div className="ob-tiers picker-catalog">
+              {PREFERENCE_TIERS.map((tier) => (
+                <section key={tier.title} className="ob-tier">
+                  <p className="ob-tier-title">{tier.title}</p>
+                  <div className="prefs-tags">{tier.fields.map(chip)}</div>
+                </section>
+              ))}
+            </div>
+          )}
+        </section>
 
-        {expanded && (
-          <div className="ob-tiers picker-catalog">
-            {PREFERENCE_TIERS.map((tier) => (
-              <section key={tier.title} className="ob-tier">
-                <p className="ob-tier-title">{tier.title}</p>
-                <div className="prefs-tags">{tier.fields.map(chip)}</div>
-              </section>
-            ))}
-          </div>
-        )}
-
-        <div className="ob-footer">
-          <span className="ob-count">{picks.length} / {MAX_PICKS} selected</span>
+        <div className="ob-footer picker-footer">
+          <span className="ob-count">{picks.length} of {MAX_PICKS} picked</span>
           <div className="ob-actions">
             {picks.length > 0 && (
               <button type="button" className="ob-clear" onClick={onClear}>Clear</button>
