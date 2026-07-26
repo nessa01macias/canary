@@ -25,33 +25,31 @@ The v1 pilot (RESEARCH.md; 43 questions, San Francisco, five frontier models,
 question set frozen at git commit 064dc90) found unassisted accuracy of 36-45%
 with confident error as the dominant failure mode, 0% pooled accuracy on
 ranking and counting blocks, 95% on an in-training-window control, and 93-100%
-accuracy when one Canary API response was prepended. v2 tests whether these
-findings survive scale, replication, a second metropolitan area, independent
+accuracy when one Canary API response was prepended. v2 stays in San Francisco
+and tests whether these findings survive scale, replication, independent
 judging, a human baseline, and a measured (rather than asserted) contamination
-audit.
+audit. Geographic generality is explicitly out of scope and deferred to a
+future version with a second metropolitan area.
 
 ## 2. Hypotheses (pre-specified)
 
 Primary outcome: paired difference in accuracy between the grounded and
-unassisted conditions, pooled over questions, per model, per metro.
+unassisted conditions, pooled over questions, per model.
 
 - **H1 (data gap).** For every tested model, unassisted accuracy on the
-  aggregation blocks (superlative, numeric, address-level) is below 50% in
-  each metro.
+  aggregation blocks (superlative, numeric, address-level) is below 50%.
 - **H2 (remediability).** For every tested model, grounded accuracy pooled
   over all blocks is at least 90%, and the paired grounded-minus-unassisted
-  difference is significant at p < 0.001 (McNemar exact test).
+  difference is significant at p < 0.001 (McNemar exact test), with the gap
+  exceeding 30 percentage points.
 - **H3 (capability control).** Unassisted accuracy on the temporal
-  in-training-window block is at least 85% pooled across models, in each
-  metro.
-- **H4 (generality).** The grounded-minus-unassisted gap exceeds 30 percentage
-  points for every model in both metros.
-- **H5 (contamination stratum).** Unassisted accuracy on questions whose
+  in-training-window block is at least 85% pooled across models.
+- **H4 (contamination stratum).** Unassisted accuracy on questions whose
   answers are retrievable on the public web at freeze time (as measured by the
   §5 audit) exceeds unassisted accuracy on unpublished-answer questions by at
   least 20 percentage points. This tests the mechanism claim directly: models
   fail because the answers were never published.
-- **H6 (human baseline).** Informed local residents without internet access
+- **H5 (human baseline).** Informed local residents without internet access
   score below 60% on the aggregation blocks; that is, the gap is a property of
   the information environment, not of machines.
 
@@ -61,14 +59,14 @@ agreement; human-with-internet condition.
 
 ## 3. Design summary
 
-Two metros: **San Francisco** (DataSF) and **Chicago** (Chicago Data Portal;
-both are Socrata platforms, so the acquisition layer ports). 120 questions per
-metro, 240 total, generated programmatically from each metro's canonical
-database under the same rules as v1 (volume floors, effect-size floors,
-documented exclusions).
+One metro: **San Francisco** (DataSF). 150 questions, generated
+programmatically from the canonical database under the same rules as v1
+(volume floors, effect-size floors, documented exclusions). A second metro is
+deferred to a future version; the single-metro scope is stated as a limitation
+in all reports.
 
-Block targets per metro (n = 120): direction 30, superlative 18, numeric 20,
-pairwise 20, address-level 15, temporal control 12, distractor controls 5.
+Block targets (n = 150): direction 35, superlative 22, numeric 25, pairwise
+25, address-level 20, temporal control 15, distractor controls 8.
 
 Models (final list fixed at freeze; exact API identifiers recorded): the then
 current frontier chat model from Anthropic, OpenAI, Google, and xAI; one
@@ -104,7 +102,7 @@ archived) determines whether any retrievable public page states the expected
 answer within the question's tolerance. Two annotators label each question
 **published** or **unpublished** from the archived pages only; disagreements
 are adjudicated and the archive is released. Contamination status is a
-pre-registered stratum (H5), not an exclusion criterion: published-answer
+pre-registered stratum (H4), not an exclusion criterion: published-answer
 questions stay in the set, because the difference between strata is itself
 the evidence.
 
@@ -151,7 +149,7 @@ nonanswer verdicts are human-reviewed before publication.
 
 ## 8. Human baseline
 
-Per metro: at least 8 adult residents (2+ years in the metro; screened for
+At least 8 adult San Francisco residents (2+ years in the metro; screened for
 self-reported familiarity with local development and news; compensated).
 Each answers a stratified 50-question subset in a proctored session, twice:
 first closed-book, then with unrestricted internet access and a 2-minute
@@ -165,19 +163,20 @@ running.
 
 - All proportions reported with Wilson 95% confidence intervals; figures carry
   interval bars.
-- H1, H3, H4: tested directly against the stated thresholds per model per
-  metro, with Wilson intervals; the hypothesis holds if the point estimate
-  clears the threshold and is claimed with its interval.
-- H2: McNemar exact test on question-paired outcomes per model per metro.
-- H5, H6: two-proportion comparisons with Wilson intervals on the difference;
-  H5 additionally via logistic regression accuracy ~ condition + block +
-  model + metro + published-stratum, standard errors clustered by question.
-- Multiplicity: primary hypotheses H1-H4 are confirmatory and reported
-  unadjusted with exact p-values; H5-H6 are labeled exploratory-confirmatory
+- H1, H3: tested directly against the stated thresholds per model, with
+  Wilson intervals; the hypothesis holds if the point estimate clears the
+  threshold and is claimed with its interval.
+- H2: McNemar exact test on question-paired outcomes per model, plus the
+  30-point gap threshold with its Wilson interval.
+- H4, H5: two-proportion comparisons with Wilson intervals on the difference;
+  H4 additionally via logistic regression accuracy ~ condition + block +
+  model + published-stratum, standard errors clustered by question.
+- Multiplicity: primary hypotheses H1-H3 are confirmatory and reported
+  unadjusted with exact p-values; H4-H5 are labeled exploratory-confirmatory
   and Holm-adjusted within their family.
-- Power note, stated honestly: per-block interval widths at n = 15-30 are
-  roughly ±12-20 points; block-level results are estimates with intervals,
-  not precise points. The paired pooled design (n = 240) has power > 0.99 for
+- Power note, stated honestly: per-block interval widths at n = 15-35 are
+  roughly ±11-20 points; block-level results are estimates with intervals,
+  not precise points. The paired pooled design (n = 150) has power > 0.99 for
   a 30-point condition gap.
 
 ## 10. Release
@@ -191,12 +190,12 @@ terms; public-record data under the source licenses listed in SOURCES.md.
 
 ## 11. Cost and timeline estimate (non-binding)
 
-Answer calls: 240 questions x ~8 systems x 2 conditions x 3 replicates =
-~11,500. Judge calls: ~34,500 (3 judges). Estimated API cost $1,000-2,500.
-Human sessions: ~$800-1,500 in compensation. Timeline: Chicago pipeline port
-3-4 weeks; question generation and contamination audit 2 weeks; runs and
-judging 1 week; human sessions in parallel; analysis and writing 3-4 weeks.
-Target: roughly one quarter end to end.
+Answer calls: 150 questions x ~8 systems x 2 conditions x 3 replicates =
+~7,200. Judge calls: ~21,600 (3 judges). Estimated API cost $700-1,800.
+Human sessions: ~$400-800 in compensation. Timeline: question generation,
+geometry tests, and contamination audit 2 weeks; runs and judging 1 week;
+human sessions in parallel; analysis and writing 3-4 weeks. Target: roughly
+6-8 weeks end to end.
 
 ## 12. Deviations and errata
 

@@ -461,16 +461,18 @@ the live record.
 
 Version 2 is specified in a draft pre-registration (`PROTOCOL_V2.md` in the
 repository), to be frozen and registered on OSF before any v2 model query. It
-scales the design to 240 questions across two metros (San Francisco and Chicago),
-roughly eight systems including an open-weights model, and three replicates per
-condition. Grading moves to the cross-vendor panel with a published human audit;
-whether an answer is retrievable on the public web becomes a measured stratum,
-via a scripted search audit archived at freeze time; ground-truth verification
-runs at freeze rather than post hoc; and a compensated human baseline, closed
-book and then with internet access, is added in each metro. Beyond v2, the
-intended cadence is a recurring, versioned report regenerated alongside the data,
-so that the question set tracks the live record and results remain accountable
-over time. Gemini joins when account constraints permit.
+stays in San Francisco and scales the design to 150 questions, roughly eight
+systems including an open-weights model, and three replicates per condition.
+Grading moves to the cross-vendor panel with a published human audit; whether an
+answer is retrievable on the public web becomes a measured stratum, via a
+scripted search audit archived at freeze time; ground-truth verification runs at
+freeze rather than post hoc; and a compensated human baseline of San Francisco
+residents, closed book and then with internet access, is added. A second
+metropolitan area is deferred to a later version, and single-metro scope remains
+a stated limitation until then. Beyond v2, the intended cadence is a recurring,
+versioned report regenerated alongside the data, so that the question set tracks
+the live record and results remain accountable over time. Gemini joins when
+account constraints permit.
 
 ## Appendix A: Validation of the trajectory ground truth
 
