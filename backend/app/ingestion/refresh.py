@@ -24,7 +24,7 @@ import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 
-from app.ingestion import base, california, census, datasf, federal, fsq, gtfs, osm
+from app.ingestion import base, bayarea, california, census, datasf, federal, fhfa, fsq, gtfs, news, osm, sanjose
 
 # Due thresholds per tier (hours since last *fetched_at*). Slightly under the
 # nominal period so a daily 07:00 job never misses by minutes.
@@ -38,6 +38,21 @@ def _datasf(slug: str):
     return lambda force=False: datasf.ingest(ds, force=force)
 
 
+def _sanjose(slug: str):
+    ds = next(d for d in sanjose.DATASETS if d.slug == slug)
+    return lambda force=False: sanjose.ingest(ds, force=force)
+
+
+def _bayarea(key: str):
+    ds = next(d for d in bayarea.SOCRATA_DATASETS if d.key == key)
+    return lambda force=False: bayarea.ingest_socrata(ds, force=force)
+
+
+def _alameda(key: str):
+    ds = next(d for d in bayarea.ALAMEDA_DATASETS if d.key == key)
+    return lambda force=False: bayarea.ingest_alameda(ds, force=force)
+
+
 def _insideairbnb(force: bool = False):
     from app.ingestion import insideairbnb
 
@@ -46,6 +61,15 @@ def _insideairbnb(force: bool = False):
         print(f"[current] insideairbnb: already have snapshot {latest}")
         return
     insideairbnb.main()
+
+
+def _insideairbnb_bay(key: str):
+    def run(force: bool = False):
+        from app.ingestion import insideairbnb
+
+        insideairbnb.fetch_bay_city(key, force=force)
+
+    return run
 
 
 def _overture(force: bool = False):
@@ -59,11 +83,17 @@ JOBS: list[tuple[str, str, object]] = [
     # --- daily: light, or diff-critical recurring snapshots ---
     ("ca_abc_licenses", "daily", california.fetch_abc),
     ("ca_cannabis_retailers", "daily", california.fetch_cannabis),
+    ("news_sf", "daily", news.fetch_daily),  # tier-zero forward events (claims tier)
     ("datasf_evictions", "daily", _datasf("evictions")),
     ("datasf_business_locations", "daily", _datasf("business_locations")),
     ("datasf_commercial_vacancy", "daily", _datasf("commercial_vacancy")),
     ("datasf_planning_records", "daily", _datasf("planning_records")),
     ("datasf_dev_pipeline", "daily", _datasf("dev_pipeline")),  # probe-cheap; advances quarterly
+    # --- San Jose (metro #2) — planning_30d is a rolling window: daily or it's lost ---
+    ("sanjose_permits_active", "daily", _sanjose("permits_active")),
+    ("sanjose_permits_expired", "daily", _sanjose("permits_expired")),
+    ("sanjose_planning_30d", "daily", _sanjose("planning_30d")),
+    ("berkeley_business_licenses", "daily", _bayarea("berkeley_business_licenses")),
     # --- weekly: heavy full archives whose events carry their own timestamps ---
     ("datasf_permits", "weekly", _datasf("permits")),
     ("datasf_crime", "weekly", _datasf("crime")),
@@ -72,6 +102,13 @@ JOBS: list[tuple[str, str, object]] = [
     ("datasf_zoning", "weekly", _datasf("zoning")),
     ("datasf_street_trees", "weekly", _datasf("street_trees")),
     ("datasf_assessor_rolls", "weekly", _datasf("assessor_rolls")),
+    ("sanjose_threeoneone", "weekly", _sanjose("threeoneone")),
+    ("sanjose_police_calls", "weekly", _sanjose("police_calls")),
+    ("oakland_crime", "weekly", _bayarea("oakland_crime")),
+    ("oakland_threeoneone", "weekly", _bayarea("oakland_threeoneone")),
+    ("berkeley_threeoneone", "weekly", _bayarea("berkeley_threeoneone")),
+    ("paloalto_permitviewer", "weekly", bayarea.ingest_paloalto),
+    ("alameda_sheriff_crime", "weekly", _alameda("alameda_sheriff_crime")),
     # --- monthly: releases, reference layers, capture-dated federal ---
     ("overture_places", "monthly", _overture),
     ("fsq_os_places", "monthly", fsq.fetch),
@@ -85,12 +122,25 @@ JOBS: list[tuple[str, str, object]] = [
     ("ca_precinct_returns", "monthly", california.fetch_precinct),
     ("census_tiger_ca", "monthly", census.fetch_tiger),
     ("census_acs_ca", "monthly", census.fetch_acs),
+    ("fhfa_hpi_tract", "monthly", fhfa.fetch),  # advances annually; probe is free
     ("datasf_parking_meters", "monthly", _datasf("parking_meters")),
     ("datasf_rpp_zones", "monthly", _datasf("rpp_zones")),
     ("datasf_sfmta_projects", "monthly", _datasf("sfmta_projects")),
     ("datasf_sfusd_boundaries", "monthly", _datasf("sfusd_boundaries")),
+    ("sanjose_zoning", "monthly", _sanjose("zoning")),
+    ("sanjose_parcels", "monthly", _sanjose("parcels")),
+    ("sanjose_addresses", "monthly", _sanjose("addresses")),
+    ("oakland_zoning", "monthly", _bayarea("oakland_zoning")),
+    ("oakland_parking_citations", "monthly", _bayarea("oakland_parking_citations")),
+    ("berkeley_zoning", "monthly", _bayarea("berkeley_zoning")),
+    ("alameda_parcels", "monthly", _alameda("alameda_parcels")),
+    ("alameda_tax_roll", "monthly", _alameda("alameda_tax_roll")),       # advances annually; probe-cheap
+    ("alameda_ownership_transfers", "monthly", _alameda("alameda_ownership_transfers")),
     # --- quarterly ---
     ("insideairbnb", "quarterly", _insideairbnb),
+    ("insideairbnb_oakland", "quarterly", _insideairbnb_bay("insideairbnb_oakland")),
+    ("insideairbnb_santa_clara_co", "quarterly", _insideairbnb_bay("insideairbnb_santa_clara_co")),
+    ("insideairbnb_san_mateo_co", "quarterly", _insideairbnb_bay("insideairbnb_san_mateo_co")),
 ]
 
 
@@ -147,6 +197,13 @@ def run(*, dry_run: bool = False, only: str | None = None, force: bool = False) 
             print(f"[FAIL] nbhd_attributes rebuild:\n{traceback.format_exc(limit=2)}")
         r = subprocess.run(["make", "pipeline"], cwd=base.BACKEND_DIR, capture_output=True, text=True)
         print("[pipeline]", "ok" if r.returncode == 0 else f"FAILED (rc={r.returncode}) — likely DuckDB lock; rerun after stopping the API")
+        # Claims lifecycle AFTER the pipeline: corroboration must see the morning's
+        # fresh events (the ratchet verifies the news layer as a side effect).
+        try:
+            news.claims_build()
+        except Exception:  # noqa: BLE001
+            failures += 1
+            print(f"[FAIL] claims_build:\n{traceback.format_exc(limit=2)}")
         # Publish (pipeline lane): serving JSON + Supabase upsert, only off a fresh build.
         if r.returncode == 0:
             p = subprocess.run(

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T06:11:07.745393+00:00",
+  "generated_at": "2026-07-26T02:07:08.984392+00:00",
   "sources": [
     {
       "key": "datasf_permits",
@@ -96,7 +96,7 @@
       "name": "DataSF: Assessor Historical Secured Property Tax Rolls",
       "geography": "san_francisco",
       "temporal_shape": "reference_layer",
-      "cadence": "daily",
+      "cadence": "monthly",
       "fmt": "csv",
       "license": "Open Data Commons PDDL / public domain (DataSF)",
       "homepage": "https://data.sfgov.org/d/wv5m-vpq2",
@@ -317,6 +317,21 @@
       "implemented": true
     },
     {
+      "key": "ca_school_directory",
+      "name": "CA public school sites 2024-25 (CDE GIS SchoolSites)",
+      "geography": "california",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "geojson",
+      "license": "CDE public record",
+      "homepage": "https://gis.data.ca.gov/datasets/CDEGIS::california-public-schools-2024-25",
+      "canonical_source": "cde_schoolsites",
+      "tier": "T1.2",
+      "requires_auth": false,
+      "notes": "ArcGIS FeatureServer; CDSCode joins CAASPP scores -> coordinates. Filter Status='Active' at compute time.",
+      "implemented": true
+    },
+    {
       "key": "census_tiger_ca",
       "name": "Census TIGER/Line boundaries \u2014 California (places, tracts, county subdivisions, counties)",
       "geography": "california",
@@ -437,6 +452,36 @@
       "implemented": true
     },
     {
+      "key": "fhfa_hpi_tract",
+      "name": "FHFA House Price Index \u2014 census tract (annual, national)",
+      "geography": "us",
+      "temporal_shape": "reference_layer",
+      "cadence": "annual",
+      "fmt": "csv",
+      "license": "US public domain (FHFA)",
+      "homepage": "https://www.fhfa.gov/data/hpi/datasets",
+      "canonical_source": "fhfa_hpi",
+      "tier": "T1.1",
+      "requires_auth": false,
+      "notes": "Repeat-sales tract HPI (BDL). THE open area-price target: validates trajectory->price. Filter STATE=06/tract FIPS downstream; join via census_tiger_ca tracts.",
+      "implemented": true
+    },
+    {
+      "key": "news_sf",
+      "name": "SF local news \u2014 area claims (pilot)",
+      "geography": "san_francisco",
+      "temporal_shape": "event_stream",
+      "cadence": "daily",
+      "fmt": "md+jsonl",
+      "license": "fair-use excerpts w/ citation; never republished in full",
+      "homepage": "(multiple local outlets)",
+      "canonical_source": "news",
+      "tier": "T6.2/T6.9/context",
+      "requires_auth": true,
+      "notes": "CLAIMS tier, never metrics. Verbatim quote + URL per claim. NOT ratchet data (archives exist).",
+      "implemented": true
+    },
+    {
       "key": "overture_places",
       "name": "Overture Maps Places \u2014 SF bbox extract",
       "geography": "san_francisco",
@@ -469,8 +514,8 @@
   ],
   "taxonomy_coverage": {
     "T1.1 price/value": {
-      "status": "planned",
-      "source": "county deed/transfer records + FHFA HPI + Zillow ZHVI; datasf_assessor_rolls acquired but Prop-13-capped (NOT market price)"
+      "status": "covered",
+      "source": "fhfa_hpi_tract (1975-2025, 7.8k CA tracts \u2014 the AREA price target); property-level still needs county deeds; assessor acquired but Prop-13-capped"
     },
     "T1.2 school quality": {
       "status": "covered",

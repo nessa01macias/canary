@@ -1,0 +1,10 @@
+{
+  "_note": "Human refutations applied by news.claims_build(). claim_id -> reason. L0 snapshots stay immutable; this file is the auditable kill switch (lifecycle state 'refuted', DATA_CONTRACT §4b). Git-tracked on purpose.",
+  "refuted": {
+    "b943f7f4eddd9b51": "Article is about San Jose's Japantown (653 N 7th St, San Jose), not SF — geocoder had false-pinned it onto SF's 7th St before the match-echo guard existed.",
+    "b9cabcd86e148db4": "Article is about San Jose's Japantown (653 N 7th St, San Jose), not SF.",
+    "2b9c822d139dba80": "Article is about San Jose's Japantown (653 N 7th St, San Jose), not SF.",
+    "6b65115cf5fb075c": "Article is about San Jose's Japantown (653 N 7th St, San Jose), not SF — the claim text itself says 'San Jose approved'.",
+    "5f608fd20135f637": "The 700 block of Mission STREET is downtown (Yerba Buena/SoMa), not the Mission District — the area label was wrong; caught by the spine agreement guard."
+  }
+}

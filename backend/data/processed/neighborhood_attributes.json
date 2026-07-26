@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-07-26T02:09:31.027654+00:00",
+ "generated_at": "2026-07-26T15:08:13.342088+00:00",
  "neighborhood_property": "nhood",
  "attributes": {
   "Western Addition": {
@@ -71,7 +71,7 @@
    "cannabis_retailers": 0,
    "tri_facilities": 0,
    "grocery_stores": 2,
-   "flood_zone_share": 0.2468458399042527,
+   "flood_zone_share": 0.252307764511027,
    "sfmta_projects": 1,
    "rpp_parcels": 0,
    "ems_response_median_mins": 9.066666666666666,
@@ -519,7 +519,7 @@
    "flood_zone_share": 0.07266008827497693,
    "sfmta_projects": 21,
    "rpp_parcels": 64,
-   "storefront_vacancy_rate": 0.14035087719298245,
+   "storefront_vacancy_rate": 0.13793103448275862,
    "ems_response_median_mins": 9.633333333333333,
    "school_pct_met": 22.1
   }
@@ -537,7 +537,7 @@
   },
   "cannabis_retailers": {
    "source": "ca_cannabis_retailers",
-   "source_as_of": "2026-07-25",
+   "source_as_of": "2026-07-26",
    "note": "Licensed cannabis retailers (DCC, daily API)"
   },
   "tri_facilities": {
@@ -552,7 +552,7 @@
   },
   "flood_zone_share": {
    "source": "fema_nfhl_flood",
-   "source_as_of": "2026-07-25",
+   "source_as_of": "2026-07-26",
    "note": "Share of area inside FEMA Special Flood Hazard Area (SFHA)"
   },
   "sfmta_projects": {
@@ -567,7 +567,7 @@
   },
   "storefront_vacancy_rate": {
    "source": "datasf_commercial_vacancy",
-   "source_as_of": "2026-07-24",
+   "source_as_of": "2026-07-25",
    "note": "Share of taxable commercial spaces reported vacant, tax year 2024 (Prop-D roll; blank flags excluded; neighborhoods missing from the roll carry no value)",
    "taxyear": 2024
   },

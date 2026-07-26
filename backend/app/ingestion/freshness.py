@@ -111,6 +111,15 @@ def build_report() -> dict:
                 max_age = max(max_age, CADENCE_MAX_AGE_DAYS.get(tier, 40))
             status = "fresh" if age_days <= max_age else ("due" if age_days <= 2 * max_age else "overdue")
 
+        # Declared-but-unscheduled guard: a spec with a recurring cadence that is
+        # NOT in the refresh JOBS will silently rot (caught the hard way: news_sf
+        # declared daily, never scheduled — a human noticed before the system did).
+        if (
+            cadence not in NO_EXPECTATION and cadence is not None
+            and key not in _pull_tiers()
+        ):
+            status = "UNSCHEDULED"
+
         rows.append(
             {
                 "source": key,

@@ -277,6 +277,81 @@ def summarize(snapshot_dir: Path, snapshot_date: str) -> dict:
     }
 
 
+# --------------------------------------------------------------------------- #
+#  Bay Area cities (fan-out 2026-07-26) — RAW capture only; the neighbourhood
+#  summary above stays SF (it feeds the SF frontend). Santa Clara County covers
+#  San Jose + Palo Alto; San Mateo County covers the Peninsula.
+# --------------------------------------------------------------------------- #
+BAY_CITIES: dict[str, tuple[str, str]] = {
+    "insideairbnb_oakland": ("united-states/ca/oakland", "Oakland"),
+    "insideairbnb_santa_clara_co": ("united-states/ca/santa-clara-county", "Santa Clara County"),
+    "insideairbnb_san_mateo_co": ("united-states/ca/san-mateo-county", "San Mateo County"),
+}
+
+BAY_SPECS = [
+    base.SourceSpec(
+        key=key,
+        name=f"Inside Airbnb — {label}",
+        geography=key.removeprefix("insideairbnb_"),
+        temporal_shape="recurring_snapshot",
+        cadence="quarterly",
+        fmt="csv",
+        license=ATTRIBUTION,
+        homepage=f"https://insideairbnb.com/{path.rsplit('/', 1)[-1]}/",
+        canonical_source="insideairbnb",
+        tier="T6.5",
+        notes="STR density/churn for the Bay fan-out. Raw capture only (SF-style summary not built). Detailed tier has host PII (gitignored, never republished).",
+    )
+    for key, (path, label) in BAY_CITIES.items()
+]
+
+
+def _discover_city_snapshot(city_path: str) -> str | None:
+    resp = requests.get(GET_DATA_URL, timeout=30)
+    resp.raise_for_status()
+    m = re.search(
+        rf"data\.insideairbnb\.com/{re.escape(city_path)}/(\d{{4}}-\d{{2}}-\d{{2}})/visualisations/listings\.csv",
+        resp.text,
+    )
+    return m.group(1) if m else None
+
+
+def fetch_bay_city(key: str, *, force: bool = False) -> None:
+    city_path, label = BAY_CITIES[key]
+    snapshot_date = _discover_city_snapshot(city_path)
+    if snapshot_date is None:
+        print(f"[skip] {key}: no snapshot found on get-the-data page (city not published?)")
+        return
+    out_dir = base.RAW_DIR / key / snapshot_date
+    if not force and (out_dir / "metadata.json").exists():
+        print(f"[current] {key}: already have snapshot {snapshot_date}")
+        return
+    out_dir.mkdir(parents=True, exist_ok=True)
+    print(f"[pull] {key} snapshot {snapshot_date}")
+    files_meta = {}
+    for subfolder, names in (("data", DETAILED_FILES), ("visualisations", SUMMARY_FILES)):
+        for name in names:
+            url = f"https://data.insideairbnb.com/{city_path}/{snapshot_date}/{subfolder}/{name}"
+            entry = _download_one(url, out_dir / name)
+            append_manifest({"scraped_at": entry["downloaded_at"], **entry})
+            files_meta[name] = {k: v for k, v in entry.items() if k != "slug"}
+            print(f"  [{entry['status']}] {name}")
+    published = date.fromisoformat(snapshot_date)
+    (out_dir / "metadata.json").write_text(json.dumps({
+        "city": f"{label}, California, United States",
+        "source": ATTRIBUTION,
+        "published_date": snapshot_date,
+        "downloaded_at": datetime.now(timezone.utc).isoformat(),
+        "data_age_days_at_download": (datetime.now(timezone.utc).date() - published).days,
+        "note": "published_date is Inside Airbnb's own snapshot date — see SF metadata note.",
+        "files": files_meta,
+    }, indent=2))
+
+
+def _bay_fetcher(key: str):
+    return lambda force=False: fetch_bay_city(key, force=force)
+
+
 def main() -> None:
     snapshot_date = discover_latest_snapshot()
     published = date.fromisoformat(snapshot_date)

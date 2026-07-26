@@ -30,6 +30,7 @@ from .schemas import (
     ChangePoint,
     Citation,
     ContributionIn,
+    GateEventIn,
     MetricInfo,
     ResidentAreaAgg,
     ResidentHexAgg,
@@ -290,6 +291,45 @@ def get_freshness() -> dict:
         raise HTTPException(503, "freshness manifest not built yet — run: python -m app.ingestion.freshness")
 
 
+@router.get("/claims")
+def get_claims(
+    area: str | None = Query(None, description="Filter to one neighborhood."),
+    status: str | None = Query(
+        None, description="claimed | corroborated | materialized | expired | refuted "
+                          "(refuted are hidden unless asked for explicitly)"),
+    limit: int = Query(200, ge=1, le=1000),
+) -> dict:
+    """
+    The claims tier — news-derived, epistemically distinct from records (tier
+    field is explicit; DATA_CONTRACT rules #10/#13/#14). Every item carries a
+    verbatim quote + URL; announced_* items carry a lifecycle status that the
+    daily refresh promotes (corroborated by a permit/opening) or ages (expired).
+    Never mixed into metrics. Plain dicts on purpose: the frozen report/marker
+    models stay untouched; UI wires this separately ("announced — unverified").
+    """
+    import json as _json
+    from pathlib import Path as _Path
+
+    path = _Path(__file__).resolve().parents[2] / "data" / "processed" / "claims.json"
+    try:
+        state = _json.loads(path.read_text())
+    except (OSError, ValueError):
+        raise HTTPException(503, "claims state not built yet — run: python -m app.ingestion.news --build")
+    items = state.get("claims", [])
+    if area:
+        items = [c for c in items if c.get("area") == area]
+    if status:
+        items = [c for c in items if c.get("status") == status]
+    else:  # known-wrong claims never surface unless explicitly requested
+        items = [c for c in items if c.get("status") != "refuted"]
+    return {
+        "generated_at": state.get("generated_at"),
+        "counts": state.get("counts"),
+        "note": state.get("note"),
+        "claims": items[:limit],
+    }
+
+
 @router.get("/sf/permits")
 async def get_sf_permits() -> list[dict]:
     """SF permits, enriched server-side (change-story, stage, units, cost).
@@ -338,6 +378,23 @@ async def post_contribution(body: ContributionIn) -> dict:
 
     try:
         await store.insert_contribution(row)
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"ok": True}
+
+
+@router.post("/gate-events", status_code=201)
+async def post_gate_event(body: GateEventIn) -> dict:
+    """
+    Fake-door funnel counter for the give-to-get gate test. Two events only
+    (gate_shown / gate_completed) + a client session id + optional area; the
+    completion rate per variant is the number that decides the consumer thesis
+    (threshold: >15-20% = flywheel real). No PII, insert-only store.
+    """
+    if not store.supabase_configured():
+        raise HTTPException(503, "Events store not configured on the server.")
+    try:
+        await store.insert_gate_event(body.model_dump(exclude_none=True))
     except RuntimeError as e:
         raise HTTPException(502, str(e))
     return {"ok": True}

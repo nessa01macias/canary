@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from dataclasses import asdict, dataclass, field
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -312,9 +313,20 @@ def fetch_arcgis_geojson(
                 "inSR": 4326,
                 "spatialRel": "esriSpatialRelIntersects",
             })
-        resp = requests.get(query_url, params=params, headers=DEFAULT_HEADERS, timeout=timeout)
-        resp.raise_for_status()
-        payload = resp.json()
+        # Long paged pulls (100s of pages) hit transient drops AND minute-scale
+        # DNS outages (observed: laptop DNS dying ~180 pages in) — the backoff
+        # must outlive the outage, not just a blip: 10s → 20s → 40s → 80s.
+        payload = None
+        for attempt in range(5):
+            try:
+                resp = requests.get(query_url, params=params, headers=DEFAULT_HEADERS, timeout=timeout)
+                resp.raise_for_status()
+                payload = resp.json()
+                break
+            except (requests.RequestException, ValueError):
+                if attempt == 4:
+                    raise
+                time.sleep(10 * (2 ** attempt))
         batch = payload.get("features", [])
         features.extend(batch)
         exceeded = payload.get("properties", {}).get("exceededTransferLimit") or payload.get(

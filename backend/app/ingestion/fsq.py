@@ -1,14 +1,18 @@
-"""Foursquare OS Places — SF bbox extract via DuckDB authed HF read.
+"""Foursquare OS Places — BAY AREA bbox extract via DuckDB authed HF read.
 
 The second POI witness alongside Overture: where both sources agree an area is
 churning (openings/closings), that agreement is the confidence signal the pipeline's
 signal-quality test wants. FSQ ships date_created/date_closed natively, so open/close
 is directly readable (noisy, but doesn't need cross-release diffing like Overture).
 
-SF bbox matches app/ingestion/overture.py exactly so the two are directly comparable.
+Scope history: extracts before 2026-07-26 are SF-only (the original bbox matched
+overture.py for witness comparison — SF comparisons still work: SF ⊂ Bay). The
+bbox was widened for the Bay Area fan-out; each snapshot's metadata records its
+own bbox. Overture stays SF until its module widens too (pipeline lane).
 Gated dataset -> needs HF_TOKEN in .env (never written to L0 metadata).
 
     python -m app.ingestion.fsq
+    python -m app.ingestion.fsq --backfill   # re-extract every release at current bbox
 """
 
 import argparse
@@ -23,16 +27,16 @@ from app.ingestion.base import SourceSpec
 
 load_dotenv(base.BACKEND_DIR / ".env")
 
-# Same SF bbox as overture.py (city proper incl. Treasure Island) for witness comparison.
-BBOX = {"xmin": -122.55, "xmax": -122.35, "ymin": 37.70, "ymax": 37.84}
+# Bay Area: SF + Oakland + Berkeley + San Jose + Palo Alto (and everything between).
+BBOX = {"xmin": -122.55, "xmax": -121.70, "ymin": 37.15, "ymax": 37.95}
 HF_REPO = "foursquare/fsq-os-places"
 TREE_API = f"https://huggingface.co/api/datasets/{HF_REPO}/tree/main/release"
 HF_GLOB = "hf://datasets/{repo}/release/dt={dt}/places/parquet/*.parquet"
 
 SPEC = SourceSpec(
     key="fsq_os_places",
-    name="Foursquare OS Places — SF bbox extract",
-    geography="san_francisco",
+    name="Foursquare OS Places — Bay Area bbox extract",
+    geography="bay_area",
     temporal_shape="recurring_snapshot",
     cadence="monthly",
     fmt="parquet",
@@ -41,7 +45,7 @@ SPEC = SourceSpec(
     canonical_source="fsq",
     tier="T4.4/T6.5",
     requires_auth=True,
-    notes="2nd POI witness vs Overture (same SF bbox). date_created/date_closed native. Needs HF_TOKEN.",
+    notes="2nd POI witness vs Overture. Bay bbox since 2026-07-26 (pre-dating snapshots are SF-only; per-snapshot bbox in metadata). Needs HF_TOKEN.",
 )
 
 
@@ -62,9 +66,11 @@ def _ingest_dt(dt: str, token: str, *, force: bool = False) -> None:
         SPEC.key, dt, geography=SPEC.geography,
         source_name=SPEC.name, license=SPEC.license, homepage=SPEC.homepage,
     )
+    # Filename kept from the SF era on purpose: readers glob places_sf.parquet
+    # across ALL snapshots (nbhd_attributes.py); scope lives in metadata.bbox.
     out_path = snap.dir / "places_sf.parquet"
     src = HF_GLOB.format(repo=HF_REPO, dt=dt)
-    print(f"[pull] {SPEC.key} release {dt}, SF bbox (scanning parquet parts...)")
+    print(f"[pull] {SPEC.key} release {dt}, Bay Area bbox (scanning parquet parts...)")
     con = duckdb.connect()
     con.execute("INSTALL httpfs; LOAD httpfs; SET enable_progress_bar=false;")
     con.execute(f"CREATE SECRET (TYPE huggingface, TOKEN '{token}');")
@@ -86,7 +92,8 @@ def _ingest_dt(dt: str, token: str, *, force: bool = False) -> None:
     con.close()
     print(f"    {dt}: {n} places ({n_open} open)")
     snap.record_file("places_sf.parquet", url=f"hf://datasets/{HF_REPO}/release/dt={dt}")
-    snap.finalize(extra={"release_dt": dt, "bbox": BBOX, "n_places": n, "n_open": n_open})
+    snap.finalize(extra={"release_dt": dt, "bbox": BBOX, "bbox_scope": "bay_area",
+                         "n_places": n, "n_open": n_open})
 
 
 def fetch(*, force: bool = False, backfill: bool = False) -> None:

@@ -15,7 +15,7 @@ import argparse
 import json
 from dataclasses import asdict
 
-from app.ingestion import base, california, census, datasf, federal, fsq, gtfs, insideairbnb, osm
+from app.ingestion import base, bayarea, california, census, datasf, federal, fhfa, fsq, gtfs, insideairbnb, news, osm, sanjose
 from app.ingestion.base import SourceSpec
 
 # --- implemented in this chat's modules (each exports SPEC/SPECS + fetch()) ---
@@ -28,6 +28,11 @@ IMPLEMENTED = [
     *federal.SPECS,
     fsq.SPEC,
     osm.SPEC,
+    fhfa.SPEC,
+    news.SPEC,  # pilot-stage: declared daily, scheduling gated on precision review
+    *sanjose.SPECS,  # metro #2 (Bay Area fan-out — portal survey 2026-07-26)
+    *bayarea.SPECS,  # Oakland + Berkeley + Palo Alto (same survey)
+    *insideairbnb.BAY_SPECS,  # STR layer for the fan-out cities
 ]
 
 # --- implemented by modules that don't export a SPEC (other chat's overture.py) ---
@@ -68,7 +73,7 @@ _IMPLEMENTED_KEYS = {s.key for s in IMPLEMENTED} | {s.key for s in EXTERNAL}
 #   gap      = no open source identified yet / genuinely hard
 TAXONOMY = {
     # Tier 1 — commoditized
-    "T1.1 price/value": ("planned", "county deed/transfer records + FHFA HPI + Zillow ZHVI; datasf_assessor_rolls acquired but Prop-13-capped (NOT market price)"),
+    "T1.1 price/value": ("covered", "fhfa_hpi_tract (1975-2025, 7.8k CA tracts — the AREA price target); property-level still needs county deeds; assessor acquired but Prop-13-capped"),
     "T1.2 school quality": ("covered", "ca_caaspp"),
     "T1.3 crime/safety": ("covered", "datasf_crime (SF); other metros need each city's open data"),
     "T1.4 commute time": ("compute", "routing over osm_california + gtfs (planned inputs)"),

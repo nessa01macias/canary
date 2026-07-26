@@ -16,12 +16,13 @@ from app.ingestion.base import SourceSpec
 # FEMA National Flood Hazard Layer -- MapServer layer 28 = flood hazard zones (S_FLD_HAZ_AR).
 FEMA_NFHL = "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28"
 SF_BBOX = (-122.52, 37.70, -122.35, 37.83)
+BAY_BBOX = (-122.55, 37.15, -121.70, 37.95)  # SF + Oakland/Berkeley + San Jose + Palo Alto
 CA_BBOX = (-124.48, 32.53, -114.13, 42.01)
 
 FEMA = SourceSpec(
     key="fema_nfhl_flood",
     name="FEMA National Flood Hazard Layer — flood zones",
-    geography="san_francisco",
+    geography="bay_area",
     temporal_shape="reference_layer",
     cadence="continuous",  # NFHL updates rolling per-panel; as_of = capture date
     fmt="geojson",
@@ -33,8 +34,10 @@ FEMA = SourceSpec(
 )
 
 
-def fetch(*, bbox_name: str = "sf", force: bool = False) -> None:
-    bbox = CA_BBOX if bbox_name == "ca" else SF_BBOX
+def fetch(*, bbox_name: str = "bay", force: bool = False) -> None:
+    # Default widened sf -> bay for the Bay Area fan-out (2026-07-26); pre-dating
+    # snapshots are SF-only — each snapshot's metadata records its own bbox.
+    bbox = {"ca": CA_BBOX, "sf": SF_BBOX}.get(bbox_name, BAY_BBOX)
     as_of = base.today().isoformat()  # rolling-update service; capture date is the honest as_of
     if not force and base.snapshot_exists(FEMA.key, as_of):
         print(f"[current] {FEMA.key}: already captured today ({as_of})")

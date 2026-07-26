@@ -56,12 +56,21 @@ async def fetch_resident_layer(view: str) -> list[dict]:
 
 async def insert_contribution(row: dict) -> None:
     """Insert one contribution row. Raises RuntimeError on any failure."""
+    await _insert("contributions", row)
+
+
+async def insert_gate_event(row: dict) -> None:
+    """Insert one fake-door funnel event (gate_shown / gate_completed)."""
+    await _insert("gate_events", row)
+
+
+async def _insert(table: str, row: dict) -> None:
     if not supabase_configured():
         raise RuntimeError(
             "Supabase not configured on the server (set SUPABASE_URL and "
             "SUPABASE_KEY / SUPABASE_SERVICE_KEY)."
         )
-    endpoint = f"{SUPABASE_URL}/rest/v1/contributions"
+    endpoint = f"{SUPABASE_URL}/rest/v1/{table}"
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",

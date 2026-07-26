@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from enum import Enum
+from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -228,6 +229,16 @@ class ContributionIn(BaseModel):
         if not (self.place_label or self.ratings or self.comment or self.answers):
             raise ValueError("contribution must include a place_label, ratings, comment, or answers")
         return self
+
+
+class GateEventIn(BaseModel):
+    """One fake-door funnel event. The gate test's whole read is
+    completed-sessions / shown-sessions per variant — nothing else is collected."""
+
+    event: Literal["gate_shown", "gate_completed"]
+    variant: Literal["report_unlock", "founding"] | None = None
+    session_id: str = Field(min_length=8, max_length=64)
+    area: str | None = Field(default=None, max_length=80)
 
 
 # --------------------------------------------------------------------------- #
