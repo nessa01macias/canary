@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import type { ChangePoint, ChangeType, Stage } from './samplePoints'
+import { CHANGE_META, KIND_COLOR, type ChangePoint } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
 import { fetchNeighborhoods } from './neighborhoods'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
@@ -10,16 +10,14 @@ import { Docs } from './Docs'
 import { ForAgents } from './ForAgents'
 import { fetchResidentLayer, type ResidentAgg } from './residentLayer'
 import { fetchReport, type AddressReport } from './report'
-import { ReportCard } from './ReportCard'
-import { MobileSheet } from './MobileSheet'
-import { neighborhoodHeadlines } from './headlines'
+import { MobileSheet, useIsMobile } from './MobileSheet'
 import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
-import { AnswerStrip } from './AnswerStrip'
-import { useAsk } from './useAsk'
+import { PlaceCard } from './PlaceCard'
+import { useAsk, type Mission } from './useAsk'
 import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
-import { EMPTY_FC, circlePolygon, scopeKey, type Scope } from './scope'
-import { useIsMobile } from './MobileSheet'
+import { EMPTY_FC, circlePolygon, scopeKey, scopeToAskContext, type Scope } from './scope'
+import { logGateCompleted } from './lib/gateEvents'
 import './App.css'
 
 // Mission → the chips it seeds, and the omnibox voice it speaks in.
@@ -36,17 +34,6 @@ const MISSIONS: { id: string; icon: string; label: string; seed: string[]; place
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
-const KIND_COLOR: Record<ChangePoint['kind'], string> = {
-  construction: '#FF6624',
-  closure:      '#c1443c',
-  opening:      '#3f8f5c',
-}
-
-const KIND_LABEL: Record<ChangePoint['kind'], string> = {
-  construction: 'Permit · Construction',
-  closure:      'Business Closure',
-  opening:      'Business Opening',
-}
 
 // Diverging ramp → neighborhood TRAJECTORY over the last few years. Orange =
 // worsening (e.g. crime climbing), blue = improving. The "Solar Shock" palette;
@@ -216,25 +203,6 @@ function buildSfMask(geo: FeatureCollection): Feature<Polygon> {
   }
 }
 
-// changeType → glyph (a channel SEPARATE from color, so no palette limit) + copy.
-const CHANGE_META: Record<ChangeType, { label: string; glyph: string; blurb: string }> = {
-  densify:    { label: 'Densifying',       glyph: '＋', blurb: 'Adding homes to the parcel' },
-  convert:    { label: 'Use converting',   glyph: '⇄', blurb: 'Changing what the building is for' },
-  taller:     { label: 'Building taller',  glyph: '↑', blurb: 'Adding stories' },
-  newbuild:   { label: 'New construction', glyph: '◆', blurb: 'Ground-up build' },
-  adu:        { label: 'ADU added',        glyph: '△', blurb: 'Backyard / in-law unit' },
-  alteration: { label: 'Alteration',       glyph: '',  blurb: 'Routine work, structure unchanged' },
-  closure:    { label: 'Business closure', glyph: '✕', blurb: '' },
-  opening:    { label: 'Business opening', glyph: '＋', blurb: '' },
-}
-
-// Pipeline stage = a CERTAINTY axis (not a value judgment on the area).
-const STAGE_META: Record<Stage, { label: string; hint: string; cls: string }> = {
-  filed:    { label: 'Filed',    hint: 'proposed',      cls: 'stage-filed' },
-  approved: { label: 'Approved', hint: 'greenlit',      cls: 'stage-approved' },
-  issued:   { label: 'Issued',   hint: 'happening now', cls: 'stage-issued' },
-  unknown:  { label: 'Filed',    hint: 'on record',     cls: 'stage-filed' },
-}
 
 // Marker radius encodes magnitude ($ value), on a log scale, clamped.
 function markerSize(cost?: number): number {
@@ -367,16 +335,13 @@ function App() {
   // that drives the "breathing" trajectory overlay.
   const pulseMetaRef = useRef<Array<{ id: number; phase: number }>>([])
   const pulseRafRef = useRef<number | null>(null)
-  const [selected, setSelected] = useState<ChangePoint | null>(null)
   const [sfCount, setSfCount] = useState<number | null>(null)
   const [contributing, setContributing] = useState(false)
-  // The magic-moment report: click anywhere → what's changing within ~500 m.
+  // The magic-moment report — fetched whenever the scope ladder is on its SPOT
+  // rung (scope-subordinate state; the effect lives next to the scope machinery).
   const [report, setReport] = useState<AddressReport | null>(null)
   const [reportLoading, setReportLoading] = useState(false)
-  const [reportOpen, setReportOpen] = useState(false)
   const reportPinRef = useRef<maplibregl.Marker | null>(null)
-  // Set inside the map closure; lets the news card's button open the report.
-  const openReportRef = useRef<((lat: number, lng: number) => void) | null>(null)
   const [researchOpen, setResearchOpen] = useState(false)
   const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
   const [agentsOpen, setAgentsOpen] = useState(false)
@@ -409,6 +374,7 @@ function App() {
   const unlockResidents = () => {
     localStorage.setItem('canary_resident_unlocked', '1')
     setResidentUnlocked(true)
+    logGateCompleted() // fake-door numerator (>15-20% completion = flywheel real)
   }
   // The hover popup is imperative MapLibre HTML, so its handler closure would
   // capture a stale unlock flag — mirror it in a ref the builder reads live.
@@ -417,17 +383,10 @@ function App() {
   // Same pattern for the mission — the hover verdict is mission-framed.
   const missionRef = useRef<string | null>(mission)
   missionRef.current = mission
-  // News card: click a neighborhood (area mode) → its real-record "why" card.
-  const [selectedNbhd, setSelectedNbhd] = useState<
-    | (import('./headlines').NbhdNewsStats & {
-        traj: number
-        descriptor: string
-        clickLngLat: [number, number]
-      })
-    | null
-  >(null)
   // Mobile only: the "⋯" menu that holds the secondary header actions.
   const [menuOpen, setMenuOpen] = useState(false)
+  // The wizard's receipt line, shown on the city rung after chips seed.
+  const [cityIntro, setCityIntro] = useState<string | null>(null)
 
   // Onboarding: add/remove a field from the shortlist (activating it on add). The
   // MAX_PICKS cap applies to shortlist membership.
@@ -484,43 +443,45 @@ function App() {
     zoomToCity()
   }
 
-  const zoomToNeighborhood = (nhood: string) => {
-    const map = mapRef.current
-    const meta = nbhdMetaRef.current.get(nhood)
-    if (!map || !meta) return
-    map.fitBounds(meta.bounds, {
-      padding: { top: 120, bottom: 90, left: 360, right: 100 },
-      duration: 900,
-      maxZoom: 15,
-    })
-  }
-  const flashNeighborhood = (nhood: string) => {
-    zoomToNeighborhood(nhood)
-    glowNeighborhood(nhood, true)
-    setTimeout(() => glowNeighborhood(nhood, false), 2600)
-  }
-
-  // Mission pick → seed chips, personalize, close the picker.
-  const pickMission = (id: string) => {
+  // Mission pick → seed chips, personalize, close the picker — and show the
+  // RECEIPT: the city card says what just happened and teaches the ask box at
+  // the exact moment of curiosity (never silent automation).
+  const pickMission = (id: string, seed?: string[]) => {
     localStorage.setItem('canary_mission', id)
     setMission(id)
     setMissionOpen(false)
-    const seed = MISSIONS.find((m) => m.id === id)?.seed ?? []
-    if (seed.length) applyAssistantChips(seed)
+    const picks = seed ?? MISSIONS.find((m) => m.id === id)?.seed ?? []
+    if (picks.length) {
+      applyAssistantChips(picks)
+      setCityIntro(
+        `Ranked all 41 neighborhoods by ${picks.map((s) => s.toLowerCase()).join(', ')}. ` +
+          'Tap a best fit below — or ask me anything.',
+      )
+      openScope({ kind: 'city' }, { fromAsk: true })
+    }
   }
 
-  // The omnibox question flow. On a result, AUTO-EXECUTE the action blocks: the
-  // model composed the answer, but the MAP is the response.
+  // The ask flow. Questions carry the current scope as CONTEXT ("here" = the
+  // place the card is about); action blocks auto-execute on the map below.
   const askFlow = useAsk()
   const runAsk = (q: string) => {
-    askFlow.ask(q).then(() => {})
+    // A global ask with no card open answers on the city rung.
+    if (!scopeRef.current) openScope({ kind: 'city' }, { fromAsk: true })
+    askFlow.ask(q, scopeToAskContext(scopeRef.current)).then(() => {})
   }
   useEffect(() => {
     const r = askFlow.result
     if (!r) return
     for (const b of r.blocks) {
-      if (b.type === 'rank_map') applyAssistantChips(b.chips)
-      else if (b.type === 'flyto') flashNeighborhood(b.neighborhood)
+      if (b.type === 'rank_map') {
+        // Re-ranking is a CITY-scale action: demote scope so the camera and the
+        // card stay locked (never two camera authorities racing).
+        openScope({ kind: 'city' }, { fromAsk: true })
+        applyAssistantChips(b.chips)
+      } else if (b.type === 'flyto') {
+        // The answer travels with the morph — fromAsk keeps it on the card.
+        openScope({ kind: 'neighborhood', nhood: b.neighborhood }, { fromAsk: true })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [askFlow.result])
@@ -538,11 +499,15 @@ function App() {
   const prevGlowIdRef = useRef<number | null>(null)
   const scopedMarkerRef = useRef<HTMLElement | null>(null)
 
-  // The single transition door. User-driven navigation clears the ask answer;
-  // ask-driven morphs (fromAsk) keep the answer travelling with the scope.
+  // The single transition door. User-driven navigation clears the ask answer
+  // AND the hidden thread (a different place is a different conversation);
+  // ask-driven morphs (fromAsk) keep both travelling with the scope.
   const openScope = (next: Scope | null, opts?: { fromAsk?: boolean }) => {
     if (scopeKey(next) === scopeKey(scopeRef.current)) return
-    if (!opts?.fromAsk) askFlow.clear()
+    if (!opts?.fromAsk) {
+      askFlow.clear()
+      askFlow.resetThread()
+    }
     setScopeRaw(next)
   }
   // The imperative map closure calls through this ref (openScope is recreated
@@ -639,6 +604,28 @@ function App() {
     if (!zoomedIn && (s?.kind === 'spot' || s?.kind === 'record')) openScope(null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomedIn])
+
+  // Spot rung → fetch the report (stale-guarded; works even if the address was
+  // picked before the map finished loading — the camera effect waits on
+  // mapReady, the data doesn't have to).
+  useEffect(() => {
+    if (scope?.kind !== 'spot') {
+      setReport(null)
+      return
+    }
+    setReportLoading(true)
+    setReport(null)
+    let stale = false
+    fetchReport(scope.lat, scope.lon)
+      .then((r) => { if (!stale) setReport(r) })
+      .catch((err) => {
+        console.error('report failed:', err)
+        if (!stale) openScope(null)
+      })
+      .finally(() => { if (!stale) setReportLoading(false) })
+    return () => { stale = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scopeKey(scope)])
 
   // Drive the trajectory overlay's "breathing": write a per-polygon sine into the
   // `pulse` feature-state each frame. Cheap — ~36 features, one repaint per frame.
@@ -767,7 +754,7 @@ function App() {
       // Respect the current mode + zoom so markers don't flash before the effects.
       applyMarkerVisibility([el], map.getZoom())
       el.title = `${point.city} · ${point.changeLabel ?? point.headline}`
-      el.addEventListener('click', () => setSelected(point))
+      el.addEventListener('click', () => openScopeRef.current({ kind: 'record', point }))
       markerElsRef.current.push(el)
       markerByIdRef.current.set(point.id, el) // record-scope highlight lookup
       markers.push(
@@ -1006,65 +993,23 @@ function App() {
       // loaded — e.g. an address picked during the initial second) starts now.
       setMapReady(true)
 
-      // The magic moment: the address report for a point (pin + flyTo + card).
-      const openReport = (lat: number, lng: number) => {
-        reportPinRef.current?.remove()
-        const pin = document.createElement('div')
-        pin.className = 'report-pin'
-        reportPinRef.current = new maplibregl.Marker({ element: pin }).setLngLat([lng, lat]).addTo(map)
-        // Ease toward the point (leave room for the card on the right).
-        map.flyTo({
-          center: [lng + 0.004, lat],
-          zoom: Math.max(map.getZoom(), 14.2),
-          duration: 900,
-        })
-        setReportOpen(true)
-        setReportLoading(true)
-        setReport(null)
-        fetchReport(lat, lng)
-          .then((r) => setReport(r))
-          .catch((err) => {
-            console.error('report failed:', err)
-            setReportOpen(false)
-            reportPinRef.current?.remove()
-          })
-          .finally(() => setReportLoading(false))
-      }
-      openReportRef.current = openReport
-
-      // Click routing, fused (Kat's news card + the report):
-      //  - AREA mode, click a neighborhood → its news card (real-record "why");
-      //    the card's button opens the full report for the clicked point.
-      //  - AREA mode, click water/outside SF → dismiss the card.
-      //  - PERMITS mode, click anywhere (non-marker) → report directly.
+      // Click routing — every click sets a SCOPE; the ladder does the rest
+      // (camera, drawing, card body, report fetch all key off it):
+      //  - AREA zoom, click a neighborhood → neighborhood rung.
+      //  - AREA zoom, click water/outside SF → close the card.
+      //  - STREET zoom, click anywhere (non-marker) → spot rung (500 m report).
       map.on('click', (e) => {
         const target = e.originalEvent.target as HTMLElement | null
         if (target?.closest('.change-marker')) return
         const { lat, lng } = e.lngLat
         if (map.getZoom() < STREET_ZOOM) {
           const hits = map.queryRenderedFeatures(e.point, { layers: ['nbhd-fill'] })
-          if (hits.length) {
-            const p = hits[0].properties as Record<string, number | string>
-            setSelectedNbhd({
-              nhood: String(p.nhood),
-              traj: Number(p.traj) || 0,
-              descriptor: String(p.descriptor),
-              permits: Number(p.permits) || 0,
-              netUnits: Number(p.netUnits) || 0,
-              totalCost: Number(p.totalCost) || 0,
-              crimeTrend: Number(p.crimeTrend),
-              bizOpenTrend: Number(p.bizOpenTrend),
-              noiseTrend: Number(p.noiseTrend),
-              evictionTrend: Number(p.evictionTrend),
-              vacancyRate: Number(p.vacancyRate),
-              trendsAsOf: (p.trendsAsOf as string) ?? null,
-              clickLngLat: [lng, lat],
-            })
-          } else {
-            setSelectedNbhd(null)
-          }
+          const nhood = hits.length ? String((hits[0].properties as { nhood?: string }).nhood ?? '') : ''
+          openScopeRef.current(
+            nhood ? { kind: 'neighborhood', nhood, clickLngLat: [lng, lat] } : null,
+          )
         } else {
-          openReport(lat, lng)
+          openScopeRef.current({ kind: 'spot', lat, lon: lng })
         }
       })
 
@@ -1115,8 +1060,6 @@ function App() {
     if (map?.getLayer('nbhd-fill')) {
       map.setLayoutProperty('nbhd-fill', 'visibility', showArea ? 'visible' : 'none')
     }
-    // The news card belongs to the area scale — drop it once the user flies in.
-    if (zoomedIn) setSelectedNbhd(null)
     if (showArea && !zoomedIn && priorities.size === 0) startPulse()
     else stopPulse()
   }, [zoomedIn, sfCount, priorities, onboardingOpen])
@@ -1187,7 +1130,7 @@ function App() {
 
         {/* The centerpiece: the product's promise as a control. */}
         <AddressSearch
-          onPick={(s) => openReportRef.current?.(s.center[1], s.center[0])}
+          onPick={(s) => openScope({ kind: 'spot', lat: s.center[1], lon: s.center[0], label: s.label })}
           onAsk={runAsk}
           placeholder={MISSIONS.find((m) => m.id === mission)?.placeholder}
         />
@@ -1271,18 +1214,32 @@ function App() {
         />
       )}
 
-      {/* Ask Canary — the answer canvas. Omnibox asks; the map responds (rank_map
-          / flyto auto-execute above); this is the receipt. Transient. */}
-      <AnswerStrip
-        busy={askFlow.busy}
-        result={askFlow.result}
-        question={askFlow.lastQuestion}
-        onFollowup={runAsk}
-        onShowNeighborhood={flashNeighborhood}
-        residentUnlocked={residentUnlocked}
-        onUnlockResidents={() => setContributing(true)}
-        onClose={askFlow.clear}
-      />
+      {/* The PlaceCard — ONE card, one conversation, scoped to whatever the
+          user is pointing at. The camera+drawing effect keeps the map framing
+          exactly what it describes; every rung ends in an ask input. */}
+      {scope && (
+        <MobileSheet onClose={() => openScope(null)}>
+          <PlaceCard
+            scope={scope}
+            onScope={openScope}
+            mission={(mission as Mission) ?? null}
+            nbhd={scope.kind === 'neighborhood' ? nbhdPropsRef.current.get(scope.nhood) ?? null : null}
+            residents={scope.kind === 'neighborhood' ? residentRef.current.get(scope.nhood) ?? null : null}
+            report={report}
+            reportLoading={reportLoading}
+            cityIntro={cityIntro}
+            matchTop={matchTop}
+            residentUnlocked={residentUnlocked}
+            onUnlockResidents={() => setContributing(true)}
+            ask={{
+              busy: askFlow.busy,
+              result: askFlow.result,
+              lastQuestion: askFlow.lastQuestion,
+              submit: runAsk,
+            }}
+          />
+        </MobileSheet>
+      )}
 
       {/* First-run mission picker — one question that personalizes everything. */}
       {missionOpen && (
@@ -1306,80 +1263,6 @@ function App() {
         </div>
       )}
 
-      {/* News card — a neighborhood's "why", from the public record (area mode). */}
-      {selectedNbhd && !reportOpen && (() => {
-        const t = selectedNbhd.traj
-        const tone = t > 0.12 ? 'up' : t < -0.12 ? 'down' : 'flat'
-        const verdict = tone === 'up' ? 'Improving' : tone === 'down' ? 'Getting worse' : 'Holding steady'
-        const glyph = tone === 'up' ? '▲' : tone === 'down' ? '▼' : '▪'
-        const items = neighborhoodHeadlines(selectedNbhd)
-        return (
-          <MobileSheet onClose={() => setSelectedNbhd(null)}>
-          <aside className={`news-card news-${tone}`}>
-            <button className="news-close" onClick={() => setSelectedNbhd(null)} aria-label="Close">×</button>
-            <span className={`news-verdict news-verdict-${tone}`}>{glyph} {verdict}</span>
-            <h3 className="news-nbhd">{selectedNbhd.nhood}</h3>
-            <p className="news-sub">{selectedNbhd.descriptor}</p>
-            <div className="news-stats">
-              <span><b>{selectedNbhd.permits}</b> permits</span>
-              <span><b>+{selectedNbhd.netUnits}</b> net units</span>
-              <span><b>${(selectedNbhd.totalCost / 1e6).toFixed(1)}M</b></span>
-            </div>
-            <p className="news-eyebrow">Why — from the public record</p>
-            <div className="news-list" role="list">
-              {items.map((h, i) => (
-                <article className={`headline-row headline-${h.tone}`} role="listitem" key={i}>
-                  {/* per-FACT direction: shape + color together (never color alone) */}
-                  <span className="headline-tick" aria-hidden="true">
-                    {h.tone === 'up' ? '▴' : h.tone === 'down' ? '▾' : '·'}
-                  </span>
-                  <div>
-                    <p className="headline-title">{h.title}</p>
-                    <p className="headline-cite">
-                      {h.source} <span className="headline-sep">·</span> <time>{h.date}</time>
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <button
-              type="button"
-              className="news-report-btn"
-              onClick={() => {
-                const [lng, lat] = selectedNbhd.clickLngLat
-                setSelectedNbhd(null)
-                openReportRef.current?.(lat, lng)
-              }}
-            >
-              What's changing at this spot →
-            </button>
-          </aside>
-          </MobileSheet>
-        )
-      })()}
-
-      {reportOpen && (
-        <MobileSheet
-          onClose={() => {
-            setReportOpen(false)
-            setReport(null)
-            reportPinRef.current?.remove()
-            reportPinRef.current = null
-          }}
-        >
-          <ReportCard
-            report={report}
-            loading={reportLoading}
-            onClose={() => {
-              setReportOpen(false)
-              setReport(null)
-              reportPinRef.current?.remove()
-              reportPinRef.current = null
-            }}
-          />
-        </MobileSheet>
-      )}
-
       {/* Map */}
       <div ref={mapContainer} id="map" />
 
@@ -1387,7 +1270,7 @@ function App() {
           Hidden until the onboarding is dismissed ("Show my map"), so it never
           peeks out behind the picker on first load or during an edit. */}
       {!onboardingOpen && (
-      <MobileSheet dismissible={false} hidden={!!selectedNbhd || reportOpen}>
+      <MobileSheet dismissible={false} hidden={scope !== null}>
       <aside className="prefs-panel">
         <div className="prefs-head">
           <p className="prefs-eyebrow">Looking for</p>
@@ -1453,7 +1336,7 @@ function App() {
                           onMouseLeave={() => glowNeighborhood(nhood, false)}
                           onFocus={() => glowNeighborhood(nhood, true)}
                           onBlur={() => glowNeighborhood(nhood, false)}
-                          onClick={() => zoomToNeighborhood(nhood)}
+                          onClick={() => openScope({ kind: 'neighborhood', nhood })}
                         >
                           <span className="prefs-result-rank" />
                           <span className="prefs-result-body">
@@ -1607,67 +1490,6 @@ function App() {
         )}
       </footer>
 
-      {/* Detail drawer — leads with the before→after delta */}
-      {selected && (
-        <div className="drawer" onClick={(e) => e.target === e.currentTarget && setSelected(null)}>
-          <div className="drawer-card">
-            <div className="drawer-accent" style={{ background: KIND_COLOR[selected.kind] }} />
-            <button className="drawer-close" onClick={() => setSelected(null)}>×</button>
-
-            <div className="drawer-toprow">
-              <p className="drawer-kind">
-                {selected.changeType ? CHANGE_META[selected.changeType].label : KIND_LABEL[selected.kind]}
-              </p>
-              {selected.stage && (
-                <span className={`stage-badge ${STAGE_META[selected.stage].cls}`}>
-                  {STAGE_META[selected.stage].label}
-                  <em>· {STAGE_META[selected.stage].hint}</em>
-                </span>
-              )}
-            </div>
-
-            <h2 className="drawer-city">{selected.neighborhood ?? selected.city}</h2>
-
-            {/* The delta — the whole point */}
-            {selected.changeLabel && (
-              <div className="delta-hero">
-                <span className="delta-glyph">
-                  {selected.changeType ? CHANGE_META[selected.changeType].glyph || '·' : '·'}
-                </span>
-                <span className="delta-text">{selected.changeLabel}</span>
-              </div>
-            )}
-            {selected.changeType && (
-              <p className="delta-blurb">{CHANGE_META[selected.changeType].blurb}</p>
-            )}
-
-            {/* Receipts: the raw before→after fields */}
-            <div className="delta-chips">
-              {selected.existingUse && selected.proposedUse && selected.existingUse !== selected.proposedUse && (
-                <span className="chip">
-                  use <b>{selected.existingUse}</b> → <b>{selected.proposedUse}</b>
-                </span>
-              )}
-              {selected.existingUnits !== undefined && selected.proposedUnits !== undefined &&
-                selected.existingUnits !== selected.proposedUnits && (
-                <span className="chip">
-                  units <b>{selected.existingUnits}</b> → <b>{selected.proposedUnits}</b>
-                </span>
-              )}
-              {selected.existingStories !== undefined && selected.proposedStories !== undefined &&
-                selected.existingStories !== selected.proposedStories && (
-                <span className="chip">
-                  stories <b>{selected.existingStories}</b> → <b>{selected.proposedStories}</b>
-                </span>
-              )}
-              {selected.cost ? <span className="chip">est. <b>${selected.cost.toLocaleString()}</b></span> : null}
-            </div>
-
-            <p className="drawer-detail">{selected.detail}</p>
-            <p className="drawer-source">⟶ {selected.source}</p>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

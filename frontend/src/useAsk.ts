@@ -1,8 +1,11 @@
 import { useCallback, useRef, useState } from 'react'
+import type { AskContext } from './scope'
 
-// The ask flow — omnibox question in, block-composed answer out. The model
-// arranges components; the server hydrated every number from DuckDB. This hook
-// owns the request, a short hidden history (for follow-ups), and the mission.
+// The ask flow — question in, block-composed answer out. The model arranges
+// components; the server hydrated every number from DuckDB. This hook owns the
+// request, a short hidden history (for follow-ups), and the mission. Questions
+// carry an optional CONTEXT (the PlaceCard scope) so "here" means the place
+// the user is looking at.
 
 export type SeriesPoint = { period: string; value: number }
 
@@ -54,7 +57,12 @@ export function useAsk() {
     setLastQuestion(null)
   }, [])
 
-  const ask = useCallback(async (question: string) => {
+  // Navigating to a different place is a different conversation.
+  const resetThread = useCallback(() => {
+    historyRef.current = []
+  }, [])
+
+  const ask = useCallback(async (question: string, context?: AskContext) => {
     const q = question.trim()
     if (!q) return
     setBusy(true)
@@ -68,6 +76,7 @@ export function useAsk() {
           question: q,
           history: historyRef.current.slice(-6),
           mission: readMission(),
+          context: context ?? null,
         }),
       })
       if (!resp.ok) {
@@ -95,5 +104,5 @@ export function useAsk() {
     }
   }, [])
 
-  return { busy, result, lastQuestion, ask, clear }
+  return { busy, result, lastQuestion, ask, clear, resetThread }
 }

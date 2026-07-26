@@ -81,14 +81,14 @@ function findHero(report: AddressReport) {
 type Props = {
   report: AddressReport | null
   loading: boolean
-  onClose: () => void
 }
 
-export function ReportCard({ report, loading, onClose }: Props) {
+// The SPOT rung's body — chrome-less (the PlaceCard owns the card shell,
+// header, and close button). Renders /api/report: hero, trajectories,
+// fixed facts, recent records.
+export function SpotReportBody({ report, loading }: Props) {
   return (
-    <aside className="report-card">
-      <button className="drawer-close" onClick={onClose}>×</button>
-
+    <div className="rc-body">
       {loading || !report ? (
         <div className="rc-loading">
           <div className="rc-loading-pulse" />
@@ -96,11 +96,6 @@ export function ReportCard({ report, loading, onClose }: Props) {
         </div>
       ) : (
         <>
-          <p className="drawer-kind">What's changing here</p>
-          <h3 className="rc-title">
-            {report.query.display_name ?? 'This spot'}
-            <span className="rc-sub"> · within ~500 m · last 24 months</span>
-          </h3>
 
           {/* THE HERO — the biggest thing approved to be built near this point */}
           {(() => {
@@ -146,10 +141,18 @@ export function ReportCard({ report, loading, onClose }: Props) {
           </div>
 
           {/* Reference attributes — the neighborhood's fixed facts (flood, EMS,
-              schools, transit…), served with provenance by the backend. */}
+              schools, transit…), served with provenance by the backend. The
+              area badge is explicit: the spine's boundary file differs from the
+              map's, and two surfaces silently disagreeing is the one failure
+              mode this product cannot afford. */}
           {Object.keys(report.attributes).length > 0 && (
             <div className="rc-section">
-              <p className="rc-section-title">The fixed facts</p>
+              <p className="rc-section-title">
+                The fixed facts
+                {report.attributes_area ? (
+                  <span className="rc-attr-area"> · {report.attributes_area} · neighborhood-level</span>
+                ) : null}
+              </p>
               <div className="rc-attrs">
                 {Object.entries(report.attributes).map(([k, v]) => (
                   <span key={k} className="rc-attr">
@@ -213,6 +216,6 @@ export function ReportCard({ report, loading, onClose }: Props) {
           </p>
         </>
       )}
-    </aside>
+    </div>
   )
 }

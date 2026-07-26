@@ -50,6 +50,9 @@ export type AddressReport = {
   changes: ReportChange[]
   trajectories: ReportTrajectory[]
   attributes: Record<string, unknown>
+  // Which neighborhood the attribute facts describe (spine boundaries differ
+  // from the map's polygons near edges — badge it, never let surfaces disagree).
+  attributes_area?: string | null
   sources: { source: string }[]
 }
 
