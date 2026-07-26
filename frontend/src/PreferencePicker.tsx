@@ -169,8 +169,16 @@ export function PreferencePicker({
         )}
 
         <section className="picker-section picker-section--catalog">
-          <button type="button" className="picker-browse" onClick={() => setExpanded((v) => !v)}>
-            {expanded ? 'Show less ▴' : `Browse all ${TOTAL_SIGNALS} signals ▾`}
+          {/* Accordion row — a stable section boundary in both states (a bare
+              floating "show less" link reads as an orphan). */}
+          <button
+            type="button"
+            className="picker-accordion"
+            aria-expanded={expanded}
+            onClick={() => setExpanded((v) => !v)}
+          >
+            <span className="picker-label picker-accordion-label">All {TOTAL_SIGNALS} signals</span>
+            <span className="picker-accordion-chevron" aria-hidden="true">{expanded ? '▴' : '▾'}</span>
           </button>
           {expanded && (
             <div className="ob-tiers picker-catalog">
