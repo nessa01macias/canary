@@ -17,7 +17,9 @@ import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
 import { AnswerStrip } from './AnswerStrip'
 import { useAsk } from './useAsk'
-import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdSignals } from './interpreter'
+import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
+import { EMPTY_FC, circlePolygon, scopeKey, type Scope } from './scope'
+import { useIsMobile } from './MobileSheet'
 import './App.css'
 
 // Mission → the chips it seeds, and the omnibox voice it speaks in.
@@ -350,6 +352,12 @@ function App() {
   // neighborhood name → its REAL signals (from backend-baked GeoJSON properties),
   // read by the preference-fit effect. See GROUNDED_TAGS.
   const nbhdSignalsRef = useRef<Map<string, NbhdSignals>>(new Map())
+  // neighborhood name → everything the PlaceCard needs (signals + click-time
+  // stats), captured at choropleth build so ANY code path (ask flyto, breadcrumb,
+  // best-fit click) can open a neighborhood card without a map click event.
+  const nbhdPropsRef = useRef<Map<string, NbhdCardData>>(new Map())
+  // marker id → its DOM element, for the record rung's .is-scope highlight.
+  const markerByIdRef = useRef<Map<string, HTMLElement>>(new Map())
   // neighborhood name → k-anonymised resident-review aggregates (the moat's read
   // side, GET /api/resident-layer). Read lazily by the hover popup.
   const residentRef = useRef<Map<string, ResidentAgg>>(new Map())
@@ -517,6 +525,121 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [askFlow.result])
 
+  // ── The scope ladder: the PlaceCard and the camera are ONE object ─────────
+  // city → neighborhood → spot (500 m) → record. Opening a scope moves the
+  // camera to frame it AND draws it on the map (glow / circle / marker halo).
+  const [scope, setScopeRaw] = useState<Scope | null>(null)
+  const scopeRef = useRef<Scope | null>(null)
+  scopeRef.current = scope
+  const [mapReady, setMapReady] = useState(false)
+  // True while OUR camera flight is in progress — the zoom-demotion effect
+  // must ignore programmatic moves or every scope flyTo would self-dismiss.
+  const programmaticMoveRef = useRef(false)
+  const prevGlowIdRef = useRef<number | null>(null)
+  const scopedMarkerRef = useRef<HTMLElement | null>(null)
+
+  // The single transition door. User-driven navigation clears the ask answer;
+  // ask-driven morphs (fromAsk) keep the answer travelling with the scope.
+  const openScope = (next: Scope | null, opts?: { fromAsk?: boolean }) => {
+    if (scopeKey(next) === scopeKey(scopeRef.current)) return
+    if (!opts?.fromAsk) askFlow.clear()
+    setScopeRaw(next)
+  }
+  // The imperative map closure calls through this ref (openScope is recreated
+  // per render; the map handlers are created once).
+  const openScopeRef = useRef(openScope)
+  openScopeRef.current = openScope
+
+  const isMobile = useIsMobile()
+
+  // Camera + drawing, ONE effect — so what the map frames and what it draws
+  // can never disagree with what the card describes.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapReady) return
+    const s = scope
+
+    // — drawing: the map shows exactly what the card is counting —
+    const circleSrc = map.getSource('scope-circle') as maplibregl.GeoJSONSource | undefined
+    circleSrc?.setData(
+      s?.kind === 'spot'
+        ? { type: 'FeatureCollection', features: [circlePolygon(s.lat, s.lon)] }
+        : EMPTY_FC,
+    )
+    reportPinRef.current?.remove()
+    reportPinRef.current = null
+    if (s?.kind === 'spot') {
+      const el = document.createElement('div')
+      el.className = 'report-pin'
+      reportPinRef.current = new maplibregl.Marker({ element: el }).setLngLat([s.lon, s.lat]).addTo(map)
+    }
+    if (prevGlowIdRef.current != null) {
+      map.setFeatureState({ source: 'nbhd', id: prevGlowIdRef.current }, { glow: false })
+      prevGlowIdRef.current = null
+    }
+    if (s?.kind === 'neighborhood') {
+      const meta = nbhdMetaRef.current.get(s.nhood)
+      if (meta && map.getLayer('nbhd-glow-core')) {
+        map.setFeatureState({ source: 'nbhd', id: meta.id }, { glow: true })
+        prevGlowIdRef.current = meta.id
+      }
+    }
+    scopedMarkerRef.current?.classList.remove('is-scope')
+    scopedMarkerRef.current = null
+    if (s?.kind === 'record') {
+      const el = markerByIdRef.current.get(s.point.id)
+      if (el) {
+        el.classList.add('is-scope')
+        scopedMarkerRef.current = el
+      }
+    }
+
+    // — camera: fly to frame the scope —
+    if (!s) return
+    programmaticMoveRef.current = true
+    map.once('moveend', () => { programmaticMoveRef.current = false })
+    const pad = isMobile
+      ? { top: 80, bottom: Math.round(window.innerHeight * 0.42), left: 24, right: 24 }
+      : { top: 120, bottom: 90, left: 340, right: 400 }
+    switch (s.kind) {
+      case 'city':
+        map.easeTo({ center: [-122.44, 37.75], zoom: 12.4, duration: 700 })
+        break
+      case 'neighborhood': {
+        const meta = nbhdMetaRef.current.get(s.nhood)
+        // maxZoom 13.6: a neighborhood fit must never cross STREET_ZOOM (14),
+        // or the demotion rule would dismiss the card it just opened.
+        if (meta) map.fitBounds(meta.bounds, { padding: pad, duration: 900, maxZoom: 13.6 })
+        break
+      }
+      case 'spot':
+        map.flyTo({
+          center: [s.lon + (isMobile ? 0 : 0.004), s.lat],
+          zoom: Math.max(map.getZoom(), 14.2),
+          duration: 900,
+        })
+        break
+      case 'record':
+        map.easeTo({
+          center: [s.point.lng + (isMobile ? 0 : 0.003), s.point.lat],
+          zoom: Math.max(map.getZoom(), 15),
+          duration: 600,
+        })
+        break
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scopeKey(scope), mapReady])
+
+  // Manual-zoom demotion: crossing the threshold with a mismatched scope closes
+  // the card — the drawn scope no longer frames anything legible at that zoom.
+  useEffect(() => {
+    if (programmaticMoveRef.current) return
+    const s = scopeRef.current
+    if (zoomedIn && s?.kind === 'neighborhood') openScope(null)
+    if (!zoomedIn && (s?.kind === 'spot' || s?.kind === 'record')) openScope(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zoomedIn])
+
   // Drive the trajectory overlay's "breathing": write a per-polygon sine into the
   // `pulse` feature-state each frame. Cheap — ~36 features, one repaint per frame.
   const stopPulse = () => {
@@ -646,6 +769,7 @@ function App() {
       el.title = `${point.city} · ${point.changeLabel ?? point.headline}`
       el.addEventListener('click', () => setSelected(point))
       markerElsRef.current.push(el)
+      markerByIdRef.current.set(point.id, el) // record-scope highlight lookup
       markers.push(
         new maplibregl.Marker({ element: el }).setLngLat([point.lng, point.lat]).addTo(map),
       )
@@ -726,6 +850,30 @@ function App() {
         id: i,
         phase: (i % 12) * ((Math.PI * 2) / 12),
       }))
+
+      // Everything the PlaceCard needs, per neighborhood — captured AFTER the
+      // traj write-back so the card's verdict matches the polygon's color, and
+      // typed here so no `Number(queryRenderedFeatures)` coercion survives.
+      nbhdPropsRef.current = new Map(
+        geo.features.map((f) => {
+          const pr = (f.properties ?? {}) as Record<string, unknown> & { nhood?: string }
+          const name = String(pr.nhood ?? '')
+          const signals = nbhdSignalsRef.current.get(name)
+          return [
+            name,
+            {
+              ...(signals as NbhdSignals),
+              nhood: name,
+              permits: Number(pr.permits ?? 0),
+              netUnits: Number(pr.netUnits ?? 0),
+              totalCost: Number(pr.totalCost ?? 0),
+              traj: Number(pr.traj ?? 0),
+              descriptor: String(pr.descriptor ?? ''),
+              trendsAsOf: (pr.trendsAsOf as string | null) ?? null,
+            },
+          ]
+        }),
+      )
 
       // Paint everything OUTSIDE San Francisco flat white, while letting the bay
       // and ocean read as water. The mask is one big polygon (the whole pannable
@@ -838,6 +986,25 @@ function App() {
         })
         map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
       }
+
+      // Scope drawing: the dashed circle that shows EXACTLY what a spot card is
+      // counting ("within ~500 m" as pixels, not a caption nobody reads).
+      map.addSource('scope-circle', { type: 'geojson', data: EMPTY_FC })
+      map.addLayer({
+        id: 'scope-circle-fill', type: 'fill', source: 'scope-circle',
+        paint: { 'fill-color': '#FF6624', 'fill-opacity': 0.07 },
+      })
+      map.addLayer({
+        id: 'scope-circle-line', type: 'line', source: 'scope-circle',
+        paint: {
+          'line-color': '#FF6624', 'line-width': 1.6,
+          'line-dasharray': [2, 2], 'line-opacity': 0.75,
+        },
+      })
+
+      // The scope camera/drawing effect (and anything queued before the style
+      // loaded — e.g. an address picked during the initial second) starts now.
+      setMapReady(true)
 
       // The magic moment: the address report for a point (pin + flyTo + card).
       const openReport = (lat: number, lng: number) => {
