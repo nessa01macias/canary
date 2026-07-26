@@ -33,8 +33,8 @@ from dotenv import load_dotenv
 
 from app.pipeline import core
 
-QUESTIONS = core.PROCESSED_DIR / "benchmark_v0.json"
-RUNS_DIR = core.PROCESSED_DIR / "benchmark_runs"
+QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
+RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
 
 JUDGE_SYSTEM = (
     "You are a strict grader. You receive a question, verified ground truth from public "
@@ -86,7 +86,8 @@ def main() -> None:
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         raise SystemExit("ANTHROPIC_API_KEY required for judging")
-    model = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
+    # Judge pinned OUTSIDE the test lineup (fable is tested; sonnet judges)
+    model = os.environ.get("JUDGE_MODEL", "claude-sonnet-5")
 
     bench = {q["id"]: q for q in json.loads(QUESTIONS.read_text())["questions"]}
 

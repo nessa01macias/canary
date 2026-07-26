@@ -13,13 +13,14 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import random
 from collections import defaultdict
 
 from app.pipeline import core
 
-QUESTIONS = core.PROCESSED_DIR / "benchmark_v0.json"
-RUNS_DIR = core.PROCESSED_DIR / "benchmark_runs"
+QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
+RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
 OUT = core.PROCESSED_DIR / "benchmark_audit_sample.csv"
 PER_CELL = 2  # verdicts sampled per (provider, verdict) cell
 SEED = 2026  # deterministic draw: re-runs produce the same sample

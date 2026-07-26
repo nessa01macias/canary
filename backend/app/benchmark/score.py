@@ -13,13 +13,14 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 from collections import defaultdict
 
 from app.pipeline import core
 
-QUESTIONS = core.PROCESSED_DIR / "benchmark_v0.json"
-RUNS_DIR = core.PROCESSED_DIR / "benchmark_runs"
+QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
+RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
 REVIEW_CSV = core.PROCESSED_DIR / "benchmark_review.csv"
 
 INCREASE = r"\b(ris(?:e|ing)|increas\w*|up(?:ward)?|grow\w*|grew|higher|more|worse|worsening|climb\w*|surg\w*)\b"

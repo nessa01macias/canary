@@ -31,8 +31,8 @@ from dotenv import load_dotenv
 
 from app.pipeline import core
 
-QUESTIONS = core.PROCESSED_DIR / "benchmark_v0.json"
-RUNS_DIR = core.PROCESSED_DIR / "benchmark_runs"
+QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
+RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
 
 SYSTEM = (
     "You are a helpful assistant answering questions from someone deciding where to "
@@ -52,7 +52,6 @@ def ask_openai_compatible(base_url: str, key: str, model: str, question: str) ->
                 {"role": "system", "content": SYSTEM},
                 {"role": "user", "content": question},
             ],
-            "temperature": 0.2,
         },
         timeout=120,
     )
@@ -90,20 +89,36 @@ def ask_gemini(key: str, model: str, question: str) -> str:
     return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
 
 
-def build_grounding(item: dict, trajectory_rows: list[dict]) -> str:
+def build_grounding(item: dict, trajectory_rows: list[dict], monthly_rows: list[dict]) -> str:
     """The slice of published Canary data one API call would return for this question.
 
-    direction/numeric/fact -> every metric for the question's area;
-    superlative            -> the question's metric across every area.
-    The benchmark file's own expected/ground_truth fields are never included --
-    the model sees only what a real Canary API response would contain.
+    grounding_rows (baked by the generator: permit-level, counts) win when present;
+    superlative -> the metric across every area; pairwise -> both areas' rows;
+    temporal -> the monthly series for the window; trap -> the noise metrics incl.
+    the refined variant (exactly what the API would serve); default -> the area's rows.
+    The benchmark file's own expected/ground_truth fields are never included.
     """
-    if item["type"] == "superlative":
-        rows = [r for r in trajectory_rows if r["metric"] == item["metric"] and r.get("rankable")]
-    else:
-        rows = [r for r in trajectory_rows if r["area_id"] == item.get("area")]
     keep = ("area_id", "metric", "last12", "prior12", "pct_change", "z", "source_as_of")
-    slim = [{k: r.get(k) for k in keep} for r in rows]
+
+    def slim_rows(rows: list[dict]) -> list[dict]:
+        return [{k: r.get(k) for k in keep} for r in rows]
+
+    if item.get("grounding_rows"):
+        slim = item["grounding_rows"]
+    elif item["type"] == "superlative":
+        slim = slim_rows([r for r in trajectory_rows if r["metric"] == item["metric"] and r.get("rankable")])
+    elif item["type"] == "pairwise":
+        slim = slim_rows([r for r in trajectory_rows if r["area_id"] in item.get("areas", []) and r["metric"] == item["metric"]])
+    elif item["type"] == "temporal":
+        series = sorted(
+            (r for r in monthly_rows if r["area_id"] == item.get("area") and r["metric"] == item["metric"]),
+            key=lambda r: r["period"],
+        )
+        slim = [{k: r.get(k) for k in ("area_id", "metric", "period", "value")} for r in series]
+    elif item["type"] == "trap":
+        slim = slim_rows([r for r in trajectory_rows if str(r["metric"]).startswith("threeoneone_noise")])
+    else:
+        slim = slim_rows([r for r in trajectory_rows if r["area_id"] == item.get("area")])
     # Field documentation ships with every real API response (agent-legibility is a
     # design constraint) -- without semantics, models misread enforcement surges as
     # crime waves (verified: GPT-4o did exactly that on the undocumented payload).
@@ -132,13 +147,19 @@ def providers() -> dict[str, callable]:
     load_dotenv(core.BACKEND_DIR / ".env")
     out: dict[str, callable] = {}
     if key := os.environ.get("OPENAI_API_KEY"):
-        model = os.environ.get("OPENAI_MODEL", "gpt-4o")
+        model = os.environ.get("OPENAI_MODEL", "gpt-5.6-sol")
         out[f"openai:{model}"] = lambda q, k=key, m=model: ask_openai_compatible(
             "https://api.openai.com/v1", k, m, q
         )
     if key := os.environ.get("ANTHROPIC_API_KEY"):
-        model = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-5")
+        model = os.environ.get("ANTHROPIC_MODEL", "claude-fable-5")
         out[f"anthropic:{model}"] = lambda q, k=key, m=model: ask_anthropic(k, m, q)
+    if key := os.environ.get("OPENAI_API_KEY"):
+        # the "search ON" bracket: same OpenAI family, native web search built in
+        model = os.environ.get("OPENAI_SEARCH_MODEL", "gpt-5-search-api")
+        out[f"openai-search:{model}"] = lambda q, k=key, m=model: ask_openai_compatible(
+            "https://api.openai.com/v1", k, m, q
+        )
     if key := os.environ.get("GEMINI_API_KEY"):
         model = os.environ.get("GEMINI_MODEL", "gemini-2.5-pro")
         out[f"gemini:{model}"] = lambda q, k=key, m=model: ask_gemini(k, m, q)
@@ -185,11 +206,14 @@ def main() -> None:
         )
 
     trajectory_rows: list[dict] = []
+    monthly_rows: list[dict] = []
     if args.grounded:
         traj_path = core.PROCESSED_DIR / "neighborhood_trajectory.json"
-        if not traj_path.exists():
-            raise SystemExit("--grounded needs processed/neighborhood_trajectory.json (run publish --local)")
+        monthly_path = core.PROCESSED_DIR / "neighborhood_metrics_monthly.json"
+        if not traj_path.exists() or not monthly_path.exists():
+            raise SystemExit("--grounded needs processed/neighborhood_*.json (run publish --local)")
         trajectory_rows = json.loads(traj_path.read_text())["rows"]
+        monthly_rows = json.loads(monthly_path.read_text())["rows"]
 
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -200,7 +224,7 @@ def main() -> None:
         for item in questions:
             prompt = item["question"]
             if args.grounded:
-                prompt = build_grounding(item, trajectory_rows) + prompt
+                prompt = build_grounding(item, trajectory_rows, monthly_rows) + prompt
             try:
                 text = ask(prompt)
                 status = "ok"
