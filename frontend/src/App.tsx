@@ -17,6 +17,7 @@ import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
 import { AnswerStrip } from './AnswerStrip'
 import { useAsk } from './useAsk'
+import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdSignals } from './interpreter'
 import './App.css'
 
 // Mission → the chips it seeds, and the omnibox voice it speaks in.
@@ -72,52 +73,9 @@ const MATCH_STOPS: Array<[number, string]> = [
 // REAL per-neighborhood signals, baked into the GeoJSON properties by the backend
 // (/api/sf/neighborhoods → DuckDB metrics, 12-vs-12-month trends, rank-normalized
 // 0..1). Captured at choropleth build into nbhdSignalsRef; consumed by the
-// trajectory overlay and the preference fit below. No placeholder hashes remain.
-type NbhdSignals = {
-  intensity: number      // permit-derived structural-change intensity (0..1)
-  crimeTrend: number     // higher = crime rising (real, DataSF via pipeline)
-  bizOpenTrend: number   // higher = business openings accelerating
-  bizCloseTrend: number  // higher = closings accelerating
-  evictionTrend: number  // higher = evictions rising
-  noiseTrend: number     // higher = 311 noise complaints rising
-  // Rank-normalized attribute signals (0..1, higher = more of it) baked in by the
-  // backend from L0 raw snapshots (backend/app/api/nbhd_attributes.py). 0.5 =
-  // neutral/no data (e.g. a neighborhood with no public school has no schoolScore).
-  schoolScore: number     // CAASPP % met-or-exceeded, tested-count weighted
-  transitAccess: number   // distinct transit stops (Cal-ITP GTFS)
-  treeCanopy: number      // street trees per km² (city inventory)
-  groceryAccess: number   // open grocery stores (Foursquare OS Places)
-  industryPresence: number// EPA TRI toxic-release facilities
-  floodShare: number      // share of area in FEMA SFHA flood zones
-  parkingPermits: number  // RPP-eligible parcels
-  roadProjects: number    // SFMTA projects intersecting
-  cannabisRetail: number  // licensed cannabis retailers (DCC)
-  emsMinutes: number      // median fire/EMS response, higher = slower
-  vacancyRate: number     // storefront vacancy share (Prop-D tax roll)
-}
-
-// Preference chips we can GROUND in live data today → a real fit score in 0..1.
-// Chips not in this map are ignored by the fit ranking (never faked): their data
-// sources aren't wired yet, and a hash pretending otherwise is worse than honesty.
-const GROUNDED_TAGS: Record<string, (s: NbhdSignals) => number> = {
-  'Low crime':          (s) => 1 - s.crimeTrend,
-  'Business openings':  (s) => s.bizOpenTrend,
-  'Vacancy trend':      (s) => 1 - s.vacancyRate, // real Prop-D vacancy roll (was bizCloseTrend proxy)
-  'New construction':   (s) => s.intensity,
-  'Quiet':              (s) => 1 - s.noiseTrend, // real 311 noise-complaint trend
-  'Housing stability':  (s) => 1 - s.evictionTrend, // real eviction-filings trend
-  // Attribute-grounded chips (L0 raw → nbhd_attributes.py → /api/sf/neighborhoods)
-  'Good schools':            (s) => s.schoolScore,
-  'Transit access':          (s) => s.transitAccess,
-  'Tree canopy':             (s) => s.treeCanopy,
-  'Groceries & retail':      (s) => s.groceryAccess,
-  'Away from industry':      (s) => 1 - s.industryPresence,
-  'Flood risk':              (s) => 1 - s.floodShare, // picking it = wanting LOW risk
-  'Parking':                 (s) => s.parkingPermits,
-  'Road projects':           (s) => s.roadProjects,
-  'Liquor & cannabis':       (s) => s.cannabisRetail,
-  'Fast emergency response': (s) => 1 - s.emsMinutes,
-}
+// trajectory overlay and the preference fit below. The signal vocabulary and
+// the chip grounding now live in interpreter.ts — the module that turns these
+// ranks into plain language everywhere.
 
 // Fill paint expressions, shared by the initial layer and the mode/preference
 // effects so the views stay in lockstep. `trajectory*` = the default pulsing
@@ -448,6 +406,9 @@ function App() {
   // capture a stale unlock flag — mirror it in a ref the builder reads live.
   const residentUnlockedRef = useRef(residentUnlocked)
   residentUnlockedRef.current = residentUnlocked
+  // Same pattern for the mission — the hover verdict is mission-framed.
+  const missionRef = useRef<string | null>(mission)
+  missionRef.current = mission
   // News card: click a neighborhood (area mode) → its real-record "why" card.
   const [selectedNbhd, setSelectedNbhd] = useState<
     | (import('./headlines').NbhdNewsStats & {
@@ -732,6 +693,7 @@ function App() {
               cannabisRetail: pr.cannabisRetail ?? 0.5,
               emsMinutes: pr.emsMinutes ?? 0.5,
               vacancyRate: pr.vacancyRate ?? 0.5,
+              vacancyRateRaw: pr.vacancyRateRaw ?? null,
             },
           ]
         }),
@@ -840,33 +802,20 @@ function App() {
         const p = f.properties as Record<string, number | string>
         const st = hoveredId !== null ? map.getFeatureState({ source: 'nbhd', id: hoveredId }) : {}
         const { active, count } = matchInfoRef.current
+        // The hover popup is a two-line PREVIEW — a scent, not a meal. The full
+        // story (evidence, residents, ask) lives in the PlaceCard on click.
+        const v = verdict(Number(p.traj) || 0)
         const fitLine =
           active && typeof st.match === 'number'
-            ? `<div class="nb-pop-fit">${Math.round(st.match * 100)}% fit · ${count} filter${count > 1 ? 's' : ''}</div>`
+            ? ` · <span class="nb-pop-fit-inline">${Math.round(st.match * 100)}% fit${count > 1 ? ` on your ${count} picks` : ''}</span>`
             : ''
-        // Resident layer: attributed opinion (k ≥ 3 reviewers), rendered as what
-        // residents SAID — never our own quality label.
-        const res = residentRef.current.get(String(p.nhood))
-        const fmt = (v: number | null) => (v == null ? '–' : v.toFixed(1))
-        // Give-to-get: the values exist, but stay blurred (a tease, never hidden)
-        // until the visitor contributes one review of their own.
-        const unlocked = residentUnlockedRef.current
-        const resLine = res
-          ? `<div class="nb-pop-res${unlocked ? '' : ' is-locked'}">Residents (${res.n}): safety <b>${fmt(res.safety)}</b> · quiet <b>${fmt(res.noise)}</b> · getting better <b>${fmt(res.trajectory)}</b> <span class="nb-pop-res-scale">/5</span>${unlocked ? '' : '<span class="nb-pop-res-hint">🔒 ＋ Review a neighborhood you know to unlock</span>'}</div>`
-          : ''
         popup
           .setLngLat(e.lngLat)
           .setHTML(
-            `<div class="nb-pop">
+            `<div class="nb-pop nb-pop--preview">
                <div class="nb-pop-name">${p.nhood}</div>
-               ${fitLine}
-               <div class="nb-pop-desc">${p.descriptor}</div>
-               <div class="nb-pop-stats">
-                 <span><b>${p.permits}</b> permits</span>
-                 <span><b>+${p.netUnits}</b> net units</span>
-                 <span><b>$${(Number(p.totalCost) / 1e6).toFixed(1)}M</b></span>
-               </div>
-               ${resLine}
+               <div class="nb-pop-verdict nb-pop-verdict--${v.tone}">${v.glyph} ${v.label}${fitLine}</div>
+               <div class="nb-pop-more">click to read this area</div>
              </div>`,
           )
           .addTo(map)
@@ -1324,23 +1273,35 @@ function App() {
               <div className="prefs-result">
                 <span className="prefs-result-label">Best fit</span>
                 <ul className="prefs-result-list">
-                  {matchTop.map((nhood) => (
-                    <li key={nhood}>
-                      <button
-                        type="button"
-                        className="prefs-result-item"
-                        onMouseEnter={() => glowNeighborhood(nhood, true)}
-                        onMouseLeave={() => glowNeighborhood(nhood, false)}
-                        onFocus={() => glowNeighborhood(nhood, true)}
-                        onBlur={() => glowNeighborhood(nhood, false)}
-                        onClick={() => zoomToNeighborhood(nhood)}
-                      >
-                        <span className="prefs-result-rank" />
-                        <span className="prefs-result-name">{nhood}</span>
-                        <span className="prefs-result-go" aria-hidden="true">→</span>
-                      </button>
-                    </li>
-                  ))}
+                  {matchTop.map((nhood) => {
+                    // The WHY, per chip — trust needs the receipt, not just a rank.
+                    const signals = nbhdSignalsRef.current.get(nhood)
+                    const why = signals ? whyChips(signals, [...priorities]) : []
+                    return (
+                      <li key={nhood}>
+                        <button
+                          type="button"
+                          className="prefs-result-item"
+                          onMouseEnter={() => glowNeighborhood(nhood, true)}
+                          onMouseLeave={() => glowNeighborhood(nhood, false)}
+                          onFocus={() => glowNeighborhood(nhood, true)}
+                          onBlur={() => glowNeighborhood(nhood, false)}
+                          onClick={() => zoomToNeighborhood(nhood)}
+                        >
+                          <span className="prefs-result-rank" />
+                          <span className="prefs-result-body">
+                            <span className="prefs-result-name">{nhood}</span>
+                            {why.length > 0 && (
+                              <span className="prefs-result-why">
+                                {why.map((w) => `${w.chip.toLowerCase()} ${w.ok ? '✓' : '✗'}`).join(' · ')}
+                              </span>
+                            )}
+                          </span>
+                          <span className="prefs-result-go" aria-hidden="true">→</span>
+                        </button>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             )}
@@ -1442,7 +1403,7 @@ function App() {
               <span className="legend-dot sz-l" style={{ background: '#999' }} />
               dot size = $ value
             </div>
-            <div className="legend-hint">Zoom in for routine permits · click any marker</div>
+            <div className="legend-hint">{mapCaption(true, priorities.size)}</div>
           </>
         ) : matchActive ? (
           <>
@@ -1458,10 +1419,7 @@ function App() {
               />
               <span>stronger fit</span>
             </div>
-            <div className="legend-item">
-              Shading = fit to your {priorities.size} filter{priorities.size > 1 ? 's' : ''}
-            </div>
-            <div className="legend-hint">Darker = more of what you’re looking for</div>
+            <div className="legend-hint">{mapCaption(false, priorities.size)}</div>
           </>
         ) : (
           <>
@@ -1477,8 +1435,7 @@ function App() {
               />
               <span>getting better</span>
             </div>
-            <div className="legend-item">Neighborhood trajectory over recent years · the strongest movers pulse</div>
-            <div className="legend-hint">Hover a neighborhood for its trajectory</div>
+            <div className="legend-hint">{mapCaption(false, 0)}</div>
           </>
         )}
       </footer>

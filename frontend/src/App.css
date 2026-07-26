@@ -338,6 +338,18 @@ html, body, #root, #app {
   transition: opacity 0.14s ease, box-shadow 0.14s ease;
 }
 .prefs-result-name { flex: 1; }
+.prefs-result-body { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.prefs-result-body .prefs-result-name { flex: none; }
+/* The WHY under each best-fit result — per-chip receipts, not just a rank. */
+.prefs-result-why {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: #8a7d6d;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .prefs-result-go {
   color: #2f80ff;
   font-weight: 800;
@@ -567,31 +579,21 @@ html, body, #root, #app {
   color: #256abf;
   margin: 2px 0 8px;
 }
-.nb-pop-stats {
-  display: flex;
-  gap: 12px;
-  font-size: 11.5px;
-  color: #666;
+/* The hover PREVIEW — two lines, a scent not a meal (the card is the meal). */
+.nb-pop--preview { min-width: 150px; }
+.nb-pop-verdict {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-top: 3px;
 }
-.nb-pop-stats b { color: #111; font-weight: 700; }
-/* resident layer: attributed k-anon review averages (the moat's read side) */
-.nb-pop-res {
-  margin-top: 7px;
-  padding-top: 6px;
-  border-top: 1px dashed #e5ddd4;
-  font-size: 11.5px;
-  color: #8a5a1f;
-}
-.nb-pop-res b { color: #FF6624; font-weight: 700; }
-.nb-pop-res-scale { color: #b9a68d; }
-/* Give-to-get: the values tease (blurred) until the visitor reviews one area. */
-.nb-pop-res.is-locked b { filter: blur(4.5px); user-select: none; }
-.nb-pop-res-hint {
-  display: block;
-  margin-top: 4px;
+.nb-pop-verdict--up { color: #3f8f5c; }
+.nb-pop-verdict--down { color: #c1443c; }
+.nb-pop-verdict--flat { color: #8a7d6d; }
+.nb-pop-fit-inline { color: #ea6a25; font-weight: 800; }
+.nb-pop-more {
+  margin-top: 5px;
   font-size: 10.5px;
-  font-weight: 600;
-  color: #b06a1a;
+  color: #b0a596;
 }
 
 /* ── Preferences panel: head row, edit & CTA ─────────────────── */
