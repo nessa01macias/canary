@@ -185,9 +185,10 @@ rather than assumed correct; all 41 judged answers were correct.
 
 ![Grouped bar chart of unassisted versus grounded accuracy for the five models. Unassisted bars sit between 36 and 45 percent; grounded bars sit between 93 and 100 percent.](frontend/public/research/fig1_models.svg)
 
-**Figure 1.** Overall accuracy by model and condition (data of Table 1). Every
-model roughly doubles its accuracy when a single Canary API response is prepended
-to the prompt. Sol's grounded bar reflects the 41 of 43 verdicts that parsed.
+**Figure 1.** Overall accuracy by model and condition (data of Table 1). "With
+Canary data" is the grounded condition: the model sees one Canary API response
+before answering. Every model roughly doubles its accuracy. Sol's grounded bar
+reflects the 41 of 43 verdicts that parsed.
 
 Table 2. Accuracy by question block, pooled across the five models.
 

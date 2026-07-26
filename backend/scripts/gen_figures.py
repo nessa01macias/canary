@@ -89,7 +89,7 @@ def legend(x: float, y: float) -> str:
         f'<rect x="{x}" y="{y}" width="12" height="12" rx="3" fill="{UNASSISTED}"/>',
         text(x + 18, y + 10, "Unassisted", 11.5, SECONDARY, anchor="start"),
         f'<rect x="{x + 108}" y="{y}" width="12" height="12" rx="3" fill="{GROUNDED}"/>',
-        text(x + 126, y + 10, "Grounded (one Canary response)", 11.5, SECONDARY, anchor="start"),
+        text(x + 126, y + 10, "With Canary data", 11.5, SECONDARY, anchor="start"),
     ]
     return "".join(parts)
 
