@@ -75,7 +75,9 @@ second interpretation.
 
 This section describes the ground truth against which all answers are graded
 (§2.1), the construction and freezing of the question set (§2.2), the two
-experimental conditions (§2.3), and the judging protocol (§2.4).
+experimental conditions (§2.3), the judging protocol (§2.4), and an independent
+verification of the ground truth against the city's own APIs, including one
+erratum it produced (§2.5).
 
 ### 2.1 Ground truth
 
@@ -180,6 +182,46 @@ judge verdicts is part of the protocol, with the agreement rate to be published 
 the judge's error bar. One limitation is noted for the record: the judge shares a
 vendor with one tested model. The fixed-evidence design (the judge never assesses
 facts, only commitment to supplied facts) and the human audit are the mitigations.
+
+### 2.5 Independent verification and an erratum
+
+A benchmark whose ground truth is computed by the authors' own pipeline invites a
+circularity objection. To remove it, every expected answer was re-derived by a
+standalone script (`scripts/verify_v1_answers.py`) that uses only the Python
+standard library and HTTP: it queries the city's own SODA endpoints directly,
+aggregates server-side, and uses the city's own analysis-neighborhood
+assignments rather than our H3 spine. The script shares no code with the Canary
+pipeline, and its raw API responses are archived alongside the report.
+
+Forty-two of 43 expected answers were confirmed. All five superlative winners
+and all six pairwise winners reproduce across roughly forty neighborhoods under
+the same volume floors; the Tenderloin decomposition reproduces exactly
+(victim-reported crime down 8.0%, enforcement activity up 43.6%); and the 311
+artifact reproduces exactly (+61.9% nominal, +25.9% with the catch-all category
+excluded, the catch-all alone carrying 56.6% of the nominal volume). Drift
+between the frozen 2026-07-24 snapshot and the live API at verification time was
+negligible: 3 of 20 count-window comparisons moved, by at most 5.3%, one of them
+because an eviction notice was removed from the record, a useful reminder that
+these datasets are append-mostly rather than append-only.
+
+The one mismatch is an erratum against ourselves. The address-level ring
+geometry was computed with a swapped coordinate axis order: the distance
+function follows the EPSG:4326 authority order (latitude first), so the "500 m"
+rings were in fact ellipses of roughly 395 m east-west by 933 m north-south.
+Under corrected geometry the expected values of two of the three address
+questions stand within their tolerances; the third (q037) does not. The true
+500 m disk around that address contains 188 net units against the frozen
+expected 53, the gap dominated by a single 185-unit permit 459 m away.
+Following the pre-registered freeze, no verdict is re-graded: the frozen values
+remain the graded truth. We note the sensitivity openly: under the corrected
+value, two unassisted answers (Grok 4.5's "100 to 200" and Claude Fable 5's
+"200 to 400") would plausibly grade correct, raising pooled address-level
+unassisted accuracy from 13% to at most 27%. The error therefore harmed the
+models, not our thesis, and no conclusion changes. The grounded condition is
+unaffected in kind, since it grades whether models commit to the supplied
+payload, which carried the same ring value. The geometry is fixed in the
+generator and in the production lookup path, q037 regenerates correctly in
+v1.1, and this note is the erratum of record.
 
 ## 3. Results
 
@@ -336,6 +378,8 @@ the scope of this study.
 One metro; one run per condition; 43 questions; five models, with Gemini absent.
 Nineteen of 430 primary verdicts were completed in a disclosed repair pass after
 truncation failures, and one grounded verdict remains unparsed and excluded. The
+address-level block carries the ring-geometry erratum of §2.5, whose corrected
+values would raise, not lower, the models' unassisted scores. The
 judge is a language model: verdicts are stored and auditable, a human audit of a
 verdict sample is owed, and the judge shares a vendor with one tested model. In the
 grounded condition, Canary data serves as both context and ground truth by design;
@@ -358,6 +402,7 @@ python -m app.benchmark.panel              # cross-vendor judge panel
 python -m app.benchmark.panel --agree      # panel agreement report
 python -m app.benchmark.stats              # Wilson intervals, McNemar, Tables 1-2
 python scripts/gen_figures.py              # Figures 1-2 from the stats artifact
+python scripts/verify_v1_answers.py        # Canary-free re-derivation from city APIs
 ```
 
 Artifacts: `data/processed/benchmark_v1.json` (questions and receipts, frozen at

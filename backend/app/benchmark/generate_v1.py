@@ -200,7 +200,10 @@ def main() -> None:
                    (coalesce(proposed_units,0)-coalesce(existing_units,0)) AS du,
                    left(regexp_replace(description, '\\s+', ' ', 'g'), 90) AS descr
             FROM read_parquet('{permits_path}') p JOIN ring USING (h3_9)
-            WHERE ST_Distance_Sphere(ST_Point(p.lon, p.lat), ST_Point({lon}, {lat})) <= 500
+            -- axis order fixed post-v1 (lat first; see RESEARCH.md erratum). The
+            -- v1 frozen set was generated with (lon, lat) ellipses; regeneration
+            -- from this code produces true 500 m disks (affects q037-class items).
+            WHERE ST_Distance_Sphere(ST_Point(p.lat, p.lon), ST_Point({lat}, {lon})) <= 500
               AND issued_date >= current_date - INTERVAL 24 MONTH
             QUALIFY row_number() OVER (PARTITION BY permit_number ORDER BY 1) = 1
             """

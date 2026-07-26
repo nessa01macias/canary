@@ -1,0 +1,921 @@
+{
+ "generated_at": "2026-07-26T09:08:48.540377+00:00",
+ "method_note": "Independent re-derivation of every benchmark_v1 expected answer directly from live DataSF SODA endpoints (permits i98e-djp9, businesses g8m3-pdis, police incidents wg3w-h783, evictions 5cei-gny5, 311 vw6y-z8j6), using server-side SoQL aggregation and the city's own Analysis Neighborhood columns -- zero Canary pipeline code imported. Windows: last12=[2025-07-01,2026-07-01), prior12=[2024-07-01,2025-07-01), jul23_jun24=[2023-07-01,2024-07-01); the numeric net-units block and 500 m address rings use the generator's rolling windows (issued_date >= 2025-07-25 resp. 2024-07-25, generation-day current_date was 2026-07-25 PDT) capped at the frozen snapshot's as_of 2026-07-24. Semantics replicated as constants: permit issuance = non-null issued_date (no status filter); net units = sum(proposed_units - existing_units, nulls as 0, Socrata ::number casts); business openings keyed on location_start_date; active businesses = location_start_date set AND location_end_date null (uncappable current-state attribute); crime split into victim-reported vs enforcement-driven by exact incident_category sets (enforcement activity is not victimization); 311 encampment/noise by case-insensitive substring on Category, refined noise excluding the 'other_excessive_noise' Request Type catch-all; address rings geocoded with the public US Census geocoder and evaluated on the TRUE 500 m geodesic disk (haversine on each permit's own coordinates), deduped by permit_number. RING-GEOMETRY FINDING: the generator's rings were not true 500 m disks -- its DuckDB ST_Distance_Sphere call passed ST_Point(lon,lat) where the function expects x=latitude (EPSG:4326 authority axis order), yielding ~395 m E-W x ~933 m N-S regions (plus an H3 k=2 clip); a pure-Python replication of that swapped-axis formula reproduces the frozen unit totals (494/43/53) and is reported per ring question alongside the true-disk verdict value, which is never adjusted to force agreement. The live API has moved past the frozen snapshot (append-mostly public records), so small count deltas are expected and are quantified per question; verdicts: confirmed (within tolerance / same sign / same winner / artifact reproduced), drift (small live-data movement: numeric within 1.5x tolerance, superlative expected still top-3 within 0.05 of the winner, pairwise gap < 0.02), mismatch (real disagreement, reported as-is), not_verified (not derivable from the public API alone). Raw API responses cached under data/processed/verification_cache/.",
+ "per_question": [
+  {
+   "id": "q001",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 877.0,
+    "prior_12mo": 1532.0,
+    "pct_change": -0.428
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q002",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Japantown",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 254.0,
+    "prior_12mo": 406.0,
+    "pct_change": -0.374
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q003",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Outer Mission",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 603.0,
+    "prior_12mo": 903.0,
+    "pct_change": -0.332
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.17,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q004",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 213.0,
+    "prior_12mo": 166.0,
+    "pct_change": 0.283
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q005",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Visitacion Valley",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 66.0,
+    "prior_12mo": 89.0,
+    "pct_change": -0.258
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q006",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Presidio Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 127.0,
+    "prior_12mo": 162.0,
+    "pct_change": -0.216
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q007",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 47.0,
+    "prior_12mo": 5.0,
+    "pct_change": 8.4
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 2.17,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q008",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Chinatown",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 37.0,
+    "prior_12mo": 18.0,
+    "pct_change": 1.056
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": -5.26
+   }
+  },
+  {
+   "id": "q009",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bernal Heights",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 37.0,
+    "prior_12mo": 21.0,
+    "pct_change": 0.762
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q010",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Lone Mountain/USF",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 162.0,
+    "prior_12mo": 650.0,
+    "pct_change": -0.751
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q011",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Presidio",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 19.0,
+    "prior_12mo": 71.0,
+    "pct_change": -0.732
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q012",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Twin Peaks",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 26.0,
+    "prior_12mo": 64.0,
+    "pct_change": -0.594
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q013",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 244.0,
+    "prior_12mo": 38.0,
+    "pct_change": 5.421
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q014",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Outer Richmond",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 97.0,
+    "prior_12mo": 27.0,
+    "pct_change": 2.593
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q015",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 987.0,
+    "prior_12mo": 289.0,
+    "pct_change": 2.415
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q016",
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "top5": [
+     [
+      "Japantown",
+      0.38
+     ],
+     [
+      "Western Addition",
+      0.283
+     ],
+     [
+      "Outer Mission",
+      0.155
+     ],
+     [
+      "Tenderloin",
+      0.154
+     ],
+     [
+      "Sunset/Parkside",
+      0.14
+     ]
+    ]
+   }
+  },
+  {
+   "id": "q017",
+   "type": "superlative",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "expected": "Bernal Heights",
+   "independent_value": "Bernal Heights",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "top5": [
+     [
+      "Bernal Heights",
+      -0.428
+     ],
+     [
+      "Seacliff",
+      -0.384
+     ],
+     [
+      "Japantown",
+      -0.374
+     ],
+     [
+      "Outer Mission",
+      -0.332
+     ],
+     [
+      "Golden Gate Park",
+      -0.325
+     ]
+    ]
+   }
+  },
+  {
+   "id": "q018",
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "top5": [
+     [
+      "Lakeshore",
+      1.562
+     ],
+     [
+      "Japantown",
+      0.649
+     ],
+     [
+      "Treasure Island",
+      0.381
+     ],
+     [
+      "North Beach",
+      0.271
+     ],
+     [
+      "Haight Ashbury",
+      0.197
+     ]
+    ]
+   }
+  },
+  {
+   "id": "q019",
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "top5": [
+     [
+      "Lakeshore",
+      8.4
+     ],
+     [
+      "North Beach",
+      1.778
+     ],
+     [
+      "Chinatown",
+      1.056
+     ],
+     [
+      "West of Twin Peaks",
+      1.0
+     ],
+     [
+      "Haight Ashbury",
+      0.933
+     ]
+    ]
+   }
+  },
+  {
+   "id": "q020",
+   "type": "superlative",
+   "metric": "units_approved_net",
+   "area": "Hayes Valley",
+   "expected": "Hayes Valley",
+   "independent_value": "Hayes Valley",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "top5": [
+     [
+      "Hayes Valley",
+      1206.0
+     ],
+     [
+      "Mission",
+      1192.0
+     ],
+     [
+      "Nob Hill",
+      987.0
+     ],
+     [
+      "West of Twin Peaks",
+      776.0
+     ],
+     [
+      "Visitacion Valley",
+      542.0
+     ]
+    ]
+   }
+  },
+  {
+   "id": "q021",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "expected": 1319,
+   "independent_value": 1319.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-25..2026-07-24 (rolling, snapshot-capped)"
+   }
+  },
+  {
+   "id": "q022",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Hayes Valley",
+   "expected": 1206,
+   "independent_value": 1207.0,
+   "delta_pct": 0.08,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-25..2026-07-24 (rolling, snapshot-capped)"
+   }
+  },
+  {
+   "id": "q023",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Mission",
+   "expected": 1172,
+   "independent_value": 1172.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-25..2026-07-24 (rolling, snapshot-capped)"
+   }
+  },
+  {
+   "id": "q024",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "expected": 934,
+   "independent_value": 934.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-25..2026-07-24 (rolling, snapshot-capped)"
+   }
+  },
+  {
+   "id": "q025",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "South of Market",
+   "expected": 511,
+   "independent_value": 511.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-25..2026-07-24 (rolling, snapshot-capped)"
+   }
+  },
+  {
+   "id": "q026",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Financial District/South Beach",
+   "expected": 14208,
+   "independent_value": 14207,
+   "delta_pct": -0.01,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-24 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q027",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Mission",
+   "expected": 7939,
+   "independent_value": 7938,
+   "delta_pct": -0.01,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-24 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q028",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "South of Market",
+   "expected": 6157,
+   "independent_value": 6158,
+   "delta_pct": 0.02,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-24 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q029",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Japantown": 0.38,
+     "Visitacion Valley": -0.258
+    }
+   }
+  },
+  {
+   "id": "q030",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "expected": "Western Addition",
+   "independent_value": "Western Addition",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Western Addition": 0.283,
+     "Presidio Heights": -0.216
+    }
+   }
+  },
+  {
+   "id": "q031",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Lakeshore": 0.08,
+     "Bernal Heights": -0.428
+    }
+   }
+  },
+  {
+   "id": "q032",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "Inner Richmond",
+   "expected": "Inner Richmond",
+   "independent_value": "Inner Richmond",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Inner Richmond": -0.027,
+     "Seacliff": -0.384
+    }
+   }
+  },
+  {
+   "id": "q033",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "expected": "Lone Mountain/USF",
+   "independent_value": "Lone Mountain/USF",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Lone Mountain/USF": 5.421,
+     "Tenderloin": -1.263
+    }
+   }
+  },
+  {
+   "id": "q034",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Outer Richmond",
+   "expected": "Outer Richmond",
+   "independent_value": "Outer Richmond",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Outer Richmond": 2.593,
+     "South of Market": -0.931
+    }
+   }
+  },
+  {
+   "id": "q035",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "600 Valencia St, San Francisco, CA",
+   "expected": 494,
+   "independent_value": 529.0,
+   "delta_pct": 7.09,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.762853648053,
+     "lon": -122.421761654874
+    },
+    "window": "issued 2024-07-25..2026-07-24, 500 m ring",
+    "true_500m_disk": {
+     "n_permits": 564,
+     "units": 529.0
+    },
+    "n_permits_expected": 768,
+    "pipeline_formula_replication": {
+     "n_permits": 799,
+     "units": 497.0,
+     "note": "swapped-axis haversine replicating the generator's ST_Distance_Sphere(ST_Point(lon,lat),...) call; reproduces the frozen expected value, showing the frozen ring was ~395m E-W x ~933m N-S, not a 500m disk"
+    },
+    "geometry_disagreements_gt5_units": [
+     {
+      "permit": "202512020691",
+      "units_delta": -36.0,
+      "true_dist_m": 609,
+      "in_true_500m_disk": false
+     },
+     {
+      "permit": "202507171080",
+      "units_delta": -6.0,
+      "true_dist_m": 605,
+      "in_true_500m_disk": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "q036",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2301 Chestnut St, San Francisco, CA",
+   "expected": 43,
+   "independent_value": 28.0,
+   "delta_pct": -34.88,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.800127254346,
+     "lon": -122.441235120613
+    },
+    "window": "issued 2024-07-25..2026-07-24, 500 m ring",
+    "true_500m_disk": {
+     "n_permits": 545,
+     "units": 28.0
+    },
+    "n_permits_expected": 747,
+    "pipeline_formula_replication": {
+     "n_permits": 797,
+     "units": 43.0,
+     "note": "swapped-axis haversine replicating the generator's ST_Distance_Sphere(ST_Point(lon,lat),...) call; reproduces the frozen expected value, showing the frozen ring was ~395m E-W x ~933m N-S, not a 500m disk"
+    },
+    "geometry_disagreements_gt5_units": []
+   }
+  },
+  {
+   "id": "q037",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "450 10th St, San Francisco, CA",
+   "expected": 53,
+   "independent_value": 188.0,
+   "delta_pct": 254.72,
+   "match": null,
+   "verdict": "mismatch",
+   "detail": {
+    "geocode": {
+     "lat": 37.770913505052,
+     "lon": -122.410542350221
+    },
+    "window": "issued 2024-07-25..2026-07-24, 500 m ring",
+    "true_500m_disk": {
+     "n_permits": 195,
+     "units": 188.0
+    },
+    "n_permits_expected": 323,
+    "pipeline_formula_replication": {
+     "n_permits": 340,
+     "units": 53.0,
+     "note": "swapped-axis haversine replicating the generator's ST_Distance_Sphere(ST_Point(lon,lat),...) call; reproduces the frozen expected value, showing the frozen ring was ~395m E-W x ~933m N-S, not a 500m disk"
+    },
+    "geometry_disagreements_gt5_units": [
+     {
+      "permit": "202511260476",
+      "units_delta": 185.0,
+      "true_dist_m": 459,
+      "in_true_500m_disk": true
+     },
+     {
+      "permit": "201809200919",
+      "units_delta": 17.0,
+      "true_dist_m": 699,
+      "in_true_500m_disk": false
+     }
+    ],
+    "diagnosis": "expected value encodes the distorted ring, not the stated 500 m: the pipeline-formula replication above matches it; the largest disagreeing permits are listed"
+   }
+  },
+  {
+   "id": "q038",
+   "type": "temporal",
+   "metric": "evictions_filed",
+   "area": "Financial District/South Beach",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 82.0,
+    "jul24_jun25": 167.0,
+    "pct_change": 1.037
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q039",
+   "type": "temporal",
+   "metric": "crime_victim_reported",
+   "area": "Lincoln Park",
+   "expected": "decrease",
+   "independent_value": {
+    "jul23_jun24": 175.0,
+    "jul24_jun25": 30.0,
+    "pct_change": -0.829
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q040",
+   "type": "temporal",
+   "metric": "crime_victim_reported",
+   "area": "Golden Gate Park",
+   "expected": "decrease",
+   "independent_value": {
+    "jul23_jun24": 1136.0,
+    "jul24_jun25": 456.0,
+    "pct_change": -0.599
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q041",
+   "type": "temporal",
+   "metric": "crime_victim_reported",
+   "area": "North Beach",
+   "expected": "decrease",
+   "independent_value": {
+    "jul23_jun24": 2589.0,
+    "jul24_jun25": 1140.0,
+    "pct_change": -0.56
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q042",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 4208.0,
+    "prior_12mo": 4574.0,
+    "pct_change": -0.08
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "decomposition_pct_change": {
+     "total": 0.112,
+     "victim": -0.08,
+     "enforcement": 0.436
+    },
+    "artifact_reproduced": true
+   }
+  },
+  {
+   "id": "q043",
+   "type": "trap",
+   "metric": "threeoneone_noise",
+   "area": "San Francisco",
+   "expected": "no",
+   "independent_value": {
+    "noise_complaints_last12": 17903,
+    "prior12": 11058,
+    "pct_change_nominal": 0.619,
+    "pct_change_refined_excl_catchall": 0.259
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "catchall_subtype": "other_excessive_noise",
+    "catchall_share_of_last12": 0.566
+   }
+  }
+ ],
+ "summary": {
+  "confirmed": 42,
+  "drift": 0,
+  "mismatch": 1,
+  "not_verified": 0
+ }
+}

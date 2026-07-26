@@ -61,10 +61,14 @@ def lookup(address: str, radius_m: int, months: int) -> None:
         CREATE TEMP VIEW nearby_permits AS
         WITH ring AS (SELECT unnest(h3_grid_disk(h3_latlng_to_cell_string({lat}, {lon}, {core.H3_RES}), 2)) AS h3_9)
         SELECT p.*,
-               ST_Distance_Sphere(ST_Point(p.lon, p.lat), ST_Point({lon}, {lat})) AS dist_m
+               -- DuckDB ST_Distance_Sphere follows EPSG:4326 authority axis order
+               -- (latitude first); passing (lon, lat) squashes rings into ~395m x
+               -- ~933m ellipses at SF latitude. Found by the independent benchmark
+               -- verification (RESEARCH.md, erratum in the verification section).
+               ST_Distance_Sphere(ST_Point(p.lat, p.lon), ST_Point({lat}, {lon})) AS dist_m
         FROM read_parquet('{core.latest_staged("datasf_permits")}') p
         JOIN ring USING (h3_9)
-        WHERE ST_Distance_Sphere(ST_Point(p.lon, p.lat), ST_Point({lon}, {lat})) <= {radius_m}
+        WHERE ST_Distance_Sphere(ST_Point(p.lat, p.lon), ST_Point({lat}, {lon})) <= {radius_m}
         -- one row per permit: the source repeats permits (e.g. one row per address range)
         QUALIFY row_number() OVER (PARTITION BY permit_number ORDER BY dist_m) = 1
         """
@@ -114,7 +118,7 @@ def lookup(address: str, radius_m: int, months: int) -> None:
         WITH ring AS (SELECT unnest(h3_grid_disk(h3_latlng_to_cell_string({lat}, {lon}, {core.H3_RES}), 2)) AS h3_9),
         nearby AS (
             SELECT p.* FROM places p JOIN ring USING (h3_9)
-            WHERE ST_Distance_Sphere(ST_Point(p.lon, p.lat), ST_Point({lon}, {lat})) <= {radius_m}
+            WHERE ST_Distance_Sphere(ST_Point(p.lat, p.lon), ST_Point({lat}, {lon})) <= {radius_m}
         )
         SELECT
             count(*) FILTER (active_from >= current_date - INTERVAL 12 MONTH),
