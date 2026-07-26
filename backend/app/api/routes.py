@@ -183,6 +183,11 @@ def get_report(
         changes=changes,
         trajectories=trajectories,
         attributes=attributes,
+        # Which neighborhood the attribute facts describe. The H3 spine and the
+        # map polygons come from different boundary files, so near an edge this
+        # can differ from where the user thinks they clicked — the card must
+        # badge it rather than let two surfaces silently disagree.
+        attributes_area=spine_nbhd,
         sources=sources,
     )
 
@@ -202,6 +207,72 @@ def get_trajectory(
         raise HTTPException(404, f"No series for metric={metric} area={area_id}")
     cite = Citation(source=rows[-1].get("source") or metric, source_as_of=rows[-1].get("source_as_of"))
     return build_trajectory(metric, area_id, area_level, rows, cite)
+
+
+# --------------------------------------------------------------------------- #
+#  Hex trajectory — the sub-neighborhood texture ("which corner is changing").
+#  Serves the pipeline's precomputed h3_9 trajectory rows as GeoJSON polygons.
+# --------------------------------------------------------------------------- #
+_HEX_CACHE: dict[str, tuple[float, dict]] = {}
+_HEX_CACHE_TTL = 600.0
+
+
+def _wkt_polygon_coords(wkt: str) -> list[list[list[float]]]:
+    """'POLYGON ((lon lat, …))' → GeoJSON coordinates. Hex boundaries are simple
+    single-ring polygons, so a hand parse beats a geometry dependency."""
+    ring = wkt[wkt.index("((") + 2 : wkt.rindex("))")]
+    return [[[float(x) for x in pt.split()] for pt in ring.split(",")]]
+
+
+@router.get("/hex-trajectory")
+def get_hex_trajectory(
+    metric: str = Query("permits_issued", description="Metric to texture by."),
+) -> dict:
+    """
+    All res-9 hexes' precomputed trajectory for one metric, as a GeoJSON
+    FeatureCollection (~1,100 features). Powers the sub-neighborhood layer:
+    every competitor's map stops at the neighborhood polygon; ours doesn't.
+    """
+    import time as _time
+
+    cached = _HEX_CACHE.get(metric)
+    if cached and _time.monotonic() - cached[0] < _HEX_CACHE_TTL:
+        return cached[1]
+
+    try:
+        allowed = {r["metric"] for r in db.available_metrics()}
+    except FileNotFoundError as e:
+        raise HTTPException(503, str(e))
+    if metric not in allowed:
+        raise HTTPException(404, f"Unknown metric '{metric}'. See /api/catalog.")
+
+    rows = db.hex_trajectory(metric)
+    features = []
+    for r in rows:
+        pct = r.get("pct_change")
+        direction = (
+            "rising" if pct is not None and pct > 0.15
+            else "declining" if pct is not None and pct < -0.15
+            else "stable"
+        )
+        features.append({
+            "type": "Feature",
+            "geometry": {"type": "Polygon", "coordinates": _wkt_polygon_coords(r["boundary_wkt"])},
+            "properties": {
+                "h3_9": r["h3_9"],
+                "neighborhood": r.get("neighborhood"),
+                "last12": r.get("last12"),
+                "prior12": r.get("prior12"),
+                "pct_change": pct,
+                "z": r.get("z"),
+                "direction": direction,
+                "source": r.get("source"),
+                "source_as_of": str(r.get("source_as_of") or ""),
+            },
+        })
+    out = {"type": "FeatureCollection", "metric": metric, "features": features}
+    _HEX_CACHE[metric] = (_time.monotonic(), out)
+    return out
 
 
 @router.get("/freshness")
@@ -309,7 +380,7 @@ async def post_ask(body: AskIn, request: Request) -> AskOut:
     if not ask_mod.check_rate(client_ip):
         raise HTTPException(429, "Free-tier limit reached — try again in a minute. (For volume access, see the For AI apps page.)")
     try:
-        result = await ask_mod.ask(body.question, body.history, body.mission)
+        result = await ask_mod.ask(body.question, body.history, body.mission, body.context)
     except RuntimeError as e:
         raise HTTPException(503, str(e))
     return AskOut(**result)

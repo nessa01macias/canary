@@ -228,6 +228,25 @@ def metric_series(area_ids: list[str], area_level: str, metric: str, months: int
     return rows
 
 
+def hex_trajectory(metric: str) -> list[dict]:
+    """Every res-9 hex's precomputed trajectory for one metric, with the hex
+    polygon boundary as WKT — the sub-neighborhood texture layer ("which corner
+    of the neighborhood is changing"). One query, ~1,100 rows; the serving layer
+    turns it into GeoJSON and caches it."""
+    return query(
+        """
+        SELECT t.area_id AS h3_9, a.neighborhood,
+               h3_cell_to_boundary_wkt(t.area_id) AS boundary_wkt,
+               t.last12, t.prior12, t.pct_change, t.slope36, t.z,
+               t.source, t.source_as_of
+        FROM trajectory t
+        LEFT JOIN areas a ON a.h3_9 = t.area_id
+        WHERE t.area_level = 'h3_9' AND t.metric = ? AND t.rankable
+        """,
+        [metric],
+    )
+
+
 def neighborhood_trends(metrics: list[str]) -> list[dict]:
     """Per-(neighborhood, metric) change signal, read from the pipeline's
     precomputed L3 `trajectory` table (last12/prior12/pct_change/z, provenance

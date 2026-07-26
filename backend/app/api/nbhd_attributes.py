@@ -75,11 +75,18 @@ def build() -> dict:
     meta: dict[str, dict] = {}
     notes: list[str] = []
 
-    def record(attr: str, rows: list[tuple], source: str, as_of: str, note: str) -> None:
+    def record(attr: str, rows: list[tuple], source: str, as_of: str, note: str,
+               fill: float | None = 0, extra_meta: dict | None = None) -> None:
+        # fill=0 is truthful for counts/shares (no points found = really zero);
+        # RATE attributes must pass fill=None — a neighborhood absent from the
+        # source has NO data, and a fake 0% is a lie the report would then cite.
         got = {r[0]: r[1] for r in rows}
         for n in names:
-            attrs[n][attr] = got.get(n, 0)
-        meta[attr] = {"source": source, "source_as_of": as_of, "note": note}
+            if n in got:
+                attrs[n][attr] = got[n]
+            elif fill is not None:
+                attrs[n][attr] = fill
+        meta[attr] = {"source": source, "source_as_of": as_of, "note": note, **(extra_meta or {})}
         print(f"  [ok] {attr:24} ({len(got)}/{len(names)} nbhds non-zero) src={source}@{as_of}")
 
     def points_per_nbhd(attr, source, sql_pts, note, per_km2=False):
@@ -195,20 +202,44 @@ def build() -> dict:
     snap = _latest_snapshot("datasf_commercial_vacancy")
     if snap:
         d, as_of = snap
-        rows = con.execute(
+        # The newest tax year is often mid-filing (2025 landed with ~1/3 of 2024's
+        # rows) — a partial roll makes rates collapse toward zero. Pick the most
+        # recent year with at least half the prior year's row count.
+        yr_row = con.execute(
             f"""
-            WITH v AS (
-              SELECT analysis_neighborhood AS nhood, vacant
+            WITH yr AS (
+              SELECT taxyear, count(*) AS n
               FROM read_csv_auto('{d}/rows.csv', ignore_errors=true)
-              WHERE taxyear = (SELECT max(taxyear) FROM read_csv_auto('{d}/rows.csv', ignore_errors=true))
-                AND analysis_neighborhood IS NOT NULL
+              WHERE taxyear IS NOT NULL
+              GROUP BY taxyear
             )
-            SELECT nhood, avg(CASE WHEN lower(CAST(vacant AS VARCHAR)) IN ('true','t','1','yes') THEN 1.0 ELSE 0.0 END) AS v
-            FROM v GROUP BY nhood
+            SELECT taxyear FROM yr
+            WHERE n >= 0.5 * coalesce((SELECT y2.n FROM yr y2 WHERE y2.taxyear = yr.taxyear - 1), 0)
+            ORDER BY taxyear DESC LIMIT 1
             """
-        ).fetchall()
-        record("storefront_vacancy_rate", rows, "datasf_commercial_vacancy", as_of,
-               "Share of taxable commercial spaces reported vacant, latest tax year (Prop-D roll)")
+        ).fetchone()
+        if yr_row:
+            taxyear = int(yr_row[0])
+            rows = con.execute(
+                f"""
+                WITH v AS (
+                  SELECT analysis_neighborhood AS nhood,
+                         -- blank/unknown flags stay NULL: excluded from the rate,
+                         -- never counted as "not vacant"
+                         CASE WHEN lower(CAST(vacant AS VARCHAR)) IN ('true','t','1','yes','y') THEN 1.0
+                              WHEN lower(CAST(vacant AS VARCHAR)) IN ('false','f','0','no','n') THEN 0.0
+                              ELSE NULL END AS is_vacant
+                  FROM read_csv_auto('{d}/rows.csv', ignore_errors=true)
+                  WHERE taxyear = {taxyear} AND analysis_neighborhood IS NOT NULL
+                )
+                SELECT nhood, avg(is_vacant) AS v
+                FROM v WHERE is_vacant IS NOT NULL GROUP BY nhood
+                """
+            ).fetchall()
+            record("storefront_vacancy_rate", rows, "datasf_commercial_vacancy", as_of,
+                   f"Share of taxable commercial spaces reported vacant, tax year {taxyear} "
+                   "(Prop-D roll; blank flags excluded; neighborhoods missing from the roll carry no value)",
+                   fill=None, extra_meta={"taxyear": taxyear})
 
     snap = _latest_snapshot("datasf_fire_ems_calls")
     if snap:
@@ -377,8 +408,12 @@ def report_attributes(neighborhood: str | None) -> tuple[dict[str, Any], list[di
         v = vals.get(attr)
         if v is None:
             continue
-        out[key] = fmt(v)
         m = meta.get(attr, {})
+        out[key] = fmt(v)
+        # Vacancy display carries its tax year — a rate without its window is
+        # exactly the ambiguity that made two surfaces contradict each other.
+        if attr == "storefront_vacancy_rate" and m.get("taxyear"):
+            out[key] = f"{v * 100:.1f}% (Prop-D roll, {m['taxyear']})"
         src = m.get("source") or attr
         cites.setdefault(src, {"source": src, "source_as_of": _leading_date(m.get("source_as_of"))})
     return out, list(cites.values())

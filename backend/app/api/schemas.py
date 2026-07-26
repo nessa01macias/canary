@@ -28,7 +28,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # --------------------------------------------------------------------------- #
@@ -172,6 +172,14 @@ class AddressReport(BaseModel):
             "pipeline stages each reference layer (data contract pattern 3)."
         ),
     )
+    attributes_area: str | None = Field(
+        default=None,
+        description=(
+            "Neighborhood the attribute facts describe (resolved via the H3 "
+            "spine, which uses different boundaries than the map polygons — "
+            "surface this so scope is explicit near edges)."
+        ),
+    )
     sources: list[Citation] = Field(
         default_factory=list, description="Distinct sources contributing to this report."
     )
@@ -259,6 +267,14 @@ class AskIn(BaseModel):
     )
     mission: str | None = Field(
         None, description="moving | buying | opening_business | exploring — frames every answer.")
+    context: dict | None = Field(
+        None,
+        description=(
+            "Where the user is asking FROM (the PlaceCard scope): "
+            "{scope: city|neighborhood|spot|record, nhood?, lat?, lon?, record_id?}. "
+            "Focuses the grounding on that area without breaking the cached city block."
+        ),
+    )
 
 
 class AskOut(BaseModel):

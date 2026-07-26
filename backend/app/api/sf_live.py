@@ -301,8 +301,13 @@ def _attribute_signals() -> tuple[dict[str, dict[str, float]], str | None]:
             continue
         ranked = sorted(vals, key=lambda kv: kv[1])
         denom = len(ranked) - 1
-        for i, (n, _) in enumerate(ranked):
+        for i, (n, raw) in enumerate(ranked):
             out.setdefault(n, {})[prop] = round(i / denom, 4)
+            # Vacancy also ships its RAW rate: rank-only language ("among the
+            # highest") misled when the underlying rate was 1.2% — the frontend
+            # must render rate + rank together.
+            if attr == "storefront_vacancy_rate":
+                out[n]["vacancyRateRaw"] = round(float(raw), 4)
     return out, data.get("generated_at")
 
 

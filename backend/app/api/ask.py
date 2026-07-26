@@ -149,6 +149,7 @@ HARD RULES:
 3. Facts with direction, never quality labels. NEVER reference race, ethnicity, income, or demographics.
 4. answer.md ≤ 100 words, plain and concrete. Trend ranks are relative: phrase as "among SF's highest/lowest".
 5. Choose blocks the INTENT warrants: comparative question → compare; place question → flyto; preference intent → rank_map; livability question where resident reviews exist → residents. Don't stack more than 4 blocks.
+6. If a FOCUS block is present, the user is currently looking at that area: read "here"/"this area" as it and answer about it unless the question clearly asks otherwise. Don't emit a flyto for the area already in focus.
 
 OUTPUT STRICT JSON, no fences:
 {"blocks":[
@@ -161,6 +162,49 @@ OUTPUT STRICT JSON, no fences:
 
 Allowed chips: """ + ", ".join(GROUNDED_CHIPS) + """
 Allowed compare metrics: """ + ", ".join(COMPARE_METRICS)
+
+
+# ---------------------------------------------------------------------------
+# Focus — the PlaceCard scope the user asks FROM. A small, per-request system
+# block appended AFTER the cached grounding block, so the big city payload's
+# prompt cache stays intact while "here" gains 12 months of monthly detail.
+# ---------------------------------------------------------------------------
+FOCUS_METRICS = [
+    "permits_issued", "units_approved_net", "biz_openings", "biz_closings",
+    # Both crime series on purpose: incidents measure REPORTING; the honest
+    # "getting safer or just more policed?" answer needs victim-reported too.
+    "crime_incidents", "crime_victim_reported", "threeoneone_noise", "evictions_filed",
+]
+
+
+def _focus_block(context: dict | None, real_areas: set[str]) -> str | None:
+    if not isinstance(context, dict):
+        return None
+    nhood = context.get("nhood")
+    # Spot/record scopes may only carry coordinates — resolve through the spine.
+    if not nhood and context.get("lat") is not None and context.get("lon") is not None:
+        try:
+            h3 = db.hex_for_point(float(context["lat"]), float(context["lon"]))
+            rows = db.query("SELECT neighborhood FROM areas WHERE h3_9 = ?", [h3])
+            nhood = rows[0]["neighborhood"] if rows else None
+        except Exception:  # noqa: BLE001 — focus is best-effort, never fatal
+            nhood = None
+    if not nhood or nhood not in real_areas:
+        return None
+    series: dict[str, list] = {}
+    for metric in FOCUS_METRICS:
+        try:
+            rows = db.metric_series([nhood], "neighborhood", metric, 12)
+        except Exception:  # noqa: BLE001
+            continue
+        if rows:
+            series[metric] = [
+                {"period": str(r["period"]), "value": r["value"] or 0} for r in rows
+            ]
+    if not series:
+        return None
+    payload = {"focus_area": nhood, "scope": context.get("scope"), "monthly_series_12mo": series}
+    return json.dumps(payload, separators=(",", ":"))
 
 
 # ---------------------------------------------------------------------------
@@ -200,7 +244,10 @@ async def _hydrate_residents(block: dict, real_areas: set[str]) -> dict | None:
     }
 
 
-async def ask(question: str, history: list[dict], mission: str | None) -> dict:
+async def ask(
+    question: str, history: list[dict], mission: str | None,
+    context: dict | None = None,
+) -> dict:
     if not ANTHROPIC_API_KEY:
         raise RuntimeError("ANTHROPIC_API_KEY not configured on the server.")
 
@@ -212,14 +259,22 @@ async def ask(question: str, history: list[dict], mission: str | None) -> dict:
         {"role": "user", "content": question[:500]},
     ]
 
+    system = [
+        {"type": "text", "text": SYSTEM_RULES + "\n\nUSER MISSION: " + mission_line},
+        {"type": "text", "text": "GROUNDING DATA:\n" + grounding_json,
+         "cache_control": {"type": "ephemeral"}},
+    ]
+    focus_json = _focus_block(context, real_areas)
+    if focus_json:
+        # After the cache marker on purpose: varies per request, must not bust
+        # the cached city-grounding prefix.
+        system.append({"type": "text", "text": "FOCUS:\n" + focus_json})
+        grounded_on = {**grounded_on, "focus": json.loads(focus_json)["focus_area"]}
+
     body = {
         "model": ASK_MODEL,
         "max_tokens": 1100,
-        "system": [
-            {"type": "text", "text": SYSTEM_RULES + "\n\nUSER MISSION: " + mission_line},
-            {"type": "text", "text": "GROUNDING DATA:\n" + grounding_json,
-             "cache_control": {"type": "ephemeral"}},
-        ],
+        "system": system,
         "messages": messages,
     }
     headers = {
