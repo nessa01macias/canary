@@ -309,7 +309,7 @@ async def post_ask(body: AskIn, request: Request) -> AskOut:
     if not ask_mod.check_rate(client_ip):
         raise HTTPException(429, "Free-tier limit reached — try again in a minute. (For volume access, see the For AI apps page.)")
     try:
-        result = await ask_mod.ask(body.question, body.history)
+        result = await ask_mod.ask(body.question, body.history, body.mission)
     except RuntimeError as e:
         raise HTTPException(503, str(e))
     return AskOut(**result)

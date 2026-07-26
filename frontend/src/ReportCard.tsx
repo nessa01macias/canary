@@ -27,8 +27,8 @@ const CATEGORY_DOT: Record<string, string> = {
   other: '#999',
 }
 
-// Tiny inline sparkline — the 24-month series as one polyline.
-function Sparkline({ series }: { series: { value: number }[] }) {
+// Tiny inline sparkline — a value series as one polyline. Reused by AnswerCanvas.
+export function Sparkline({ series }: { series: { value: number }[] }) {
   if (series.length < 2) return null
   const w = 72
   const h = 20

@@ -1,23 +1,26 @@
 """
-Ask Canary — intent-language in, grounded facts + map actions out.
+Ask Canary v2 — the curated-generative-UI engine.
 
-This endpoint is the consumer face of the B2B product: an LLM grounded on the
-SAME per-neighborhood payload the map serves (the benchmark's 0-39% → 85-98%
-mechanism, productized). Architecture decisions:
+The model COMPOSES an interface from a blessed block registry; the server
+HYDRATES every number from DuckDB. The model never emits a statistic that
+reaches a chart — it only arranges components and writes prose (which must
+quote the grounding). A hallucinated interface is impossible; a bespoke one is
+automatic:
 
-- CONTEXT-STUFFING, NOT TOOL-USE: the grounded corpus (~41 areas × signals,
-  attributes, resident aggregates) is ~15KB — one round-trip, no agent loop.
-  The grounding block is prompt-cached (cache_control) so repeat asks are cheap.
-- THE MODEL DRIVES THE MAP: strict-JSON contract {answer_md, neighborhoods,
-  chips, followups}; the frontend turns those into fly-to + fit-overlay actions.
-  Outputs are CLAMPED server-side to the real area names / real grounded chips.
-- HONESTY AS POLICY: no rent/price claims (we hold no price data — say so and
-  answer the nearest computable), numbers only from the grounding, neutral
-  directions, no demographic steering. Constraint #2/#3 enforced in the prompt.
-- FREE-TIER SHAPED: per-IP rate limit; the same grounding as a licensed feed
-  with SLAs is what "For AI apps" sells.
+  intent ──► Claude (grounded, mission-aware) ──► block spec
+                                                    │  {"blocks":[{type,...}]}
+             frontend renders ◄── server hydration ─┘  (series from DuckDB,
+             (sparklines, compare, map actions)         residents from k-anon views)
 
-Keys live server-side only (ANTHROPIC_API_KEY). No SDK — plain httpx.
+Block registry (all optional, model picks what the intent warrants):
+  answer     {md}                                    the prose receipt
+  rank_map   {chips}                                 applies the fit overlay
+  flyto      {neighborhood}                          camera + glow
+  compare    {areas[2..3], metrics[1..3]}            side-by-side w/ 12mo series
+  residents  {area}                                  k-anon review averages
+
+Personalization: `mission` (moving | buying | opening_business | exploring)
+rides every call and frames both the prose and the component choice.
 """
 
 from __future__ import annotations
@@ -28,19 +31,34 @@ import time
 
 import httpx
 
-from . import sf_live, store
+from . import db, sf_live, store
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 ASK_MODEL = os.environ.get("CANARY_ASK_MODEL", "claude-haiku-4-5")
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 
-# The chips the frontend can actually apply (mirror of GROUNDED_TAGS keys).
 GROUNDED_CHIPS = [
     "Low crime", "Quiet", "Housing stability", "New construction",
     "Business openings", "Vacancy trend", "Good schools", "Transit access",
     "Tree canopy", "Groceries & retail", "Away from industry", "Flood risk",
     "Parking", "Road projects", "Liquor & cannabis", "Fast emergency response",
 ]
+
+# Metrics the compare block may chart (all have full 41-hood monthly series).
+COMPARE_METRICS = [
+    "permits_issued", "units_approved_net", "biz_openings", "biz_closings",
+    "crime_incidents", "crime_victim_reported", "threeoneone_noise",
+    "evictions_filed", "threeoneone_cleaning",
+]
+
+MISSIONS = {"moving", "buying", "opening_business", "exploring"}
+
+MISSION_FRAMING = {
+    "moving": "The user is looking for a place to LIVE (renting). Lead with livability change: quiet, safety direction, eviction pressure, resident reviews.",
+    "buying": "The user is buying a home — a 10-year commitment. Lead with the forward layer: approved construction, units pipeline, structural trajectory, schools, flood.",
+    "opening_business": "The user wants to open a business. Lead with commercial vitality: business openings momentum, storefront vacancy, foot-traffic proxies (transit, grocery anchors), cannabis/liquor licensing as nightlife signal.",
+    "exploring": "The user is exploring. Surprise them with the most striking real movements in the data.",
+}
 
 # ---------------------------------------------------------------------------
 # Rate limit — in-process sliding window per client IP. Demo/free tier.
@@ -62,18 +80,19 @@ def check_rate(client_ip: str) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Grounding — compact per-neighborhood facts from the same cached payload the
-# map serves, plus the k-anonymous resident aggregates when they exist.
+# Grounding — compact per-neighborhood facts (same cached payload the map uses).
 # ---------------------------------------------------------------------------
-async def _grounding() -> tuple[str, dict]:
+async def _grounding() -> tuple[str, set[str], dict]:
     nbhd = await sf_live.get_neighborhoods()
     areas: list[dict] = []
+    names: set[str] = set()
     as_of = None
     for f in nbhd.get("features", []):
         p = f.get("properties") or {}
         name = p.get("nhood")
         if not name:
             continue
+        names.add(name)
         as_of = p.get("trendsAsOf") or as_of
         areas.append({
             "name": name,
@@ -81,7 +100,6 @@ async def _grounding() -> tuple[str, dict]:
             "permits_24mo": p.get("permits"),
             "net_units_approved": p.get("netUnits"),
             "construction_$M": round((p.get("totalCost") or 0) / 1e6, 1),
-            # rank-normalized 0..1 across SF (1 = highest / fastest-rising)
             "trend_ranks": {
                 "crime_rising": p.get("crimeTrend"),
                 "noise_rising": p.get("noiseTrend"),
@@ -110,40 +128,85 @@ async def _grounding() -> tuple[str, dict]:
              "getting_better_of5": r.get("avg_trajectory")}
             for r in rows
         ]
-    except Exception:  # noqa: BLE001 — resident layer optional
+    except Exception:  # noqa: BLE001
         pass
 
     payload = {
         "geography": "San Francisco, 41 Analysis Neighborhoods",
         "as_of": as_of,
-        "note": "trend_ranks and attributes are rank-normalized 0..1 across SF neighborhoods (1 = most / fastest-rising). permits/net_units/$ are raw 24-month values.",
+        "note": "trend_ranks and attributes are rank-normalized 0..1 across SF (1 = most/fastest-rising). permits/net_units/$ are raw 24-month values.",
         "areas": areas,
         "resident_reviews_k_anonymous": residents,
     }
-    return json.dumps(payload, separators=(",", ":")), {"areas": len(areas), "as_of": as_of}
+    return json.dumps(payload, separators=(",", ":")), names, {"areas": len(areas), "as_of": as_of}
 
 
-SYSTEM_RULES = """You are Canary, a neighborhood-change assistant for San Francisco, grounded EXCLUSIVELY on the attached open-data payload (permits, business churn, crime, 311, evictions, schools, transit, flood, etc. — with as-of dates).
+SYSTEM_RULES = """You are Canary, a neighborhood-change engine for San Francisco, grounded EXCLUSIVELY on the attached open-data payload. You do not chat — you COMPOSE AN INTERFACE from blocks, plus a short prose receipt.
 
 HARD RULES:
-1. Use ONLY numbers present in the grounding. Never invent a statistic, price, or trend.
-2. You have NO rent or home-price data. If asked about prices/rents, say so plainly in one sentence, then answer the nearest computable question (e.g. displacement pressure via evictions, vacancy, construction supply).
-3. Facts with direction, never quality labels: say "crime reports rising fastest in SF" not "bad neighborhood". NEVER reference race, ethnicity, income, or demographics — not even indirectly.
-4. Be concise: ≤120 words of prose, bullets welcome. Mention 2-4 specific neighborhoods with one cited number each.
-5. Trend ranks are relative (0..1 across SF): phrase as "among SF's highest/lowest", not as percentages.
-6. If resident reviews exist for a relevant area, you may quote the averages as "residents say".
+1. Prose uses ONLY numbers present in the grounding. Never invent a statistic, price, or trend.
+2. You have NO rent or home-price data. If asked about prices/rents, say so in one sentence, then answer the nearest computable question.
+3. Facts with direction, never quality labels. NEVER reference race, ethnicity, income, or demographics.
+4. answer.md ≤ 100 words, plain and concrete. Trend ranks are relative: phrase as "among SF's highest/lowest".
+5. Choose blocks the INTENT warrants: comparative question → compare; place question → flyto; preference intent → rank_map; livability question where resident reviews exist → residents. Don't stack more than 4 blocks.
 
-OUTPUT: respond with STRICT JSON only, no markdown fence:
-{"answer_md": "...", "neighborhoods": ["exact area names from the grounding you recommend looking at"], "chips": ["preference chips from the allowed list that encode the user's intent"], "followups": ["2 short natural next questions"]}
-Allowed chips: """ + ", ".join(GROUNDED_CHIPS)
+OUTPUT STRICT JSON, no fences:
+{"blocks":[
+  {"type":"answer","md":"..."},
+  {"type":"rank_map","chips":["..."]},
+  {"type":"flyto","neighborhood":"..."},
+  {"type":"compare","areas":["A","B"],"metrics":["biz_openings"]},
+  {"type":"residents","area":"..."}
+],"followups":["...","..."]}
+
+Allowed chips: """ + ", ".join(GROUNDED_CHIPS) + """
+Allowed compare metrics: """ + ", ".join(COMPARE_METRICS)
 
 
-async def ask(question: str, history: list[dict]) -> dict:
+# ---------------------------------------------------------------------------
+# Hydration — the server fills every number the components render.
+# ---------------------------------------------------------------------------
+def _hydrate_compare(block: dict, real_areas: set[str]) -> dict | None:
+    areas = [a for a in block.get("areas", []) if a in real_areas][:3]
+    metrics = [m for m in block.get("metrics", []) if m in COMPARE_METRICS][:3] or ["biz_openings"]
+    if len(areas) < 2:
+        return None
+    series: dict[str, dict[str, list]] = {}
+    for area in areas:
+        series[area] = {}
+        for metric in metrics:
+            rows = db.metric_series([area], "neighborhood", metric, 12)
+            series[area][metric] = [
+                {"period": str(r["period"]), "value": r["value"] or 0} for r in rows
+            ]
+    return {"type": "compare", "areas": areas, "metrics": metrics, "series": series}
+
+
+async def _hydrate_residents(block: dict, real_areas: set[str]) -> dict | None:
+    area = block.get("area")
+    if area not in real_areas:
+        return None
+    try:
+        rows = await store.fetch_resident_layer("resident_layer_by_area")
+    except Exception:  # noqa: BLE001
+        return None
+    match = next((r for r in rows if r["place_label"] == area), None)
+    if not match:
+        return None
+    return {
+        "type": "residents", "area": area, "n_reviews": match["n_reviews"],
+        "safety": match.get("avg_safety"), "quiet": match.get("avg_noise"),
+        "getting_better": match.get("avg_trajectory"),
+    }
+
+
+async def ask(question: str, history: list[dict], mission: str | None) -> dict:
     if not ANTHROPIC_API_KEY:
         raise RuntimeError("ANTHROPIC_API_KEY not configured on the server.")
 
-    grounding_json, grounded_on = await _grounding()
+    grounding_json, real_areas, grounded_on = await _grounding()
 
+    mission_line = MISSION_FRAMING.get(mission or "", MISSION_FRAMING["exploring"])
     messages = [
         *[{"role": m["role"], "content": m["content"][:1000]} for m in history[-6:]],
         {"role": "user", "content": question[:500]},
@@ -151,10 +214,9 @@ async def ask(question: str, history: list[dict]) -> dict:
 
     body = {
         "model": ASK_MODEL,
-        "max_tokens": 900,
+        "max_tokens": 1100,
         "system": [
-            {"type": "text", "text": SYSTEM_RULES},
-            # The big grounding block is cache-marked: repeat questions reuse it.
+            {"type": "text", "text": SYSTEM_RULES + "\n\nUSER MISSION: " + mission_line},
             {"type": "text", "text": "GROUNDING DATA:\n" + grounding_json,
              "cache_control": {"type": "ephemeral"}},
         ],
@@ -171,24 +233,38 @@ async def ask(question: str, history: list[dict]) -> dict:
         raise RuntimeError(f"LLM upstream {resp.status_code}: {resp.text[:200]}")
     text = "".join(b.get("text", "") for b in resp.json().get("content", []))
 
-    # Parse the strict-JSON contract; degrade to plain prose if the model slips.
-    parsed: dict = {}
     try:
-        start = text.index("{")
-        end = text.rindex("}") + 1
-        parsed = json.loads(text[start:end])
+        parsed = json.loads(text[text.index("{"): text.rindex("}") + 1])
     except (ValueError, json.JSONDecodeError):
-        parsed = {"answer_md": text.strip()}
+        parsed = {"blocks": [{"type": "answer", "md": text.strip()}]}
 
-    # Clamp actions to reality: only real area names, only real chips.
-    real_areas = {a["name"] for a in json.loads(grounding_json)["areas"]}
-    neighborhoods = [n for n in parsed.get("neighborhoods", []) if n in real_areas][:4]
-    chips = [c for c in parsed.get("chips", []) if c in GROUNDED_CHIPS][:4]
+    # Clamp + hydrate: only known block types, real areas, real chips; every
+    # chartable number filled server-side from DuckDB.
+    blocks: list[dict] = []
+    for b in parsed.get("blocks", [])[:5]:
+        t = b.get("type")
+        if t == "answer" and b.get("md"):
+            blocks.append({"type": "answer", "md": str(b["md"])[:1200]})
+        elif t == "rank_map":
+            chips = [c for c in b.get("chips", []) if c in GROUNDED_CHIPS][:4]
+            if chips:
+                blocks.append({"type": "rank_map", "chips": chips})
+        elif t == "flyto" and b.get("neighborhood") in real_areas:
+            blocks.append({"type": "flyto", "neighborhood": b["neighborhood"]})
+        elif t == "compare":
+            hydrated = _hydrate_compare(b, real_areas)
+            if hydrated:
+                blocks.append(hydrated)
+        elif t == "residents":
+            hydrated = await _hydrate_residents(b, real_areas)
+            if hydrated:
+                blocks.append(hydrated)
+
+    if not any(b["type"] == "answer" for b in blocks):
+        blocks.insert(0, {"type": "answer", "md": "Here's what the record shows."})
 
     return {
-        "answer_md": parsed.get("answer_md", "").strip() or "I couldn't form an answer — try rephrasing?",
-        "neighborhoods": neighborhoods,
-        "chips": chips,
+        "blocks": blocks,
         "followups": [str(f)[:120] for f in parsed.get("followups", [])][:2],
         "grounded_on": grounded_on,
         "model": ASK_MODEL,

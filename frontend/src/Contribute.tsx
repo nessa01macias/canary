@@ -16,9 +16,10 @@ const QUESTIONS: { key: string; label: string }[] = [
 type Props = {
   onClose: () => void
   neighborhoods: string[] // real area names from the map data (empty = not loaded yet)
+  onSubmitted?: () => void // give-to-get: a successful review unlocks the resident layer
 }
 
-export function Contribute({ onClose, neighborhoods }: Props) {
+export function Contribute({ onClose, neighborhoods, onSubmitted }: Props) {
   const [place, setPlace] = useState('')
   const [movingOut, setMovingOut] = useState<boolean | null>(null)
   const [ratings, setRatings] = useState<Record<string, number>>({})
@@ -39,6 +40,7 @@ export function Contribute({ onClose, neighborhoods }: Props) {
     })
     if (res.ok) {
       setStatus('done')
+      onSubmitted?.()
     } else {
       setError(res.error)
       setStatus('error')

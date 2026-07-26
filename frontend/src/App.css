@@ -584,6 +584,15 @@ html, body, #root, #app {
 }
 .nb-pop-res b { color: #FF6624; font-weight: 700; }
 .nb-pop-res-scale { color: #b9a68d; }
+/* Give-to-get: the values tease (blurred) until the visitor reviews one area. */
+.nb-pop-res.is-locked b { filter: blur(4.5px); user-select: none; }
+.nb-pop-res-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #b06a1a;
+}
 
 /* ── Preferences panel: head row, edit & CTA ─────────────────── */
 .prefs-head {
@@ -1201,27 +1210,7 @@ html, body, #root, #app {
   font-size: clamp(12px, 1.6vh, 12.5px);
 }
 
-/* Locked tiers (everything below Fundamentals): the section TITLE stays crisp,
-   but the chips go inert and their labels blur — a teaser for more to come. */
 .prefs-tag .tag-label { display: inline-block; }
-.prefs-tag.is-locked {
-  cursor: pointer;                 /* tap to contribute local intel + unlock */
-  background: #fff;
-  border-color: rgba(0,0,0,0.10);
-  box-shadow: none;
-}
-.prefs-tag.is-locked:hover {
-  border-color: rgba(255, 102, 36, 0.55);
-  transform: translateY(-1px);
-}
-.prefs-tag.is-locked:hover .tag-label { filter: blur(2px); } /* hint it's reachable */
-.prefs-tag.is-locked .tag-label {
-  filter: blur(3.5px);
-  opacity: 0.8;
-  user-select: none;
-  transition: filter 0.16s ease;
-}
-.prefs-tag.is-locked .soon { display: none; }
 
 
 /* ── Contribute modal (resident give-to-get) ─────────────────── */
@@ -2284,102 +2273,14 @@ html, body, #root, #app {
   color: #2329A8;
 }
 
-/* ── Ask Canary — the grounded assistant (consumer face of the B2B feed) ── */
-.ask-launcher {
-  position: absolute;
-  bottom: 58px;
-  left: 16px;
-  z-index: 26;
-  background: #2329A8;
-  color: #fff;
-  border: none;
-  border-radius: 99px;
-  padding: 11px 18px;
-  font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 24px rgba(35,41,168,0.35);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-.ask-launcher:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(35,41,168,0.45); }
+/* ── Ask Canary — the answer canvas (omnibox asks; the map responds) ─────── */
 
-.ask-panel {
-  position: absolute;
-  bottom: 58px;
-  left: 16px;
-  z-index: 26;
-  width: 390px;
-  max-height: min(64vh, 560px);
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 12px 48px rgba(35,41,168,0.22);
-  overflow: hidden;
-  animation: slide-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
-  font-family: 'Inter', system-ui, sans-serif;
-}
-.ask-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 14px 16px 10px;
-  background: #2329A8;
-}
-.ask-head .drawer-close { position: static; background: rgba(255,255,255,0.15); color: #fff; }
-.ask-title { font-size: 15px; font-weight: 800; color: #fff; }
-.ask-sub { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 2px; }
-
-.ask-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.ask-starters-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #999; margin: 4px 0 8px; }
-.ask-starter {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: #fff7f2;
-  border: 1px solid rgba(255,102,36,0.25);
-  border-radius: 10px;
-  padding: 9px 12px;
-  font-family: inherit;
-  font-size: 13px;
-  color: #333;
-  cursor: pointer;
-  margin-bottom: 6px;
-  transition: border-color 0.12s ease, background 0.12s ease;
-}
-.ask-starter:hover { border-color: #FF6624; background: #fff1e8; }
-
-.ask-msg { font-size: 13.5px; line-height: 1.5; }
-.ask-msg--user {
-  align-self: flex-end;
-  background: #2329A8;
-  color: #fff;
-  border-radius: 14px 14px 4px 14px;
-  padding: 8px 13px;
-  max-width: 85%;
-}
-.ask-msg--assistant {
-  align-self: flex-start;
-  background: #f7f3ee;
-  border-radius: 14px 14px 14px 4px;
-  padding: 10px 13px;
-  max-width: 95%;
-  color: #222;
-}
+/* Markdown from the answer block — the model writes tight prose (reused). */
 .ask-md p { margin: 0 0 6px; }
 .ask-md p:last-child { margin-bottom: 0; }
 .ask-md ul { margin: 4px 0; padding-left: 18px; }
-.ask-busy { color: #999; font-style: italic; animation: pulse 1.2s infinite; }
 
-.ask-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+/* Pill action (the ⌖ flyto button) + follow-up links, reused by the canvas. */
 .ask-action {
   background: #fff;
   border: 1px solid rgba(35,41,168,0.35);
@@ -2393,10 +2294,6 @@ html, body, #root, #app {
   transition: background 0.12s ease;
 }
 .ask-action:hover { background: #eef0ff; }
-.ask-action--chips { border-color: rgba(255,102,36,0.5); color: #d24e12; }
-.ask-action--chips:hover { background: #fff1e8; }
-
-.ask-followups { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
 .ask-followup {
   text-align: left;
   background: none;
@@ -2410,29 +2307,204 @@ html, body, #root, #app {
 }
 .ask-followup:hover { color: #FF6624; }
 
-.ask-inputrow {
+/* The answer canvas: a transient card under the navbar. The MAP is the real
+   response (rank_map / flyto auto-execute above); this is the receipt. */
+.answer-strip {
+  position: absolute;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 28;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(70vh, 620px);
+  overflow-y: auto;
+  padding: 18px 20px 16px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(28,20,14,0.24);
+  animation: slide-up 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.answer-close { position: absolute; top: 12px; right: 12px; }
+
+.answer-busy {
+  position: absolute;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 28;
   display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.97);
+  border-radius: 99px;
+  box-shadow: 0 12px 40px rgba(28,20,14,0.2);
+  font-size: 13px;
+  color: #666;
+  font-style: italic;
+  animation: slide-up 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* "what the map just did" line — the receipt for an executed action block. */
+.answer-did { margin: 8px 0 2px; }
+.answer-did-item {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2329A8;
+  letter-spacing: 0.2px;
+}
+
+/* compare block: side-by-side columns, one per area. */
+.answer-compare {
+  display: flex;
+  gap: 14px;
+  margin: 12px 0 4px;
+  flex-wrap: wrap;
+}
+.answer-compare-col {
+  flex: 1 1 200px;
+  min-width: 180px;
+  padding: 12px 13px;
+  background: #faf6f1;
+  border: 1px solid #efe7dd;
+  border-radius: 12px;
+}
+.answer-compare-area {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 8px;
+}
+.answer-compare-metric {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 5px 0;
+  color: #FF6624;
+}
+.answer-compare-label { flex: 1; font-size: 11.5px; color: #555; }
+.answer-compare-val {
+  font-size: 13px;
+  font-weight: 800;
+  color: #111;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* residents block: the gated depth (Glassdoor's second salary page). */
+.answer-residents {
+  margin: 12px 0 4px;
+  padding: 12px 13px;
+  background: #fff8f2;
+  border: 1px solid rgba(255,102,36,0.22);
+  border-radius: 12px;
+}
+.answer-residents-head { font-size: 12px; font-weight: 800; color: #b06a1a; margin-bottom: 6px; }
+.answer-residents-vals { font-size: 13px; color: #6b4a24; }
+.answer-residents-vals b { color: #FF6624; }
+.answer-residents-vals.is-locked b { filter: blur(5px); user-select: none; }
+.answer-residents-scale { color: #b9a68d; }
+.answer-unlock {
+  display: block;
+  margin-top: 9px;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px dashed rgba(255,102,36,0.5);
+  border-radius: 10px;
+  padding: 8px 11px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #d24e12;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.answer-unlock:hover { background: #fff1e8; }
+
+.answer-followups {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid #f0eae2;
 }
-.ask-input {
-  flex: 1;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 9px 12px;
+.answer-grounding {
+  margin-top: 10px;
+  font-size: 10.5px;
+  color: #b0a596;
+  letter-spacing: 0.2px;
+}
+
+/* ── First-run mission picker (one question personalizes everything) ─────── */
+.mission-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(28, 20, 14, 0.34);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: ob-fade 0.2s ease;
+}
+.mission-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 30px 32px 26px;
+  text-align: center;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.3);
+  animation: ob-rise 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mission-card .ob-title { text-align: center; }
+.mission-card .ob-sub { margin: 0 auto; text-align: center; }
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0 8px;
+}
+.mission-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
   font-family: inherit;
-  font-size: 13px;
-}
-.ask-input:focus { outline: 2px solid rgba(255,102,36,0.5); border-color: transparent; }
-.ask-send {
-  background: #FF6624;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  width: 42px;
-  font-size: 16px;
-  font-weight: 800;
   cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
 }
-.ask-send:disabled { background: #ccc; cursor: not-allowed; }
+.mission-btn:hover {
+  transform: translateY(-2px);
+  border-color: #FF6624;
+  box-shadow: 0 10px 26px rgba(255,102,36,0.2);
+}
+.mission-icon { font-size: 26px; }
+.mission-label { font-size: 13.5px; font-weight: 700; color: #222; }
+.mission-skip {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: #8a7d6d;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.mission-skip:hover { color: #111; }

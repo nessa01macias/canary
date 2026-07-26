@@ -13,11 +13,23 @@ import { fetchReport, type AddressReport } from './report'
 import { ReportCard } from './ReportCard'
 import { MobileSheet } from './MobileSheet'
 import { neighborhoodHeadlines } from './headlines'
-import ContributeModal from './ContributeModal'
 import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
-import { AskCanary } from './AskCanary'
+import { AnswerStrip } from './AnswerStrip'
+import { useAsk } from './useAsk'
 import './App.css'
+
+// Mission → the chips it seeds, and the omnibox voice it speaks in.
+const MISSIONS: { id: string; icon: string; label: string; seed: string[]; placeholder: string }[] = [
+  { id: 'moving', icon: '🏠', label: 'Moving here', seed: ['Quiet', 'Low crime', 'Housing stability'],
+    placeholder: 'Where should I live? Ask, or type an address…' },
+  { id: 'buying', icon: '🔑', label: 'Buying a home', seed: ['New construction', 'Good schools', 'Flood risk'],
+    placeholder: "What's approved to be built near…? Ask, or type an address…" },
+  { id: 'opening_business', icon: '☕', label: 'Opening a business', seed: ['Business openings', 'Vacancy trend', 'Transit access'],
+    placeholder: 'Where should the shop go? Ask, or type an address…' },
+  { id: 'exploring', icon: '🧭', label: 'Just exploring', seed: [],
+    placeholder: "Ask anything — “which neighborhoods are getting quieter?”" },
+]
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
@@ -415,19 +427,27 @@ function App() {
   // `priorities` but STAYS in `shortlist`, rendered as an empty-state button.
   const [shortlist, setShortlist] = useState<string[]>([])
   const [matchTop, setMatchTop] = useState<string[]>([])
-  // Onboarding picker opens first so the user chooses what to rank neighborhoods by.
-  const [onboardingOpen, setOnboardingOpen] = useState(true)
-  // The give-to-get gate (Kat's Glassdoor mechanic): tiers beyond Fundamentals are
-  // locked until the user contributes local intel once. Persisted so a returning
-  // contributor stays unlocked. Tapping a locked chip opens the ContributeModal.
-  const [gateUnlocked, setGateUnlocked] = useState(
-    () => localStorage.getItem('canary_gate_unlocked') === '1',
+  // The chip catalog: reachable any time via "Choose what matters", but no longer
+  // the forced first screen (the mission picker is). Open data → never gated.
+  const [onboardingOpen, setOnboardingOpen] = useState(false)
+  // Mission — the personalization seed, chosen on first run. Frames every Ask
+  // answer and seeds the starting chips.
+  const [mission, setMission] = useState<string | null>(() => localStorage.getItem('canary_mission'))
+  const [missionOpen, setMissionOpen] = useState(() => !localStorage.getItem('canary_mission'))
+  // The give-to-get gate, REVERSED: the open-data chips are free; the gate is now
+  // the community layer — resident reviews are unlocked by contributing one
+  // (true Glassdoor timing: gate the salary page, not the front door). Persisted.
+  const [residentUnlocked, setResidentUnlocked] = useState(
+    () => localStorage.getItem('canary_resident_unlocked') === '1',
   )
-  const [contribTag, setContribTag] = useState<string | null>(null)
-  const unlockGate = () => {
-    localStorage.setItem('canary_gate_unlocked', '1')
-    setGateUnlocked(true)
+  const unlockResidents = () => {
+    localStorage.setItem('canary_resident_unlocked', '1')
+    setResidentUnlocked(true)
   }
+  // The hover popup is imperative MapLibre HTML, so its handler closure would
+  // capture a stale unlock flag — mirror it in a ref the builder reads live.
+  const residentUnlockedRef = useRef(residentUnlocked)
+  residentUnlockedRef.current = residentUnlocked
   // News card: click a neighborhood (area mode) → its real-record "why" card.
   const [selectedNbhd, setSelectedNbhd] = useState<
     | (import('./headlines').NbhdNewsStats & {
@@ -505,6 +525,36 @@ function App() {
       maxZoom: 15,
     })
   }
+  const flashNeighborhood = (nhood: string) => {
+    zoomToNeighborhood(nhood)
+    glowNeighborhood(nhood, true)
+    setTimeout(() => glowNeighborhood(nhood, false), 2600)
+  }
+
+  // Mission pick → seed chips, personalize, close the picker.
+  const pickMission = (id: string) => {
+    localStorage.setItem('canary_mission', id)
+    setMission(id)
+    setMissionOpen(false)
+    const seed = MISSIONS.find((m) => m.id === id)?.seed ?? []
+    if (seed.length) applyAssistantChips(seed)
+  }
+
+  // The omnibox question flow. On a result, AUTO-EXECUTE the action blocks: the
+  // model composed the answer, but the MAP is the response.
+  const askFlow = useAsk()
+  const runAsk = (q: string) => {
+    askFlow.ask(q).then(() => {})
+  }
+  useEffect(() => {
+    const r = askFlow.result
+    if (!r) return
+    for (const b of r.blocks) {
+      if (b.type === 'rank_map') applyAssistantChips(b.chips)
+      else if (b.type === 'flyto') flashNeighborhood(b.neighborhood)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [askFlow.result])
 
   // Drive the trajectory overlay's "breathing": write a per-polygon sine into the
   // `pulse` feature-state each frame. Cheap — ~36 features, one repaint per frame.
@@ -798,8 +848,11 @@ function App() {
         // residents SAID — never our own quality label.
         const res = residentRef.current.get(String(p.nhood))
         const fmt = (v: number | null) => (v == null ? '–' : v.toFixed(1))
+        // Give-to-get: the values exist, but stay blurred (a tease, never hidden)
+        // until the visitor contributes one review of their own.
+        const unlocked = residentUnlockedRef.current
         const resLine = res
-          ? `<div class="nb-pop-res">Residents (${res.n}): safety <b>${fmt(res.safety)}</b> · quiet <b>${fmt(res.noise)}</b> · getting better <b>${fmt(res.trajectory)}</b> <span class="nb-pop-res-scale">/5</span></div>`
+          ? `<div class="nb-pop-res${unlocked ? '' : ' is-locked'}">Residents (${res.n}): safety <b>${fmt(res.safety)}</b> · quiet <b>${fmt(res.noise)}</b> · getting better <b>${fmt(res.trajectory)}</b> <span class="nb-pop-res-scale">/5</span>${unlocked ? '' : '<span class="nb-pop-res-hint">🔒 ＋ Review a neighborhood you know to unlock</span>'}</div>`
           : ''
         popup
           .setLngLat(e.lngLat)
@@ -1017,7 +1070,11 @@ function App() {
         </div>
 
         {/* The centerpiece: the product's promise as a control. */}
-        <AddressSearch onPick={(s) => openReportRef.current?.(s.center[1], s.center[0])} />
+        <AddressSearch
+          onPick={(s) => openReportRef.current?.(s.center[1], s.center[0])}
+          onAsk={runAsk}
+          placeholder={MISSIONS.find((m) => m.id === mission)?.placeholder}
+        />
 
         <div className="topbar-right">
           <button className="nav-quiet" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
@@ -1093,18 +1150,44 @@ function App() {
       {contributing && (
         <Contribute
           onClose={() => setContributing(false)}
+          onSubmitted={unlockResidents}
           neighborhoods={nbhdIdsRef.current.map((n) => n.nhood).filter(Boolean).sort()}
         />
       )}
 
-      {/* Give-to-get gate: tap a locked chip → contribute local intel → unlock.
-          Submission really persists (POST /api/contributions) and really unlocks. */}
-      {contribTag && (
-        <ContributeModal
-          tag={contribTag}
-          onClose={() => setContribTag(null)}
-          onSubmitted={unlockGate}
-        />
+      {/* Ask Canary — the answer canvas. Omnibox asks; the map responds (rank_map
+          / flyto auto-execute above); this is the receipt. Transient. */}
+      <AnswerStrip
+        busy={askFlow.busy}
+        result={askFlow.result}
+        question={askFlow.lastQuestion}
+        onFollowup={runAsk}
+        onShowNeighborhood={flashNeighborhood}
+        residentUnlocked={residentUnlocked}
+        onUnlockResidents={() => setContributing(true)}
+        onClose={askFlow.clear}
+      />
+
+      {/* First-run mission picker — one question that personalizes everything. */}
+      {missionOpen && (
+        <div className="mission-overlay">
+          <div className="mission-card">
+            <p className="prefs-eyebrow">Welcome to Canary</p>
+            <h2 className="ob-title">What brings you here?</h2>
+            <p className="ob-sub">We'll tailor the map — and you can change it anytime.</p>
+            <div className="mission-grid">
+              {MISSIONS.map((m) => (
+                <button key={m.id} className="mission-btn" onClick={() => pickMission(m.id)}>
+                  <span className="mission-icon">{m.icon}</span>
+                  <span className="mission-label">{m.label}</span>
+                </button>
+              ))}
+            </div>
+            <button className="mission-skip" onClick={() => { pickMission('exploring') }}>
+              Skip — just show me the map
+            </button>
+          </div>
+        </div>
       )}
 
       {/* News card — a neighborhood's "why", from the public record (area mode). */}
@@ -1158,15 +1241,6 @@ function App() {
           </MobileSheet>
         )
       })()}
-
-      <AskCanary
-        onShowNeighborhood={(n) => {
-          zoomToNeighborhood(n)
-          glowNeighborhood(n, true)
-          setTimeout(() => glowNeighborhood(n, false), 2600)
-        }}
-        onApplyChips={applyAssistantChips}
-      />
 
       {reportOpen && (
         <MobileSheet
@@ -1294,13 +1368,12 @@ function App() {
             </p>
 
             <div className="ob-tiers">
-              {PREFERENCE_TIERS.map((tier, ti) => {
-                // The give-to-get gate: only Fundamentals is open on first visit;
-                // deeper tiers blur and tease until the user contributes local
-                // intel once (tap a locked chip → ContributeModal → unlock).
-                const locked = ti > 0 && !gateUnlocked
+              {PREFERENCE_TIERS.map((tier) => {
+                // Gate reversed: the chip catalog is all open civic data, so every
+                // tier is free. The give-to-get moment moved to the depth that
+                // matters — resident-review details (see `residentUnlocked`).
                 return (
-                  <section key={tier.title} className={`ob-tier${locked ? ' is-locked' : ''}`}>
+                  <section key={tier.title} className="ob-tier">
                     <p className="ob-tier-title">{tier.title}</p>
                     <div className="prefs-tags">
                       {tier.fields.map((f) => {
@@ -1310,11 +1383,10 @@ function App() {
                           <button
                             key={f.label}
                             type="button"
-                            className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}${locked ? ' is-locked' : ''}`}
-                            aria-pressed={locked ? undefined : sel}
-                            aria-label={locked ? `Add local info about ${f.label} to unlock` : undefined}
-                            disabled={!locked && (!f.available || atCap)}
-                            onClick={() => (locked ? setContribTag(f.label) : toggleShortlist(f.label))}
+                            className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}`}
+                            aria-pressed={sel}
+                            disabled={!f.available || atCap}
+                            onClick={() => toggleShortlist(f.label)}
                           >
                             <span className="tag-label">{f.label}</span>
                             {!f.available && <span className="soon">soon</span>}

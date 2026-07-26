@@ -213,6 +213,14 @@ class ContributionIn(BaseModel):
     # directional calibration). Free-form JSON — schema-on-read, like events.attrs.
     answers: dict[str, object] | None = None
 
+    @model_validator(mode="after")
+    def _not_empty(self) -> "ContributionIn":
+        # An all-defaults body ({}) is not a contribution — found the hard way
+        # when an API probe 201'd an empty row into the store.
+        if not (self.place_label or self.ratings or self.comment or self.answers):
+            raise ValueError("contribution must include a place_label, ratings, comment, or answers")
+        return self
+
 
 # --------------------------------------------------------------------------- #
 #  Resident layer — the READ side of the moat. k-anonymised (n ≥ 3) aggregates
@@ -249,14 +257,19 @@ class AskIn(BaseModel):
         default_factory=list,
         description="Prior turns [{role: user|assistant, content}], last 6 kept.",
     )
+    mission: str | None = Field(
+        None, description="moving | buying | opening_business | exploring — frames every answer.")
 
 
 class AskOut(BaseModel):
-    answer_md: str
-    neighborhoods: list[str] = Field(
-        default_factory=list, description="Real area names — frontend flies to them.")
-    chips: list[str] = Field(
-        default_factory=list, description="Grounded preference chips — frontend applies them.")
+    """Curated generative UI: the model composed these blocks from the blessed
+    registry; the server hydrated every chartable number from DuckDB."""
+
+    blocks: list[dict] = Field(
+        default_factory=list,
+        description="answer{md} | rank_map{chips} | flyto{neighborhood} | "
+                    "compare{areas,metrics,series} | residents{area,n_reviews,…}",
+    )
     followups: list[str] = Field(default_factory=list)
     grounded_on: dict = Field(default_factory=dict)
     model: str = ""
