@@ -958,14 +958,19 @@ function App() {
           active && typeof st.match === 'number'
             ? ` · <span class="nb-pop-fit-inline">${Math.round(st.match * 100)}% fit${count > 1 ? ` on your ${count} picks` : ''}</span>`
             : ''
-        // The give-to-get tease at the highest-traffic surface: where reviews
-        // exist, the values blur until the visitor contributes one of their own.
+        // The give-to-get tease at the highest-traffic surface. While locked,
+        // EVERY hover carries the lock (Glassdoor's trick isn't where the blur
+        // sits — it's that you can't avoid seeing it): blurred values where
+        // reviews exist, "be the first" where they don't. Unlocked → values
+        // only where they exist. Open civic data is never gated (canon #6).
         const res = residentRef.current.get(String(p.nhood))
         const unlocked = residentUnlockedRef.current
         const fmtR = (x: number | null) => (x == null ? '–' : x.toFixed(1))
         const resLine = res
           ? `<div class="nb-pop-res${unlocked ? '' : ' is-locked'}">residents: safety <b>${fmtR(res.safety)}</b> · quiet <b>${fmtR(res.noise)}</b> · better <b>${fmtR(res.trajectory)}</b>${unlocked ? '' : ' <span class="nb-pop-lock">🔒</span>'}</div>`
-          : ''
+          : unlocked
+            ? ''
+            : `<div class="nb-pop-res is-empty">residents: <span class="nb-pop-lock">🔒</span> none yet — be the first</div>`
         popup
           .setLngLat(e.lngLat)
           .setHTML(
