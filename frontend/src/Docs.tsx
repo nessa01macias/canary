@@ -60,6 +60,14 @@ export function Docs({ onClose, initialTab }: Props) {
                 ) : (
                   <span>{children}</span>
                 ),
+              // Figures are referenced repo-relative (frontend/public/…) so the
+              // markdown renders on GitHub too; on the site they serve from /.
+              img: ({ src, alt }) => (
+                <img
+                  src={typeof src === 'string' ? src.replace(/^frontend\/public\//, '/') : src}
+                  alt={alt}
+                />
+              ),
             }}
           >
             {doc.body}

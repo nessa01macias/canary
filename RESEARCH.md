@@ -71,7 +71,13 @@ reasoning, added context should help only marginally. If the deficit is one of d
 availability, grounded accuracy should approach the ceiling. The results support the
 second interpretation.
 
-## 2. Ground truth
+## 2. Methods
+
+This section describes the ground truth against which all answers are graded
+(§2.1), the construction and freezing of the question set (§2.2), the two
+experimental conditions (§2.3), and the judging protocol (§2.4).
+
+### 2.1 Ground truth
 
 Expected answers are computed by the Canary pipeline from municipal public records:
 building permits, the business registry, police incident reports, eviction notices,
@@ -96,7 +102,7 @@ Three properties of the ground truth bear on benchmark validity.
    itself, including one case in which the receipts corrected our own mistaken
    narrative attribution, is reported in Appendix A.
 
-## 3. Benchmark design
+### 2.2 Benchmark design
 
 The instrument contains 43 questions in seven blocks, generated programmatically
 from the database and frozen at git commit `064dc90` before any model was queried.
@@ -118,7 +124,7 @@ Metrics used include victim-reported crime, business openings, eviction filings,
 encampment reports, and net approved housing units. Volume and effect-size floors
 ensure that each expected answer is unambiguous at the stated tolerance.
 
-## 4. Experimental setup
+### 2.3 Experimental setup
 
 Two conditions with identical questions. In the **unassisted** condition, the model
 receives the question and a system prompt instructing it to commit to a direct
@@ -142,7 +148,7 @@ identifiers: `claude-fable-5`, `gpt-5.6-sol`, `gpt-5-search-api`, `sonar-pro`,
 `grok-4.5`. Gemini could not be included due to account constraints and is planned
 for v1.1.
 
-## 5. Judging
+### 2.4 Judging
 
 Answers are graded by an LLM judge (`claude-sonnet-5`, held out of the test set)
 that receives the question, the pre-verified ground truth with its receipt, and the
@@ -159,7 +165,10 @@ the judge's error bar. One limitation is noted for the record: the judge shares 
 vendor with one tested model. The fixed-evidence design (the judge never assesses
 facts, only commitment to supplied facts) and the human audit are the mitigations.
 
-## 6. Results
+## 3. Results
+
+Table 1 and Figure 1 report overall accuracy by model; Table 2 and Figure 2
+report accuracy by question block, pooled across the five models.
 
 Table 1. Overall accuracy by model and condition.
 
@@ -174,6 +183,12 @@ Table 1. Overall accuracy by model and condition.
 ¹ Two of Sol's 43 grounded verdicts failed to parse during judging and are excluded
 rather than assumed correct; all 41 judged answers were correct.
 
+![Grouped bar chart of unassisted versus grounded accuracy for the five models. Unassisted bars sit between 36 and 45 percent; grounded bars sit between 93 and 100 percent.](frontend/public/research/fig1_models.svg)
+
+**Figure 1.** Overall accuracy by model and condition (data of Table 1). Every
+model roughly doubles its accuracy when a single Canary API response is prepended
+to the prompt. Sol's grounded bar reflects the 41 of 43 verdicts that parsed.
+
 Table 2. Accuracy by question block, pooled across the five models.
 
 | Block | Unassisted | Grounded |
@@ -186,7 +201,15 @@ Table 2. Accuracy by question block, pooled across the five models.
 | Temporal (in training window) | 95% | 100% |
 | Distractors | 100% | 100% |
 
-### 6.1 Error analysis: the superlative block
+![Grouped horizontal bar chart of unassisted versus grounded accuracy for the seven question blocks. Superlative and numeric blocks score zero unassisted and 91 to 100 percent grounded; the temporal control is near ceiling in both conditions.](frontend/public/research/fig2_blocks.svg)
+
+**Figure 2.** Accuracy by question block, pooled across the five models (data of
+Table 2). The blocks that require an unpublished aggregation (superlative,
+numeric, address-level) collapse in the unassisted condition and recover when
+grounded; the temporal control, whose answers fall inside training windows, is
+near ceiling in both conditions.
+
+### 3.1 Error analysis: the superlative block
 
 Question 16 asked which San Francisco neighborhood had the largest increase in new
 business openings over the past year. The registry answer is Japantown (+38%, the
@@ -211,7 +234,7 @@ because the fact was never published. In the grounded condition, Grok 4.5 answer
 the same question in one line: Japantown, 50 to 69 openings, +38%, with the
 z-score.
 
-### 6.2 Error analysis: the numeric block
+### 3.2 Error analysis: the numeric block
 
 Asked how many net new housing units were approved in Nob Hill in the twelve months
 before July 2026, GPT-5.6 Sol answered "roughly 25 net new housing units," with a
@@ -222,7 +245,7 @@ indistinguishable from that of an informed estimate. All five models failed all
 eight numeric items in the unassisted condition; all five answered all eight
 correctly when grounded.
 
-### 6.3 The generational shift in failure mode
+### 3.3 The generational shift in failure mode
 
 In v0, previous-generation models refused frequently (GPT-4o declined 39 of 46
 items). In v1, refusals nearly disappear outside the search-configured model, and
@@ -230,7 +253,7 @@ error mass moves into confident, specific, well-argued wrong answers (17-25 of 4
 per model). From a user-welfare perspective this is a regression: an abstention
 prompts further search, whereas a fluent wrong answer terminates it.
 
-### 6.4 Controls
+### 3.4 Controls
 
 The temporal block, whose answers fall inside the models' training windows, scored
 95% unassisted, and both distractor items were answered correctly by all models.
@@ -239,7 +262,7 @@ statistical artifacts we planted. The deficit is confined to aggregate facts abo
 the recent present, which is precisely the class of fact that must be computed from
 primary records rather than remembered from text.
 
-### 6.5 Grounded condition
+### 3.5 Grounded condition
 
 With one API response prepended, three of five models answered every judged item
 correctly, and the remaining two scored 93% and 95%, with residual misses
@@ -249,7 +272,7 @@ tuning. We take this as evidence that current frontier models are already suffic
 consumers of structured area data, and that the binding constraint is the existence
 and machine-legibility of the data itself.
 
-## 7. Discussion
+## 4. Discussion
 
 **The deficit is informational, not cognitive.** Three observations triangulate this
 conclusion: capability improved between generations while diagnostic-block accuracy
@@ -260,7 +283,7 @@ scale does not conjure them.
 
 **Fluency without grounding harms users.** The shift from refusal to confident error
 means the cost of the missing data layer is rising with model quality. The
-qualitative examples in §6.1 and §6.2 illustrate answers whose surface form carries
+qualitative examples in §3.1 and §3.2 illustrate answers whose surface form carries
 the markers of expertise while the content is wrong by wide margins.
 
 **Machine-readable semantics are part of the data.** Our own v1.0.1 payload error is
@@ -278,7 +301,7 @@ pilot scale, on our question dimensions, in one metropolitan area. They do not
 establish market demand for external grounding; that is an adoption question outside
 the scope of this study.
 
-## 8. Limitations
+## 5. Limitations
 
 One metro; one run per condition; 43 questions; five models, with Gemini absent. The
 judge is a language model: verdicts are stored and auditable, a human audit of a
@@ -290,7 +313,7 @@ falsifiable forward predictions, in Appendix A. The ±30% numeric
 tolerance is permissive. The temporal (n=4) and distractor (n=2) blocks are small
 and their percentages carry wide uncertainty.
 
-## 9. Reproducibility
+## 6. Reproducibility
 
 ```
 cd backend
@@ -306,7 +329,7 @@ verdicts), stamped with pipeline git version and source snapshot date. The inten
 cadence is monthly regeneration alongside the data, so that the question set tracks
 the live record.
 
-## 10. Future work
+## 7. Future work
 
 Include Gemini; run stability replicates; publish the human audit of judge verdicts;
 extend to a second metropolitan area; publish as a recurring, versioned report so
@@ -342,7 +365,7 @@ would have obscured the error. Second, the Tenderloin decomposition: police inci
 data measures proactive enforcement in some categories and victim reports in others,
 and splitting them inverts the headline (victim-reported crime fell 8.0% while
 enforcement activity rose 43.6%; citywide, −18.7% against +29.7%). Both corrections
-were subsequently encoded as benchmark items (§3, distractors).
+were subsequently encoded as benchmark items (§2.2, distractors).
 
 A related correction was made after this pass: loading the full 311 archive (8.79M
 cases since 2008) revealed that the nominal noise-complaint trend (+61.9%) is
