@@ -142,6 +142,24 @@ function ResidentsSay({
   )
 }
 
+// One-click ground truth: deep links OUT to Google (the keyless Maps URLs —
+// linking out is free and ToS-clean; embedding Google tiles or Places data in
+// our map would not be). The familiar gut-check lives one click away.
+function GroundTruth({ lat, lon }: { lat: number; lon: number }) {
+  const at = `${lat.toFixed(6)}%2C${lon.toFixed(6)}`
+  return (
+    <p className="pc-groundtruth">
+      see it for yourself ·{' '}
+      <a href={`https://www.google.com/maps/search/?api=1&query=${at}`} target="_blank" rel="noopener noreferrer">
+        Google Maps ↗
+      </a>{' '}
+      <a href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${at}`} target="_blank" rel="noopener noreferrer">
+        Street View ↗
+      </a>
+    </p>
+  )
+}
+
 export type AskSectionState = {
   busy: boolean
   result: AskResult | null
@@ -363,6 +381,7 @@ export function PlaceCard({
             <span className="rc-sub"> · within ~500 m · last 24 months</span>
           </h3>
           <SpotReportBody report={report ?? null} loading={!!reportLoading} />
+          <GroundTruth lat={scope.lat} lon={scope.lon} />
         </div>
       )}
 
@@ -412,6 +431,7 @@ export function PlaceCard({
 
             {p.detail && <p className="drawer-detail">{p.detail}</p>}
             <p className="drawer-source">→ {p.source}{p.neighborhood ? ` · ${p.neighborhood}` : ''}</p>
+            <GroundTruth lat={p.lat} lon={p.lng} />
 
             <button
               className="news-report-btn"

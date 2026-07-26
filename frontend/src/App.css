@@ -475,6 +475,23 @@ html, body, #root, #app {
   padding-top: 12px;
 }
 
+/* Ground-truth deep links (outbound to Google — GroundTruth in PlaceCard) */
+.pc-groundtruth {
+  font-size: 11px;
+  color: #999;
+  margin: 10px 0 0;
+}
+.pc-groundtruth a {
+  color: #8a7c72;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(138, 124, 114, 0.5);
+  margin-right: 6px;
+}
+.pc-groundtruth a:hover {
+  color: #1c1712;
+  border-bottom-color: currentColor;
+}
+
 /* ── Drawer: before→after delta ──────────────────────────────── */
 .drawer-toprow {
   display: flex;
@@ -2453,9 +2470,9 @@ html, body, #root, #app {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(28, 20, 14, 0.34);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  /* LIGHT scrim, no blur — the breathing map behind IS the welcome; the
+     wizard is a guest on top of it, not a wall in front of it. */
+  background: rgba(28, 20, 14, 0.16);
   animation: ob-fade 0.2s ease;
 }
 .mission-card {
@@ -2655,3 +2672,27 @@ html, body, #root, #app {
   letter-spacing: 0;
   color: #a89a8a;
 }
+
+/* ── Intake wizard step 2 — the mission's question, answered with chips ─── */
+.mission-chips {
+  justify-content: center;
+  margin: 18px 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mission-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+/* Deep links out to the familiar gut-check (Street View) — spot/record rungs. */
+.pc-groundtruth {
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: #a89a8a;
+}
+.pc-groundtruth a { color: #2329A8; font-weight: 600; text-decoration: none; margin-right: 8px; }
+.pc-groundtruth a:hover { text-decoration: underline; }

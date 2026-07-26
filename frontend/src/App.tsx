@@ -33,6 +33,27 @@ const MISSIONS: { id: string; icon: string; label: string; seed: string[]; place
     placeholder: "Ask anything — “which neighborhoods are getting quieter?”" },
 ]
 
+// Step 2 of the intake: the mission's QUESTION, answered with chips. Curated
+// per QUESTION_MAP.md lead order, and only chips in GROUNDED_TAGS — every pick
+// must visibly move the map (a dead choice teaches the user not to choose).
+const MISSION_QUESTIONS: Record<string, { question: string; chips: string[] }> = {
+  buying: {
+    question: 'What would make or break the place?',
+    chips: ['Good schools', 'Flood risk', 'New construction', 'Quiet', 'Low crime',
+            'Housing stability', 'Tree canopy', 'Parking'],
+  },
+  moving: {
+    question: 'What does a good street mean to you?',
+    chips: ['Low crime', 'Quiet', 'Housing stability', 'Transit access',
+            'Groceries & retail', 'Tree canopy', 'Fast emergency response', 'Good schools'],
+  },
+  opening_business: {
+    question: 'What does the shop need around it?',
+    chips: ['Business openings', 'Vacancy trend', 'Transit access', 'Groceries & retail',
+            'Liquor & cannabis', 'Parking', 'Road projects', 'Away from industry'],
+  },
+}
+
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
 
@@ -366,6 +387,13 @@ function App() {
   // answer and seeds the starting chips.
   const [mission, setMission] = useState<string | null>(() => localStorage.getItem('canary_mission'))
   const [missionOpen, setMissionOpen] = useState(() => !localStorage.getItem('canary_mission'))
+  // The intake wizard's working state (step 1 = who are you; step 2 = the
+  // mission's question, answered with chips).
+  const [wizardMission, setWizardMission] = useState<string | null>(null)
+  const [wizardPicks, setWizardPicks] = useState<string[]>([])
+  // Never interrupt before value: the breathing map IS the welcome. The card
+  // slides in only after the map is up and has had a beat to make its case.
+  const [wizardReady, setWizardReady] = useState(false)
   // The give-to-get gate, REVERSED: the open-data chips are free; the gate is now
   // the community layer — resident reviews are unlocked by contributing one
   // (true Glassdoor timing: gate the salary page, not the front door). Persisted.
@@ -595,6 +623,13 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scopeKey(scope), mapReady])
+
+  // The wizard waits for the map (plus a beat) before asking anything.
+  useEffect(() => {
+    if (!mapReady || !missionOpen) return
+    const t = setTimeout(() => setWizardReady(true), 1200)
+    return () => clearTimeout(t)
+  }, [mapReady, missionOpen])
 
   // Manual-zoom demotion: crossing the threshold with a mismatched scope closes
   // the card — the drawn scope no longer frames anything legible at that zoom.
@@ -1299,24 +1334,88 @@ function App() {
         </MobileSheet>
       )}
 
-      {/* First-run mission picker — one question that personalizes everything. */}
-      {missionOpen && (
+      {/* First-run intake — mission is the FIRST question OF the questionnaire,
+          not a replacement for it: who are you (1 of 2) → your mission's
+          question, answered with chips (2 of 2) → the map ranks + the city card
+          receipts what happened and teaches the ask box. Light scrim, delayed
+          past map load: value first, questions second. */}
+      {missionOpen && wizardReady && (
         <div className="mission-overlay">
           <div className="mission-card">
-            <p className="prefs-eyebrow">Welcome to Canary</p>
-            <h2 className="ob-title">What brings you here?</h2>
-            <p className="ob-sub">We'll tailor the map — and you can change it anytime.</p>
-            <div className="mission-grid">
-              {MISSIONS.map((m) => (
-                <button key={m.id} className="mission-btn" onClick={() => pickMission(m.id)}>
-                  <span className="mission-icon">{m.icon}</span>
-                  <span className="mission-label">{m.label}</span>
+            {!wizardMission ? (
+              <>
+                <p className="prefs-eyebrow">Welcome to Canary · 1 of 2</p>
+                <h2 className="ob-title">What brings you here?</h2>
+                <p className="ob-sub">The map reads differently for a renter, a buyer, and a shop owner.</p>
+                <div className="mission-grid">
+                  {MISSIONS.map((m) => (
+                    <button
+                      key={m.id}
+                      className="mission-btn"
+                      onClick={() => (m.id === 'exploring' ? pickMission('exploring') : setWizardMission(m.id))}
+                    >
+                      <span className="mission-icon">{m.icon}</span>
+                      <span className="mission-label">{m.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <button className="mission-skip" onClick={() => pickMission('exploring')}>
+                  Skip — just show me the map
                 </button>
-              ))}
-            </div>
-            <button className="mission-skip" onClick={() => { pickMission('exploring') }}>
-              Skip — just show me the map
-            </button>
+              </>
+            ) : (
+              <>
+                <p className="prefs-eyebrow">
+                  {MISSIONS.find((m) => m.id === wizardMission)?.label} · 2 of 2
+                </p>
+                <h2 className="ob-title">{MISSION_QUESTIONS[wizardMission]?.question}</h2>
+                <p className="ob-sub">
+                  Pick up to {MAX_PICKS} — every pick re-ranks all 41 neighborhoods live.
+                </p>
+                <div className="prefs-tags mission-chips">
+                  {(MISSION_QUESTIONS[wizardMission]?.chips ?? []).map((c) => {
+                    const sel = wizardPicks.includes(c)
+                    const atCap = wizardPicks.length >= MAX_PICKS && !sel
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        className={`prefs-tag${sel ? ' is-selected' : ''}`}
+                        aria-pressed={sel}
+                        disabled={atCap}
+                        onClick={() =>
+                          setWizardPicks((prev) => (sel ? prev.filter((x) => x !== c) : [...prev, c]))
+                        }
+                      >
+                        <span className="tag-label">{c}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                <div className="mission-actions">
+                  <button
+                    className="mission-skip"
+                    onClick={() => {
+                      // The full 6-tier catalog instead — mission still saved.
+                      localStorage.setItem('canary_mission', wizardMission)
+                      setMission(wizardMission)
+                      setMissionOpen(false)
+                      setOnboardingOpen(true)
+                    }}
+                  >
+                    Show me everything instead
+                  </button>
+                  <button
+                    type="button"
+                    className="ob-done"
+                    disabled={wizardPicks.length === 0}
+                    onClick={() => pickMission(wizardMission, wizardPicks)}
+                  >
+                    Show my map
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
