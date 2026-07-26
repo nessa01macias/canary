@@ -239,8 +239,10 @@
   },
   {
    "id": "q040",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Correct direction"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Direction (decrease) matches ground truth, though exact numbers differ slightly from verified figures.",
+   "repaired": true
   },
   {
    "id": "q041",

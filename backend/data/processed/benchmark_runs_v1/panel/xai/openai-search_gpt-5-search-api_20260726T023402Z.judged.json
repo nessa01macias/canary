@@ -1,0 +1,265 @@
+{
+ "provider": "openai-search:gpt-5-search-api",
+ "judge_model": "grok-4.5",
+ "run_file": "openai-search_gpt-5-search-api_20260726T023402Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to overall decrease/falling crime, matching ground truth."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q003",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges by admitting no specific Outer Mission data and only infers citywide trend without committing"
+  },
+  {
+   "id": "q004",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to increase or decrease; offers to look up data instead."
+  },
+  {
+   "id": "q005",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses with no data found; does not commit to decrease or any direction for the area"
+  },
+  {
+   "id": "q006",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to any direction for Presidio Heights specifically"
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges; says data insufficient to conclude increase or decrease for Lakeshore"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase, matching ground truth direction"
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to yearly direction; claims data insufficient"
+  },
+  {
+   "id": "q010",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with 'likely down' but explicitly says cannot say definitively without specific data"
+  },
+  {
+   "id": "q011",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses/hedges on Presidio-specific trend without committing to up or down"
+  },
+  {
+   "id": "q012",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to up or down for Twin Peaks over the year; discusses SF-wide and short-term district data instead."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to no increase/flat at zero, opposite of GT increase"
+  },
+  {
+   "id": "q014",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges heavily with no data found and only a tentative 'best guess' of small increases, without firm commitment."
+  },
+  {
+   "id": "q015",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges and explicitly refuses to commit on Nob Hill, only notes city-wide increase."
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing; suggests other areas but does not name Japantown or firmly pick a wrong winner."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to correct neighborhood name Bernal Heights matching ground truth"
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to Sunset District as likely answer instead of ground-truth Lakeshore, with hedging"
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin (and others) instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to South of Market rather than Hayes Valley"
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges and claims data unavailable without committing to any number."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to ~60-70 units, far outside 30% tolerance of 1206."
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Guesses 200-400 units, well outside 1172\u00b130% tolerance, with hedging"
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to <20 net units (far from 934\u00b130%) despite some hedging language"
+  },
+  {
+   "id": "q025",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges that it could not find the specific figure and only offers related/non-matching numbers."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~22k-43k active/registered businesses, far outside 14208 \u00b130%."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to ~15-20k active (vs GT 7939 \u00b130%), with mild hedging"
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 20k-30k vs ground truth ~6k (far outside 30% tol)"
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Japantown as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Western Addition as having the bigger increase, matching ground truth"
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Lakeshore having the bigger increase, matching ground truth name/direction."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Inner Richmond as having the bigger increase per GT relative changes."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Tenderloin as larger increase, but GT is Lone Mountain/USF"
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa larger (+590 vs +17); GT has Outer Richmond +2.6 > SoMa -0.9"
+  },
+  {
+   "id": "q035",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 20-50 units, far outside 494 \u00b135% tolerance, though with some hedging"
+  },
+  {
+   "id": "q036",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses to give a number and only offers a possible future estimate without committing."
+  },
+  {
+   "id": "q037",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Heavy hedging/refusal to find data; only speculative wrong-range guess without commitment"
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase, matching ground truth direction."
+  },
+  {
+   "id": "q039",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses specific data for Lincoln Park and does not commit to rise or fall there."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to fall/decrease matching GT."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime fell, matching ground-truth decrease."
+  },
+  {
+   "id": "q042",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with mixed/improving-some-worsening-others without committing to overall victimization decrease"
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to no, complaints rise != louder city, cites reporting changes"
+  }
+ ]
+}

@@ -89,8 +89,10 @@
   },
   {
    "id": "q015",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer ultimately commits to an increase in units approved, matching ground truth despite some hedging.",
+   "repaired": true
   },
   {
    "id": "q016",

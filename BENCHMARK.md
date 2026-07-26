@@ -9,19 +9,23 @@ Canary API response (data slice + field docs) prepended.
 
 | Model | Bare | Canary ON | Confidently wrong (bare) |
 |---|---|---|---|
-| claude-fable-5 | 43% | **100%** | 17/43 |
+| claude-fable-5 | 49% | **100%** | 19/43 |
 | grok-4.5 | 42% | **100%** | 25/43 |
-| gpt-5.6-sol | 42% | **100%**¹ | 23/43 |
-| gpt-5-search-api | 36% | **95%** | 11/43 (+13 refusals) |
-| perplexity sonar-pro (live search) | 45% | **93%** | 21/43 |
+| gpt-5.6-sol | 44% | **100%** | 23/43 |
+| gpt-5-search-api | 37% | **95%**¹ | 11/43 (+13 refusals) |
+| perplexity sonar-pro (live search) | 47% | **93%** | 21/43 |
 
-¹ 41/41 judged (2 verdicts failed to parse and are excluded, not assumed).
+¹ 40/42 judged (one verdict failed to parse after retries; excluded, not assumed).
+All counts from `python -m app.benchmark.stats` (Wilson 95% CIs and McNemar tests
+in RESEARCH.md); 19 originally unparsed verdicts completed via `judge --repair`,
+disclosed there.
 
-Headline blocks (bare, pooled): **superlatives 0/25 · numeric 0% · pairwise 64%**
+Headline blocks (bare, pooled): **superlatives 1/25 · numeric 1/40 · pairwise 67%**
 (vs 50% coin-flip) · temporal-in-training-window 95% (the control that shows the gap
 is the present, not the past).
 
 Reproduce: `cd backend && python -m app.benchmark.generate_v1 && python -m app.benchmark.run
-&& python -m app.benchmark.run --grounded && python -m app.benchmark.judge`
+&& python -m app.benchmark.run --grounded && python -m app.benchmark.judge
+&& python -m app.benchmark.judge --repair && python -m app.benchmark.stats`
 (v0 history: previous-generation models scored 0-39% bare, dominated by refusals;
 see the git history of this file.)

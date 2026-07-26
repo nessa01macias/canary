@@ -15,14 +15,14 @@ Francisco neighborhoods, covering direction of change, cross-neighborhood rankin
 counts, pairwise comparisons, and approved construction near specific addresses.
 Ground truth for every question is computed from municipal public records and
 carries a citation; the question set was frozen at a git commit prior to any model
-query. In the unassisted condition, accuracy ranges from 36% to 45%. In contrast to
+query. In the unassisted condition, accuracy ranges from 37% to 49%. In contrast to
 the previous model generation, refusals are rare; the dominant failure mode is
 confident error, with individual models producing confidently wrong answers on up to
-25 of 43 items. All 25 attempts at ranking questions ("which neighborhood changed
-most") were incorrect, and all counting questions were answered outside a ±30%
-tolerance. When a single Canary API response is prepended to the same questions,
-accuracy rises to 93-100%, with three of five models answering every judged item
-correctly. Control blocks indicate the deficit is specific to aggregate,
+25 of 43 items. Twenty-four of 25 answers to ranking questions ("which neighborhood
+changed most") were incorrect, as were 39 of 40 counting answers graded against a
+±30% tolerance. When a single Canary API response is prepended to the same
+questions, accuracy rises to 93-100%, with three of five models answering all 43
+items correctly. Control blocks indicate the deficit is specific to aggregate,
 present-state facts: the same models score 95% on equivalent questions inside their
 training window and pass both designed distractor items. We interpret these results
 as evidence that the failure is one of data availability rather than model
@@ -35,9 +35,9 @@ We asked the five newest AI models 43 checkable questions about San Francisco
 neighborhoods, the kind anyone deciding where to live actually asks: is crime
 getting better here, where are new businesses opening, how much housing was just
 approved near this address. Every question has a verifiable answer in the city's
-public records. On their own, the models scored around 40%, and unlike older models
-they rarely said "I don't know"; one gave confidently wrong answers on 25 of 43
-questions. Asked which neighborhood was rising fastest, the five models produced
+public records. On their own, the models scored between 37% and 49%, and unlike
+older models they rarely said "I don't know"; one gave confidently wrong answers on
+25 of 43 questions. Asked which neighborhood was rising fastest, the five models produced
 four different confident answers, all wrong. The reason is that these answers were
 never written down anywhere: nobody had computed them from the millions of raw
 records the city publishes, so there was nothing for a model to learn or retrieve.
@@ -124,6 +124,11 @@ Metrics used include victim-reported crime, business openings, eviction filings,
 encampment reports, and net approved housing units. Volume and effect-size floors
 ensure that each expected answer is unambiguous at the stated tolerance.
 
+One bookkeeping note for reproducers: the second distractor (the
+enforcement-versus-victimization item, q042) is typed `direction` in the frozen
+artifact file. All analyses classify it with the distractor block, as tabled above,
+and the analysis script (`app.benchmark.stats`) encodes that mapping explicitly.
+
 ### 2.3 Experimental setup
 
 Two conditions with identical questions. In the **unassisted** condition, the model
@@ -158,6 +163,17 @@ answers delivered without meaningful hedging are additionally flagged as
 *confidently wrong*; following VOYGR's scoring rationale, we regard this as the most
 costly outcome for users, who receive misinformation rather than no information.
 
+**Judging completeness.** The initial judging pass left 19 of 430 verdicts
+unparsed, in most cases because the judge's token cap truncated long verdicts
+mid-JSON. The holes were filled in a repair pass that grades only missing verdicts,
+with the same judge and the same prompt; existing verdicts are never re-graded, and
+every repaired verdict is flagged in the artifacts. One verdict (GPT-5 search,
+grounded, q032) failed repeatedly and is excluded rather than assumed. During
+review we identified one verdict that deviates from the rubric (a direction item
+graded on stated magnitude rather than direction); it is retained as judged, since
+verdicts are never edited by the authors after the fact, and it is flagged for the
+human audit.
+
 All verdicts are stored with one-line rationales
 (`benchmark_runs_v1/*.judged.json`) and are auditable. A stratified human audit of
 judge verdicts is part of the protocol, with the agreement rate to be published as
@@ -168,47 +184,54 @@ facts, only commitment to supplied facts) and the human audit are the mitigation
 ## 3. Results
 
 Table 1 and Figure 1 report overall accuracy by model; Table 2 and Figure 2
-report accuracy by question block, pooled across the five models.
+report accuracy by question block, pooled across the five models. Uncertainty is
+reported as Wilson 95% intervals (in brackets), and the condition contrast is
+tested per model with an exact McNemar test on question-paired outcomes. Every
+number in this section is emitted by `app.benchmark.stats` from the stored
+verdicts; the tables are pasted from its output.
 
-Table 1. Overall accuracy by model and condition.
+Table 1. Overall accuracy by model and condition, with Wilson 95% intervals and
+exact McNemar p for the paired condition contrast.
 
-| Model | Unassisted | Grounded | Confidently wrong (unassisted) |
-|---|---|---|---|
-| Claude Fable 5 | 43% | **100%** (43/43) | 17/43 |
-| Grok 4.5 | 42% | **100%** (43/43) | 25/43 |
-| GPT-5.6 Sol | 42% | **100%** (41/41 judged)¹ | 23/43 |
-| GPT-5 search | 36% (13 refusals) | **95%** | 11/43 |
-| Perplexity sonar-pro | 45% | **93%** | 21/43 |
+| Model | Unassisted | Grounded | Confidently wrong (unassisted) | McNemar p |
+|---|---|---|---|---|
+| Claude Fable 5 | 49% [35, 63] | **100%** [92, 100] (43/43) | 19/43 | 4.8 × 10⁻⁷ |
+| Grok 4.5 | 42% [28, 57] | **100%** [92, 100] (43/43) | 25/43 | 6.0 × 10⁻⁸ |
+| GPT-5.6 Sol | 44% [30, 59] | **100%** [92, 100] (43/43) | 23/43 | 1.2 × 10⁻⁷ |
+| GPT-5 search | 37% [24, 52] (13 refusals) | **95%** [84, 99] (40/42)¹ | 11/43 | 6.0 × 10⁻⁸ |
+| Perplexity sonar-pro | 47% [33, 61] | **93%** [81, 98] (40/43) | 21/43 | 3.6 × 10⁻⁵ |
 
-¹ Two of Sol's 43 grounded verdicts failed to parse during judging and are excluded
-rather than assumed correct; all 41 judged answers were correct.
+¹ One grounded verdict (q032) failed to parse across repeated judging attempts and
+is excluded rather than assumed; the 95% reflects the 42 judged answers.
 
 ![Grouped bar chart of unassisted versus grounded accuracy for the five models. Unassisted bars sit between 36 and 45 percent; grounded bars sit between 93 and 100 percent.](frontend/public/research/fig1_models.svg)
 
 **Figure 1.** Overall accuracy by model and condition (data of Table 1). "With
 Canary data" is the grounded condition: the model sees one Canary API response
-before answering. Every model roughly doubles its accuracy. Sol's grounded bar
-reflects the 41 of 43 verdicts that parsed.
+before answering. Every model roughly doubles its accuracy. Whiskers are Wilson
+95% intervals; the GPT-5 search grounded bar reflects the 42 judged verdicts.
 
-Table 2. Accuracy by question block, pooled across the five models.
+Table 2. Accuracy by question block, pooled across the five models, with Wilson
+95% intervals and exact counts.
 
 | Block | Unassisted | Grounded |
 |---|---|---|
-| Superlative | 0% | 91% |
-| Numeric | 0% | 100% |
-| Pairwise (chance = 50%) | 64% | 93% |
-| Direction | 55% | 100% |
-| Address-level | 13% | 93% |
-| Temporal (in training window) | 95% | 100% |
-| Distractors | 100% | 100% |
+| Superlative | 4% [1, 20] (1/25) | 92% [75, 98] (23/25) |
+| Numeric | 2% [0, 13] (1/40) | 100% [91, 100] (40/40) |
+| Pairwise (chance = 50%) | 67% [49, 81] (20/30) | 93% [78, 98] (27/29) |
+| Direction | 56% [45, 67] (42/75) | 100% [95, 100] (75/75) |
+| Address-level | 13% [4, 38] (2/15) | 93% [70, 99] (14/15) |
+| Temporal (in training window) | 95% [76, 99] (19/20) | 100% [84, 100] (20/20) |
+| Distractors | 90% [60, 98] (9/10) | 100% [72, 100] (10/10) |
 
 ![Grouped horizontal bar chart of unassisted versus grounded accuracy for the seven question blocks. Superlative and numeric blocks score zero unassisted and 91 to 100 percent grounded; the temporal control is near ceiling in both conditions.](frontend/public/research/fig2_blocks.svg)
 
 **Figure 2.** Accuracy by question block, pooled across the five models (data of
-Table 2). The blocks that require an unpublished aggregation (superlative,
-numeric, address-level) collapse in the unassisted condition and recover when
-grounded; the temporal control, whose answers fall inside training windows, is
-near ceiling in both conditions.
+Table 2), with Wilson 95% whiskers. The blocks that require an unpublished
+aggregation (superlative, numeric, address-level) collapse in the unassisted
+condition and recover when grounded; the temporal control, whose answers fall
+inside training windows, is near ceiling in both conditions. The temporal and
+distractor blocks are small and their intervals correspondingly wide.
 
 ### 3.1 Error analysis: the superlative block
 
@@ -225,7 +248,9 @@ largest rise citywide). Representative unassisted responses:
   retrieved from the web.
 
 Four distinct answers, each argued from real but non-dispositive context, none
-correct. We note a qualitative difference from v0, where three previous-generation
+correct. Across the block, the single correct response of 25 was the
+search-configured model identifying Bernal Heights as the largest drop in
+victim-reported crime; every "which is rising" item was missed by every model. We note a qualitative difference from v0, where three previous-generation
 models converged on the same incorrect answer (the Mission), a pattern consistent
 with shared training-distribution priors. The frontier models diverge more, and
 construct more sophisticated justifications, without any improvement in accuracy.
@@ -242,30 +267,34 @@ before July 2026, GPT-5.6 Sol answered "roughly 25 net new housing units," with 
 caveat about boundary definitions. The permit record gives 1,319, driven by a small
 number of large approved projects. The error is a factor of approximately fifty, and
 the response format (a specific figure with a methodological caveat) is
-indistinguishable from that of an informed estimate. All five models failed all
-eight numeric items in the unassisted condition; all five answered all eight
-correctly when grounded.
+indistinguishable from that of an informed estimate. Thirty-nine of the 40
+unassisted numeric answers fell outside the ±30% tolerance; the single pass was
+Claude Fable 5 on the South of Market unit count, answering with a range whose
+upper portion overlaps the tolerance band. When grounded, all five models answered
+all eight numeric items correctly.
 
 ### 3.3 The generational shift in failure mode
 
 In v0, previous-generation models refused frequently (GPT-4o declined 39 of 46
 items). In v1, refusals nearly disappear outside the search-configured model, and
-error mass moves into confident, specific, well-argued wrong answers (17-25 of 43
-per model). From a user-welfare perspective this is a regression: an abstention
+error mass moves into confident, specific, well-argued wrong answers (19-25 of 43
+per model; 11 for the search-configured model, which still refuses). From a user-welfare perspective this is a regression: an abstention
 prompts further search, whereas a fluent wrong answer terminates it.
 
 ### 3.4 Controls
 
 The temporal block, whose answers fall inside the models' training windows, scored
-95% unassisted, and both distractor items were answered correctly by all models.
-Models are well calibrated on the recorded past and are not deceived by the
-statistical artifacts we planted. The deficit is confined to aggregate facts about
+95% unassisted. Nine of the ten distractor responses were correct; the single miss
+is the designed failure occurring in the wild: Grok 4.5 affirmed that Tenderloin
+crime had worsened, accepting the enforcement-driven aggregate the item plants.
+Models are otherwise well calibrated on the recorded past and are largely not
+deceived by the statistical artifacts. The deficit is confined to aggregate facts about
 the recent present, which is precisely the class of fact that must be computed from
 primary records rather than remembered from text.
 
 ### 3.5 Grounded condition
 
-With one API response prepended, three of five models answered every judged item
+With one API response prepended, three of five models answered all 43 items
 correctly, and the remaining two scored 93% and 95%, with residual misses
 attributable largely to judge strictness on phrasing rather than misreading. Five
 models from four vendors used the same documented payload without any per-model
@@ -304,7 +333,9 @@ the scope of this study.
 
 ## 5. Limitations
 
-One metro; one run per condition; 43 questions; five models, with Gemini absent. The
+One metro; one run per condition; 43 questions; five models, with Gemini absent.
+Nineteen of 430 primary verdicts were completed in a disclosed repair pass after
+truncation failures, and one grounded verdict remains unparsed and excluded. The
 judge is a language model: verdicts are stored and auditable, a human audit of a
 verdict sample is owed, and the judge shares a vendor with one tested model. In the
 grounded condition, Canary data serves as both context and ground truth by design;
@@ -321,7 +352,12 @@ cd backend
 python -m app.benchmark.generate_v1        # regenerate questions from the live snapshot
 python -m app.benchmark.run                # unassisted condition, all configured providers
 python -m app.benchmark.run --grounded     # grounded condition
-python -m app.benchmark.judge              # verdicts and summary table
+python -m app.benchmark.judge              # primary verdicts and summary table
+python -m app.benchmark.judge --repair     # complete any unparsed verdicts (flagged)
+python -m app.benchmark.panel              # cross-vendor judge panel
+python -m app.benchmark.panel --agree      # panel agreement report
+python -m app.benchmark.stats              # Wilson intervals, McNemar, Tables 1-2
+python scripts/gen_figures.py              # Figures 1-2 from the stats artifact
 ```
 
 Artifacts: `data/processed/benchmark_v1.json` (questions and receipts, frozen at

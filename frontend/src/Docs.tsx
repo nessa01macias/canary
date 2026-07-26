@@ -68,6 +68,13 @@ export function Docs({ onClose, initialTab }: Props) {
                   alt={alt}
                 />
               ),
+              // Wide tables (the sources registry) scroll inside their own box
+              // instead of stretching the card past its border.
+              table: ({ children }) => (
+                <div className="table-scroll">
+                  <table>{children}</table>
+                </div>
+              ),
             }}
           >
             {doc.body}

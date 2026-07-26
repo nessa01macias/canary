@@ -50,19 +50,27 @@ JUDGE_SYSTEM = (
 )
 
 
-def judge_one(key: str, model: str, item: dict, answer: str) -> dict:
+def build_prompt(item: dict, answer: str) -> str:
+    """The judge's user message. Shared with the cross-vendor panel (panel.py) so
+    every judge grades from the identical prompt."""
     gt = {k: v for k, v in item.items() if k in ("expected", "tolerance_pct", "ground_truth", "scoring_note", "type", "metric", "area")}
-    user = (
+    return (
         f"QUESTION:\n{item['question']}\n\n"
         f"GROUND TRUTH (verified, {item['receipt']}):\n{json.dumps(gt)}\n\n"
         f"ASSISTANT'S ANSWER:\n{answer}"
     )
+
+
+def judge_one(key: str, model: str, item: dict, answer: str) -> dict:
+    user = build_prompt(item, answer)
     resp = requests.post(
         "https://api.anthropic.com/v1/messages",
         headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
         json={
             "model": model,
-            "max_tokens": 200,
+            # 400: a 200 cap truncated long-reason verdicts mid-JSON (14 of the
+            # original v1 judge_error holes were exactly this)
+            "max_tokens": 400,
             "system": JUDGE_SYSTEM,
             "messages": [{"role": "user", "content": user}],
         },
@@ -79,6 +87,9 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--only", help="judge only run files whose name contains this (enables parallel judging)")
+    parser.add_argument("--repair", action="store_true",
+                        help="re-judge ONLY judge_error verdicts inside existing .judged.json files "
+                             "(coverage completion, never selective re-grading; repairs are flagged)")
     args = parser.parse_args()
 
     load_dotenv(core.BACKEND_DIR / ".env")
@@ -89,6 +100,34 @@ def main() -> None:
     model = os.environ.get("JUDGE_MODEL", "claude-sonnet-5")
 
     bench = {q["id"]: q for q in json.loads(QUESTIONS.read_text())["questions"]}
+
+    if args.repair:
+        for judged_path in sorted(RUNS_DIR.glob("*.judged.json")):
+            j = json.loads(judged_path.read_text())
+            holes = [v for v in j["verdicts"] if v["verdict"] == "judge_error"]
+            if not holes:
+                continue
+            run = json.loads((RUNS_DIR / j["run_file"]).read_text())
+            answers = {a["id"]: a["answer"] for a in run["answers"] if a["status"] == "ok"}
+            print(f"[repair] {j['provider']}: {len(holes)} judge_error hole(s)")
+            for v in holes:
+                qid = v["id"]
+                fresh = {"verdict": "judge_error"}
+                for _ in range(3):
+                    try:
+                        fresh = judge_one(key, model, bench[qid], answers[qid])
+                    except (requests.RequestException, json.JSONDecodeError) as exc:
+                        fresh = {"verdict": "judge_error", "reason": str(exc)[:100]}
+                    if fresh.get("verdict") != "judge_error":
+                        break
+                    time.sleep(1)
+                if fresh.get("verdict") == "judge_error":
+                    print(f"         {qid} still failing after retries")
+                v.clear()
+                v.update({"id": qid, **fresh, "repaired": True})
+                time.sleep(0.1)
+            judged_path.write_text(json.dumps(j, indent=1))
+        return
 
     for run_path in sorted(RUNS_DIR.glob("*.json")):
         if run_path.name.endswith(".judged.json"):

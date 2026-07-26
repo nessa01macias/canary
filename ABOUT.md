@@ -52,7 +52,7 @@ known ways. Three real examples from building this:
 ## What we found about AI assistants
 
 We tested the five newest AI models, including ones with live web search, on 43
-checkable questions about San Francisco neighborhoods. They scored around 40%, and
+checkable questions about San Francisco neighborhoods. They scored 37-49%, and
 unlike older models they rarely admit uncertainty anymore. One was confidently wrong
 on 25 of its 43 answers. When we asked which neighborhood was rising fastest, the
 five models gave four different confident answers, and all of them were wrong.

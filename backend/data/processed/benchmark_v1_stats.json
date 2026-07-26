@@ -1,0 +1,316 @@
+{
+ "unparsed_after_repair": 1,
+ "per_model": [
+  {
+   "model": "Claude Fable 5",
+   "provider": "anthropic:claude-fable-5",
+   "unassisted": {
+    "correct": 21,
+    "n": 43,
+    "acc": 0.4884,
+    "ci": [
+     0.3462,
+     0.6325
+    ],
+    "nonanswer": 0
+   },
+   "grounded": {
+    "correct": 43,
+    "n": 43,
+    "acc": 1.0,
+    "ci": [
+     0.918,
+     1.0
+    ],
+    "nonanswer": 0
+   },
+   "confident_wrong_unassisted": 19,
+   "mcnemar": {
+    "paired_n": 43,
+    "b": 0,
+    "c": 22,
+    "p": 4.76837158203125e-07
+   }
+  },
+  {
+   "model": "Grok 4.5",
+   "provider": "xai:grok-4.5",
+   "unassisted": {
+    "correct": 18,
+    "n": 43,
+    "acc": 0.4186,
+    "ci": [
+     0.2838,
+     0.5667
+    ],
+    "nonanswer": 0
+   },
+   "grounded": {
+    "correct": 43,
+    "n": 43,
+    "acc": 1.0,
+    "ci": [
+     0.918,
+     1.0
+    ],
+    "nonanswer": 0
+   },
+   "confident_wrong_unassisted": 25,
+   "mcnemar": {
+    "paired_n": 43,
+    "b": 0,
+    "c": 25,
+    "p": 5.960464477539063e-08
+   }
+  },
+  {
+   "model": "GPT-5.6 Sol",
+   "provider": "openai:gpt-5.6-sol",
+   "unassisted": {
+    "correct": 19,
+    "n": 43,
+    "acc": 0.4419,
+    "ci": [
+     0.3043,
+     0.5889
+    ],
+    "nonanswer": 0
+   },
+   "grounded": {
+    "correct": 43,
+    "n": 43,
+    "acc": 1.0,
+    "ci": [
+     0.918,
+     1.0
+    ],
+    "nonanswer": 0
+   },
+   "confident_wrong_unassisted": 23,
+   "mcnemar": {
+    "paired_n": 43,
+    "b": 0,
+    "c": 24,
+    "p": 1.1920928955078125e-07
+   }
+  },
+  {
+   "model": "GPT-5 search",
+   "provider": "openai-search:gpt-5-search-api",
+   "unassisted": {
+    "correct": 16,
+    "n": 43,
+    "acc": 0.3721,
+    "ci": [
+     0.2438,
+     0.5214
+    ],
+    "nonanswer": 13
+   },
+   "grounded": {
+    "correct": 40,
+    "n": 42,
+    "acc": 0.9524,
+    "ci": [
+     0.8421,
+     0.9868
+    ],
+    "nonanswer": 0
+   },
+   "confident_wrong_unassisted": 11,
+   "mcnemar": {
+    "paired_n": 42,
+    "b": 0,
+    "c": 25,
+    "p": 5.960464477539063e-08
+   }
+  },
+  {
+   "model": "Perplexity sonar-pro",
+   "provider": "perplexity:sonar-pro",
+   "unassisted": {
+    "correct": 20,
+    "n": 43,
+    "acc": 0.4651,
+    "ci": [
+     0.3251,
+     0.6108
+    ],
+    "nonanswer": 1
+   },
+   "grounded": {
+    "correct": 40,
+    "n": 43,
+    "acc": 0.9302,
+    "ci": [
+     0.8139,
+     0.976
+    ],
+    "nonanswer": 0
+   },
+   "confident_wrong_unassisted": 21,
+   "mcnemar": {
+    "paired_n": 43,
+    "b": 2,
+    "c": 22,
+    "p": 3.5881996154785156e-05
+   }
+  }
+ ],
+ "per_block": [
+  {
+   "block": "Superlative",
+   "questions_per_model": 5,
+   "unassisted": {
+    "correct": 1,
+    "n": 25,
+    "acc": 0.04,
+    "ci": [
+     0.0071,
+     0.1954
+    ]
+   },
+   "grounded": {
+    "correct": 23,
+    "n": 25,
+    "acc": 0.92,
+    "ci": [
+     0.7503,
+     0.9778
+    ]
+   }
+  },
+  {
+   "block": "Numeric",
+   "questions_per_model": 8,
+   "unassisted": {
+    "correct": 1,
+    "n": 40,
+    "acc": 0.025,
+    "ci": [
+     0.0044,
+     0.1288
+    ]
+   },
+   "grounded": {
+    "correct": 40,
+    "n": 40,
+    "acc": 1.0,
+    "ci": [
+     0.9124,
+     1.0
+    ]
+   }
+  },
+  {
+   "block": "Pairwise (chance = 50%)",
+   "questions_per_model": 6,
+   "unassisted": {
+    "correct": 20,
+    "n": 30,
+    "acc": 0.6667,
+    "ci": [
+     0.4878,
+     0.8077
+    ]
+   },
+   "grounded": {
+    "correct": 27,
+    "n": 29,
+    "acc": 0.931,
+    "ci": [
+     0.7804,
+     0.9809
+    ]
+   }
+  },
+  {
+   "block": "Direction",
+   "questions_per_model": 15,
+   "unassisted": {
+    "correct": 42,
+    "n": 75,
+    "acc": 0.56,
+    "ci": [
+     0.4475,
+     0.6667
+    ]
+   },
+   "grounded": {
+    "correct": 75,
+    "n": 75,
+    "acc": 1.0,
+    "ci": [
+     0.9513,
+     1.0
+    ]
+   }
+  },
+  {
+   "block": "Address-level",
+   "questions_per_model": 3,
+   "unassisted": {
+    "correct": 2,
+    "n": 15,
+    "acc": 0.1333,
+    "ci": [
+     0.0374,
+     0.3788
+    ]
+   },
+   "grounded": {
+    "correct": 14,
+    "n": 15,
+    "acc": 0.9333,
+    "ci": [
+     0.7018,
+     0.9881
+    ]
+   }
+  },
+  {
+   "block": "Temporal (in training window)",
+   "questions_per_model": 4,
+   "unassisted": {
+    "correct": 19,
+    "n": 20,
+    "acc": 0.95,
+    "ci": [
+     0.7639,
+     0.9911
+    ]
+   },
+   "grounded": {
+    "correct": 20,
+    "n": 20,
+    "acc": 1.0,
+    "ci": [
+     0.8389,
+     1.0
+    ]
+   }
+  },
+  {
+   "block": "Distractors",
+   "questions_per_model": 2,
+   "unassisted": {
+    "correct": 9,
+    "n": 10,
+    "acc": 0.9,
+    "ci": [
+     0.5958,
+     0.9821
+    ]
+   },
+   "grounded": {
+    "correct": 10,
+    "n": 10,
+    "acc": 1.0,
+    "ci": [
+     0.7225,
+     1.0
+    ]
+   }
+  }
+ ]
+}

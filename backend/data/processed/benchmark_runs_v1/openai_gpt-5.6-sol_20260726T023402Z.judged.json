@@ -17,8 +17,10 @@
   },
   {
    "id": "q003",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Direction correct (decrease) but stated magnitude 10-15% is far outside tolerance of actual -33.3% decrease",
+   "repaired": true
   },
   {
    "id": "q004",
@@ -184,13 +186,17 @@
   },
   {
    "id": "q031",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore as having the bigger increase, matching ground truth direction.",
+   "repaired": true
   },
   {
    "id": "q032",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Answer names Inner Richmond, mat"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant selected Inner Richmond, matching the expected ground-truth answer.",
+   "repaired": true
   },
   {
    "id": "q033",

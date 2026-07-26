@@ -113,8 +113,10 @@
   },
   {
    "id": "q019",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore as the neighborhood, matching ground truth area.",
+   "repaired": true
   },
   {
    "id": "q020",
@@ -191,7 +193,8 @@
   {
    "id": "q032",
    "verdict": "judge_error",
-   "reason": ""
+   "reason": "",
+   "repaired": true
   },
   {
    "id": "q033",
@@ -255,8 +258,10 @@
   },
   {
    "id": "q043",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Answer clearly concludes complaints "
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer concludes complaints are not proof of actual loudness, aligning with expected 'no' despite lacking the specific reporting-flow detail.",
+   "repaired": true
   }
  ]
 }

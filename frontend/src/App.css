@@ -931,10 +931,15 @@ html, body, #root, #app {
 .research-body {
   padding: 34px 38px 30px;
   overflow-y: auto;
+  /* wide tables must never drag the whole card sideways; they scroll in
+     their own .table-scroll wrapper instead */
+  overflow-x: hidden;
   font-size: 14px;
   line-height: 1.65;
   color: #2a2622;
 }
+.research-body .table-scroll { max-width: 100%; overflow-x: auto; }
+.research-body a { overflow-wrap: anywhere; }
 .research-body h1 { font-size: 22px; line-height: 1.25; margin: 0 0 4px; }
 .research-body h3 { font-size: 15px; color: #6b6560; font-weight: 600; margin: 0 0 14px; }
 .research-body h2 { font-size: 17px; margin: 26px 0 8px; }

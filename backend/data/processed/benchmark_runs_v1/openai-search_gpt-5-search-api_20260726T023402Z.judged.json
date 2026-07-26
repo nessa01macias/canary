@@ -101,8 +101,10 @@
   },
   {
    "id": "q017",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Bernal Heights as the neighborhood with the largest drop, matching the ground truth's expected area.",
+   "repaired": true
   },
   {
    "id": "q018",

@@ -1,0 +1,265 @@
+{
+ "provider": "openai-search:gpt-5-search-api",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "openai-search_gpt-5-search-api_20260726T023402Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to crime falling overall in Bernal Heights, matching the verified 42.8% decrease."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to crime falling in Japantown, matching the verified decrease."
+  },
+  {
+   "id": "q003",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer explicitly says it cannot confirm the Outer Mission-specific trend and only infers from citywide data, so it does not commit to the requested neighborhood result."
+  },
+  {
+   "id": "q004",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer explicitly says it cannot determine whether Western Addition business openings increased or decreased and instead discusses citywide data."
+  },
+  {
+   "id": "q005",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer does not commit to whether Visitacion Valley business openings increased or decreased."
+  },
+  {
+   "id": "q006",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response does not commit to whether Presidio Heights business openings increased or decreased and instead discusses city-wide registrations."
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer explicitly declines to determine whether Lakeshore eviction notices increased or decreased, instead citing only a citywide increase."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to an increase, matching the ground-truth direction."
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer does not commit to a year-over-year direction for Bernal Heights, instead citing an irrelevant month-over-month decrease and saying annual data is insufficient."
+  },
+  {
+   "id": "q010",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "It suggests reports are likely down but explicitly says it cannot determine the neighborhood-specific direction definitively."
+  },
+  {
+   "id": "q011",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer does not commit to whether Presidio reports are up or down; it only states a citywide decrease."
+  },
+  {
+   "id": "q012",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response does not commit to an up-or-down trend for Twin Peaks specifically and instead discusses citywide and District 7 data."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly says approvals did not increase and were flat, while the ground truth shows an increase from 38 to 244 units."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer ultimately commits, albeit tentatively, to Outer Richmond seeing an increase, matching the ground-truth direction."
+  },
+  {
+   "id": "q015",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer declines to commit on Nob Hill specifically and instead reports a city-wide increase."
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer declines to identify a definitive neighborhood and does not commit to the ground-truth answer, Japantown."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Bernal Heights as the neighborhood with the largest drop."
+  },
+  {
+   "id": "q018",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response explicitly declines to give a definitive answer and offers only a hedged guess of Sunset District, rather than committing to Lakeshore."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer names Tenderloin as having the largest rise, but the verified ground truth is Lakeshore."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to South of Market, but the verified ground truth is Hayes Valley with 1,206 net approved units."
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer does not provide an estimate for net units approved and instead discusses completed new-construction units, a different metric."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to about 60\u201370 units, far below the verified estimate of 1,206 net approved units and outside the 30% tolerance."
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates 200\u2013400 units, far below the verified roughly 1,172, but frames the estimate with meaningful hedging."
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates fewer than 20 units, far outside the ground-truth value of roughly 934, though it hedges the estimate as merely plausible."
+  },
+  {
+   "id": "q025",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response explicitly declines to provide a SoMa permit-based estimate and instead gives figures for a different area/metric and citywide total."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer gives 22,651 active registrations (or 43,100 total locations), both outside the accepted range of approximately 9,946\u201318,470 around the ground truth of 14,208."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates roughly 15,000\u201320,000 active businesses, well above the verified 7,939 and outside the 30% tolerance, though it meaningfully hedges."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates 20,000\u201330,000 active businesses in SoMa, far above the verified figure of roughly 6,157, though it hedges based on boundary definitions."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer explicitly commits to Japantown, matching the ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer ultimately commits to Western Addition, matching the ground truth."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Lakeshore as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Inner Richmond, matching the ground truth as the neighborhood with the larger year-over-year change."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to Tenderloin, but the verified ground truth shows Lone Mountain/USF had the bigger increase (5.421 vs. -1.263)."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to South of Market, while the ground truth shows Outer Richmond had the bigger increase."
+  },
+  {
+   "id": "q035",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates 20\u201350 net new units, far below the verified total of roughly 494, though it clearly frames this as a rough, uncertain estimate."
+  },
+  {
+   "id": "q036",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response does not provide or commit to any estimate for the requested net new housing units."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates 100\u2013300 units, which is outside the tolerated range around the verified total of 53, though it clearly labels the estimate speculative."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to an increase, matching the ground truth (82 to 167)."
+  },
+  {
+   "id": "q039",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The response does not commit to whether Lincoln Park incidents rose or fell; it only states that citywide crime was falling."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a fall, matching the verified decrease."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a fall in victim-reported crime incidents, matching the verified decrease."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits that crime is generally getting better and distinguishes rising drug-offense activity from falling victimization-related categories."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "It correctly says the complaint increase does not establish that San Francisco became dramatically louder and identifies reporting behavior as a likely driver."
+  }
+ ]
+}

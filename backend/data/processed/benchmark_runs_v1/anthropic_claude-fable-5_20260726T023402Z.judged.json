@@ -5,8 +5,10 @@
  "verdicts": [
   {
    "id": "q001",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Answer correctly states crime is falling, mat"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' matching the verified decrease direction, despite underestimating magnitude.",
+   "repaired": true
   },
   {
    "id": "q002",
@@ -40,18 +42,24 @@
   },
   {
    "id": "q007",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing' direction, matching ground truth increase (5\u219246, +8.2x), despite understating magnitude as 'modest'.",
+   "repaired": true
   },
   {
    "id": "q008",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"conf"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing', matching the ground-truth direction, despite understating magnitude.",
+   "repaired": true
   },
   {
    "id": "q009",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Answer commits to 'increasing' direction, mat"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing' direction, matching ground truth increase (76% rise), despite underestimating magnitude.",
+   "repaired": true
   },
   {
    "id": "q010",
@@ -145,18 +153,24 @@
   },
   {
    "id": "q025",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Estimated range 300\u2013500 overlaps with the tolerance band (357.7\u2013664.3) around the true value 511.",
+   "repaired": true
   },
   {
    "id": "q026",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer's 18,000\u201320,000 range lies mostly above the tolerance band (9,946\u201318,470) around the true value of 14,208.",
+   "repaired": true
   },
   {
    "id": "q027",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~5,000\u20136,000, mostly below the tolerance range (5,557\u201310,321) around the true value of 7,939.",
+   "repaired": true
   },
   {
    "id": "q028",
@@ -238,8 +252,10 @@
   },
   {
    "id": "q041",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime fell, matching ground truth direction, despite underestimating magnitude.",
+   "repaired": true
   },
   {
    "id": "q042",

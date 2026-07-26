@@ -31,7 +31,7 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
         <p className="agents-sub">
           People bring their biggest place decisions to AI: where to live, buy, open a
           business. These are questions about a place's future, and we tested the five
-          newest frontier models on 43 of them. Alone, they scored about 40%, failing
+          newest frontier models on 43 of them. Alone, they scored 37-49%, failing
           not for lack of intelligence but because the answers were never published
           anywhere. Reading from one Canary response, three of the five scored a
           perfect 100%. Canary computes what no one has written down, monthly, from
@@ -40,12 +40,12 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
 
         <div className="agents-stats">
           <div className="agents-stat">
-            <span className="agents-stat-num">0 / 25</span>
-            <span className="agents-stat-label">the five newest frontier models, asked which SF neighborhood is rising fastest. Zero correct answers</span>
+            <span className="agents-stat-num">24 / 25</span>
+            <span className="agents-stat-label">which-neighborhood-changed-most questions answered wrong by the five newest models. Every "rising fastest" item was missed</span>
           </div>
           <div className="agents-stat">
-            <span className="agents-stat-num">43% → 100%</span>
-            <span className="agents-stat-label">Claude Fable 5 on 43 checkable neighborhood questions, bare vs with one Canary response. Grok 4.5: same</span>
+            <span className="agents-stat-num">49% → 100%</span>
+            <span className="agents-stat-label">Claude Fable 5 on 43 checkable neighborhood questions, bare vs with one Canary response. Grok and Sol reached 100% too</span>
           </div>
           <div className="agents-stat">
             <span className="agents-stat-num">25 / 43</span>

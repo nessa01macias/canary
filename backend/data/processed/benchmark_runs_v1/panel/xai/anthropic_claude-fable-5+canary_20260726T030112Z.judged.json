@@ -1,0 +1,265 @@
+{
+ "provider": "anthropic:claude-fable-5+canary",
+ "judge_model": "grok-4.5",
+ "run_file": "anthropic_claude-fable-5+canary_20260726T030112Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling with exact matching numbers and ~43% decrease."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease with exact matching counts and ~37% drop."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease with exact matching counts and pct."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to increase with matching numbers."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer/decrease with exact matching numbers 89->66"
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states fewer openings with exact matching numbers 162->127."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to increase with matching numbers 46 vs 5."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states increasing and cites exact matching counts (37 vs 19)."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increasing with matching numbers 37 vs 21."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states decrease with matching numbers."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states decrease with matching numbers from ground truth."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to decrease with exact matching counts and pct change"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase with matching numbers from GT."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increase from 27 to 97, matching GT direction and numbers."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increase with matching numbers 289 to 987."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Japantown with matching 38% increase"
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly names Bernal Heights as largest drop, matching GT pct change ~43%."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Lakeshore as largest % increase, matching GT."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Lakeshore as the neighborhood with the largest rise, matching ground truth."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Hayes Valley with matching 1206 units"
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 is within 30% tolerance of 1319"
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to ~1200/1206, within 30% of GT 1206."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1192 is within 30% tolerance of 1172"
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 is within 30% tolerance of 934"
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within 30% tolerance of 511"
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "14,200 matches 14208 well within 30% tolerance"
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states ~7900/7939, matching GT within tolerance."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to ~6200/6157, matching GT 6157 within 30% tolerance."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Japantown with matching +38% vs -26% figures."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Western Addition as having the bigger increase, matching GT direction and approx. magnitudes."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lakeshore as having the bigger increase, matching GT values."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Inner Richmond as worse/less-improved trend matching GT bigger increase"
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Lone Mountain/USF, matching ground truth"
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Outer Richmond as bigger increase, matching GT direction"
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to GT value of 494 net units."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 43 net new units, matching GT within tolerance."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states exactly 53 net new units, matching ground truth within tolerance."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to rise/increase matching GT direction and numbers"
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to sharp decrease matching GT numbers and direction."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states sharp fall/decrease with matching numbers and ~60% decline."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime fell, matching GT decrease with exact numbers."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states victimization fell ~8% and distinguishes enforcement surge from resident crime experience."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no and attributes jump to reporting/platform change, matching GT"
+  }
+ ]
+}

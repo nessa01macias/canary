@@ -113,8 +113,10 @@
   },
   {
    "id": "q019",
-   "verdict": "judge_error",
-   "reason": ""
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly names Lakeshore as the neighborhood with largest rise; area matches ground truth despite percentage discrepancy.",
+   "repaired": true
   },
   {
    "id": "q020",
@@ -190,8 +192,10 @@
   },
   {
    "id": "q032",
-   "verdict": "judge_error",
-   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false"
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer's numbers (-3% Inner Richmond vs -38% Seacliff) match ground truth (-0.027 vs -0.384), correctly implying Inner Richmond had the smaller decline (relatively larger 'increase').",
+   "repaired": true
   },
   {
    "id": "q033",
