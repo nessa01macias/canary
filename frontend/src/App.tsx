@@ -13,46 +13,15 @@ import { fetchReport, type AddressReport } from './report'
 import { MobileSheet, useIsMobile } from './MobileSheet'
 import { fetchSfBusinessChanges } from './bizChanges'
 import { AddressSearch } from './AddressSearch'
-import { PlaceCard } from './PlaceCard'
+import { PlaceCard, askPlaceholderFor } from './PlaceCard'
 import { useAsk, type Mission } from './useAsk'
-import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
+import { GROUNDED_TAGS, computeCityFacts, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
 import { EMPTY_FC, circlePolygon, scopeKey, scopeToAskContext, type Scope } from './scope'
 import { HEX_METRIC_LABEL, fetchHexTrajectory, hexMetricFor } from './hexLayer'
 import { logGateCompleted } from './lib/gateEvents'
+import { MAX_PICKS, MISSIONS } from './missions'
+import { PreferencePicker } from './PreferencePicker'
 import './App.css'
-
-// Mission → the chips it seeds, and the omnibox voice it speaks in.
-const MISSIONS: { id: string; icon: string; label: string; seed: string[]; placeholder: string }[] = [
-  { id: 'moving', icon: '🏠', label: 'Moving here', seed: ['Quiet', 'Low crime', 'Housing stability'],
-    placeholder: 'Where should I live? Ask, or type an address…' },
-  { id: 'buying', icon: '🔑', label: 'Buying a home', seed: ['New construction', 'Good schools', 'Flood risk'],
-    placeholder: "What's approved to be built near…? Ask, or type an address…" },
-  { id: 'opening_business', icon: '☕', label: 'Opening a business', seed: ['Business openings', 'Vacancy trend', 'Transit access'],
-    placeholder: 'Where should the shop go? Ask, or type an address…' },
-  { id: 'exploring', icon: '🧭', label: 'Just exploring', seed: [],
-    placeholder: "Ask anything — “which neighborhoods are getting quieter?”" },
-]
-
-// Step 2 of the intake: the mission's QUESTION, answered with chips. Curated
-// per QUESTION_MAP.md lead order, and only chips in GROUNDED_TAGS — every pick
-// must visibly move the map (a dead choice teaches the user not to choose).
-const MISSION_QUESTIONS: Record<string, { question: string; chips: string[] }> = {
-  buying: {
-    question: 'What would make or break the place?',
-    chips: ['Good schools', 'Flood risk', 'New construction', 'Quiet', 'Low crime',
-            'Housing stability', 'Tree canopy', 'Parking'],
-  },
-  moving: {
-    question: 'What does a good street mean to you?',
-    chips: ['Low crime', 'Quiet', 'Housing stability', 'Transit access',
-            'Groceries & retail', 'Tree canopy', 'Fast emergency response', 'Good schools'],
-  },
-  opening_business: {
-    question: 'What does the shop need around it?',
-    chips: ['Business openings', 'Vacancy trend', 'Transit access', 'Groceries & retail',
-            'Liquor & cannabis', 'Parking', 'Road projects', 'Away from industry'],
-  },
-}
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
@@ -253,81 +222,6 @@ function applyMarkerVisibility(els: HTMLElement[], zoom: number) {
   }
 }
 
-// How many priorities a user may pick in onboarding — the top-N we rank areas by.
-const MAX_PICKS = 6
-
-type PrefField = { label: string; available?: boolean }
-type PrefTier = { title: string; fields: PrefField[] }
-
-// The full field catalog the onboarding picker offers, grouped by tier. `available`
-// fields are live or compute-ready today; the rest are shown but disabled ("soon")
-// until their data source lands (federal feeds, the Census key, deed records…).
-const PREFERENCE_TIERS: PrefTier[] = [
-  {
-    title: 'Fundamentals',
-    fields: [
-      { label: 'Good schools', available: true },
-      { label: 'Low crime', available: true },
-      { label: 'Short commute', available: true },
-      { label: 'Low property tax', available: true },
-      { label: 'Walkable', available: true },
-      { label: 'Home prices' }, // Prop 13 → needs deed records / FHFA
-    ],
-  },
-  {
-    title: 'Risk & rules',
-    fields: [
-      { label: 'Flood risk', available: true },
-      { label: 'Fire risk', available: true },
-      { label: 'Zoning', available: true },
-      { label: 'Jurisdiction', available: true },
-      { label: 'Parking', available: true },
-      { label: 'Broadband & cell' }, // federal, pending
-    ],
-  },
-  {
-    title: 'Sensory',
-    fields: [
-      { label: 'Quiet', available: true },       // 311
-      { label: 'Tree canopy', available: true }, // tree inventory
-      { label: 'Clean air' },                    // on-demand raster / federal
-      { label: 'No rail noise' },
-      { label: 'Away from industry', available: true }, // EPA TRI facilities
-    ],
-  },
-  {
-    title: 'Getting around',
-    fields: [
-      { label: 'Transit access', available: true },
-      { label: 'Groceries & retail', available: true }, // Overture
-      { label: 'Fast emergency response', available: true },
-      { label: 'School bus routes', available: true },
-      { label: 'Urgent care nearby' }, // HIFLD, pending
-    ],
-  },
-  {
-    title: 'Who lives here',
-    fields: [
-      { label: 'Political lean', available: true },
-      { label: 'Renters vs owners' }, // needs Census key
-      { label: 'Age mix' },           // needs Census key
-    ],
-  },
-  {
-    title: 'Where it’s heading',
-    fields: [
-      { label: 'New construction', available: true },
-      { label: 'Rezoning', available: true },
-      { label: 'Transit expansion', available: true },
-      { label: 'Business openings', available: true }, // business velocity
-      { label: 'Vacancy trend', available: true },
-      { label: 'Housing stability', available: true }, // eviction-filings trend (real)
-      { label: 'Road projects', available: true },
-      { label: 'Liquor & cannabis', available: true },
-    ],
-  },
-]
-
 function App() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
@@ -380,20 +274,14 @@ function App() {
   // `priorities` but STAYS in `shortlist`, rendered as an empty-state button.
   const [shortlist, setShortlist] = useState<string[]>([])
   const [matchTop, setMatchTop] = useState<string[]>([])
-  // The chip catalog: reachable any time via "Choose what matters", but no longer
-  // the forced first screen (the mission picker is). Open data → never gated.
-  const [onboardingOpen, setOnboardingOpen] = useState(false)
-  // Mission — the personalization seed, chosen on first run. Frames every Ask
-  // answer and seeds the starting chips.
+  // THE preference picker — the only preference surface (mission tabs +
+  // spotlight + folded catalog). First run shows it once after the map has had
+  // a beat; "Choose what matters" and "Edit" reopen the same screen.
   const [mission, setMission] = useState<string | null>(() => localStorage.getItem('canary_mission'))
-  const [missionOpen, setMissionOpen] = useState(() => !localStorage.getItem('canary_mission'))
-  // The intake wizard's working state (step 1 = who are you; step 2 = the
-  // mission's question, answered with chips).
-  const [wizardMission, setWizardMission] = useState<string | null>(null)
-  const [wizardPicks, setWizardPicks] = useState<string[]>([])
-  // Never interrupt before value: the breathing map IS the welcome. The card
-  // slides in only after the map is up and has had a beat to make its case.
-  const [wizardReady, setWizardReady] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [firstRunPicker, setFirstRunPicker] = useState(() => !localStorage.getItem('canary_mission'))
+  // Never interrupt before value: the breathing map IS the welcome.
+  const [pickerReady, setPickerReady] = useState(false)
   // The give-to-get gate, REVERSED: the open-data chips are free; the gate is now
   // the community layer — resident reviews are unlocked by contributing one
   // (true Glassdoor timing: gate the salary page, not the front door). Persisted.
@@ -468,20 +356,30 @@ function App() {
       for (const c of chips) next.add(c)
       return new Set([...next].slice(0, MAX_PICKS))
     })
-    setOnboardingOpen(false)
+    setPickerOpen(false)
     zoomToCity()
   }
 
-  // Mission pick → seed chips, personalize, close the picker — and show the
-  // RECEIPT: the city card says what just happened and teaches the ask box at
-  // the exact moment of curiosity (never silent automation).
-  const pickMission = (id: string, seed?: string[]) => {
+  // Picker handlers. The mission is a TAB inside the picker (a lens, not a
+  // step); Done shows the RECEIPT — the city card says what just happened and
+  // teaches the ask box at the moment of curiosity (never silent automation).
+  const handleMissionTab = (id: string) => {
     localStorage.setItem('canary_mission', id)
     setMission(id)
-    setMissionOpen(false)
-    const picks = seed ?? MISSIONS.find((m) => m.id === id)?.seed ?? []
+  }
+  const dismissPicker = () => {
+    // First-run close counts as "exploring" so the picker doesn't re-ambush.
+    if (!localStorage.getItem('canary_mission')) {
+      localStorage.setItem('canary_mission', 'exploring')
+      setMission('exploring')
+    }
+    setPickerOpen(false)
+    setFirstRunPicker(false)
+  }
+  const finishPicker = () => {
+    const picks = [...priorities]
+    dismissPicker()
     if (picks.length) {
-      applyAssistantChips(picks)
       setCityIntro(
         `Ranked all 41 neighborhoods by ${picks.map((s) => s.toLowerCase()).join(', ')}. ` +
           'Tap a best fit below — or ask me anything.',
@@ -624,12 +522,12 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scopeKey(scope), mapReady])
 
-  // The wizard waits for the map (plus a beat) before asking anything.
+  // The first-run picker waits for the map (plus a beat) before asking anything.
   useEffect(() => {
-    if (!mapReady || !missionOpen) return
-    const t = setTimeout(() => setWizardReady(true), 1200)
+    if (!mapReady || !firstRunPicker) return
+    const t = setTimeout(() => setPickerReady(true), 1200)
     return () => clearTimeout(t)
-  }, [mapReady, missionOpen])
+  }, [mapReady, firstRunPicker])
 
   // Manual-zoom demotion: crossing the threshold with a mismatched scope closes
   // the card — the drawn scope no longer frames anything legible at that zoom.
@@ -1049,12 +947,21 @@ function App() {
           active && typeof st.match === 'number'
             ? ` · <span class="nb-pop-fit-inline">${Math.round(st.match * 100)}% fit${count > 1 ? ` on your ${count} picks` : ''}</span>`
             : ''
+        // The give-to-get tease at the highest-traffic surface: where reviews
+        // exist, the values blur until the visitor contributes one of their own.
+        const res = residentRef.current.get(String(p.nhood))
+        const unlocked = residentUnlockedRef.current
+        const fmtR = (x: number | null) => (x == null ? '–' : x.toFixed(1))
+        const resLine = res
+          ? `<div class="nb-pop-res${unlocked ? '' : ' is-locked'}">residents: safety <b>${fmtR(res.safety)}</b> · quiet <b>${fmtR(res.noise)}</b> · better <b>${fmtR(res.trajectory)}</b>${unlocked ? '' : ' <span class="nb-pop-lock">🔒</span>'}</div>`
+          : ''
         popup
           .setLngLat(e.lngLat)
           .setHTML(
             `<div class="nb-pop nb-pop--preview">
                <div class="nb-pop-name">${p.nhood}</div>
                <div class="nb-pop-verdict nb-pop-verdict--${v.tone}">${v.glyph} ${v.label}${fitLine}</div>
+               ${resLine}
                <div class="nb-pop-more">click to read this area</div>
              </div>`,
           )
@@ -1159,15 +1066,14 @@ function App() {
   // "changing" flash standing down at street zoom, and the pulse.
   useEffect(() => {
     const map = mapRef.current
-    // Keep the trajectory overlay dark behind the onboarding modal — it only
-    // lights up once the user dismisses onboarding ("Show my map").
-    const showArea = !onboardingOpen
+    // The picker sits on a LIGHT scrim — the map stays visible (and re-ranks
+    // live) behind it, so the overlay never goes dark.
     if (map?.getLayer('nbhd-fill')) {
-      map.setLayoutProperty('nbhd-fill', 'visibility', showArea ? 'visible' : 'none')
+      map.setLayoutProperty('nbhd-fill', 'visibility', 'visible')
     }
-    if (showArea && !zoomedIn && priorities.size === 0) startPulse()
+    if (!zoomedIn && priorities.size === 0) startPulse()
     else stopPulse()
-  }, [zoomedIn, sfCount, priorities, onboardingOpen])
+  }, [zoomedIn, sfCount, priorities])
 
   // Repaint the area overlay. Default (no preferences) = the pulsing trajectory
   // view (blue improving, red worsening); with preferences picked = a static
@@ -1188,7 +1094,7 @@ function App() {
       setMatchTop([])
       // Breathe only while the trajectory overlay is actually the visible view
       // (area scale, onboarding dismissed).
-      if (!zoomedIn && !onboardingOpen) startPulse()
+      if (!zoomedIn) startPulse()
       else stopPulse()
       return
     }
@@ -1219,7 +1125,7 @@ function App() {
     setMatchTop(
       [...scored].sort((a, b) => b.fit - a.fit).slice(0, 3).map((s) => s.nhood).filter(Boolean),
     )
-  }, [priorities, zoomedIn, sfCount, onboardingOpen])
+  }, [priorities, zoomedIn, sfCount])
 
   const matchActive = priorities.size > 0
 
@@ -1232,13 +1138,6 @@ function App() {
           <span className="brand-sep" />
           <span className="brand-sub">Real-world place intelligence for upwards mobility</span>
         </div>
-
-        {/* The centerpiece: the product's promise as a control. */}
-        <AddressSearch
-          onPick={(s) => openScope({ kind: 'spot', lat: s.center[1], lon: s.center[0], label: s.label })}
-          onAsk={runAsk}
-          placeholder={MISSIONS.find((m) => m.id === mission)?.placeholder}
-        />
 
         <div className="topbar-right">
           <button className="nav-quiet" onClick={() => { setDocsTab(undefined); setResearchOpen(true) }}>
@@ -1319,9 +1218,23 @@ function App() {
         />
       )}
 
+      {/* THE box — the card's handle. One input, docked exactly where the card
+          opens, so a question and its answer are physically one column. Card
+          closed, it's the front door (address or any question); card open, its
+          placeholder follows the scope ("Ask about Noe Valley…"). */}
+      <div className="ask-dock">
+        <AddressSearch
+          onPick={(s) => openScope({ kind: 'spot', lat: s.center[1], lon: s.center[0], label: s.label })}
+          onAsk={runAsk}
+          placeholder={
+            askPlaceholderFor(scope) ?? MISSIONS.find((m) => m.id === mission)?.placeholder
+          }
+        />
+      </div>
+
       {/* The PlaceCard — ONE card, one conversation, scoped to whatever the
           user is pointing at. The camera+drawing effect keeps the map framing
-          exactly what it describes; every rung ends in an ask input. */}
+          exactly what it describes; the dock above is its question box. */}
       {scope && (
         <MobileSheet onClose={() => openScope(null)}>
           <PlaceCard
@@ -1333,6 +1246,7 @@ function App() {
             report={report}
             reportLoading={reportLoading}
             cityIntro={cityIntro}
+            cityFacts={scope.kind === 'city' ? computeCityFacts(nbhdPropsRef.current.values()) : null}
             matchTop={matchTop}
             residentUnlocked={residentUnlocked}
             onUnlockResidents={() => setContributing(true)}
@@ -1346,99 +1260,29 @@ function App() {
         </MobileSheet>
       )}
 
-      {/* First-run intake — mission is the FIRST question OF the questionnaire,
-          not a replacement for it: who are you (1 of 2) → your mission's
-          question, answered with chips (2 of 2) → the map ranks + the city card
-          receipts what happened and teaches the ask box. Light scrim, delayed
-          past map load: value first, questions second. */}
-      {missionOpen && wizardReady && (
-        <div className="mission-overlay">
-          <div className="mission-card">
-            {!wizardMission ? (
-              <>
-                <p className="prefs-eyebrow">Welcome to Canary · 1 of 2</p>
-                <h2 className="ob-title">What brings you here?</h2>
-                <p className="ob-sub">The map reads differently for a renter, a buyer, and a shop owner.</p>
-                <div className="mission-grid">
-                  {MISSIONS.map((m) => (
-                    <button
-                      key={m.id}
-                      className="mission-btn"
-                      onClick={() => (m.id === 'exploring' ? pickMission('exploring') : setWizardMission(m.id))}
-                    >
-                      <span className="mission-icon">{m.icon}</span>
-                      <span className="mission-label">{m.label}</span>
-                    </button>
-                  ))}
-                </div>
-                <button className="mission-skip" onClick={() => pickMission('exploring')}>
-                  Skip — just show me the map
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="prefs-eyebrow">
-                  {MISSIONS.find((m) => m.id === wizardMission)?.label} · 2 of 2
-                </p>
-                <h2 className="ob-title">{MISSION_QUESTIONS[wizardMission]?.question}</h2>
-                <p className="ob-sub">
-                  Pick up to {MAX_PICKS} — every pick re-ranks all 41 neighborhoods live.
-                </p>
-                <div className="prefs-tags mission-chips">
-                  {(MISSION_QUESTIONS[wizardMission]?.chips ?? []).map((c) => {
-                    const sel = wizardPicks.includes(c)
-                    const atCap = wizardPicks.length >= MAX_PICKS && !sel
-                    return (
-                      <button
-                        key={c}
-                        type="button"
-                        className={`prefs-tag${sel ? ' is-selected' : ''}`}
-                        aria-pressed={sel}
-                        disabled={atCap}
-                        onClick={() =>
-                          setWizardPicks((prev) => (sel ? prev.filter((x) => x !== c) : [...prev, c]))
-                        }
-                      >
-                        <span className="tag-label">{c}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-                <div className="mission-actions">
-                  <button
-                    className="mission-skip"
-                    onClick={() => {
-                      // The full 6-tier catalog instead — mission still saved.
-                      localStorage.setItem('canary_mission', wizardMission)
-                      setMission(wizardMission)
-                      setMissionOpen(false)
-                      setOnboardingOpen(true)
-                    }}
-                  >
-                    Show me everything instead
-                  </button>
-                  <button
-                    type="button"
-                    className="ob-done"
-                    disabled={wizardPicks.length === 0}
-                    onClick={() => pickMission(wizardMission, wizardPicks)}
-                  >
-                    Show my map
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+      {/* THE preference picker — the only preference surface. One screen, zero
+          steps: mission tabs + the mission's question (8 grounded chips) +
+          Kat's full catalog folded underneath. First run, "Choose what
+          matters", and "Edit" all open THIS. Picks edit the live shortlist, so
+          the map re-ranks behind the light scrim while you choose. */}
+      {((firstRunPicker && pickerReady) || pickerOpen) && (
+        <PreferencePicker
+          mission={mission}
+          onMission={handleMissionTab}
+          picks={shortlist}
+          onToggle={toggleShortlist}
+          onClear={clearAll}
+          onDone={finishPicker}
+          onClose={dismissPicker}
+          firstRun={firstRunPicker}
+        />
       )}
 
       {/* Map */}
       <div ref={mapContainer} id="map" />
 
-      {/* Preferences panel — a shorthand summary of what onboarding picked.
-          Hidden until the onboarding is dismissed ("Show my map"), so it never
-          peeks out behind the picker on first load or during an edit. */}
-      {!onboardingOpen && (
+      {/* Preferences panel — the shorthand summary of your picks. Both of its
+          doors (Choose what matters / Edit) open THE picker. */}
       <MobileSheet dismissible={false} hidden={scope !== null}>
       <aside className="prefs-panel">
         <div className="prefs-head">
@@ -1451,7 +1295,7 @@ function App() {
                 </button>
               )}
               {/* Dashed, no-fill empty-state button that reopens the picker */}
-              <button type="button" className="prefs-edit-ghost" onClick={() => setOnboardingOpen(true)}>
+              <button type="button" className="prefs-edit-ghost" onClick={() => setPickerOpen(true)}>
                 Edit
               </button>
             </div>
@@ -1460,7 +1304,7 @@ function App() {
         {shortlist.length === 0 ? (
           <>
             <p className="prefs-hint">Tell us what matters and we’ll rank every neighborhood by fit.</p>
-            <button type="button" className="prefs-cta" onClick={() => setOnboardingOpen(true)}>
+            <button type="button" className="prefs-cta" onClick={() => setPickerOpen(true)}>
               Choose what matters
             </button>
           </>
@@ -1528,78 +1372,6 @@ function App() {
         )}
       </aside>
       </MobileSheet>
-      )}
-
-      {/* Onboarding — centered picker across the full tiered field catalog */}
-      {onboardingOpen && (
-        <div
-          className="onboarding"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Choose what matters to you"
-          onClick={(e) => e.target === e.currentTarget && setOnboardingOpen(false)}
-        >
-          <div className="onboarding-card">
-            <button className="ob-close" onClick={() => setOnboardingOpen(false)} aria-label="Close">×</button>
-            <p className="prefs-eyebrow">Welcome</p>
-            <h2 className="ob-title">Hey! Let’s find the best parcel for you.</h2>
-            <p className="ob-sub">
-              Pick up to {MAX_PICKS}. We’ll rank every San Francisco neighborhood by how well it fits.
-            </p>
-
-            <div className="ob-tiers">
-              {PREFERENCE_TIERS.map((tier) => {
-                // Gate reversed: the chip catalog is all open civic data, so every
-                // tier is free. The give-to-get moment moved to the depth that
-                // matters — resident-review details (see `residentUnlocked`).
-                return (
-                  <section key={tier.title} className="ob-tier">
-                    <p className="ob-tier-title">{tier.title}</p>
-                    <div className="prefs-tags">
-                      {tier.fields.map((f) => {
-                        const sel = shortlist.includes(f.label)
-                        const atCap = shortlist.length >= MAX_PICKS && !sel
-                        return (
-                          <button
-                            key={f.label}
-                            type="button"
-                            className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}`}
-                            aria-pressed={sel}
-                            disabled={!f.available || atCap}
-                            onClick={() => toggleShortlist(f.label)}
-                          >
-                            <span className="tag-label">{f.label}</span>
-                            {!f.available && <span className="soon">soon</span>}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </section>
-                )
-              })}
-            </div>
-
-            <div className="ob-footer">
-              <span className="ob-count">{shortlist.length} / {MAX_PICKS} selected</span>
-              <div className="ob-actions">
-                {shortlist.length > 0 && (
-                  <button type="button" className="ob-clear" onClick={clearAll}>
-                    Clear
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="ob-done"
-                  disabled={shortlist.length === 0}
-                  onClick={() => setOnboardingOpen(false)}
-                >
-                  Show my map
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Bottom legend strip — swaps with the mode */}
       <footer className="legend-strip">

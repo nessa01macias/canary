@@ -206,6 +206,28 @@ export function whyChips(signals: NbhdSignals, activeChips: string[]): ChipVerdi
 }
 
 // ---------------------------------------------------------------------------
+// City facts — the city rung's dossier body (the card is never a bare chat).
+// ---------------------------------------------------------------------------
+export type CityFacts = {
+  rising: string[]
+  declining: string[]
+  permits: number
+  netUnits: number
+}
+
+export function computeCityFacts(areas: Iterable<NbhdCardData>): CityFacts | null {
+  const list = [...areas]
+  if (list.length === 0) return null
+  const byTraj = [...list].sort((a, b) => b.traj - a.traj)
+  return {
+    rising: byTraj.slice(0, 3).filter((a) => a.traj > 0.05).map((a) => a.nhood),
+    declining: byTraj.slice(-3).filter((a) => a.traj < -0.05).map((a) => a.nhood).reverse(),
+    permits: list.reduce((n, a) => n + a.permits, 0),
+    netUnits: Math.round(list.reduce((n, a) => n + a.netUnits, 0)),
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Map caption — the map narrates itself. Deterministic over app state, always
 // matching what the pixels currently mean (the five-year-old test for colors).
 // ---------------------------------------------------------------------------

@@ -1,11 +1,10 @@
-import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import type { AskTurn, Block, Mission } from './useAsk'
 import type { ResidentAgg } from './residentLayer'
 import type { AddressReport } from './report'
 import { CHANGE_META, KIND_COLOR, KIND_LABEL, STAGE_META } from './samplePoints'
 import { SpotReportBody, Sparkline } from './ReportCard'
-import { directionLine, evidenceLines, verdict, type NbhdCardData } from './interpreter'
+import { directionLine, evidenceLines, verdict, type CityFacts, type NbhdCardData } from './interpreter'
 import { parentScope, type Scope } from './scope'
 import { logGateShown } from './lib/gateEvents'
 
@@ -126,20 +125,34 @@ function ResidentsSay({
   unlocked: boolean
   onUnlock: () => void
 }) {
-  if (!agg) return null
+  // Renders on EVERY neighborhood card — the give-to-get funnel is
+  // see-the-locked-thing → want it → contribute → unlock, and a gate that only
+  // appears where people already contributed can never bootstrap the moat.
   if (!unlocked) logGateShown(area) // fake-door instrumentation (deduped per session+area)
   return (
     <div className="answer-residents pc-residents">
-      <div className="answer-residents-head">Residents say ({agg.n})</div>
-      <div className={`answer-residents-vals${unlocked ? '' : ' is-locked'}`}>
-        safety <b>{fmt5(agg.safety)}</b> · quiet <b>{fmt5(agg.noise)}</b> · getting better{' '}
-        <b>{fmt5(agg.trajectory)}</b> <span className="answer-residents-scale">/5</span>
-      </div>
-      {!unlocked && (
-        <button className="answer-unlock" onClick={onUnlock}>
-          🔒 Review a neighborhood you know to unlock what residents said
-        </button>
+      <div className="answer-residents-head">Residents say{agg ? ` (${agg.n})` : ''}</div>
+      {agg ? (
+        <div className={`answer-residents-vals${unlocked ? '' : ' is-locked'}`}>
+          safety <b>{fmt5(agg.safety)}</b> · quiet <b>{fmt5(agg.noise)}</b> · getting better{' '}
+          <b>{fmt5(agg.trajectory)}</b> <span className="answer-residents-scale">/5</span>
+        </div>
+      ) : (
+        <div className="answer-residents-vals answer-residents-empty">
+          No resident reviews here yet — the layer no dataset can replace.
+        </div>
       )}
+      {!unlocked ? (
+        <button className="answer-unlock" onClick={onUnlock}>
+          🔒 {agg
+            ? 'Review a neighborhood you know to unlock what residents said'
+            : `Be the first to review ${area} — one review unlocks resident insights across all of SF`}
+        </button>
+      ) : !agg ? (
+        <button className="answer-unlock" onClick={onUnlock}>
+          ＋ Add the first review for {area}
+        </button>
+      ) : null}
     </div>
   )
 }
@@ -170,42 +183,23 @@ export type AskSectionState = {
 }
 
 function AskSection({
-  placeholder,
   ask,
   onShowNeighborhood,
   residentUnlocked,
   onUnlockResidents,
 }: {
-  placeholder: string
   ask: AskSectionState
   onShowNeighborhood: (n: string) => void
   residentUnlocked: boolean
   onUnlockResidents: () => void
 }) {
-  const [q, setQ] = useState('')
-  const send = () => {
-    if (!q.trim() || ask.busy) return
-    ask.submit(q.trim())
-    setQ('')
-  }
   const last = ask.turns.length - 1
+  if (ask.turns.length === 0 && !ask.busy) return null
   return (
     <div className="pc-ask">
-      <div className="pc-ask-inputrow">
-        <input
-          className="pc-ask-input"
-          value={q}
-          placeholder={placeholder}
-          onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => { if (e.key === 'Enter') send() }}
-        />
-        <button className="pc-ask-send" onClick={send} disabled={ask.busy || !q.trim()} aria-label="Ask">
-          ↑
-        </button>
-      </div>
-
-      {/* The conversation about THIS place, stacked — replying never deletes
-          what came before. Older turns dim; follow-ups only on the newest. */}
+      {/* No input here — THE box (docked directly above this card) is the one
+          place to type; this section is the conversation it produces.
+          Stacked turns: replying never deletes what came before. */}
       {ask.turns.map((t, i) => (
         <div key={i} className={`pc-turn${i === last ? ' is-latest' : ''}`}>
           <div className="pc-turn-q">{t.question}</div>
@@ -247,6 +241,15 @@ function AskSection({
   )
 }
 
+// The dock's placeholder tracks the card's scope — the box is the card's handle.
+export function askPlaceholderFor(scope: Scope | null): string | undefined {
+  if (!scope) return undefined
+  return scope.kind === 'city' ? 'Ask about San Francisco…'
+    : scope.kind === 'neighborhood' ? `Ask about ${scope.nhood}…`
+    : scope.kind === 'spot' ? 'Ask about this spot…'
+    : 'Ask about this record…'
+}
+
 // ---------------------------------------------------------------------------
 // The card
 // ---------------------------------------------------------------------------
@@ -258,7 +261,8 @@ type Props = {
   residents?: ResidentAgg | null        // for neighborhood scope
   report?: AddressReport | null         // for spot scope
   reportLoading?: boolean
-  cityIntro?: string | null             // the wizard's receipt line (city scope)
+  cityIntro?: string | null             // the picker's receipt line (city scope)
+  cityFacts?: CityFacts | null          // the city rung's dossier body
   matchTop?: string[]                   // best-fit names for the city rung
   residentUnlocked: boolean
   onUnlockResidents: () => void
@@ -303,17 +307,13 @@ export function PlaceCard({
   report,
   reportLoading,
   cityIntro,
+  cityFacts,
   matchTop = [],
   residentUnlocked,
   onUnlockResidents,
   ask,
 }: Props) {
   const showNeighborhood = (n: string) => onScope({ kind: 'neighborhood', nhood: n })
-  const askPlaceholder =
-    scope.kind === 'city' ? 'Ask about San Francisco…'
-    : scope.kind === 'neighborhood' ? `Ask about ${scope.nhood}…`
-    : scope.kind === 'spot' ? 'Ask about this spot…'
-    : 'Ask about this record…'
 
   return (
     <aside className={`place-card place-card--${scope.kind}`}>
@@ -325,14 +325,42 @@ export function PlaceCard({
         <div className="pc-body">
           <h3 className="pc-title">San Francisco</h3>
           {cityIntro && <p className="pc-direction">{cityIntro}</p>}
+          {/* Dossier first, always — the card is never a bare chat. */}
+          {cityFacts && (
+            <>
+              <p className="pc-section-label">The city right now</p>
+              {cityFacts.rising.length > 0 && (
+                <div className="pc-cityrow">
+                  <span className="pc-cityrow-label pc-cityrow-label--up">▲ rising fastest</span>
+                  {cityFacts.rising.map((n) => (
+                    <button key={n} className="ask-action" onClick={() => showNeighborhood(n)}>{n}</button>
+                  ))}
+                </div>
+              )}
+              {cityFacts.declining.length > 0 && (
+                <div className="pc-cityrow">
+                  <span className="pc-cityrow-label pc-cityrow-label--down">▼ under pressure</span>
+                  {cityFacts.declining.map((n) => (
+                    <button key={n} className="ask-action" onClick={() => showNeighborhood(n)}>{n}</button>
+                  ))}
+                </div>
+              )}
+              <p className="pc-citytotals">
+                {cityFacts.permits} recent permits on record · +{cityFacts.netUnits} net housing units approved
+              </p>
+            </>
+          )}
           {matchTop.length > 0 && (
-            <div className="pc-cityfits">
-              {matchTop.map((n) => (
-                <button key={n} className="ask-action" onClick={() => showNeighborhood(n)}>
-                  ⌖ {n}
-                </button>
-              ))}
-            </div>
+            <>
+              <p className="pc-section-label">Best fit for your picks</p>
+              <div className="pc-cityfits">
+                {matchTop.map((n) => (
+                  <button key={n} className="ask-action" onClick={() => showNeighborhood(n)}>
+                    ⌖ {n}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}
@@ -456,7 +484,6 @@ export function PlaceCard({
 
       {/* ── The ask — every rung ends in a question box ─────────────────── */}
       <AskSection
-        placeholder={askPlaceholder}
         ask={ask}
         onShowNeighborhood={showNeighborhood}
         residentUnlocked={residentUnlocked}

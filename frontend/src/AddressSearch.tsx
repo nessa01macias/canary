@@ -123,8 +123,17 @@ export function AddressSearch({
       } else if (onAsk && q.trim().length >= 2) {
         // No suggestion chosen → this is a QUESTION for the map, not an address.
         e.preventDefault()
+        const question = q.trim()
+        // Kill the geocode machinery completely: abort any in-flight fetch (its
+        // .then would reopen the list OVER the answer card), drop suggestions,
+        // and clear the box — the question lives on, echoed in the card's thread.
+        abortRef.current?.abort()
+        setQ('')
+        setSuggestions([])
+        setLoading(false)
         setOpen(false)
-        onAsk(q.trim())
+        setActiveIdx(-1)
+        onAsk(question)
       }
       return
     }

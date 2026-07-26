@@ -2371,7 +2371,7 @@ html, body, #root, #app {
 /* Cream glass of the old news card + the report card's right-dock geometry. */
 .place-card {
   position: absolute;
-  top: 68px;
+  top: 114px;
   right: 16px;
   bottom: 60px;
   z-index: 26;
@@ -2547,4 +2547,142 @@ html, body, #root, #app {
   margin-bottom: 6px;
   padding-left: 8px;
   border-left: 2px solid #ddd2c4;
+}
+
+
+/* ── THE box — the card's handle (one column: question above, answer below) ── */
+.ask-dock {
+  position: absolute;
+  top: 64px;               /* just under the topbar, exactly where the card opens */
+  right: 16px;
+  z-index: 27;
+  width: 360px;
+}
+.ask-dock .addr-search { flex: none; max-width: none; margin: 0; width: 100%; }
+.ask-dock .addr-search-input {
+  box-shadow: 0 10px 30px rgba(28, 20, 14, 0.20);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+@media (max-width: 640px) {
+  .ask-dock { display: none; } /* mobile keeps its own header; dock is desktop */
+}
+
+/* ── THE preference picker — one screen, zero steps ─────────────────────── */
+.picker-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  /* LIGHT scrim — the map stays visible and re-ranks live behind it. */
+  background: rgba(28, 20, 14, 0.16);
+  animation: ob-fade 0.2s ease;
+}
+.picker-card {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 26px 30px 22px;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+  animation: ob-rise 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The mission is a TAB — tap one and the spotlight refocuses. */
+.picker-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 4px;
+}
+.picker-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 99px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #444;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+}
+.picker-tab:hover { border-color: rgba(255,102,36,0.5); transform: translateY(-1px); }
+.picker-tab.is-active {
+  background: #2329A8;
+  border-color: #2329A8;
+  color: #fff;
+}
+
+.picker-question {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: #111;
+  margin: 16px 0 10px;
+}
+/* The spotlight — the mission's 8, larger than catalog chips. */
+.picker-spotlight { display: flex; flex-wrap: wrap; gap: 9px; }
+.picker-spotlight .prefs-tag { padding: 8px 15px; font-size: 13.5px; }
+
+.picker-browse {
+  display: block;
+  margin: 18px 0 4px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8a7d6d;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  padding: 0;
+}
+.picker-browse:hover { color: #111; }
+.picker-catalog { margin-top: 10px; }
+
+/* ── Gate tease in the hover popup ──────────────────────────────────────── */
+.nb-pop-res {
+  margin-top: 5px;
+  font-size: 11px;
+  color: #8a5a1f;
+}
+.nb-pop-res b { color: #FF6624; font-weight: 700; }
+.nb-pop-res.is-locked b { filter: blur(4px); user-select: none; }
+.nb-pop-lock { font-size: 10px; }
+
+/* Gate empty state on the card */
+.answer-residents-empty { color: #a08a6c; font-style: italic; }
+
+/* ── City rung facts (the dossier body) ─────────────────────────────────── */
+.pc-cityrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+.pc-cityrow-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  min-width: 96px;
+}
+.pc-cityrow-label--up { color: #3f8f5c; }
+.pc-cityrow-label--down { color: #c1443c; }
+.pc-citytotals {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: #8a7d6d;
 }
