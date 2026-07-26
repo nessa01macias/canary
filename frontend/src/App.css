@@ -376,32 +376,7 @@ html, body, #root, #app {
 }
 
 /* ── Detail drawer ───────────────────────────────────────────── */
-.drawer {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0 0 52px;
-  pointer-events: none;
-}
 
-.drawer-card {
-  pointer-events: all;
-  position: relative;
-  background: rgba(242, 231, 225, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 520px;
-  padding: 28px 28px 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  overflow: hidden;
-  animation: slide-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
-}
 
 @keyframes slide-up {
   from { transform: translateY(24px); opacity: 0; }
@@ -443,13 +418,6 @@ html, body, #root, #app {
   margin: 0 0 6px;
 }
 
-.drawer-city {
-  font-size: 13px;
-  font-weight: 600;
-  color: #2329A8;
-  margin: 0 0 4px;
-  letter-spacing: 0.2px;
-}
 
 .drawer-headline {
   font-size: 20px;
@@ -1045,21 +1013,6 @@ html, body, #root, #app {
   box-shadow: 0 2px 8px rgba(35,41,168,0.45);
 }
 
-.report-card {
-  position: absolute;
-  top: 68px;
-  right: 16px;
-  bottom: 60px;
-  z-index: 25;
-  width: 340px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 10px 40px rgba(35,41,168,0.18);
-  padding: 20px 20px 14px;
-  overflow-y: auto;
-  animation: slide-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
-  font-family: 'Inter', system-ui, sans-serif;
-}
 
 .rc-loading {
   display: flex;
@@ -1492,46 +1445,13 @@ html, body, #root, #app {
 
 
 /* ── Neighborhood news card (click a parcel) ─────────────────── */
-.news-card {
-  position: absolute;
-  top: 76px;
-  right: 20px;
-  z-index: 16;
-  width: 340px;
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
-  padding: 16px 18px 18px;
-  background: rgba(242, 231, 225, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
-  animation: news-in 0.28s cubic-bezier(0.32, 0.72, 0, 1);
-}
 @keyframes news-in {
   from { opacity: 0; transform: translateY(-6px) scale(0.985); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .news-card { animation-duration: 0.01ms; }
-}
+  }
 
-.news-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 26px;
-  height: 26px;
-  border: none;
-  background: transparent;
-  color: #8a7c72;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  border-radius: 8px;
-}
-.news-close:hover { background: rgba(0,0,0,0.06); color: #333; }
 
 .news-verdict {
   display: inline-block;
@@ -1546,45 +1466,11 @@ html, body, #root, #app {
 .news-verdict-down { background: #ff6624; }
 .news-verdict-flat { background: #9a8c81; }
 
-.news-nbhd {
-  margin: 8px 0 2px;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  color: #17120f;
-}
-.news-sub {
-  margin: 0 0 10px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #6a5d54;
-}
-.news-stats {
-  display: flex;
-  gap: 12px;
-  font-size: 11.5px;
-  color: #6a5d54;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-.news-stats b { color: #17120f; font-weight: 700; }
 
-.news-eyebrow {
-  margin: 12px 0 8px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #9a8c81;
-}
 
 /* "Why" facts: a quiet ledger, not a stack of boxes. Typography carries the fact;
    chrome recedes (hairline separators only); color appears ONLY where it means
    something — the per-fact direction tick, in the map's own diverging pair. */
-.news-list {
-  display: flex;
-  flex-direction: column;
-}
 .headline-row {
   display: grid;
   grid-template-columns: 14px 1fr;
@@ -1819,13 +1705,11 @@ html, body, #root, #app {
   .topbar { display: none; }
   .mtopbar { display: block; }
 
-  /* The prefs panel, neighborhood news and address report are all hosted inside
-     the draggable <MobileSheet> — the sheet owns positioning, chrome and scroll,
-     so the cards themselves become plain flow content. */
+  /* The prefs panel and the PlaceCard are hosted inside the draggable
+     <MobileSheet> — the sheet owns positioning, chrome and scroll, so the
+     cards themselves become plain flow content. */
   .msheet .prefs-panel,
-  .msheet .news-card,
-  .msheet .place-card,
-  .msheet .report-card {
+  .msheet .place-card {
     position: static;
     inset: auto;
     width: auto;
@@ -1841,10 +1725,6 @@ html, body, #root, #app {
     overflow: visible;
     padding: 2px 14px 10px;
   }
-
-  /* Bottom drawer (change detail): give the card breathing room from edges. */
-  .drawer { padding: 0 10px 58px; align-items: flex-end; }
-  .drawer-card { padding: 24px 20px 20px; max-height: 78vh; overflow-y: auto; }
 
   /* Centered modals: tighter gutters + padding, keep them scrollable. */
   .contribute-overlay, .contrib-overlay, .research-overlay {
@@ -1990,10 +1870,6 @@ html, body, #root, #app {
   overscroll-behavior: contain;
   padding-bottom: 12px;
 }
-/* The card's own close button is redundant with drag-down-to-dismiss, but keep
-   it as a larger touch target inside the sheet. */
-.msheet .news-close { top: 4px; right: 10px; width: 34px; height: 34px; }
-
 /* Very small phones: shrink the mode toggle text a touch more. */
 @media (max-width: 380px) {
   .mode-toggle button { font-size: 11px; padding: 5px 8px; }
@@ -2329,45 +2205,7 @@ html, body, #root, #app {
 
 /* The answer canvas: a transient card under the navbar. The MAP is the real
    response (rank_map / flyto auto-execute above); this is the receipt. */
-.answer-strip {
-  position: absolute;
-  top: 74px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 28;
-  width: min(560px, calc(100vw - 32px));
-  max-height: min(70vh, 620px);
-  overflow-y: auto;
-  padding: 18px 20px 16px;
-  background: rgba(255,255,255,0.97);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(0,0,0,0.07);
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(28,20,14,0.24);
-  animation: slide-up 0.24s cubic-bezier(0.32, 0.72, 0, 1);
-  font-family: 'Inter', system-ui, sans-serif;
-}
-.answer-close { position: absolute; top: 12px; right: 12px; }
 
-.answer-busy {
-  position: absolute;
-  top: 74px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 28;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 12px 18px;
-  background: rgba(255,255,255,0.97);
-  border-radius: 99px;
-  box-shadow: 0 12px 40px rgba(28,20,14,0.2);
-  font-size: 13px;
-  color: #666;
-  font-style: italic;
-  animation: slide-up 0.24s cubic-bezier(0.32, 0.72, 0, 1);
-}
 
 /* "what the map just did" line — the receipt for an executed action block. */
 .answer-did { margin: 8px 0 2px; }

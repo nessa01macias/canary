@@ -53,7 +53,7 @@ the rest are **ignored, never faked**.
 | Low crime | `1 − crimeTrend` (crime_incidents, 12-vs-12mo) |
 | Quiet | `1 − noiseTrend` (311 noise complaints — **new**, staged today) |
 | Business openings | `bizOpenTrend` |
-| Vacancy trend | `1 − bizCloseTrend` (proxy; real `datasf_commercial_vacancy` raw landed 🟠) |
+| Vacancy trend | `1 − vacancyRate` (REAL Prop-D roll since 2026-07-25: latest *complete* tax year, blanks excluded, no zero-fill; `vacancyRateRaw` ships alongside the rank so surfaces render rate+rank together. Known debt: the H3 spine uses Inside Airbnb boundaries vs the map's DataSF polygons — `/api/report` now returns `attributes_area` so the card badges which area the facts describe; unifying the spine on DataSF polygons is the real fix) |
 | New construction | `intensity` (live permits) |
 
 ### One API-field away 🟡

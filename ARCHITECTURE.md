@@ -117,7 +117,9 @@ backend host in either environment.
 | `GET /api/catalog` | DuckDB | machine-readable capability list (agent-legible) |
 | `POST /api/contributions` | Supabase | persists a user review (the moat, write side) |
 | `GET /api/resident-layer` | Supabase (k-anon views) + DuckDB (names) | aggregated reviews per area/hex, n ≥ 3 only (the moat, read side) |
-| `POST /api/ask` | Claude (server-side key) composes; DuckDB hydrates every number | intent + mission → **curated generative UI**: the model arranges a blessed block registry (answer / rank_map / flyto / compare / residents), the server hydrates all series from DuckDB (no invented charts). Rate-limited free tier — the live demo of the B2B grounding feed |
+| `POST /api/ask` | Claude (server-side key) composes; DuckDB hydrates every number | intent + mission + **context** (the PlaceCard scope — "here" means the place the card is about; scoped 12-mo series appended AFTER the cached grounding block so the prompt cache survives) → **curated generative UI**: the model arranges a blessed block registry (answer / rank_map / flyto / compare / residents), the server hydrates all series from DuckDB (no invented charts). Rate-limited free tier — the live demo of the B2B grounding feed |
+| `GET /api/hex-trajectory` | DuckDB (precomputed `trajectory` @ h3_9 + H3 boundary WKT) | one metric's per-hex trend as GeoJSON (~700 rankable hexes, 600s cache) — the sub-neighborhood texture ("which corner is changing") |
+| `POST /api/gate-events` | Supabase | fake-door gate instrumentation (shown/completed per variant) — the >15–20% contribution-rate test |
 
 Everything is H3-native (global spine) and geography-agnostic — adding a metro
 changes data, never the contract.
