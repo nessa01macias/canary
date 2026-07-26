@@ -18,8 +18,8 @@ before any model was queried. Bare, the newest models score **36-45%** — and u
 the previous generation, they rarely refuse: their failure mode is **confident error**
 (Grok 4.5: confidently wrong on 25 of 43 answers; GPT-5.6 Sol: 23). On "which
 neighborhood changed most" questions, the five models went **0 for 25**. With **one
-Canary API response** prepended, accuracy rose to **93-100%** (two models scored a
-perfect 43/43). The gap is not model capability — capability visibly improved — and
+Canary API response** prepended, accuracy rose to **93-100%** (three models scored
+perfectly). The gap is not model capability — capability visibly improved — and
 not web freshness: it is that area-level answers had never been computed and published
 anywhere, so no amount of intelligence or retrieval can recover them.
 
