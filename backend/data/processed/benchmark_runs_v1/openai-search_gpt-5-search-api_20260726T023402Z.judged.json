@@ -1,0 +1,264 @@
+{
+ "provider": "openai-search:gpt-5-search-api",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "openai-search_gpt-5-search-api_20260726T023402Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to overall decrease in crime, matching ground truth direction."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime falling in Japantown, matching ground truth decrease direction."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to overall decreasing trend and suggests Outer Mission likely follows, matching ground truth decrease, despite hedging on neighborhood-specific data."
+  },
+  {
+   "id": "q004",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to a direction for Western Addition specifically, offering only citywide data and asking to follow up."
+  },
+  {
+   "id": "q005",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant fails to provide the neighborhood-specific direction, only citywide data and a refusal to commit."
+  },
+  {
+   "id": "q006",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant admits it cannot find Presidio Heights-specific data and instead cites citywide trend, not committing to the neighborhood-level decrease."
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant explicitly states it cannot determine Lakeshore-specific trend, only gives citywide data; does not commit to increase for Lakeshore."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing' direction, matching ground truth, despite citing different specific figures."
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges, claims insufficient data for year-over-year comparison, and suggests a decrease rather than committing to the increase direction."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'likely down' matching ground truth decrease, though with hedging."
+  },
+  {
+   "id": "q011",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Declines to give Presidio-specific trend, only cites citywide figure without committing to Presidio direction"
+  },
+  {
+   "id": "q012",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer explicitly says it couldn't find a clear trend for Twin Peaks, offering SF-wide and district-level info instead of committing to the actual decrease."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer claims flat/no increase, contradicting ground truth of a large increase (244 vs 38 units approved)."
+  },
+  {
+   "id": "q014",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges, refuses to commit definitively, offering only a vague 'best guess' of small increase rather than a clear direction."
+  },
+  {
+   "id": "q015",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Explicitly states it cannot determine Nob Hill-specific data, only gives citywide figures without committing to Nob Hill direction."
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit to a single neighborhood, mentions Financial District/South Beach and Mission instead of Japantown, without clearly asserting either as the answer."
+  },
+  {
+   "id": "q017",
+   "verdict": "judge_error",
+   "reason": "{\"verdict\":"
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer guesses Sunset District instead of Lakeshore, though hedged with uncertainty."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin as the largest rise, not Lakeshore per ground truth."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names South of Market with 597 units, not Hayes Valley with 1206 units as per ground truth."
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant does not provide a numeric estimate and instead states data is unavailable, without committing to any figure."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~60-70 units, far outside tolerance of expected 1206."
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Estimate of 200-400 units falls far outside the tolerance range around 1172 (roughly 820-1524)."
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to <20 units, far outside tolerance of expected 934."
+  },
+  {
+   "id": "q025",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant declines to give a specific SoMa figure, offering only tangential numbers instead of committing to an estimate."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~22,651 (or 43,100) active businesses, far outside the 14,208 \u00b130% tolerance range (9,946-18,470)."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer estimates ~15,000-23,000 active businesses, far outside the expected ~7,939 (\u00b130%)."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer estimates 20,000-30,000 active businesses, far exceeding the expected 6,157 (\u00b130% = ~4,300-8,000)"
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Japantown having the bigger increase, matching ground truth, despite initial hedging."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Despite hedging, the answer commits to Western Addition as the likely larger increase, matching ground truth."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Lakeshore as bigger increase, matching ground truth direction, despite different specific numbers."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer picks Inner Richmond, matching ground truth direction, despite both actually decreasing."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin as bigger increase, contradicting ground truth that Lone Mountain/USF had the larger (positive) change while Tenderloin was negative."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer picks South of Market as bigger increase, contradicting ground truth of Outer Richmond."
+  },
+  {
+   "id": "q035",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer estimates 20-50 units vs ground truth 494, far outside tolerance."
+  },
+  {
+   "id": "q036",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refused to provide a specific estimate, not committing to any number or direction."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer's speculative range (100-300) excludes the ground truth value of 53, though hedged as speculative."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states eviction notices increased, matching ground truth direction."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime was falling citywide, aligning with expected decrease, though it hedges on Lincoln Park-specific data."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime fell, matching expected decrease direction."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime fell, matching expected decrease direction."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer emphasizes overall improving trend (robberies, violent/property crime declining) while noting drug offenses rising, aligning with ground truth that victimization is falling despite enforcement-related increases."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, attributes rise to reporting behavior/complaint dynamics rather than actual noise increase, matching ground truth direction."
+  }
+ ]
+}

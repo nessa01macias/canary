@@ -1,0 +1,265 @@
+{
+ "provider": "xai:grok-4.5+canary",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "xai_grok-4.5+canary_20260726T030112Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling with matching numbers 877 vs 1532 (~-43%), matching ground truth."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling, matching decrease from 406 to 254 (-37%), consistent with ground truth."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is falling with matching figures (602 vs 903, -33%), aligning with ground truth decrease."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States increase from 166 to 213 (~28%), matching ground truth."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct numbers (66 vs 89, ~26% decline)"
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct figures 162 to 127, ~22% decline"
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 5 to 46 (820% rise, consistent with pct_change 8.2 as multiplier)"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction (increase) and numbers 19->37, ~95%"
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers exactly (21->37, ~76% increase)."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with numbers matching ground truth exactly."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches direction (decrease) and numbers (19 vs 71, -73%) within tolerance."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease, 26 vs 64, ~59% drop"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 38 to 244 (~542%)."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'up' with 97 vs 27 units, matching ground truth exactly."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (987 vs 289, ~241% increase)"
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Names Japantown with +38% matching ground truth pct_change of 0.38"
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Bernal Heights with -42.8% matching ground truth exactly."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore with ~156% increase matching ground truth pct_change of 1.562"
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore as the neighborhood, matching ground truth despite differing pct_change figure."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches ground truth: Hayes Valley with 1,206 units."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 falls within 30% tolerance of expected 1319 (range ~923-1715)."
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches expected value of 1206 exactly."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1,192 is within 30% tolerance of expected 1,172"
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 is within 30% tolerance of expected 934 (range ~654-1214)."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within 30% tolerance of expected 511 (range ~358-664)."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 14,208 (~14,200), matching expected value exactly."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 7939 exactly."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 6157 exactly"
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Japantown with matching percentage figures (38% vs -26%), consistent with ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Western Addition with matching percentages (+28.3% vs -21.6%)"
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Lakeshore with +8% vs Bernal Heights -43%, matching ground truth direction and magnitudes."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Inner Richmond with matching values (-2.7% vs -38.4%), consistent with ground truth."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lone Mountain/USF as having the bigger increase, matching ground truth direction, despite fabricated intermediate numbers."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Outer Richmond as having the bigger increase, matching ground truth direction."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 494 units from 768 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth value of 43 units exactly."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 53, matching ground truth exactly."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: rise from 82 to 167."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and exact figures (175 to 30, decrease)."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states fall with matching numbers 1,136 to 456, consistent with ground truth."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States fell, with matching numbers 2589 to 1140."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies victimization down ~8% and distinguishes enforcement surge, matching ground truth."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, attributes rise to reporting/app changes not actual noise increase, matching ground truth direction."
+  }
+ ]
+}

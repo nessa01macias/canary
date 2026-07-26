@@ -1,0 +1,262 @@
+{
+ "provider": "openai:gpt-5.6-sol",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "openai_gpt-5.6-sol_20260726T023402Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Direction correctly identified as falling/decrease, matching ground truth, though magnitude (15% vs actual 42.8%) is off but direction is what matters per rules"
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correct direction (decrease), though the stated magnitude (10\u201320%) is smaller than actual (-37.4%), it's a directional match with hedged numbers."
+  },
+  {
+   "id": "q003",
+   "verdict": "judge_error",
+   "reason": ""
+  },
+  {
+   "id": "q004",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states a decrease, but ground truth shows an increase (~28.3%)."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States fewer new businesses opened, matching the decrease direction in ground truth."
+  },
+  {
+   "id": "q006",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer claims an increase in new business openings, but ground truth shows a decrease of ~21.6%."
+  },
+  {
+   "id": "q007",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states decreasing while ground truth shows a large increase (46 vs 5, +8.2x)"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'increasing', matching ground truth direction."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states evictions are increasing, matching ground truth direction."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states reports are down, matching the ground-truth decrease direction."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States decrease, matching ground truth direction."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states reports are down, matching ground truth decrease direction."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Ground truth shows a large increase (244 vs 38), but the answer states the trend is down."
+  },
+  {
+   "id": "q014",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 'Down' while ground truth shows an increase (97 vs 27 units)."
+  },
+  {
+   "id": "q015",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Ground truth shows an increase (down from 289 to 987 units, actually a rise), but the answer claims a decrease."
+  },
+  {
+   "id": "q016",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Union Square, not Japantown as verified"
+  },
+  {
+   "id": "q017",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin, not Bernal Heights as verified."
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Sunset/Parkside, not Lakeshore as verified."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin, but ground truth is Lakeshore."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names SoMa, but ground truth is Hayes Valley."
+  },
+  {
+   "id": "q021",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~25 units vs ground truth ~1319 (tolerance 30%), far outside tolerance."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~30 units vs expected ~1206 (tolerance \u00b130%), far outside range"
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "300 is far outside the 30% tolerance band around 1172 (expected range ~820-1524)"
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer of 80 is far outside the 30% tolerance band around expected 934 (approx 654-1214)."
+  },
+  {
+   "id": "q025",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~900 units, outside the tolerance range (358-664) around expected 511."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "20,000 exceeds the tolerance range (~9,946\u201318,470) around the expected 14,208 active businesses."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "11,000 exceeds the tolerance range (5557-10321) around expected 7939"
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer of ~18,000 far exceeds tolerance range (4310-8004) around expected 6157"
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Japantown as having the bigger increase, matching ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Western Addition as having the bigger increase, matching ground truth."
+  },
+  {
+   "id": "q031",
+   "verdict": "judge_error",
+   "reason": ""
+  },
+  {
+   "id": "q032",
+   "verdict": "judge_error",
+   "reason": "{\"verdict\":\"correct\",\"confident_wrong\":false,\"reason\":\"Answer names Inner Richmond, mat"
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin, but ground truth shows Lone Mountain/USF had the bigger increase (5.421 vs -1.263)."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names SoMa, but ground truth shows Outer Richmond had the increase while SoMa declined."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "350 falls within the \u00b135% tolerance band around 494 (321\u2013667)."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 12 units vs ground truth 43 (tolerance ~28-58), well outside tolerance and stated without hedging."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer's estimate (~30, range 20-40) falls below the tolerance range (34.45-71.55) around the ground truth of 53."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states eviction notices rose, matching the ground truth increase."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime fell, matching expected decrease."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime incidents fell, matching the expected decrease direction."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime fell, matching expected decrease direction."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States crime is modestly improving/decreasing, aligning with victimization decrease direction."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, attributes rise to reporting/app behavior changes rather than actual noise increase, matching ground truth direction."
+  }
+ ]
+}

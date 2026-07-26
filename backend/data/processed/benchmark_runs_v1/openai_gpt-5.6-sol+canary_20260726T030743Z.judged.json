@@ -1,0 +1,6 @@
+{
+ "provider": "openai:gpt-5.6-sol+canary",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "openai_gpt-5.6-sol+canary_20260726T030743Z.json",
+ "verdicts": []
+}

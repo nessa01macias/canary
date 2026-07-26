@@ -215,8 +215,10 @@ def main() -> None:
             "expected": total_units, "tolerance_pct": 35,
             "ground_truth": {"total_units_500m_24mo": total_units, "n_permits": len(rows)},
             "grounding_rows": [
-                {"permit": r[0], "issued": str(r[1]), "cost": r[2], "units_delta": r[3], "description": r[4]}
-                for r in top
+                {"ring_summary": {"radius_m": 500, "window_months": 24,
+                 "total_net_units_approved": total_units, "n_permits": len(rows)}},
+                *[{"permit": r[0], "issued": str(r[1]), "cost": r[2], "units_delta": r[3], "description": r[4]}
+                  for r in top],
             ],
         })
 

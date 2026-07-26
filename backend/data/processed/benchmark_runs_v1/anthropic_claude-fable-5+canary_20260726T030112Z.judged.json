@@ -1,0 +1,265 @@
+{
+ "provider": "anthropic:claude-fable-5+canary",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "anthropic_claude-fable-5+canary_20260726T030112Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States crime is falling, with 877 vs 1532 (-43%) matching ground truth direction and magnitude."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from 406 to 254 (~37%)"
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is falling, with 602 vs 903 (-33%), matching ground truth direction and numbers."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected increase with correct numbers 213 vs 166 (~28%)"
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches decrease direction and exact numbers (89->66, -26%)"
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct numbers 162\u2192127 (~22%)"
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly states increase with matching numbers 46 vs 5"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches direction (increase) and exact figures 37 vs 19, ~95%."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected increase with correct numbers 37 vs 21 (~76%)."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction (decrease) and exact numbers (650 to 162, ~75% decline)."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from 71 to 19, ~73% drop."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease, 64 to 26, ~59% drop."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states increase, matching direction, with numbers 38 to 244 matching ground truth exactly."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction (increase) and numbers 27->97, ~260% increase."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and exact figures (289 to 987, ~242% increase)."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Japantown with 38% increase, matching ground truth exactly."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Bernal Heights with ~43% drop, matching ground truth pct_change of -0.428."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Lakeshore with ~156% increase, matching ground truth pct_change of 1.562 (156.2%)."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly names Lakeshore as the neighborhood with the largest rise in eviction filings"
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Hayes Valley with 1,206 units matching ground truth."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 falls within 30% tolerance of expected 1319 (range ~923-1715)."
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 1,200 (1,206 exactly), matching expected value within tolerance."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1,192 is within 30% tolerance of expected 1,172"
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 falls within 30% tolerance of expected 934 (654-1214 range)"
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within 30% tolerance of expected 511 (357.7\u2013664.3 range)"
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "14,200 matches expected 14,208 within tolerance"
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 7,939 (7,900 rounded), matching expected value exactly."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states ~6,200 (6,157), matching expected value within tolerance."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Japantown with +38% vs Visitacion Valley -26%, matching ground truth values."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Western Addition with ~28% increase vs Presidio Heights ~22% decline, matching ground truth values."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lakeshore with ~8% increase vs Bernal Heights ~43% decrease, matching ground truth."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Inner Richmond had bigger increase (smaller decrease, near flat) vs Seacliff's sharp decline, matching -0.027 vs -0.384 figures."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lone Mountain/USF as having the bigger increase, matching ground truth direction, despite different specific numbers."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Outer Richmond as having the bigger increase, matching the ground truth direction."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches expected value (494 units, 768 permits) exactly."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 43 net new units and 747 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 53 units and 323 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly states rise from ~82 to ~167, matching ground truth numbers and direction."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from ~175 to ~30, consistent direction and approximate magnitude."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth numbers (1136 -> 456, -60%) and correct direction (decrease)."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct figures (2,589 to 1,140, ~56% decline)."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states victim-reported crime fell ~8% and distinguishes enforcement surge from victimization, matching ground truth."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, attributes rise to reporting/platform behavior rather than actual noise levels, matching ground truth direction."
+  }
+ ]
+}

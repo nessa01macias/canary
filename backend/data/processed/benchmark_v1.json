@@ -491,6 +491,14 @@
    },
    "grounding_rows": [
     {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 494,
+      "n_permits": 768
+     }
+    },
+    {
      "permit": "202506047864",
      "issued": "2025-09-02",
      "cost": 30916200.0,
@@ -577,6 +585,14 @@
    },
    "grounding_rows": [
     {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 43,
+      "n_permits": 747
+     }
+    },
+    {
      "permit": "202504154412",
      "issued": "2025-11-17",
      "cost": 2518206.0,
@@ -662,6 +678,14 @@
     "n_permits": 323
    },
    "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 53,
+      "n_permits": 323
+     }
+    },
     {
      "permit": "202203089442",
      "issued": "2025-02-11",
@@ -823,5 +847,6 @@
    "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-24, Canary pipeline",
    "id": "q043"
   }
- ]
+ ],
+ "protocol_note": "v1.0.1: address_forward ON-payloads now include the ring aggregate (matches /api/report); questions unchanged from freeze 064dc90"
 }

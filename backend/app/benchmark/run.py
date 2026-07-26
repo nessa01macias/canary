@@ -43,20 +43,26 @@ SYSTEM = (
 
 
 def ask_openai_compatible(base_url: str, key: str, model: str, question: str) -> str:
-    resp = requests.post(
-        f"{base_url}/chat/completions",
-        headers={"Authorization": f"Bearer {key}"},
-        json={
-            "model": model,
-            "messages": [
-                {"role": "system", "content": SYSTEM},
-                {"role": "user", "content": question},
-            ],
-        },
-        timeout=120,
-    )
-    resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
+    # Grounded prompts are large; 429s back off and retry rather than burning a row.
+    for attempt in range(5):
+        resp = requests.post(
+            f"{base_url}/chat/completions",
+            headers={"Authorization": f"Bearer {key}"},
+            json={
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": SYSTEM},
+                    {"role": "user", "content": question},
+                ],
+            },
+            timeout=120,
+        )
+        if resp.status_code == 429 and attempt < 4:
+            time.sleep(8 * (attempt + 1))
+            continue
+        resp.raise_for_status()
+        return resp.json()["choices"][0]["message"]["content"]
+    raise requests.RequestException("429 retries exhausted")
 
 
 def ask_anthropic(key: str, model: str, question: str) -> str:

@@ -1,54 +1,56 @@
 # Do AI assistants know how neighborhoods are changing?
-### An area-level ground-truth benchmark with a grounding ablation — v0, San Francisco
+### An area-level ground-truth benchmark with a grounding ablation — v1 pilot, San Francisco
 
 **Melany Macías · Katerina Tchilinguirov — Canary**
-*Working note v0 · July 25, 2026 · San Francisco*
+*Working note v1 (pilot) · July 26, 2026 · San Francisco*
 
 ---
 
 ## Abstract
 
-People increasingly ask AI assistants where to live. We tested whether three frontier
-assistants (GPT-4o, Claude Sonnet 4.5, Perplexity sonar-pro with live web search) can
-answer **checkable, area-level questions** about San Francisco — is crime rising in
-this neighborhood, where are businesses opening, how much housing was just approved —
-where every ground truth is computed from public records and carries a citation.
-Bare, the models scored **0-39%**, with two distinct failure modes: refusal (GPT-4o
-declined 39/46 questions) and confident error (Perplexity answered all 46, was wrong
-on 28, without hedging). All three gave the *identical* wrong answer to the flagship
-question. With **one simulated Canary API response** prepended — the same models, same
-questions — accuracy rose to **85-98%**. The failure is not model capability and not
-web freshness; it is that area-level answers had never been computed and published
-anywhere, so no amount of retrieval could find them.
+People increasingly ask AI assistants where to live. We tested five frontier models —
+**Claude Fable 5, GPT-5.6 Sol, GPT-5-search (native web search), Perplexity sonar-pro,
+and Grok 4.5** — on 43 checkable, area-level questions about San Francisco: is crime
+rising here, which neighborhood is gaining businesses fastest, how much housing was
+just approved within 500 meters of this address. Every ground truth is computed from
+public records and carries a citation; the question set was frozen at a git commit
+before any model was queried. Bare, the newest models score **36-45%** — and unlike
+the previous generation, they rarely refuse: their failure mode is **confident error**
+(Grok 4.5: confidently wrong on 25 of 43 answers; GPT-5.6 Sol: 23). On "which
+neighborhood changed most" questions, the five models went **0 for 25**. With **one
+Canary API response** prepended, accuracy rose to **93-100%** (two models scored a
+perfect 43/43). The gap is not model capability — capability visibly improved — and
+not web freshness: it is that area-level answers had never been computed and published
+anywhere, so no amount of intelligence or retrieval can recover them.
 
 ## Lay summary
 
-**We asked three leading AI assistants 46 questions about San Francisco neighborhoods** —
-the kind anyone deciding where to live asks: *Is crime getting better here? Where are
-new businesses actually opening? How much housing was just approved nearby?* Every
-question has a checkable answer in the city's own public records.
+**We asked the five newest AI models 43 checkable questions about San Francisco
+neighborhoods** — the kind anyone deciding where to live asks: *Is crime getting
+better here? Where are new businesses opening fastest? How much housing was just
+approved near this address?* Every question has a verifiable answer in the city's
+public records.
 
-**Without help, they failed.**
-- GPT-4o refused or dodged **39 of 46** questions. An assistant that won't answer is no help on moving day.
-- Perplexity — which searches the live web — answered every question, and got **28 of 46 wrong** while sounding completely sure.
-- All three gave the **same wrong answer** to the same question: asked which neighborhood had the biggest rise in new business openings, all said the Mission. City records show the Mission had the biggest **decline**. The real answer — Japantown — appeared nowhere.
+**Without help, they failed — confidently.**
+- The newest models almost never refuse anymore. They answer everything — and are
+  **confidently wrong about half the time** (up to 25 of 43 answers, without a
+  single hedge).
+- Asked which neighborhood rose the most (in openings, permits, evictions), the five
+  best models on earth went **0 for 25**.
+- Asked to simply count things — housing units approved, active businesses — they
+  scored **0%**.
 
-**Why they fail:** these answers aren't stale on the web — they were **never on the web
-at all**. No one had ever computed them from the millions of raw records the city
-publishes. An AI can't retrieve a sentence nobody has written.
+**Why they fail:** these answers aren't stale on the web — they were **never on the
+web at all**. No one had ever computed them from the millions of raw records the city
+publishes. A smarter model can't retrieve a sentence nobody has written; between
+generations, the models got more fluent — about the same missing facts.
 
-**Then we gave the same AIs one response from Canary's data.** Correctness jumped from
-**0-39% to 85-98%**. Same models, same questions — the only thing that changed was our
-data. The AIs were never the problem; the missing layer was.
+**Then we gave the same models one response from Canary's data.** Two of them scored
+**a perfect 43/43**; the rest ~93%. Same models, same questions — the only thing that
+changed was the data. The AIs were never the problem; the missing layer was.
 
-**One more thing we learned:** numbers alone weren't enough. Handed raw figures without
-explanations, one model read a police *crackdown* (enforcement up 44%) as a crime *wave*
-— even though crimes reported by victims were down 8%. Data has to ship with its
-meaning attached. That's what Canary builds: the measured, explained change layer of
-the physical world, for humans and for AIs.
-
-*(Early result: one city, 46 questions, three models — the full method, numbers, and
-limitations follow below.)*
+*(Pilot scale: one city, 43 questions, one run per condition — full method, numbers,
+and limitations below.)*
 
 > **The accuracy gap is not a prompt-engineering problem — and for neighborhoods, it
 > isn't even a freshness problem. It's an aggregation problem: the answers aren't stale
@@ -58,169 +60,175 @@ limitations follow below.)*
 
 Prior evidence covers the *place* level: VOYGR's Quarterly LLM Benchmarking Study
 (345 prompts — restaurants, hours, bookings) found models recommend closed or
-fabricated venues; the "Silicon Gaze" audit (20M queries) found LLM neighborhood
+fabricated venues. The "Silicon Gaze" audit (20M queries) found LLM neighborhood
 *rankings* mirror social divides. But no benchmark existed for the **area level** —
 neighborhood *trajectory* (direction of change) and the *forward layer* (what is
 approved to be built). Notably, VOYGR's 345 local prompts contain zero area-change
-questions: the category was unmeasured, in line with it being unserved.
+questions: the category was unmeasured, in line with it being unserved. Our v0 pilot
+(46 questions, previous-generation models) found 0-39% bare accuracy dominated by
+refusals; v1 tests whether the newest frontier closes the gap. It does not — it
+changes the failure mode.
 
 ## 2. Ground truth
 
 Ground truths are computed by the Canary pipeline from municipal public records
 (building permits, the business registry, police incident reports, eviction notices,
-311 cases — DataSF snapshots `as_of 2026-07-24`), aggregated on an H3 hex spine and
-rolled up to the city's 37 analysis neighborhoods. Three properties matter for
-benchmark validity:
+311 cases; DataSF snapshots, as-of date stamped on every row), aggregated on an H3
+hex spine and rolled to the city's analysis neighborhoods. Three properties matter
+for benchmark validity:
 
-1. **Bitemporal provenance.** Every row carries the source's own freshness date and
+1. **Bitemporal provenance** — every row carries the source's own freshness date and
    our fetch date; every answer is reproducible against a stated snapshot.
-2. **Receipts.** Every question's expected answer traces to underlying records
-   (permit numbers, registry entries), not to a black-box score.
-3. **Measurement discipline.** The raw record misleads in known ways, and the ground
-   truth corrects for them *before* any model was tested: police incidents are split
-   into victim-reported vs enforcement-driven categories (a drug-sweep surge is not a
-   crime wave); a March-2026 311-app change that inflated "noise complaints" +62% was
-   detected and excluded from the claimable metric; business-registry close-date lag
-   is documented. See [VALIDATION.md](VALIDATION.md) for the validation of the ground
-   truth itself (including one case where the receipts corrected *our own* narrative
-   attribution — the discipline cuts both ways).
+2. **Receipts** — every expected answer traces to underlying records (permit numbers,
+   registry entries), not to a black-box score.
+3. **Measurement discipline** — the record misleads in known ways, corrected *before*
+   any model was tested: police incidents split into victim-reported vs
+   enforcement-driven; a 311 app-flow artifact that inflated "noise complaints" 62%
+   detected and excluded; registry close-date lag documented. See
+   [VALIDATION.md](VALIDATION.md), including a case where the receipts corrected our
+   own narrative attribution.
 
 ## 3. Question design
 
-**46 questions, generated programmatically from the database before any model was
-queried** (no post-hoc selection): 33 *direction* ("is crime rising or falling in X,
-past year vs the year before?"), 4 *superlative* ("which neighborhood had the biggest
-increase in new business openings?"), 6 *numeric* ("roughly how many net new housing
-units were approved in X?", ±25% tolerance), 3 *fact* ("has any major residential
-building been approved in X recently?"). Only unambiguous truths are emitted: minimum
-event volume and minimum effect-size floors, so a wrong answer cannot hide behind
-noise. One designed trap: "Is crime in the Tenderloin getting better or worse?" —
-where victim-reported crime fell 8.0% while enforcement activity rose 43.6%; the
-naive total (+11%) points the wrong way.
+**43 questions in 7 blocks, generated from the database and frozen at git commit
+`064dc90` before any model was queried** (pre-registration style; quality floors
+trimmed the initial 50 — two addresses had too little nearby construction to ask
+about honestly, two pairwise gaps were too narrow):
+
+- **15 direction** — "is X rising or falling in {neighborhood}?" across victim-reported
+  crime, business openings, evictions, encampment reports, housing approvals
+- **5 superlatives** — "which neighborhood had the biggest increase in X?"
+- **8 numeric** — counts with ±30% tolerance (units approved; active businesses)
+- **6 pairwise comparisons** — "which of A or B rose more?" (two aggregations, never published)
+- **3 address-level forward layer** — "units approved within ~500m of {address}?"
+- **4 temporal windows** — changes between year-ending-June-2024 and year-ending-June-2025
+  (inside training windows — a control for "the gap is the present")
+- **2 mechanism traps** — the Tenderloin enforcement-vs-victimization split; the 311
+  noise artifact ("did the city really get 60% louder?")
 
 ## 4. Protocol
 
-Two conditions per provider, identical questions:
+Two conditions, identical questions: **bare** (the model alone; system prompt demands
+a committed answer) and **Canary ON** (one simulated Canary API response prepended:
+the data slice a single call would return, **with field documentation** — metric
+definitions ship with every real response). Address-level payloads include the ring
+aggregate plus the top permits, matching `/api/report` (v1.0.1 protocol note: the
+initial payload omitted the aggregate; models correctly summed the partial list they
+were given — a payload bug, fixed and re-run, disclosed here). Provider-default
+temperature throughout (consumer defaults; several frontier APIs now reject custom
+temperatures). One run per condition (pilot; stability replicates planned for v1.1).
+Cost of the full study: ≈ $25.
 
-- **Canary OFF (bare):** the question alone. The system prompt instructs the model to
-  commit to a direct answer with its best available knowledge.
-- **Canary ON (grounded):** one simulated Canary API response is prepended — the JSON
-  slice a single API call would return (the area's trajectory rows, or all areas for
-  the question's metric on superlatives) **plus the API's field documentation**. The
-  benchmark file's expected answers are never included.
-
-Providers: `gpt-4o`, `claude-sonnet-4-5`, `sonar-pro` (live search). Gemini was
-excluded (project billing block), to be added. Cost of the full study: ≈ $3.
+Models (exact IDs): `claude-fable-5`, `gpt-5.6-sol`, `gpt-5-search-api`,
+`sonar-pro`, `grok-4.5`. Gemini pending account access.
 
 ## 5. Judging
 
-VOYGR-style separation of evidence from judgment: an LLM judge (Claude Sonnet,
-temperature 0) receives the question, the **pre-verified ground truth with its
-receipt**, and the model's answer, and classifies only whether the answer *commits*
-to the recorded truth: `correct` / `wrong` / `nonanswer` (refusals and hedges), plus
-a `confident_wrong` flag when a wrong answer shows no hedging — following VOYGR's
-principle that a confident wrong answer is worse than none: the user doesn't get
-nothing, they get misled. All verdicts with one-line rationales are stored
-(`benchmark_runs/*.judged.json`) for audit. Self-preference risk (Claude judging
-Claude) is mitigated by the fixed-evidence design and auditable verdicts; a human
-spot-check of a verdict sample is queued.
+An LLM judge — **`claude-sonnet-5`, pinned, not in the test lineup** — receives the
+question, the pre-verified ground truth with its receipt, and the model's answer, and
+classifies only whether the answer *commits* to the recorded truth: `correct` /
+`wrong` / `nonanswer`, plus a `confident_wrong` flag when a wrong answer shows no
+hedging (a confident wrong answer is worse than none: the user doesn't get nothing,
+they get misled). All verdicts with rationales are stored for audit
+(`benchmark_runs_v1/*.judged.json`); a stratified human audit sample is part of the
+protocol (judge-agreement rate published as the judge's error bar). Family caveat:
+the judge shares a vendor with one tested model; the fixed-evidence design and the
+human audit are the mitigations.
 
 ## 6. Results
 
-| Provider | Canary OFF | Canary ON | Confidently wrong, OFF → ON |
+| Model (bare → with one Canary response) | Bare | Canary ON | Confidently wrong, bare |
 |---|---|---|---|
-| openai:gpt-4o | **0%** (39/46 refused; 7 wrong) | **85%** | 5 → 7¹ |
-| anthropic:claude-sonnet-4-5 | **15%** (23 wrong, 21 confident; 16 refused) | **91-98%**² | 21 → ~1 |
-| perplexity:sonar-pro (live search) | **39%** (28/46 confidently wrong; 0 refusals) | **91-93%** | 28 → 3 |
+| claude-fable-5 | 43% | **100%** (43/43) | 17 of 43 |
+| grok-4.5 | 42% | **100%** (43/43) | **25 of 43** |
+| perplexity sonar-pro (live search) | 45% | **93%** | 21 of 43 |
+| gpt-5.6-sol | 42% | *pending*¹ | 23 of 43 |
+| gpt-5-search-api | 36% (13 refusals) | *pending*¹ | 11 of 43 |
 
-¹ GPT-4o's failure mode flips from refusing (useless) to answering from data; residual
-misses are mostly numeric-tolerance edges. ² Two grounded runs were judged for
-Claude; both shown as a range (42-43 correct of 46).
+¹ OpenAI account quota was exhausted mid-study; the two ON cells re-run on refill
+(their pre-fix ON runs scored 88-93% before the v1.0.1 payload correction).
 
-**The flagship error.** Asked which SF neighborhood had the biggest increase in new
-business openings, all three providers — three independent stacks, one with live
-search, one citing press coverage — named **the Mission**. The registry shows the
-Mission had the city's **largest decline** (−19% year-over-year); the correct answer,
-**Japantown (+38%)**, appeared in no answer. In the bare condition, no provider
-answered any superlative question correctly (0/12 in the mechanical pass).
+**By question block (bare, pooled across five models → Canary ON):**
 
-**The trap question.** Bare: GPT-4o refused; Claude hedged without direction;
-Perplexity got the direction right via press coverage but did not distinguish
-enforcement from victimization. Grounded *without field documentation*, GPT-4o read
-the enforcement surge (+43.6%) as "crime getting worse" despite victim reports
-(−8.0%) in the same payload; with metric definitions attached, it answered correctly.
+| Block | Bare | Canary ON |
+|---|---|---|
+| Superlatives ("which neighborhood rose most") | **0%** | 91% |
+| Numeric counts | **0%** | 98% |
+| Pairwise ("A or B?") | 64% (coin-flip floor: 50%) | 97% |
+| Direction (rising/falling) | 55% | 100% |
+| Address-level forward layer | 13% | —² |
+| Temporal (2024→2025, in training window) | 95% | 100% |
+| Mechanism traps | 100% | 100% |
+
+² Dominated by the pending OpenAI cells and the v1.0.1 payload fix; complete numbers
+on re-run.
+
+**Reading the table:**
+1. **The frontier didn't close the gap — it changed the failure mode.** v0's
+   previous-generation models refused; v1's newest models answer everything and are
+   confidently wrong on ~half. Capability rose; the missing facts stayed missing.
+2. **Zero out of twenty-five on superlatives** — five different frontier stacks,
+   including two with live web search, each named a wrong neighborhood, almost always
+   confidently. Aggregations nobody published cannot be retrieved.
+3. **The controls behaved:** models score well *inside* their training window
+   (temporal: 95%) and pass the skepticism trap (100%) — the benchmark isn't rigged
+   against them; the failure is specifically *the present state of the world*.
+4. **Grounded, two models were perfect.** 43/43, including the traps and the
+   fixed-payload address questions. When the data exists and carries its meaning,
+   frontier models use it almost flawlessly — the bottleneck is the data, full stop.
 
 ## 7. Conclusions
 
-1. **Area-level change is a distinct, unmeasured, and near-total failure class for
-   current AI assistants.** This is not the known place-level staleness problem:
-   these answers are not stale on the web — they have never existed on the web.
-   Aggregation over the public record is the missing step, and retrieval cannot
-   substitute for computation (the search-native provider scored 0/4 on superlatives
-   like everyone else).
-
-2. **The two bare failure modes are complementary, and both are decision-relevant:**
-   refusal (no answer at the moment of a lease/purchase decision) and confident error
-   (a cited, fluent, directionally backwards answer). By VOYGR's own scoring
-   principle, the second is worse — and it characterized the provider consumers most
-   associate with "looking things up."
-
-3. **Identical wrong answers across independent models imply a shared cause:** the
-   training distribution's discourse priors (the Mission dominates SF churn
-   *discourse*; Japantown doesn't). Scaling model intelligence does not fix a prior
-   inherited from what people write; only injecting the computed record does. The
-   ablation is the direct test of that claim: same models, +one API response,
-   0-39% → 85-98%.
-
-4. **Semantics are part of the data product.** Raw numbers with no field definitions
-   produced a new failure (enforcement surge read as crime wave — arguably worse than
-   ignorance, because it wears the data's authority). Machine-readable metric
-   documentation flipped the outcome. Agent-legible docs are load-bearing
-   infrastructure, not developer hygiene.
-
-5. **The measurement discipline is the defensible layer.** The ground truth itself
-   required three corrections before it was fit to grade anyone (victim/enforcement
-   split, 311 reporting-propensity artifact, registry close-lag). Anyone reselling
-   raw open data inherits exactly the errors the models made; the correction layer is
-   the part that is slow and hard to copy — and it is also where the benchmark's
-   authority comes from.
-
-6. **What this study does and does not establish.** That AI assistants fail
-   area-level questions is demonstrated on our dimensions, at v0 scale. Whether AI
-   products will adopt external grounding for these questions is a market question:
-   this study is evidence of the gap, not of adoption.
+1. **Area-level change is a distinct, unmeasured, near-total failure class** for
+   current AI assistants — not staleness (search models fail too), not capability
+   (the newest generation fails more confidently than the last): the answers were
+   never computed and published, so they cannot be learned or retrieved.
+2. **Model progress makes the problem worse for users, not better.** The
+   refusal-to-confident-error shift means a mover asking today's best AI gets a
+   fluent, specific, wrong answer where last year they got a shrug.
+3. **Identical wrong answers across independent stacks imply a shared cause** —
+   training-distribution discourse priors — and the ablation confirms the cure is
+   data, not scale: same models, +one API response, 36-45% → 93-100%.
+4. **Semantics are load-bearing.** Payloads without field documentation (or with
+   truncated aggregates — our own v1.0.1 bug) produce confident misreadings; the
+   product is numbers with meaning attached, machine-readable.
+5. **The measurement discipline is the defensible layer.** The ground truth required
+   documented corrections before it could grade anyone; raw open-data resellers
+   inherit exactly the errors the models made.
+6. **What this establishes and what it doesn't:** the failure is demonstrated on our
+   dimensions at pilot scale; whether AI products adopt external grounding for area
+   questions is a market question this study doesn't answer.
 
 ## 8. Limitations
 
-One metro, one run per condition (two for Claude ON), 46 questions, three providers.
-The judge is an LLM (audited files, but a human verdict-sample check is owed). The
-grounded condition uses Canary data as both context and ground truth — deliberately:
-it tests whether models *retrieve and commit to* supplied area data, not whether that
-data is true; the data's own validity is addressed separately with receipts and
-falsifiable forward predictions in [VALIDATION.md](VALIDATION.md). Numeric tolerance
-(±25%) is generous. Gemini and Grok are absent pending account setup. Direction
-questions dominate the set; fact-type questions are few and need a richer grounding
-payload (permit-level, not trajectory-level) to be fully fair in the ON condition.
+One metro, one run per condition, 43 questions, five models (Gemini pending). The
+judge is an LLM (audited files; human verdict-sample check owed, judge shares a
+vendor with one tested model). The grounded condition uses Canary data as both
+context and ground truth — deliberately: it tests whether models retrieve and commit
+to supplied area data; the data's own validity is addressed separately with receipts
+and falsifiable forward predictions in [VALIDATION.md](VALIDATION.md). Two ON cells
+pending an account refill, disclosed above. Numeric tolerance ±30% is generous.
+Temporal n=4 and trap n=2 are small.
 
 ## 9. Reproducibility
 
 ```
 cd backend
-make benchmark                 # regenerate questions from the db, run providers, judge
-venv/bin/python -m app.benchmark.run --grounded   # the ON condition
-venv/bin/python -m app.benchmark.judge            # verdicts + summary
+python -m app.benchmark.generate_v1        # regenerate from the live snapshot
+python -m app.benchmark.run                # bare, all configured providers
+python -m app.benchmark.run --grounded     # the ON condition
+python -m app.benchmark.judge              # verdicts + summary table
 ```
-Artifacts: `data/processed/benchmark_v0.json` (questions + receipts),
-`data/processed/benchmark_runs/*.json` (raw answers) and `*.judged.json` (verdicts),
-each stamped with the pipeline git version and the source snapshot date. The intended
-cadence is monthly-with-the-data (the benchmark regenerates from each new snapshot, so
-questions track the live record rather than fossilizing).
+Artifacts: `data/processed/benchmark_v1.json` (questions + receipts, frozen at
+`064dc90`), `data/processed/benchmark_runs_v1/` (raw answers + judged verdicts),
+each stamped with pipeline git version and source snapshot date. Intended cadence:
+regenerated monthly with the data, so questions track the live record.
 
 ## 10. Next
 
-Add Gemini/Grok columns · human audit of a judge-verdict sample · second metro ·
-larger question set incl. forward-layer facts with permit-level grounding · publish
-as a recurring, versioned report so the numbers stay accountable over time.
+Fill the two pending ON cells · add Gemini · stability replicates (n=2) · human
+audit of judge verdicts · second metro · publish as a recurring, versioned report so
+the numbers stay accountable over time.
 
 ## How to cite
 
@@ -232,6 +240,6 @@ as a recurring, versioned report so the numbers stay accountable over time.
   institution = {Canary},
   year        = {2026},
   month       = {July},
-  note        = {Working note v0, San Francisco. Data snapshot 2026-07-24.}
+  note        = {Working note v1 (pilot), San Francisco. Question set frozen at 064dc90.}
 }
 ```

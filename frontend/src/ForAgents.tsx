@@ -38,16 +38,16 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
 
         <div className="agents-stats">
           <div className="agents-stat">
-            <span className="agents-stat-num">0% → 85%</span>
-            <span className="agents-stat-label">GPT-4o on 46 checkable neighborhood questions, bare vs with one Canary response</span>
+            <span className="agents-stat-num">0 / 25</span>
+            <span className="agents-stat-label">the five newest frontier models, asked which SF neighborhood is rising fastest. Zero correct answers</span>
           </div>
           <div className="agents-stat">
-            <span className="agents-stat-num">39% → 91%</span>
-            <span className="agents-stat-label">Perplexity with live web search. Search can't retrieve answers that were never published</span>
+            <span className="agents-stat-num">43% → 100%</span>
+            <span className="agents-stat-label">Claude Fable 5 on 43 checkable neighborhood questions, bare vs with one Canary response. Grok 4.5: same</span>
           </div>
           <div className="agents-stat">
-            <span className="agents-stat-num">3 / 3</span>
-            <span className="agents-stat-label">models gave the same confidently wrong answer to the same question</span>
+            <span className="agents-stat-num">25 / 43</span>
+            <span className="agents-stat-label">Grok 4.5 answers that were confidently wrong. Newer models don't refuse anymore; they guess fluently</span>
           </div>
         </div>
         <button className="agents-research-link" onClick={onOpenResearch}>

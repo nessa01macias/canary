@@ -49,15 +49,15 @@ this:
 
 ## What we found about AI assistants
 
-We asked three leading AI assistants 46 checkable questions about San Francisco
-neighborhoods. They failed badly: one refused to answer 85% of them; another answered
-everything confidently and was wrong 61% of the time. All three named the Mission as
-the neighborhood with the biggest rise in new businesses — city records show it had
-the biggest *decline*.
+We asked the five newest AI models — including ones with live web search — 43
+checkable questions about San Francisco neighborhoods. They scored around 40%, and
+unlike older models they rarely admit uncertainty: one was confidently wrong on 25 of
+its 43 answers. Asked which neighborhood was rising fastest, the five went **0 for
+25** between them.
 
 Why? Because these answers were never written down anywhere on the internet — so no
-AI could find them. When we gave the same AIs Canary's data, they went from failing
-to about 9 answers in 10 correct. (The full study is in the **Research** tab.)
+AI can find them, no matter how smart it gets. When we gave the same models Canary's
+data, two scored perfectly and the rest ~93%. (The full study is in the **Research** tab.)
 
 ## Who this is for
 

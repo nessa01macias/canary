@@ -63,7 +63,6 @@ def judge_one(key: str, model: str, item: dict, answer: str) -> dict:
         json={
             "model": model,
             "max_tokens": 200,
-            "temperature": 0,
             "system": JUDGE_SYSTEM,
             "messages": [{"role": "user", "content": user}],
         },
