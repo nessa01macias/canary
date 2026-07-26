@@ -44,16 +44,23 @@ function readMission(): Mission | null {
     : null
 }
 
-type Turn = { role: 'user' | 'assistant'; content: string }
+type HistTurn = { role: 'user' | 'assistant'; content: string }
+
+// A visible exchange: the question the user asked + the composed answer.
+// The card renders these STACKED — replying must never delete what came before
+// (a conversation you can't scroll back through doesn't feel like one).
+export type AskTurn = { question: string; result: AskResult }
+
+const MAX_VISIBLE_TURNS = 4
 
 export function useAsk() {
   const [busy, setBusy] = useState(false)
-  const [result, setResult] = useState<AskResult | null>(null)
+  const [turns, setTurns] = useState<AskTurn[]>([])
   const [lastQuestion, setLastQuestion] = useState<string | null>(null)
-  const historyRef = useRef<Turn[]>([])
+  const historyRef = useRef<HistTurn[]>([])
 
   const clear = useCallback(() => {
-    setResult(null)
+    setTurns([])
     setLastQuestion(null)
   }, [])
 
@@ -67,7 +74,8 @@ export function useAsk() {
     if (!q) return
     setBusy(true)
     setLastQuestion(q)
-    setResult(null)
+    const append = (result: AskResult) =>
+      setTurns((prev) => [...prev, { question: q, result }].slice(-MAX_VISIBLE_TURNS))
     try {
       const resp = await fetch('/api/ask', {
         method: 'POST',
@@ -81,11 +89,11 @@ export function useAsk() {
       })
       if (!resp.ok) {
         const detail = (await resp.json().catch(() => null))?.detail ?? `Server ${resp.status}`
-        setResult({ blocks: [{ type: 'answer', md: String(detail) }], followups: [] })
+        append({ blocks: [{ type: 'answer', md: String(detail) }], followups: [] })
         return
       }
       const data: AskResult = await resp.json()
-      setResult(data)
+      append(data)
       // Feed the hidden thread so follow-ups have context.
       const answerMd =
         (data.blocks.find((b) => b.type === 'answer') as { md?: string } | undefined)?.md ?? ''
@@ -93,9 +101,9 @@ export function useAsk() {
         ...historyRef.current,
         { role: 'user', content: q },
         { role: 'assistant', content: answerMd },
-      ].slice(-6) as Turn[]
+      ].slice(-6) as HistTurn[]
     } catch (e) {
-      setResult({
+      append({
         blocks: [{ type: 'answer', md: `Couldn't reach the server: ${e instanceof Error ? e.message : e}` }],
         followups: [],
       })
@@ -104,5 +112,8 @@ export function useAsk() {
     }
   }, [])
 
-  return { busy, result, lastQuestion, ask, clear, resetThread }
+  // The newest answer — what App's auto-execute effect watches for action blocks.
+  const result = turns.length ? turns[turns.length - 1].result : null
+
+  return { busy, turns, result, lastQuestion, ask, clear, resetThread }
 }

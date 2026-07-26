@@ -2534,3 +2534,17 @@ html, body, #root, #app {
 }
 .pc-groundtruth a { color: #2329A8; font-weight: 600; text-decoration: none; margin-right: 8px; }
 .pc-groundtruth a:hover { text-decoration: underline; }
+
+/* ── The visible mini-thread inside the card's ask section ──────────────── */
+.pc-turn { margin-top: 12px; }
+.pc-turn:not(.is-latest) { opacity: 0.55; }
+.pc-turn:not(.is-latest):hover { opacity: 0.9; }
+/* The user's question, echoed — so an answer is never floating context-free. */
+.pc-turn-q {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a7d6d;
+  margin-bottom: 6px;
+  padding-left: 8px;
+  border-left: 2px solid #ddd2c4;
+}

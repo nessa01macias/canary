@@ -1338,7 +1338,7 @@ function App() {
             onUnlockResidents={() => setContributing(true)}
             ask={{
               busy: askFlow.busy,
-              result: askFlow.result,
+              turns: askFlow.turns,
               lastQuestion: askFlow.lastQuestion,
               submit: runAsk,
             }}

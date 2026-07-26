@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import type { AskResult, Block, Mission } from './useAsk'
+import type { AskTurn, Block, Mission } from './useAsk'
 import type { ResidentAgg } from './residentLayer'
 import type { AddressReport } from './report'
 import { CHANGE_META, KIND_COLOR, KIND_LABEL, STAGE_META } from './samplePoints'
@@ -54,7 +54,9 @@ function BlockView({
     case 'rank_map':
       return (
         <div className="answer-did">
-          <span className="answer-did-item">✦ map ranked by {block.chips.join(' + ')}</span>
+          <span className="answer-did-item">
+            ✦ ranked the map by {block.chips.join(' + ')} — now in <b>your picks</b> (left panel), tap any to toggle
+          </span>
         </div>
       )
 
@@ -162,7 +164,7 @@ function GroundTruth({ lat, lon }: { lat: number; lon: number }) {
 
 export type AskSectionState = {
   busy: boolean
-  result: AskResult | null
+  turns: AskTurn[]
   lastQuestion: string | null
   submit: (q: string) => void
 }
@@ -186,6 +188,7 @@ function AskSection({
     ask.submit(q.trim())
     setQ('')
   }
+  const last = ask.turns.length - 1
   return (
     <div className="pc-ask">
       <div className="pc-ask-inputrow">
@@ -201,6 +204,30 @@ function AskSection({
         </button>
       </div>
 
+      {/* The conversation about THIS place, stacked — replying never deletes
+          what came before. Older turns dim; follow-ups only on the newest. */}
+      {ask.turns.map((t, i) => (
+        <div key={i} className={`pc-turn${i === last ? ' is-latest' : ''}`}>
+          <div className="pc-turn-q">{t.question}</div>
+          {t.result.blocks.map((b, j) => (
+            <BlockView
+              key={j}
+              block={b}
+              onShowNeighborhood={onShowNeighborhood}
+              residentUnlocked={residentUnlocked}
+              onUnlockResidents={onUnlockResidents}
+            />
+          ))}
+          {i === last && !ask.busy && t.result.followups.length > 0 && (
+            <div className="answer-followups">
+              {t.result.followups.map((f) => (
+                <button key={f} className="ask-followup" onClick={() => ask.submit(f)}>{f}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+
       {ask.busy && (
         <div className="pc-ask-busy">
           <span className="rc-loading-pulse" />
@@ -208,28 +235,12 @@ function AskSection({
         </div>
       )}
 
-      {!ask.busy && ask.result && (
-        <div className="pc-ask-result">
-          {ask.result.blocks.map((b, i) => (
-            <BlockView
-              key={i}
-              block={b}
-              onShowNeighborhood={onShowNeighborhood}
-              residentUnlocked={residentUnlocked}
-              onUnlockResidents={onUnlockResidents}
-            />
-          ))}
-          {ask.result.followups.length > 0 && (
-            <div className="answer-followups">
-              {ask.result.followups.map((f) => (
-                <button key={f} className="ask-followup" onClick={() => ask.submit(f)}>{f}</button>
-              ))}
-            </div>
-          )}
-          <div className="answer-grounding">
-            Grounded in SF public records
-            {ask.result.grounded_on?.as_of ? ` · as of ${ask.result.grounded_on.as_of}` : ''} · never invented
-          </div>
+      {ask.turns.length > 0 && (
+        <div className="answer-grounding">
+          Grounded in SF public records
+          {ask.turns[last]?.result.grounded_on?.as_of
+            ? ` · as of ${ask.turns[last].result.grounded_on!.as_of}`
+            : ''} · never invented
         </div>
       )}
     </div>
