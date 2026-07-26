@@ -1896,7 +1896,7 @@ html, body, #root, #app {
 }
 /* the rotated identifier, arXiv's signature */
 .research-body.paper::before {
-  content: 'canary · research note v0 · 2026-07-25';
+  content: 'canary · research note v1 · 2026-07-26';
   position: absolute;
   top: 190px;
   left: 26px;

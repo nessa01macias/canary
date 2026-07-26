@@ -24,10 +24,16 @@ changed most") were incorrect, as were 39 of 40 counting answers graded against 
 questions, accuracy rises to 93-100%, with three of five models answering all 43
 items correctly. Control blocks indicate the deficit is specific to aggregate,
 present-state facts: the same models score 95% on equivalent questions inside their
-training window and pass both designed distractor items. We interpret these results
-as evidence that the failure is one of data availability rather than model
-capability or retrieval freshness: the target facts had not previously been computed
-or published, and therefore cannot be recalled or retrieved at any capability level.
+training window and nine of ten distractor responses resist the planted artifacts.
+Validity is checked from three directions: every expected answer was re-derived
+from the city's own APIs by a script independent of our pipeline (42 of 43
+confirmed; the exception is disclosed as an erratum), verdicts were replicated by a
+cross-vendor judge panel (Fleiss kappa 0.95, no measurable self-preference), and
+all results carry Wilson 95% intervals with exact McNemar tests (p < 4 × 10⁻⁵ for
+every model). We interpret these results as evidence that the failure is one of
+data availability rather than model capability or retrieval freshness: the target
+facts had not previously been computed or published, and therefore cannot be
+recalled or retrieved at any capability level.
 
 ## Lay summary
 
@@ -44,6 +50,13 @@ records the city publishes, so there was nothing for a model to learn or retriev
 When we supplied the same models with one response from Canary's data, three scored
 perfectly and the other two came close. The models were not the limiting factor. The
 missing data layer was.
+
+We also checked our own homework. An independent program, sharing no code with our
+system, re-derived every answer straight from the city's records and confirmed 42
+of the 43. The one it flagged was a bug on our side, in the geometry of one
+question, and the paper describes it openly; correcting it would make the models
+look slightly better, not worse. A second opinion on the grading, from judges built
+by three different companies, agreed with the original verdicts 97% of the time.
 
 ## 1. Introduction
 
@@ -70,6 +83,17 @@ response from our system prepended to the prompt. If the deficit were one of
 reasoning, added context should help only marginally. If the deficit is one of data
 availability, grounded accuracy should approach the ceiling. The results support the
 second interpretation.
+
+This note makes five contributions: (1) to our knowledge the first area-level
+benchmark of AI assistants on neighborhood change, with a receipt behind every
+expected answer and the question set frozen at a git commit before any model
+query; (2) a grounding ablation across five frontier models from four vendors;
+(3) an independent verification methodology, in which a script sharing no code
+with our pipeline re-derives every expected answer from the city's own APIs,
+together with the erratum that verification produced; (4) a cross-vendor judging
+protocol with a measured self-preference test; and (5) a complete public artifact
+set spanning questions, receipts, raw answers, verdicts, statistics, and
+verification outputs.
 
 ## 2. Methods
 
@@ -382,7 +406,11 @@ answers are correct.
 **Corrections are part of the data.** The ground truth required documented
 adjustments (enforcement versus victimization, the 311 reporting artifact, closure
 lag) before it could fairly grade anyone. Systems that ingest raw public records
-without such corrections inherit exactly the errors this benchmark penalizes.
+without such corrections inherit exactly the errors this benchmark penalizes. The
+same discipline applies to ourselves: the independent verification of §2.5 caught a
+geometry bug in our own generator that internal review had not, and we regard
+external re-derivation as a standing requirement of benchmark practice rather than
+a one-time exercise.
 
 **Scope of claims.** These results establish the failure and its remediability at
 pilot scale, on our question dimensions, in one metropolitan area. They do not
@@ -431,9 +459,18 @@ the live record.
 
 ## 7. Future work
 
-Include Gemini; run stability replicates; publish the human audit of judge verdicts;
-extend to a second metropolitan area; publish as a recurring, versioned report so
-that results remain accountable over time.
+Version 2 is specified in a draft pre-registration (`PROTOCOL_V2.md` in the
+repository), to be frozen and registered on OSF before any v2 model query. It
+scales the design to 240 questions across two metros (San Francisco and Chicago),
+roughly eight systems including an open-weights model, and three replicates per
+condition. Grading moves to the cross-vendor panel with a published human audit;
+whether an answer is retrievable on the public web becomes a measured stratum,
+via a scripted search audit archived at freeze time; ground-truth verification
+runs at freeze rather than post hoc; and a compensated human baseline, closed
+book and then with internet access, is added in each metro. Beyond v2, the
+intended cadence is a recurring, versioned report regenerated alongside the data,
+so that the question set tracks the live record and results remain accountable
+over time. Gemini joins when account constraints permit.
 
 ## Appendix A: Validation of the trajectory ground truth
 
