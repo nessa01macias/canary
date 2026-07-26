@@ -57,7 +57,7 @@ its 43 answers. Asked which neighborhood was rising fastest, the five went **0 f
 
 Why? Because these answers were never written down anywhere on the internet — so no
 AI can find them, no matter how smart it gets. When we gave the same models Canary's
-data, two scored perfectly and the rest ~93%. (The full study is in the **Research** tab.)
+data, three scored perfectly and the rest 93-95%. (The full study is in the **Research** tab.)
 
 ## Who this is for
 

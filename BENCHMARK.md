@@ -11,11 +11,11 @@ Canary API response (data slice + field docs) prepended.
 |---|---|---|---|
 | claude-fable-5 | 43% | **100%** | 17/43 |
 | grok-4.5 | 42% | **100%** | 25/43 |
+| gpt-5.6-sol | 42% | **100%**¹ | 23/43 |
+| gpt-5-search-api | 36% | **95%** | 11/43 (+13 refusals) |
 | perplexity sonar-pro (live search) | 45% | **93%** | 21/43 |
-| gpt-5.6-sol | 42% | pending¹ | 23/43 |
-| gpt-5-search-api | 36% | pending¹ | 11/43 (+13 refusals) |
 
-¹ OpenAI quota exhausted mid-study; cells fill on account refill.
+¹ 41/41 judged (2 verdicts failed to parse and are excluded, not assumed).
 
 Headline blocks (bare, pooled): **superlatives 0/25 · numeric 0% · pairwise 64%**
 (vs 50% coin-flip) · temporal-in-training-window 95% (the control that shows the gap

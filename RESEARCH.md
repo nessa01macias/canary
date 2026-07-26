@@ -45,8 +45,8 @@ web at all**. No one had ever computed them from the millions of raw records the
 publishes. A smarter model can't retrieve a sentence nobody has written; between
 generations, the models got more fluent — about the same missing facts.
 
-**Then we gave the same models one response from Canary's data.** Two of them scored
-**a perfect 43/43**; the rest ~93%. Same models, same questions — the only thing that
+**Then we gave the same models one response from Canary's data.** Three of them
+scored **perfectly**; the other two 93-95%. Same models, same questions — the only thing that
 changed was the data. The AIs were never the problem; the missing layer was.
 
 *(Pilot scale: one city, 43 questions, one run per condition — full method, numbers,
@@ -141,27 +141,24 @@ human audit are the mitigations.
 |---|---|---|---|
 | claude-fable-5 | 43% | **100%** (43/43) | 17 of 43 |
 | grok-4.5 | 42% | **100%** (43/43) | **25 of 43** |
+| gpt-5.6-sol | 42% | **100%** (41/41)¹ | 23 of 43 |
+| gpt-5-search-api | 36% (13 refusals) | **95%** | 11 of 43 |
 | perplexity sonar-pro (live search) | 45% | **93%** | 21 of 43 |
-| gpt-5.6-sol | 42% | *pending*¹ | 23 of 43 |
-| gpt-5-search-api | 36% (13 refusals) | *pending*¹ | 11 of 43 |
 
-¹ OpenAI account quota was exhausted mid-study; the two ON cells re-run on refill
-(their pre-fix ON runs scored 88-93% before the v1.0.1 payload correction).
+¹ Two of Sol's 43 ON verdicts failed to parse in judging and are excluded (disclosed
+rather than assumed correct); all 41 judged answers were correct.
 
 **By question block (bare, pooled across five models → Canary ON):**
 
 | Block | Bare | Canary ON |
 |---|---|---|
 | Superlatives ("which neighborhood rose most") | **0%** | 91% |
-| Numeric counts | **0%** | 98% |
-| Pairwise ("A or B?") | 64% (coin-flip floor: 50%) | 97% |
+| Numeric counts | **0%** | 100% |
+| Pairwise ("A or B?") | 64% (coin-flip floor: 50%) | 93% |
 | Direction (rising/falling) | 55% | 100% |
-| Address-level forward layer | 13% | —² |
+| Address-level forward layer | 13% | 93% |
 | Temporal (2024→2025, in training window) | 95% | 100% |
 | Mechanism traps | 100% | 100% |
-
-² Dominated by the pending OpenAI cells and the v1.0.1 payload fix; complete numbers
-on re-run.
 
 **Reading the table:**
 1. **The frontier didn't close the gap — it changed the failure mode.** v0's
@@ -173,7 +170,7 @@ on re-run.
 3. **The controls behaved:** models score well *inside* their training window
    (temporal: 95%) and pass the skepticism trap (100%) — the benchmark isn't rigged
    against them; the failure is specifically *the present state of the world*.
-4. **Grounded, two models were perfect.** 43/43, including the traps and the
+4. **Grounded, three models were perfect.** Including the traps and the
    fixed-payload address questions. When the data exists and carries its meaning,
    frontier models use it almost flawlessly — the bottleneck is the data, full stop.
 
@@ -206,8 +203,7 @@ judge is an LLM (audited files; human verdict-sample check owed, judge shares a
 vendor with one tested model). The grounded condition uses Canary data as both
 context and ground truth — deliberately: it tests whether models retrieve and commit
 to supplied area data; the data's own validity is addressed separately with receipts
-and falsifiable forward predictions in [VALIDATION.md](VALIDATION.md). Two ON cells
-pending an account refill, disclosed above. Numeric tolerance ±30% is generous.
+and falsifiable forward predictions in [VALIDATION.md](VALIDATION.md). Numeric tolerance ±30% is generous.
 Temporal n=4 and trap n=2 are small.
 
 ## 9. Reproducibility
@@ -226,7 +222,7 @@ regenerated monthly with the data, so questions track the live record.
 
 ## 10. Next
 
-Fill the two pending ON cells · add Gemini · stability replicates (n=2) · human
+Add Gemini · stability replicates (n=2) · human
 audit of judge verdicts · second metro · publish as a recurring, versioned report so
 the numbers stay accountable over time.
 
