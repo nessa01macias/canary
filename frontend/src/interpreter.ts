@@ -209,8 +209,14 @@ export function whyChips(signals: NbhdSignals, activeChips: string[]): ChipVerdi
 // Map caption — the map narrates itself. Deterministic over app state, always
 // matching what the pixels currently mean (the five-year-old test for colors).
 // ---------------------------------------------------------------------------
-export function mapCaption(zoomedIn: boolean, activeChipCount: number): string {
+export function mapCaption(
+  zoomedIn: boolean,
+  activeChipCount: number,
+  hexMetricLabel?: string | null,
+): string {
   if (zoomedIn) return 'Each dot is one real permit or business change — click it for the record'
+  if (hexMetricLabel)
+    return `Small hexes = block-level ${hexMetricLabel} — amber rising, blue falling`
   if (activeChipCount > 0)
     return `Warmer = closer fit to your ${activeChipCount} pick${activeChipCount > 1 ? 's' : ''} — click an area to see why`
   return 'Each area breathes with how fast it’s changing — click one to read it'

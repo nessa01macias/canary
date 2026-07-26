@@ -17,6 +17,7 @@ import { PlaceCard } from './PlaceCard'
 import { useAsk, type Mission } from './useAsk'
 import { GROUNDED_TAGS, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
 import { EMPTY_FC, circlePolygon, scopeKey, scopeToAskContext, type Scope } from './scope'
+import { HEX_METRIC_LABEL, fetchHexTrajectory, hexMetricFor } from './hexLayer'
 import { logGateCompleted } from './lib/gateEvents'
 import './App.css'
 
@@ -605,6 +606,36 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomedIn])
 
+  // Neighborhood rung → the hex texture. Lazily fetched per metric (server
+  // caches too), keyed to the user's leading active chip; visibility rides the
+  // scope so the one-encoding rule holds (city ramp OR hex texture, never both
+  // fighting — the hexes sit above the fill only inside the zoom band).
+  const hexCacheRef = useRef<Map<string, FeatureCollection>>(new Map())
+  const hexMetric = scope?.kind === 'neighborhood' ? hexMetricFor([...priorities]) : null
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapReady || !map.getLayer('hex-fill')) return
+    if (!hexMetric) {
+      map.setLayoutProperty('hex-fill', 'visibility', 'none')
+      return
+    }
+    let stale = false
+    const show = (fc: FeatureCollection) => {
+      if (stale) return
+      const src = map.getSource('hex') as maplibregl.GeoJSONSource | undefined
+      src?.setData(fc)
+      map.setLayoutProperty('hex-fill', 'visibility', 'visible')
+    }
+    const cached = hexCacheRef.current.get(hexMetric)
+    if (cached) show(cached)
+    else {
+      fetchHexTrajectory(hexMetric)
+        .then((fc) => { hexCacheRef.current.set(hexMetric, fc); show(fc) })
+        .catch(() => {}) // texture is an enhancement — its absence breaks nothing
+    }
+    return () => { stale = true }
+  }, [hexMetric, mapReady])
+
   // Spot rung → fetch the report (stale-guarded; works even if the address was
   // picked before the map finished loading — the camera effect waits on
   // mapReady, the data doesn't have to).
@@ -894,6 +925,33 @@ function App() {
         paint: {
           'fill-color': trajectoryColor(),
           'fill-opacity': trajectoryOpacity(),
+        },
+      })
+
+      // The hex texture — "which corner is changing". Sits between the fill and
+      // the borders; visible only while a neighborhood scope is open (the scope
+      // effect flips visibility + hydrates the source from /api/hex-trajectory).
+      // Amber = the metric rising on that block, blue = falling; intensity = |z|.
+      map.addSource('hex', { type: 'geojson', data: EMPTY_FC })
+      map.addLayer({
+        id: 'hex-fill',
+        type: 'fill',
+        source: 'hex',
+        layout: { visibility: 'none' },
+        paint: {
+          'fill-color': [
+            'match', ['get', 'direction'],
+            'rising', '#FF9B29',
+            'declining', '#355CF5',
+            'rgba(0,0,0,0)',
+          ] as maplibregl.DataDrivenPropertyValueSpecification<string>,
+          // Zoom band ~12.5–14: fades in as a neighborhood frames, hands off to
+          // the markers before street zoom (the decomposition stays intact).
+          'fill-opacity': [
+            '*',
+            ['interpolate', ['linear'], ['zoom'], 12.3, 0, 12.8, 0.32, 13.6, 0.34, STREET_ZOOM, 0.04],
+            ['min', 1, ['abs', ['coalesce', ['get', 'z'], 0]]],
+          ] as maplibregl.DataDrivenPropertyValueSpecification<number>,
         },
       })
 
@@ -1469,7 +1527,7 @@ function App() {
               />
               <span>stronger fit</span>
             </div>
-            <div className="legend-hint">{mapCaption(false, priorities.size)}</div>
+            <div className="legend-hint">{mapCaption(false, priorities.size, hexMetric ? HEX_METRIC_LABEL[hexMetric] : null)}</div>
           </>
         ) : (
           <>
@@ -1485,7 +1543,7 @@ function App() {
               />
               <span>getting better</span>
             </div>
-            <div className="legend-hint">{mapCaption(false, 0)}</div>
+            <div className="legend-hint">{mapCaption(false, 0, hexMetric ? HEX_METRIC_LABEL[hexMetric] : null)}</div>
           </>
         )}
       </footer>
