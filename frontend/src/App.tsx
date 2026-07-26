@@ -967,28 +967,40 @@ function App() {
       // the borders; visible only while a neighborhood scope is open (the scope
       // effect flips visibility + hydrates the source from /api/hex-trajectory).
       // Amber = the metric rising on that block, blue = falling; intensity = |z|.
-      map.addSource('hex', { type: 'geojson', data: EMPTY_FC })
-      map.addLayer({
-        id: 'hex-fill',
-        type: 'fill',
-        source: 'hex',
-        layout: { visibility: 'none' },
-        paint: {
-          'fill-color': [
-            'match', ['get', 'direction'],
-            'rising', '#FF9B29',
-            'declining', '#355CF5',
-            'rgba(0,0,0,0)',
-          ] as maplibregl.DataDrivenPropertyValueSpecification<string>,
-          // Zoom band ~12.5–14: fades in as a neighborhood frames, hands off to
-          // the markers before street zoom (the decomposition stays intact).
-          'fill-opacity': [
-            '*',
-            ['interpolate', ['linear'], ['zoom'], 12.3, 0, 12.8, 0.32, 13.6, 0.34, STREET_ZOOM, 0.04],
-            ['min', 1, ['abs', ['coalesce', ['get', 'z'], 0]]],
-          ] as maplibregl.DataDrivenPropertyValueSpecification<number>,
-        },
-      })
+      // try/catch: the texture is an enhancement — a style-validation throw here
+      // must NEVER take the borders/hover handlers below down with it.
+      try {
+        map.addSource('hex', { type: 'geojson', data: EMPTY_FC })
+        // |z| clamped to 0..1 — reused as the per-feature factor at each zoom
+        // stop (MapLibre only allows ["zoom"] in a TOP-LEVEL interpolate, so
+        // the zoom curve is outside and the data expression lives in the stops).
+        const zFactor = ['min', 1, ['abs', ['coalesce', ['get', 'z'], 0]]]
+        map.addLayer({
+          id: 'hex-fill',
+          type: 'fill',
+          source: 'hex',
+          layout: { visibility: 'none' },
+          paint: {
+            'fill-color': [
+              'match', ['get', 'direction'],
+              'rising', '#FF9B29',
+              'declining', '#355CF5',
+              'rgba(0,0,0,0)',
+            ] as maplibregl.DataDrivenPropertyValueSpecification<string>,
+            // Zoom band ~12.5–14: fades in as a neighborhood frames, hands off
+            // to the markers before street zoom (the decomposition stays intact).
+            'fill-opacity': [
+              'interpolate', ['linear'], ['zoom'],
+              12.3, 0,
+              12.8, ['*', 0.32, zFactor],
+              13.6, ['*', 0.34, zFactor],
+              STREET_ZOOM, ['*', 0.04, zFactor],
+            ] as unknown as maplibregl.DataDrivenPropertyValueSpecification<number>,
+          },
+        })
+      } catch (err) {
+        console.error('hex texture layer failed (map continues without it):', err)
+      }
 
       map.addLayer({
         id: 'nbhd-line',
