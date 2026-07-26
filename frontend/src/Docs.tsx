@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm'
 // to drift. CONTEXT.md (strategy) and DEPLOY.md (ops) are deliberately NOT shipped.
 import aboutMd from '../../ABOUT.md?raw'
 import researchMd from '../../RESEARCH.md?raw'
-import validationMd from '../../VALIDATION.md?raw'
 // SOURCES.md is the PUBLIC sources page. DATA_SOURCES.md is the internal working
 // registry (ops notes, gaps, backlog) and must never ship to the site.
 import sourcesMd from '../../SOURCES.md?raw'
@@ -14,7 +13,6 @@ import sourcesMd from '../../SOURCES.md?raw'
 // Each tab has ONE job — no two tabs repeat each other:
 //   about      plain-language, for everyone (summarizes, links down)
 //   research   the full AI study: method, results table, conclusions
-//   validation the trajectory signal's receipts (is OUR data right?)
 //   sources    reference: where every number comes from
 // (BENCHMARK.md is a repo-side results snapshot, superseded by research — not shipped.)
 const DOCS: { key: string; label: string; body: string; paper?: boolean }[] = [
@@ -22,7 +20,6 @@ const DOCS: { key: string; label: string; body: string; paper?: boolean }[] = [
   // paper: true renders the research note with arXiv-style typography (serif,
   // centered title block, epigraph, booktabs tables, margin identifier).
   { key: 'research', label: 'Research', body: researchMd, paper: true },
-  { key: 'validation', label: 'Validation', body: validationMd },
   { key: 'sources', label: 'Data sources', body: sourcesMd },
 ]
 

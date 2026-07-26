@@ -3,9 +3,9 @@
 The shared picture of how the system fits together. Read this before changing how
 data flows. Companion docs: [`CONTEXT.md`](CONTEXT.md) (the why), [`DATA_SOURCES.md`](DATA_SOURCES.md)
 (where data comes from), [`DEPLOY.md`](DEPLOY.md) (how it ships),
-[`RESEARCH.md`](RESEARCH.md) (the AI area benchmark: method + conclusions),
-[`VALIDATION.md`](VALIDATION.md) (ground-truth validation of the trajectory signal),
-[`BENCHMARK.md`](BENCHMARK.md) (benchmark results one-pager).
+[`RESEARCH.md`](RESEARCH.md) (the AI area benchmark: method, results, and the
+ground-truth validation in Appendix A), [`BENCHMARK.md`](BENCHMARK.md) (results
+snapshot), [`SOURCES.md`](SOURCES.md) (every source, with URLs and licenses).
 
 ---
 

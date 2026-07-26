@@ -94,7 +94,7 @@ Three properties of the ground truth bear on benchmark validity.
    decomposition and excluded from the claimable metric. Business closure dates lag
    reality, and the lag is documented. The validation of the trajectory signal
    itself, including one case in which the receipts corrected our own mistaken
-   narrative attribution, is reported separately in [VALIDATION.md](VALIDATION.md).
+   narrative attribution, is reported in Appendix A.
 
 ## 3. Benchmark design
 
@@ -286,7 +286,7 @@ verdict sample is owed, and the judge shares a vendor with one tested model. In 
 grounded condition, Canary data serves as both context and ground truth by design;
 the condition tests whether models retrieve and commit to supplied area data, while
 the validity of the data itself is assessed separately, with receipts and
-falsifiable forward predictions, in [VALIDATION.md](VALIDATION.md). The ±30% numeric
+falsifiable forward predictions, in Appendix A. The ±30% numeric
 tolerance is permissive. The temporal (n=4) and distractor (n=2) blocks are small
 and their percentages carry wide uncertainty.
 
@@ -311,6 +311,53 @@ the live record.
 Include Gemini; run stability replicates; publish the human audit of judge verdicts;
 extend to a second metropolitan area; publish as a recurring, versioned report so
 that results remain accountable over time.
+
+## Appendix A: Validation of the trajectory ground truth
+
+Before the benchmark could grade anyone, the signal that generates its expected
+answers had to be validated. We selected seven San Francisco neighborhoods with
+well-documented arcs over 2020-2026 and compared the pipeline's per-dimension
+trajectory (trailing twelve months against the twelve before, standardized citywide)
+against both the underlying records and the documented narrative. Every claim below
+has two layers: the computed signal, and the receipt, meaning identifiable records
+such as permit numbers and registry entries. Where an external narrative is cited it
+was widely reported at the time and is labeled as context, distinct from the record.
+
+| Neighborhood | Dimension | Computed | Receipt (our data) | Verdict |
+|---|---|---|---|---|
+| Treasure Island | permits issued | +38%, z+1.0 | $79.4M six-story 150-unit residential (issued 2026-07-01); $40M fully affordable 100-unit building; $31M new construction; 20,000 yd³ grading. Matches the documented island redevelopment. | Confirmed |
+| Lakeshore | permits issued | +156%, z+4.9 | Top permits are a $6.5M golf maintenance building, a $5M gatehouse, and a parking expansion; zero housing units. Our initial attribution to the Stonestown redevelopment was wrong; those permits are not yet in the issued record. | Corrected |
+| Tenderloin | crime incidents | +11%, z+2.5, against a citywide decline of 8% | Decomposition: drug offenses 1,790 to 2,824 (+58%), warrants +35%, assault flat (1,109 to 1,134). An enforcement surge, not a victimization surge. | Consistent, reframed |
+| Mission | business openings | −19%, z−1.3 | Named closures on record across retail, salons, and labs; matches the documented Valencia Street churn. | Consistent |
+| Financial District / South Beach | net business churn | +235 net, the city's highest | 1,666 openings against 1,431 closings; matches the downtown recovery narrative. | Consistent |
+| Bayview Hunters Point | permits; business churn | permits −21.6%; net churn −18, the city's lowest | Aggregate counts; consistent with documented underinvestment. | Consistent |
+| Japantown | business openings | +38%, z+2.9 | Openings are predominantly health practices, physicians, and restaurants. No documented narrative exists. | Lead (model-surfaced) |
+
+Two failures in this pass were more informative than the successes, and both are now
+design features. First, the Lakeshore correction: the magnitude signal was real, but
+the narrative we first attached to it was wrong, and the underlying permits showed
+it (golf course capital works, zero housing units). The per-dimension design
+contained the tell, since net approved units sat near zero; a single composite score
+would have obscured the error. Second, the Tenderloin decomposition: police incident
+data measures proactive enforcement in some categories and victim reports in others,
+and splitting them inverts the headline (victim-reported crime fell 8.0% while
+enforcement activity rose 43.6%; citywide, −18.7% against +29.7%). Both corrections
+were subsequently encoded as benchmark items (§3, distractors).
+
+A related correction was made after this pass: loading the full 311 archive (8.79M
+cases since 2008) revealed that the nominal noise-complaint trend (+61.9%) is
+dominated by a March 2026 change in the city's reporting application, concentrated
+in one catch-all category (+145%) and the mobile channel (+139% against +15% by
+phone). The refined metric excluding the artifact rose 25.9%. The recurring lesson,
+now standing policy, is that report-based metrics measure reporting as well as
+reality, and each one requires a propensity check before a trend is published.
+
+Falsifiable forward predictions, recorded July 2026 and checkable around January
+2027: (1) Treasure Island remains top-three citywide in net approved housing units;
+(2) Stonestown-driven residential permits appear in Lakeshore's issued record within
+twelve months; (3) if the Tenderloin enforcement operation winds down, drug offense
+counts fall toward baseline while assault remains flat, distinguishing an
+enforcement pulse from underlying change.
 
 ## How to cite
 
