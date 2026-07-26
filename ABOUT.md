@@ -1,70 +1,75 @@
 # What is Canary?
 
-**Canary tells you where a neighborhood is heading — not just what it's like today.**
+**Canary tells you where a neighborhood is heading, not just what it is like today.**
 
-When you're deciding where to live, everything you can look up describes the present:
-crime rates, walk scores, photos, prices. But you're not moving into the present —
-you're signing a lease for the next few years. What you actually want to know is:
+When you are deciding where to live, everything you can look up describes the
+present: crime rates, walk scores, photos, prices. But nobody moves into the present.
+When you sign a lease you are committing to the next few years of a street's life,
+and what you actually want to know is where that street is going.
 
-- Is this street getting better or worse?
+- Is this area getting better or worse?
 - Are businesses opening here, or quietly disappearing?
 - Is anything about to be built next to my window?
 
-Nobody answers those questions. Not the listing sites, not the review apps — and, as
-we found out, not the AI assistants either (more on that below).
+Nobody answers those questions. Not the listing sites, not the review apps, and, as
+we found out when we tested them, not the AI assistants either. More on that below.
 
 ## How Canary answers them
 
-Cities publish enormous amounts of public records: every building permit, every
+Cities publish enormous amounts of public records. Every building permit, every
 registered business opening and closing, every police report, every noise complaint,
-every eviction notice. Millions of rows, updated constantly — and almost impossible
-for a person to read.
+every eviction notice becomes a row in some public dataset. Millions of rows, updated
+constantly, and almost impossible for a person to read.
 
-Canary reads them. We collect these records every month, clean them up, and turn them
-into a simple, honest picture of how every neighborhood is changing. On the map, that
-looks like:
-
-- **Neighborhood colors** — is this area's activity rising or falling (new businesses,
-  construction, safety reports, complaints), each measured over the last year vs the
-  year before.
-- **What's coming** — construction that is already *approved* near an address: how big,
-  how many homes, how much money, with the actual permit number attached.
+Canary reads them. We collect these records continuously, clean them up, and turn
+them into an honest picture of how every neighborhood is changing. On the map, that
+looks like two things. The neighborhood colors show whether an area's activity is
+rising or falling: new businesses, construction, safety reports, complaints, each
+measured over the last year against the year before. And for any address, we can show
+what is coming: construction that is already approved nearby, how big it will be, how
+many homes it adds, with the actual permit number attached.
 
 ## Why you can trust it
 
-Every number traces back to a public record you can check — a permit number, a
-business registration, a dated city report. We never publish a "good neighborhood /
-bad neighborhood" score; we show you what's happening, cited, and you decide.
+Every number traces back to a public record you can check for yourself, whether that
+is a permit number, a business registration, or a dated city report. We never publish
+a score that says a neighborhood is "good" or "bad." We show you what is happening,
+with the receipts, and you decide what it means for you.
 
-And we're honest about what the data *can't* say. Three real examples from building
-this:
+We are also honest about what the data cannot say, because public records mislead in
+known ways. Three real examples from building this:
 
-- Police reports measure **police activity**, not just crime. In the Tenderloin,
-  reports went *up* 11% — but that was a police crackdown (drug enforcement up 44%).
-  Crimes reported by *victims* actually went **down 8%**. We show those separately, so
-  a crackdown never gets mistaken for a crime wave.
-- The city's 311 "noise complaints" jumped 62% — but most of that was a change in the
-  city's phone app, not louder streets. We publish the honest version.
-- When businesses close, the paperwork often lags months behind. We say so.
+- Police reports measure police activity as much as crime. In the Tenderloin, reports
+  went up 11%, but that was a drug enforcement crackdown. Crimes reported by actual
+  victims went down 8% over the same period. We show those separately, so a
+  crackdown never gets mistaken for a crime wave.
+- The city's count of 311 noise complaints jumped 62% in a year. Most of that turned
+  out to be a change in the city's phone app, not louder streets. We publish the
+  corrected version.
+- When businesses close, the paperwork often lags months behind reality. We say so
+  rather than pretending the number is sharper than it is.
 
 ## What we found about AI assistants
 
-We asked the five newest AI models — including ones with live web search — 43
+We tested the five newest AI models, including ones with live web search, on 43
 checkable questions about San Francisco neighborhoods. They scored around 40%, and
-unlike older models they rarely admit uncertainty: one was confidently wrong on 25 of
-its 43 answers. Asked which neighborhood was rising fastest, the five went **0 for
-25** between them.
+unlike older models they rarely admit uncertainty anymore. One was confidently wrong
+on 25 of its 43 answers. When we asked which neighborhood was rising fastest, the
+five models gave four different confident answers, and all of them were wrong.
 
-Why? Because these answers were never written down anywhere on the internet — so no
-AI can find them, no matter how smart it gets. When we gave the same models Canary's
-data, three scored perfectly and the rest 93-95%. (The full study is in the **Research** tab.)
+The reason is simple: these answers were never written down anywhere on the
+internet, so no AI can find them, no matter how smart it gets. Someone has to compute
+them from the raw records first. When we gave the same models Canary's data, three of
+them scored perfectly and the other two came close. The full study is in the
+**Research** tab.
 
 ## Who this is for
 
-- **People choosing where to live** — free. This information was only ever available
-  to developers and investment funds; we think the family signing a lease deserves it
-  too.
-- **AI apps and companies** — the same data, machine-readable, so their answers about
-  places stop being wrong.
+**People choosing where to live** use Canary free. This kind of information used to
+be an institutional privilege, sold to developers and investment funds. We think the
+family signing a lease deserves it too.
+
+**AI apps and companies** can get the same data machine-readable, so their answers
+about places stop being wrong.
 
 *Today: San Francisco. The engine is built to add cities without starting over.*

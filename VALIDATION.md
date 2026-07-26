@@ -1,19 +1,23 @@
-# Trajectory Signal Validation v0 — San Francisco, July 2026
+# Does our own signal match reality? Trajectory validation, San Francisco
 
-**What this is.** Before grading anyone else's answers (see RESEARCH.md), we validate
-our own: is neighborhood trajectory computable from open data, and does it match
-ground truth? This is the first pass: 7 neighborhoods with documented 2020-26 arcs,
-checked against the pipeline's per-dimension trajectory (trailing 12 months vs the 12
-before, z-scored against all SF neighborhoods).
+*First pass, July 2026*
 
-**Method discipline.** Every claim has two layers: the *computed signal* (from
-`canary.duckdb`, DataSF snapshots as_of 2026-07-24) and the *receipt* (the underlying
-records themselves — permit numbers, business names, category decompositions). A signal
-without a receipt is not cited. Where a row references an external narrative (a
-redevelopment program, a retail decline), it was widely reported at the time and is
-labeled as context, distinct from the record.
+**What this is.** Before grading anyone else's answers (see RESEARCH.md), we validated
+our own. Is neighborhood trajectory computable from open data, and does it match
+ground truth? We took seven neighborhoods with well-documented arcs over 2020-2026
+and checked them against the pipeline's per-dimension trajectory, meaning the trailing
+twelve months compared to the twelve before, standardized against all San Francisco
+neighborhoods.
 
-**Reproduce:** `cd backend && make pipeline`, then the queries in `app/pipeline/trajectory.py`.
+**How we kept ourselves honest.** Every claim here has two layers: the computed
+signal from our database, and the receipt, which means the underlying records
+themselves: permit numbers, business names, category breakdowns. A signal without a
+receipt is not cited. Where a row mentions an external narrative, such as a
+redevelopment program or a retail decline, that narrative was widely reported at the
+time and is labeled as context, distinct from the record.
+
+**Reproduce:** `cd backend && make pipeline`, then the queries in
+`app/pipeline/trajectory.py`.
 
 ---
 
@@ -21,61 +25,73 @@ labeled as context, distinct from the record.
 
 | Neighborhood | Dimension | Computed | Receipt (our data) | External narrative | Verdict |
 |---|---|---|---|---|---|
-| Treasure Island | permits_issued | +38%, z+1.0 | $79.4M 6-story **150-unit** residential (issued 2026-07-01); $40M **100% affordable, 100 units** (2026-01-05); $31M new construction; 20,000 yd³ grading | Multi-phase island redevelopment program, ~8,000 homes planned | **CONFIRMED** |
-| Lakeshore | permits_issued | +156%, z+4.9 | Top permits: $6.5M golf maintenance building, $5M gatehouse, $1M parking expansion — **0 housing units** | Initially attributed to Stonestown redevelopment (~3,500 homes) — **wrong**: those permits aren't in the issued record yet | **CORRECTED** — signal real (capex surge), first narrative attribution false; caught by receipts |
-| Tenderloin | crime_incidents | +11%, z+2.5 (city −8%) | Decomposition: Drug Offense 1,790→2,824 (+58%), Warrant +35%, **Assault flat** (1,109→1,134) | 2025-26 TL drug-market enforcement crackdowns | **CONSISTENT** — but the correct claim is "enforcement surged," not "crime surged" |
-| Mission | biz_openings | −19%, z−1.3 | Named closures on record (retail, salons, labs — e.g. Beli SF, Boutique Salud Y Vida) | Documented Valencia St retail churn/closure wave | **CONSISTENT** |
-| Financial District/South Beach | biz net churn | +235 net (city's top) | 1,666 opens vs 1,431 closes | Downtown recovery push, return-to-office | **CONSISTENT** |
-| Bayview Hunters Point | permits_issued, biz net | −21.6% permits; −18 net biz (city's bottom) | — | Long-documented underinvestment pressure | **CONSISTENT** |
-| Japantown | biz_openings | +38%, z+2.9 | Opened NAICS: mental-health practitioners (621330 ×7), physicians, restaurants | **No documented story found** | **LEAD** — model-surfaced, unverified; this category is the product |
+| Treasure Island | permits issued | +38%, z+1.0 | $79.4M six-story, 150-unit residential building (issued 2026-07-01); $40M fully affordable 100-unit building (2026-01-05); $31M new construction; 20,000 cubic yards of grading | Multi-phase island redevelopment, roughly 8,000 homes planned | **CONFIRMED** |
+| Lakeshore | permits issued | +156%, z+4.9 | Top permits are a $6.5M golf maintenance building, a $5M gatehouse, and a $1M parking expansion. Zero housing units. | We initially attributed this to the Stonestown redevelopment (about 3,500 homes). That was wrong; those permits are not in the issued record yet | **CORRECTED**. The capex surge is real, but our first narrative attribution was false, and the receipts caught it |
+| Tenderloin | crime incidents | +11%, z+2.5, against a citywide decline of 8% | Breaking the number apart: drug offenses rose from 1,790 to 2,824 (+58%), warrants +35%, while assault stayed flat (1,109 to 1,134) | The 2025-26 drug market enforcement crackdowns | **CONSISTENT**, but the correct claim is that enforcement surged, not that crime surged |
+| Mission | business openings | −19%, z−1.3 | Named closures on record across retail, salons, and labs (for example Beli SF and Boutique Salud Y Vida) | The widely covered Valencia Street retail churn | **CONSISTENT** |
+| Financial District / South Beach | net business churn | +235 net, the city's highest | 1,666 openings against 1,431 closings | The downtown recovery push and return to office | **CONSISTENT** |
+| Bayview Hunters Point | permits and business churn | permits −21.6%; net business churn −18, the city's lowest | (aggregate counts) | Long-documented underinvestment pressure | **CONSISTENT** |
+| Japantown | business openings | +38%, z+2.9 | The openings are mostly mental health practices, physicians, and restaurants | No documented story found anywhere | **LEAD**: the model surfaced something nobody has written up, which is exactly the product |
 
-**Scorecard: 1 confirmed with hard receipts, 4 consistent, 1 corrected, 1 lead.**
+**Scorecard: one confirmed with hard receipts, four consistent, one corrected, one lead.**
 
 ## The two most important findings are the two failures
 
-1. **The Lakeshore correction.** The magnitude signal (+156%, z+4.9) was real, but the
-   obvious narrative we attached to it was wrong — the spend is golf-course capex, not
-   the famous mall redevelopment. Two lessons baked into the design now:
-   (a) never ship a z-score without its underlying records — the receipt discipline is
-   what separates us from vibes; (b) the per-dimension design already contained the
-   tell: `units_approved_net` for Lakeshore was ~0. A composite "improving!" score
-   would have laundered the error.
+**The Lakeshore correction.** The magnitude signal (+156%, z+4.9) was real, but the
+obvious story we attached to it was wrong. The spending turned out to be golf course
+capital works, not the famous mall redevelopment. Two lessons are now baked into the
+design. First, never ship a standardized score without its underlying records; the
+receipt discipline is what separates measurement from vibes. Second, the
+per-dimension design already contained the tell, because net housing units for
+Lakeshore sat at roughly zero. A single composite "improving!" score would have
+laundered the error.
 
-2. **The Tenderloin mechanism — now resolved in the pipeline.** Police incident data
-   measures *police activity* in proactive categories (drugs, warrants) and *victim
-   reports* in others (assault, burglary). The category mapping
-   (`app/pipeline/crime_categories.py`) splits the metric, and the split **inverts the
-   headline**: Tenderloin `crime_victim_reported` **−8.0%** vs `crime_enforcement`
-   **+43.6%** (citywide: −18.7% vs +29.7%). A product reporting "Tenderloin crime +11%"
-   would have been wrong in the direction that matters to a resident — and this is
-   precisely the kind of error AI assistants answering from vibes make (it became one
-   of the benchmark's designed questions; see RESEARCH.md). User-facing crime trends
-   use `crime_victim_reported` only.
+**The Tenderloin mechanism, now resolved in the pipeline.** Police incident data
+measures police activity in proactive categories such as drugs and warrants, and
+measures victim reports in categories such as assault and burglary. Our category
+mapping (`app/pipeline/crime_categories.py`) splits the metric, and the split inverts
+the headline: victim-reported crime in the Tenderloin fell 8.0% while enforcement
+activity rose 43.6% (citywide, the same split reads −18.7% against +29.7%). A product
+reporting "Tenderloin crime up 11%" would have been wrong in the direction that
+matters to a resident. This is precisely the kind of error AI assistants make when
+answering from general impressions, and it became one of the benchmark's designed
+questions; see RESEARCH.md. User-facing crime trends in Canary use the
+victim-reported series only.
 
-## Known limitations of v0
+## Known limitations of this pass
 
-- **Business close-date lag**: registry closes trail reality; recent `biz_closings` undercount (openings are timely).
-- **311 loaded post-v0** (8.79M cases, 2008→now): encampment complaints −31.7%, street
-  cleaning −8.2%. The headline noise number (+61.9%) **failed its propensity check**:
-  a hard step-change in 2026-03, concentrated in the `other_excessive_noise` catch-all
-  (+145%) and the Mobile channel (+139% vs Phone +15%) — an app-flow change, not louder
-  streets. The refined `threeoneone_noise_specific` metric (catch-all excluded) shows
-  **+25.9%**, still elevated but honest. Third instance of the same lesson (biz close-lag,
-  enforcement-vs-victim, now this): every 311/report-based metric measures *reporting*,
-  and the pipeline must carry a propensity check before a trend ships.
-- **Single snapshot**: no revision history yet; `source_as_of` discipline is in place, revisions accumulate from here.
-- **Neighborhood grain**: 37 areas is coarse; hex-level (res 9) trajectories exist in the db but need per-hex volume gates before they're claim-worthy.
-- Crime dataset starts 2018 (schema break); pre-2018 stitching not done.
+- **Business closure lag.** Registry close dates trail reality, so recent closing
+  counts undercount. Opening dates are timely.
+- **The 311 noise correction.** After this validation ran, we loaded 8.79 million 311
+  cases going back to 2008. The headline noise trend (+61.9%) failed its own
+  propensity check: the jump is a hard step-change in March 2026, concentrated in a
+  single catch-all category (+145%) and in the mobile app channel (+139%, against
+  +15% by phone). That is a reporting-flow change, not louder streets. The refined
+  metric that excludes the catch-all rose 25.9%, which is elevated but honest. This
+  is the third instance of the same lesson: report-based metrics measure reporting,
+  and every one of them needs a propensity check before a trend ships.
+- **Single snapshot.** Revision history accumulates from here; the as-of discipline
+  is in place.
+- **Neighborhood grain.** Thirty-seven areas is coarse. Hex-level trajectories exist
+  in the database but need per-hex volume gates before they are claim-worthy.
+- The police dataset begins in 2018 after a schema break, and we have not stitched
+  the earlier years.
 
-## What would settle it further (in order)
+## What would settle it further
 
-1. **Forward predictions, written down now** (out-of-sample, check ~Jan 2027):
-   - Treasure Island `units_approved_net` stays top-3 citywide (build-out continues).
-   - Stonestown-driven Lakeshore residential permits appear in the issued record within 12 months (units_approved_net spikes).
-   - Tenderloin drug-offense counts fall back toward baseline if/when the operation winds down, while assault stays flat — distinguishing enforcement pulse from underlying change.
-2. **Price cross-check**: regress our 2023-24 trajectory dimensions against 2024-26 FHFA tract-level HPI once ingested (leakage-free via `source_as_of`).
-3. **The AI benchmark** — done: these receipts became its ground-truth questions, and the results are in RESEARCH.md.
+1. **Forward predictions, written down now** and checkable around January 2027:
+   Treasure Island stays top-three citywide in net housing units approved as the
+   build-out continues. Stonestown-driven residential permits appear in Lakeshore's
+   issued record within twelve months. If the Tenderloin operation winds down, drug
+   offense counts fall back toward baseline while assault stays flat, which would
+   distinguish an enforcement pulse from underlying change.
+2. **A price cross-check.** Regress our 2023-24 trajectory dimensions against
+   2024-26 FHFA tract-level house price movements, leakage-free thanks to the as-of
+   stamps.
+3. **The AI benchmark.** Done: these receipts became its ground-truth questions, and
+   the results are in RESEARCH.md.
 
 ---
-*Generated 2026-07-25 from pipeline snapshot 2026-07-24; per-dimension only — no composite
-neighborhood scores, by design constraint (facts with citations, no quality labels).*
+*Generated July 2026 from the 2026-07-24 pipeline snapshot. Per-dimension only, with
+no composite neighborhood scores, by design constraint: facts with citations, never
+quality labels.*

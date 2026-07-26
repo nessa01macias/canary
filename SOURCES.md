@@ -27,5 +27,5 @@ platforms; everything is published by a government or under an open license.
 - **No protected-class data.** Race, ethnicity, and income are excluded from every
   metric and every model, everywhere, by design.
 - **Complaints are complaints.** Report-based data (police reports, 311) measures
-  reporting behavior as well as reality; where the two diverge, we say so — see the
+  reporting behavior as well as reality; where the two diverge, we say so; see the
   Validation page for the corrections we've published about our own data.

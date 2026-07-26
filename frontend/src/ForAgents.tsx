@@ -30,10 +30,12 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
         </h1>
         <p className="agents-sub">
           People bring their biggest place decisions to AI: where to live, buy, open a
-          business. These are questions about a place's future, and every frontier model
-          fails them. Not for lack of intelligence: the answers were never published
-          anywhere. Canary computes them monthly from public records and serves them
-          with a citation on every number.
+          business. These are questions about a place's future, and we tested the five
+          newest frontier models on 43 of them. Alone, they scored about 40%, failing
+          not for lack of intelligence but because the answers were never published
+          anywhere. Reading from one Canary response, three of the five scored a
+          perfect 100%. Canary computes what no one has written down, monthly, from
+          public records, with a citation on every number.
         </p>
 
         <div className="agents-stats">

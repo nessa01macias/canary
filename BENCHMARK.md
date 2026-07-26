@@ -1,4 +1,4 @@
-# AI Area Benchmark v1 — results snapshot
+# AI Area Benchmark v1: results snapshot
 
 **The full study (method, findings, conclusions, limitations) lives in
 [RESEARCH.md](RESEARCH.md).** This file is the quick-reference table only.
@@ -23,5 +23,5 @@ is the present, not the past).
 
 Reproduce: `cd backend && python -m app.benchmark.generate_v1 && python -m app.benchmark.run
 && python -m app.benchmark.run --grounded && python -m app.benchmark.judge`
-(v0 history: previous-generation models scored 0-39% bare, dominated by refusals —
-see git history of this file.)
+(v0 history: previous-generation models scored 0-39% bare, dominated by refusals;
+see the git history of this file.)
