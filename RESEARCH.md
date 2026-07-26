@@ -176,12 +176,28 @@ graded on stated magnitude rather than direction); it is retained as judged, sin
 verdicts are never edited by the authors after the fact, and it is flagged for the
 human audit.
 
+**Cross-vendor panel.** Every answer was additionally re-graded by two judges
+from other vendors (`gpt-5.6-sol` and `grok-4.5`, each itself a tested system,
+which we disclose), using the identical prompt as the primary judge. Across the
+427 of 430 items where all three verdicts parsed, pairwise agreement is 97.2 to
+97.9%, Fleiss kappa is 0.95, and 96.5% of items are unanimous, with no item
+lacking a majority. Recomputing accuracy under majority verdicts moves no cell
+of Table 1 by more than seven percentage points and changes no conclusion. A
+direct self-preference probe (does a judge rate its own vendor's answers correct
+more often than the other two judges rate the same answers?) finds none: the
+deltas are −1.2, −0.6, and 0.0 percentage points for the Anthropic, OpenAI, and
+xAI judges respectively, the first two mildly against self. The primary
+estimator remains the pre-specified single judge; the panel is reported as a
+robustness check (`benchmark_v1_panel.json`, verdicts under
+`benchmark_runs_v1/panel/`).
+
 All verdicts are stored with one-line rationales
 (`benchmark_runs_v1/*.judged.json`) and are auditable. A stratified human audit of
 judge verdicts is part of the protocol, with the agreement rate to be published as
 the judge's error bar. One limitation is noted for the record: the judge shares a
 vendor with one tested model. The fixed-evidence design (the judge never assesses
-facts, only commitment to supplied facts) and the human audit are the mitigations.
+facts, only commitment to supplied facts), the cross-vendor panel below, and the
+human audit are the mitigations.
 
 ### 2.5 Independent verification and an erratum
 
@@ -381,7 +397,9 @@ truncation failures, and one grounded verdict remains unparsed and excluded. The
 address-level block carries the ring-geometry erratum of §2.5, whose corrected
 values would raise, not lower, the models' unassisted scores. The
 judge is a language model: verdicts are stored and auditable, a human audit of a
-verdict sample is owed, and the judge shares a vendor with one tested model. In the
+verdict sample is owed, and the judge shares a vendor with one tested model,
+though the cross-vendor panel (§2.4) measures that risk directly and finds
+kappa 0.95 agreement with no self-preference. In the
 grounded condition, Canary data serves as both context and ground truth by design;
 the condition tests whether models retrieve and commit to supplied area data, while
 the validity of the data itself is assessed separately, with receipts and

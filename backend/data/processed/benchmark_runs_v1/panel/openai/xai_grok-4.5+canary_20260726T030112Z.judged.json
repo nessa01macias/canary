@@ -1,0 +1,265 @@
+{
+ "provider": "xai:grok-4.5+canary",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "xai_grok-4.5+canary_20260726T030112Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and matches the verified counts and approximately 43% decline."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and matches the verified figures: 406 to 254, about a 37% decline."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately states 602 vs. 903, about a 33% decline."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified increase from 166 to 213 openings, approximately 28%."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 89 to 66 openings, approximately 26%."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 162 to 127 openings, approximately 22%."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 5 to 46, an 820% increase."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 19 to 37, approximately 95%."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 21 to 37, approximately 76%."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states a decrease and matches the verified counts and approximately 75% decline."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states a decrease and matches the verified counts (19 vs. 71) and approximately 73% decline."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states a decrease and matches the verified counts (26 vs. 64) and approximately 59% decline."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified increase from 38 to 244 units, approximately 542%."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified increase from 27 to 97 net approved units, approximately 259%."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: approvals increased from 289 to 987, about a 241% rise."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Japantown and cites the verified 38% increase."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Bernal Heights and the approximately -42.8% change, matching the ground truth."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore, matching the verified ground truth, and its +156% figure aligns with the 1.562 proportional change."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore, matching the verified ground truth."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Hayes Valley and 1,206 units, exactly matching the ground truth."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 is within the stated \u00b130% tolerance of the expected 1,319."
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 1,206 net approved units, exactly matching the ground truth."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1,192 is within the 30% tolerance of the verified value 1,172."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 is within the stated \u00b130% tolerance of the expected 934 net units."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within the stated \u00b130% tolerance of the expected 511 net units."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth count of 14,208 active businesses."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the verified count of 7,939 active businesses."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth value of 6,157 active businesses."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Japantown and matches the verified changes: +38% versus approximately -25.8% in Visitacion Valley."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Western Addition and matches the verified changes: +28.3% versus -21.6% for Presidio Heights."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Lakeshore, matching the ground truth, with changes of about +8% versus -42.8% for Bernal Heights."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Inner Richmond, matching the ground truth; its cited changes of \u22122.7% versus \u221238.4% also align."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly identifies Lone Mountain/USF, matching the ground-truth comparison."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer explicitly selects Outer Richmond, matching the ground-truth comparison."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth of 494 net new housing units."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 43 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth estimate of 53 net new housing units."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to an increase and gives the verified figures of 82 and 167."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that incidents fell, matching the decrease from 175 to 30."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that incidents fell, from 1,136 to 456, matching the ground truth."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that incidents fell, matching the verified decrease from 2,589 to 1,140."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly states that victim-reported crime decreased by about 8% and appropriately distinguishes rising enforcement-driven incidents from falling victimization."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly says no and correctly distinguishes increased 311 reporting volume from objective noise conditions, consistent with the reporting/app-change explanation."
+  }
+ ]
+}

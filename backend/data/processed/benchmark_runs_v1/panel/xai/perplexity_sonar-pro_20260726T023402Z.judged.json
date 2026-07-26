@@ -1,0 +1,265 @@
+{
+ "provider": "perplexity:sonar-pro",
+ "judge_model": "grok-4.5",
+ "run_file": "perplexity_sonar-pro_20260726T023402Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to rising/increase; GT is clear decrease (-43%)."
+  },
+  {
+   "id": "q002",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer opens with 'Falling' but body and takeaway commit to rising/flat-to-up, opposite of GT decrease."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching ground-truth direction."
+  },
+  {
+   "id": "q004",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fewer/decrease; GT is increase (213 vs 166)."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly commits to fewer openings (decrease), matching ground truth."
+  },
+  {
+   "id": "q006",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to increase/rising openings; GT is clear decrease."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increasing, matching ground truth direction."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to modestly/slightly up (increase direction) matching GT, despite understating magnitude and some hedging."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase (up modestly), matching GT direction"
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease/down, matching ground truth direction"
+  },
+  {
+   "id": "q011",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to increase/up while ground truth is decrease, with hedging via 'likely' and inference"
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to decrease (flat-to-down / modestly decreasing) matching GT direction"
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to decrease/down while GT is clear increase; mild hedging via 'almost certainly' and citywide inference."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to slightly/modestly up, matching ground-truth increase direction."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase/more units approved, matching GT direction"
+  },
+  {
+   "id": "q016",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission Bay instead of ground-truth Japantown"
+  },
+  {
+   "id": "q017",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Japantown instead of ground-truth Bernal Heights"
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District/District 9 instead of Hayes Valley"
+  },
+  {
+   "id": "q021",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 200-250 net units, far outside 1319 \u00b130% tolerance."
+  },
+  {
+   "id": "q022",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~200 (150-250) vs GT 1206 \u00b130%"
+  },
+  {
+   "id": "q023",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 250-300 units, far outside 1172 +/-30% range"
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 1300-1500 (and 1000-2000 range) outside 934\u00b130% tolerance"
+  },
+  {
+   "id": "q025",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 200-250, outside 30% tolerance of 511 (range ~358-664)"
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 6000-7000, outside 30% tolerance of 14208"
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~4000, outside 30% tolerance of 7939"
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 8k-12k, outside GT 6157 \u00b130% (max ~8004); actual not in stated range"
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Japantown, matching ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Western Addition, matching ground truth"
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Lakeshore as the neighborhood with the bigger increase."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Inner Richmond, matching expected pairwise winner"
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Lone Mountain/USF as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to South of Market but GT shows Outer Richmond higher (2.593 vs -0.931)."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer's 300-500 range overlaps GT 494 within 35% tolerance (~321-667)"
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 300-500 units vs ground truth 43 (tol 35%)"
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 200-500 units, far outside GT 53 \u00b135% range, though with some estimate hedging."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to rise/increase, matching ground truth."
+  },
+  {
+   "id": "q039",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states incidents fell/decreased, matching ground-truth direction."
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to rise/increase; GT is decrease."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to decrease/fell, matching GT direction"
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime getting better/declining, matching ground-truth decrease in victimization."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no, attributing rise mainly to reporting/app changes not actual noise."
+  }
+ ]
+}
