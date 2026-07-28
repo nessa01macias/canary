@@ -1,0 +1,4121 @@
+{
+ "generated_at": "2026-07-28T15:12:26.704853+00:00",
+ "method_note": "Independent re-derivation of every benchmark_v2 expected answer directly from live DataSF SODA endpoints (permits i98e-djp9, businesses g8m3-pdis, police incidents wg3w-h783, evictions 5cei-gny5, 311 vw6y-z8j6), using server-side SoQL aggregation and the city's own Analysis Neighborhood columns -- zero Canary pipeline code imported. Windows: last12=[2025-07-01,2026-07-01), prior12=[2024-07-01,2025-07-01), jul23_jun24=[2023-07-01,2024-07-01); the numeric net-units block and the 500 m address rings use the generator's rolling windows (issued_date >= 2025-07-28 resp. 2024-07-28; generation-day current_date was 2026-07-28 PDT) capped at the frozen permits snapshot's as_of 2026-07-24. Semantics replicated as constants: permit issuance = non-null issued_date (no status filter); net units = sum(proposed_units - existing_units, nulls as 0, Socrata ::number casts); permit cost = sum(coalesce(revised_cost, estimated_cost)) over issued permits; business openings keyed on location_start_date; business closings keyed on location_end_date with location_start_date set -- AS-FROZEN these INCLUDE administrative closures because the stager's truthy check never matched the export's '***Administratively Closed' value (documented no-op; the intended-semantics variant is reported per question as a diagnostic); active businesses = location_start_date set AND location_end_date null (uncappable current-state attribute); crime split into victim-reported vs enforcement-driven by exact incident_category sets (enforcement activity is not victimization); 311 encampment by case-insensitive substring on Category, street cleaning by exact Category = 'Street and Sidewalk Cleaning' (verified the only clean/sweep Category live), noise by substring with the refined variant excluding the 'other_excessive_noise' Request Type catch-all; address rings geocoded with the public US Census geocoder and evaluated on the TRUE 500 m geodesic disk (haversine on each permit's own coordinates), one count per permit_number where a permit is in-disk iff ANY of its duplicate rows' points is (the generator's WHERE precedes its QUALIFY dedupe; some permits carry two address points) -- in v2 the generator's axis-order erratum is fixed and self-tested, so true-disk agreement doubles as the regression check. Superlatives verify BOTH the winner (#1) and the recorded runner-up (#2) under the trajectory rules (rankable = last12+prior12 >= 24; pct_change defined only for prior12 > 0; 'most' ranks by last12 level with no floor). Trap questions verify the EMBEDDED numbers and the decomposition mechanism, not the yes/no; the Prop-13 trap is 'documentary' (source-documentation, no computable number). The live API has moved past the frozen snapshots (2026-07-24 permits/crime/311, 2026-07-25 businesses/evictions; append-mostly public records), so small count deltas are expected and quantified per question. Verdicts: confirmed (within tolerance / same sign / same #1 and #2 / mechanism + embedded numbers within 2%), drift (small live-data movement: numeric within 1.5x tolerance, superlative winner-or-runner-up displaced within 0.05 pct-points or 5% level margin, pairwise gap < 0.02, trap numbers within 10% with mechanism intact), mismatch (real disagreement, reported as-is), documentary (mechanism-only trap), not_verified (not derivable from the public API alone). Raw API responses cached under data/processed/verification_cache/.",
+ "per_question": [
+  {
+   "id": "q001",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 877.0,
+    "prior_12mo": 1532.0,
+    "pct_change": -0.428
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q002",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Japantown",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 254.0,
+    "prior_12mo": 406.0,
+    "pct_change": -0.374
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q003",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Outer Mission",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 603.0,
+    "prior_12mo": 903.0,
+    "pct_change": -0.332
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.17,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q004",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Golden Gate Park",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 308.0,
+    "prior_12mo": 456.0,
+    "pct_change": -0.325
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.65,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q005",
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Financial District/South Beach",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 2464.0,
+    "prior_12mo": 3644.0,
+    "pct_change": -0.324
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q006",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 213.0,
+    "prior_12mo": 166.0,
+    "pct_change": 0.283
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q007",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Visitacion Valley",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 66.0,
+    "prior_12mo": 89.0,
+    "pct_change": -0.258
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q008",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Presidio Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 127.0,
+    "prior_12mo": 162.0,
+    "pct_change": -0.216
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q009",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Mission",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 785.0,
+    "prior_12mo": 969.0,
+    "pct_change": -0.19
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q010",
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Bernal Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 214.0,
+    "prior_12mo": 259.0,
+    "pct_change": -0.174
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q011",
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Japantown",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 45.0,
+    "prior_12mo": 78.0,
+    "pct_change": -0.423
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 11,
+     "admin_closures_in_prior12": 6,
+     "intended_last12": 34,
+     "intended_prior12": 72,
+     "intended_pct_change": -0.528,
+     "intended_direction": "decrease",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q012",
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Oceanview/Merced/Ingleside",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 120.0,
+    "prior_12mo": 173.0,
+    "pct_change": -0.306
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 62,
+     "admin_closures_in_prior12": 42,
+     "intended_last12": 58,
+     "intended_prior12": 131,
+     "intended_pct_change": -0.557,
+     "intended_direction": "decrease",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q013",
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Glen Park",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 90.0,
+    "prior_12mo": 69.0,
+    "pct_change": 0.304
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 21,
+     "admin_closures_in_prior12": 6,
+     "intended_last12": 69,
+     "intended_prior12": 63,
+     "intended_pct_change": 0.095,
+     "intended_direction": "increase",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q014",
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Russian Hill",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 156.0,
+    "prior_12mo": 210.0,
+    "pct_change": -0.257
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 46,
+     "admin_closures_in_prior12": 32,
+     "intended_last12": 110,
+     "intended_prior12": 178,
+     "intended_pct_change": -0.382,
+     "intended_direction": "decrease",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q015",
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Inner Richmond",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 157.0,
+    "prior_12mo": 207.0,
+    "pct_change": -0.242
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 40,
+     "admin_closures_in_prior12": 17,
+     "intended_last12": 117,
+     "intended_prior12": 190,
+     "intended_pct_change": -0.384,
+     "intended_direction": "decrease",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q016",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 47.0,
+    "prior_12mo": 5.0,
+    "pct_change": 8.4
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q017",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Chinatown",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 37.0,
+    "prior_12mo": 18.0,
+    "pct_change": 1.056
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q018",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bernal Heights",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 37.0,
+    "prior_12mo": 21.0,
+    "pct_change": 0.762
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q019",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Russian Hill",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 34.0,
+    "prior_12mo": 20.0,
+    "pct_change": 0.7
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q020",
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bayview Hunters Point",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 49.0,
+    "prior_12mo": 31.0,
+    "pct_change": 0.581
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q021",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Lone Mountain/USF",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 162.0,
+    "prior_12mo": 650.0,
+    "pct_change": -0.751
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q022",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Presidio",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 19.0,
+    "prior_12mo": 71.0,
+    "pct_change": -0.732
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q023",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Twin Peaks",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 26.0,
+    "prior_12mo": 64.0,
+    "pct_change": -0.594
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q024",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Presidio Heights",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 91.0,
+    "prior_12mo": 220.0,
+    "pct_change": -0.586
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q025",
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Castro/Upper Market",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 1510.0,
+    "prior_12mo": 3572.0,
+    "pct_change": -0.577
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q026",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 244.0,
+    "prior_12mo": 38.0,
+    "pct_change": 5.421
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q027",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Outer Richmond",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 97.0,
+    "prior_12mo": 27.0,
+    "pct_change": 2.593
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q028",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 987.0,
+    "prior_12mo": 289.0,
+    "pct_change": 2.415
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q029",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 776.0,
+    "prior_12mo": 260.0,
+    "pct_change": 1.985
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q030",
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Tenderloin",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": -125.0,
+    "prior_12mo": 475.0,
+    "pct_change": -1.263
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": -0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q031",
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 205.0,
+    "prior_12mo": 80.0,
+    "pct_change": 1.562
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q032",
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Japantown",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 122.0,
+    "prior_12mo": 74.0,
+    "pct_change": 0.649
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q033",
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "North Beach",
+   "expected": "increase",
+   "independent_value": {
+    "last_12mo": 413.0,
+    "prior_12mo": 325.0,
+    "pct_change": 0.271
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q034",
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Visitacion Valley",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 186.0,
+    "prior_12mo": 253.0,
+    "pct_change": -0.265
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q035",
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Bayview Hunters Point",
+   "expected": "decrease",
+   "independent_value": {
+    "last_12mo": 917.0,
+    "prior_12mo": 1170.0,
+    "pct_change": -0.216
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_last12_pct": 0.0,
+    "delta_prior12_pct": 0.0
+   }
+  },
+  {
+   "id": "q036",
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Western Addition",
+    "live_runner_up": "Western Addition",
+    "top5": [
+     [
+      "Japantown",
+      0.38
+     ],
+     [
+      "Western Addition",
+      0.283
+     ],
+     [
+      "Outer Mission",
+      0.155
+     ],
+     [
+      "Tenderloin",
+      0.154
+     ],
+     [
+      "Sunset/Parkside",
+      0.14
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.05
+   }
+  },
+  {
+   "id": "q037",
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Financial District/South Beach",
+   "expected": "Financial District/South Beach",
+   "independent_value": "Financial District/South Beach",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "most",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Mission",
+    "live_runner_up": "Mission",
+    "top5": [
+     [
+      "Financial District/South Beach",
+      1666.0
+     ],
+     [
+      "Mission",
+      785.0
+     ],
+     [
+      "South of Market",
+      599.0
+     ],
+     [
+      "Sunset/Parkside",
+      585.0
+     ],
+     [
+      "Castro/Upper Market",
+      481.0
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.0
+   }
+  },
+  {
+   "id": "q038",
+   "type": "superlative",
+   "metric": "biz_closings",
+   "area": "Twin Peaks",
+   "expected": "Twin Peaks",
+   "independent_value": "Twin Peaks",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Glen Park",
+    "live_runner_up": "Glen Park",
+    "top5": [
+     [
+      "Twin Peaks",
+      0.559
+     ],
+     [
+      "Glen Park",
+      0.304
+     ],
+     [
+      "Western Addition",
+      0.146
+     ],
+     [
+      "Mission Bay",
+      0.096
+     ],
+     [
+      "Castro/Upper Market",
+      0.089
+     ]
+    ],
+    "delta_winner_value_pct": -0.03,
+    "delta_runner_up_value_pct": 0.11,
+    "biz_closings_intended_semantics": {
+     "intended_top3": [
+      [
+       "Twin Peaks",
+       0.188
+      ],
+      [
+       "Glen Park",
+       0.095
+      ],
+      [
+       "Mission Bay",
+       0.016
+      ]
+     ],
+     "intended_winner": "Twin Peaks",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q039",
+   "type": "superlative",
+   "metric": "biz_closings",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "drop",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Oceanview/Merced/Ingleside",
+    "live_runner_up": "Oceanview/Merced/Ingleside",
+    "top5": [
+     [
+      "Japantown",
+      -0.423
+     ],
+     [
+      "Oceanview/Merced/Ingleside",
+      -0.306
+     ],
+     [
+      "Russian Hill",
+      -0.257
+     ],
+     [
+      "Inner Richmond",
+      -0.242
+     ],
+     [
+      "South of Market",
+      -0.235
+     ]
+    ],
+    "delta_winner_value_pct": 0.02,
+    "delta_runner_up_value_pct": 0.12,
+    "biz_closings_intended_semantics": {
+     "intended_top3": [
+      [
+       "Visitacion Valley",
+       -0.574
+      ],
+      [
+       "Oceanview/Merced/Ingleside",
+       -0.557
+      ],
+      [
+       "Japantown",
+       -0.528
+      ]
+     ],
+     "intended_winner": "Visitacion Valley",
+     "intended_semantics_would_flip_answer": true
+    }
+   }
+  },
+  {
+   "id": "q040",
+   "type": "superlative",
+   "metric": "crime_victim_reported",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Inner Richmond",
+    "live_runner_up": "Inner Richmond",
+    "top5": [
+     [
+      "Lakeshore",
+      0.08
+     ],
+     [
+      "Inner Richmond",
+      -0.027
+     ],
+     [
+      "Presidio",
+      -0.027
+     ],
+     [
+      "South of Market",
+      -0.075
+     ],
+     [
+      "Tenderloin",
+      -0.08
+     ]
+    ],
+    "delta_winner_value_pct": -0.41,
+    "delta_runner_up_value_pct": -1.8
+   }
+  },
+  {
+   "id": "q041",
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "North Beach",
+    "live_runner_up": "North Beach",
+    "top5": [
+     [
+      "Lakeshore",
+      8.4
+     ],
+     [
+      "North Beach",
+      1.778
+     ],
+     [
+      "Chinatown",
+      1.056
+     ],
+     [
+      "West of Twin Peaks",
+      1.0
+     ],
+     [
+      "Haight Ashbury",
+      0.933
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": -0.01
+   }
+  },
+  {
+   "id": "q042",
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Portola",
+   "expected": "Portola",
+   "independent_value": "Portola",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "drop",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Potrero Hill",
+    "live_runner_up": "Potrero Hill",
+    "top5": [
+     [
+      "Portola",
+      -0.474
+     ],
+     [
+      "Potrero Hill",
+      -0.3
+     ],
+     [
+      "Lone Mountain/USF",
+      -0.25
+     ],
+     [
+      "Pacific Heights",
+      -0.25
+     ],
+     [
+      "Mission Bay",
+      -0.226
+     ]
+    ],
+    "delta_winner_value_pct": -0.07,
+    "delta_runner_up_value_pct": -0.0
+   }
+  },
+  {
+   "id": "q043",
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Tenderloin",
+   "expected": "Tenderloin",
+   "independent_value": "Tenderloin",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "most",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Financial District/South Beach",
+    "live_runner_up": "Financial District/South Beach",
+    "top5": [
+     [
+      "Tenderloin",
+      210.0
+     ],
+     [
+      "Financial District/South Beach",
+      177.0
+     ],
+     [
+      "Mission",
+      142.0
+     ],
+     [
+      "South of Market",
+      75.0
+     ],
+     [
+      "Nob Hill",
+      72.0
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.0
+   }
+  },
+  {
+   "id": "q044",
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Japantown",
+    "live_runner_up": "Japantown",
+    "top5": [
+     [
+      "Lakeshore",
+      1.562
+     ],
+     [
+      "Japantown",
+      0.649
+     ],
+     [
+      "Treasure Island",
+      0.381
+     ],
+     [
+      "North Beach",
+      0.271
+     ],
+     [
+      "Haight Ashbury",
+      0.197
+     ]
+    ],
+    "delta_winner_value_pct": 0.03,
+    "delta_runner_up_value_pct": -0.05
+   }
+  },
+  {
+   "id": "q045",
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Financial District/South Beach",
+   "expected": "Financial District/South Beach",
+   "independent_value": "Financial District/South Beach",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "most",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Sunset/Parkside",
+    "live_runner_up": "Sunset/Parkside",
+    "top5": [
+     [
+      "Financial District/South Beach",
+      2489.0
+     ],
+     [
+      "Sunset/Parkside",
+      1856.0
+     ],
+     [
+      "West of Twin Peaks",
+      1501.0
+     ],
+     [
+      "Mission",
+      1427.0
+     ],
+     [
+      "Outer Richmond",
+      1221.0
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.0
+   }
+  },
+  {
+   "id": "q046",
+   "type": "superlative",
+   "metric": "threeoneone_encampment",
+   "area": "McLaren Park",
+   "expected": "McLaren Park",
+   "independent_value": "McLaren Park",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Oceanview/Merced/Ingleside",
+    "live_runner_up": "Oceanview/Merced/Ingleside",
+    "top5": [
+     [
+      "McLaren Park",
+      0.6
+     ],
+     [
+      "Oceanview/Merced/Ingleside",
+      0.33
+     ],
+     [
+      "Chinatown",
+      0.226
+     ],
+     [
+      "Glen Park",
+      0.097
+     ],
+     [
+      "Seacliff",
+      0.077
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.11
+   }
+  },
+  {
+   "id": "q047",
+   "type": "superlative",
+   "metric": "threeoneone_cleaning",
+   "area": "McLaren Park",
+   "expected": "McLaren Park",
+   "independent_value": "McLaren Park",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Presidio",
+    "live_runner_up": "Presidio",
+    "top5": [
+     [
+      "McLaren Park",
+      0.518
+     ],
+     [
+      "Presidio",
+      0.446
+     ],
+     [
+      "Treasure Island",
+      0.439
+     ],
+     [
+      "Seacliff",
+      0.409
+     ],
+     [
+      "Lincoln Park",
+      0.39
+     ]
+    ],
+    "delta_winner_value_pct": -0.09,
+    "delta_runner_up_value_pct": 0.1
+   }
+  },
+  {
+   "id": "q048",
+   "type": "superlative",
+   "metric": "threeoneone_cleaning",
+   "area": "Sunset/Parkside",
+   "expected": "Sunset/Parkside",
+   "independent_value": "Sunset/Parkside",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "drop",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Inner Sunset",
+    "live_runner_up": "Inner Sunset",
+    "top5": [
+     [
+      "Sunset/Parkside",
+      -0.428
+     ],
+     [
+      "Inner Sunset",
+      -0.34
+     ],
+     [
+      "Outer Richmond",
+      -0.301
+     ],
+     [
+      "Bayview Hunters Point",
+      -0.273
+     ],
+     [
+      "Financial District/South Beach",
+      -0.271
+     ]
+    ],
+    "delta_winner_value_pct": 0.1,
+    "delta_runner_up_value_pct": -0.05
+   }
+  },
+  {
+   "id": "q049",
+   "type": "superlative",
+   "metric": "permit_cost_issued_usd",
+   "area": "Hayes Valley",
+   "expected": "Hayes Valley",
+   "independent_value": "Hayes Valley",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Chinatown",
+    "live_runner_up": "Chinatown",
+    "top5": [
+     [
+      "Hayes Valley",
+      9.27
+     ],
+     [
+      "Chinatown",
+      7.342
+     ],
+     [
+      "Outer Mission",
+      2.557
+     ],
+     [
+      "McLaren Park",
+      2.049
+     ],
+     [
+      "North Beach",
+      1.271
+     ]
+    ],
+    "delta_winner_value_pct": -0.0,
+    "delta_runner_up_value_pct": -0.0
+   }
+  },
+  {
+   "id": "q050",
+   "type": "superlative",
+   "metric": "permit_cost_issued_usd",
+   "area": "Financial District/South Beach",
+   "expected": "Financial District/South Beach",
+   "independent_value": "Financial District/South Beach",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "most",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Chinatown",
+    "live_runner_up": "Chinatown",
+    "top5": [
+     [
+      "Financial District/South Beach",
+      886006640.0
+     ],
+     [
+      "Chinatown",
+      424903420.0
+     ],
+     [
+      "Hayes Valley",
+      384373187.0
+     ],
+     [
+      "Mission Bay",
+      316309770.0
+     ],
+     [
+      "Bayview Hunters Point",
+      245804408.0
+     ]
+    ],
+    "delta_winner_value_pct": 0.0,
+    "delta_runner_up_value_pct": 0.0
+   }
+  },
+  {
+   "id": "q051",
+   "type": "superlative",
+   "metric": "crime_enforcement",
+   "area": "Mission",
+   "expected": "Mission",
+   "independent_value": "Mission",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "mode": "rise",
+    "winner_confirmed": true,
+    "runner_up_confirmed": true,
+    "expected_runner_up": "Outer Richmond",
+    "live_runner_up": "Outer Richmond",
+    "top5": [
+     [
+      "Mission",
+      0.723
+     ],
+     [
+      "Outer Richmond",
+      0.621
+     ],
+     [
+      "Inner Richmond",
+      0.562
+     ],
+     [
+      "Nob Hill",
+      0.56
+     ],
+     [
+      "Tenderloin",
+      0.436
+     ]
+    ],
+    "delta_winner_value_pct": 0.03,
+    "delta_runner_up_value_pct": 0.03
+   }
+  },
+  {
+   "id": "q052",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "expected": 1319,
+   "independent_value": 1319.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q053",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Hayes Valley",
+   "expected": 1206,
+   "independent_value": 1207.0,
+   "delta_pct": 0.08,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q054",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Mission",
+   "expected": 1172,
+   "independent_value": 1172.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q055",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "expected": 934,
+   "independent_value": 934.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q056",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "South of Market",
+   "expected": 511,
+   "independent_value": 511.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q057",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Western Addition",
+   "expected": 482,
+   "independent_value": 482.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q058",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Visitacion Valley",
+   "expected": 453,
+   "independent_value": 453.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q059",
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Chinatown",
+   "expected": 313,
+   "independent_value": 313.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "issued 2025-07-28..2026-07-24 (rolling, permits-snapshot-capped)"
+   }
+  },
+  {
+   "id": "q060",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Financial District/South Beach",
+   "expected": 14207,
+   "independent_value": 14207,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q061",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Mission",
+   "expected": 7938,
+   "independent_value": 7938,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q062",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "South of Market",
+   "expected": 6158,
+   "independent_value": 6158,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q063",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Sunset/Parkside",
+   "expected": 5029,
+   "independent_value": 5029,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q064",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Bayview Hunters Point",
+   "expected": 4719,
+   "independent_value": 4719,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q065",
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Outer Richmond",
+   "expected": 3557,
+   "independent_value": 3557,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "note": "current-state attribute; live registry churn since the 2026-07-25 snapshot is expected drift"
+   }
+  },
+  {
+   "id": "q066",
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Mission",
+   "expected": 4883,
+   "independent_value": 4884.0,
+   "delta_pct": 0.02,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q067",
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "South of Market",
+   "expected": 4640,
+   "independent_value": 4640.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q068",
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "expected": 4207,
+   "independent_value": 4208.0,
+   "delta_pct": 0.02,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q069",
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Bayview Hunters Point",
+   "expected": 2913,
+   "independent_value": 2914.0,
+   "delta_pct": 0.03,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q070",
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Tenderloin",
+   "expected": 210,
+   "independent_value": 210.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q071",
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Financial District/South Beach",
+   "expected": 177,
+   "independent_value": 177.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q072",
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Mission",
+   "expected": 142,
+   "independent_value": 142.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q073",
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Financial District/South Beach",
+   "expected": 1666,
+   "independent_value": 1666.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q074",
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Mission",
+   "expected": 785,
+   "independent_value": 785.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q075",
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "South of Market",
+   "expected": 599,
+   "independent_value": 599.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q076",
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Sunset/Parkside",
+   "expected": 585,
+   "independent_value": 585.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "window": "month-truncated last12 2025-07-01..2026-07-01"
+   }
+  },
+  {
+   "id": "q077",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Japantown": 0.38,
+     "Visitacion Valley": -0.258
+    },
+    "gt_pct_changes": {
+     "Japantown": 0.38,
+     "Visitacion Valley": -0.258
+    }
+   }
+  },
+  {
+   "id": "q078",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "expected": "Western Addition",
+   "independent_value": "Western Addition",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Western Addition": 0.283,
+     "Presidio Heights": -0.216
+    },
+    "gt_pct_changes": {
+     "Western Addition": 0.283,
+     "Presidio Heights": -0.216
+    }
+   }
+  },
+  {
+   "id": "q079",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Outer Mission",
+   "expected": "Outer Mission",
+   "independent_value": "Outer Mission",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Outer Mission": 0.155,
+     "Mission": -0.19
+    },
+    "gt_pct_changes": {
+     "Outer Mission": 0.155,
+     "Mission": -0.19
+    }
+   }
+  },
+  {
+   "id": "q080",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Tenderloin",
+   "expected": "Tenderloin",
+   "independent_value": "Tenderloin",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Tenderloin": 0.154,
+     "Bernal Heights": -0.174
+    },
+    "gt_pct_changes": {
+     "Tenderloin": 0.154,
+     "Bernal Heights": -0.174
+    }
+   }
+  },
+  {
+   "id": "q081",
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "area": "Sunset/Parkside",
+   "expected": "Sunset/Parkside",
+   "independent_value": "Sunset/Parkside",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Sunset/Parkside": 0.14,
+     "Noe Valley": -0.169
+    },
+    "gt_pct_changes": {
+     "Sunset/Parkside": 0.14,
+     "Noe Valley": -0.169
+    }
+   }
+  },
+  {
+   "id": "q082",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Lakeshore": 0.08,
+     "Bernal Heights": -0.428
+    },
+    "gt_pct_changes": {
+     "Lakeshore": 0.08,
+     "Bernal Heights": -0.428
+    }
+   }
+  },
+  {
+   "id": "q083",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "Inner Richmond",
+   "expected": "Inner Richmond",
+   "independent_value": "Inner Richmond",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Inner Richmond": -0.027,
+     "Seacliff": -0.384
+    },
+    "gt_pct_changes": {
+     "Inner Richmond": -0.027,
+     "Seacliff": -0.384
+    }
+   }
+  },
+  {
+   "id": "q084",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "South of Market",
+   "expected": "South of Market",
+   "independent_value": "South of Market",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "South of Market": -0.075,
+     "Japantown": -0.374
+    },
+    "gt_pct_changes": {
+     "South of Market": -0.075,
+     "Japantown": -0.374
+    }
+   }
+  },
+  {
+   "id": "q085",
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "expected": "Tenderloin",
+   "independent_value": "Tenderloin",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Tenderloin": -0.08,
+     "Outer Mission": -0.332
+    },
+    "gt_pct_changes": {
+     "Tenderloin": -0.08,
+     "Outer Mission": -0.333
+    }
+   }
+  },
+  {
+   "id": "q086",
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "area": "Bayview Hunters Point",
+   "expected": "Bayview Hunters Point",
+   "independent_value": "Bayview Hunters Point",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Bayview Hunters Point": 0.581,
+     "Mission Bay": -0.226
+    },
+    "gt_pct_changes": {
+     "Bayview Hunters Point": 0.581,
+     "Mission Bay": -0.226
+    }
+   }
+  },
+  {
+   "id": "q087",
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "area": "Castro/Upper Market",
+   "expected": "Castro/Upper Market",
+   "independent_value": "Castro/Upper Market",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Castro/Upper Market": 0.394,
+     "South of Market": -0.148
+    },
+    "gt_pct_changes": {
+     "Castro/Upper Market": 0.394,
+     "South of Market": -0.148
+    }
+   }
+  },
+  {
+   "id": "q088",
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "area": "Western Addition",
+   "expected": "Western Addition",
+   "independent_value": "Western Addition",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Western Addition": 0.325,
+     "Outer Richmond": -0.095
+    },
+    "gt_pct_changes": {
+     "Western Addition": 0.325,
+     "Outer Richmond": -0.095
+    }
+   }
+  },
+  {
+   "id": "q089",
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "area": "Hayes Valley",
+   "expected": "Hayes Valley",
+   "independent_value": "Hayes Valley",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Hayes Valley": 0.194,
+     "Nob Hill": -0.077
+    },
+    "gt_pct_changes": {
+     "Hayes Valley": 0.194,
+     "Nob Hill": -0.077
+    }
+   }
+  },
+  {
+   "id": "q090",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "expected": "Lone Mountain/USF",
+   "independent_value": "Lone Mountain/USF",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Lone Mountain/USF": 5.421,
+     "Tenderloin": -1.263
+    },
+    "gt_pct_changes": {
+     "Lone Mountain/USF": 5.421,
+     "Tenderloin": -1.263
+    }
+   }
+  },
+  {
+   "id": "q091",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Outer Richmond",
+   "expected": "Outer Richmond",
+   "independent_value": "Outer Richmond",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Outer Richmond": 2.593,
+     "South of Market": -0.931
+    },
+    "gt_pct_changes": {
+     "Outer Richmond": 2.593,
+     "South of Market": -0.931
+    }
+   }
+  },
+  {
+   "id": "q092",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "expected": "Nob Hill",
+   "independent_value": "Nob Hill",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Nob Hill": 2.415,
+     "Sunset/Parkside": -0.876
+    },
+    "gt_pct_changes": {
+     "Nob Hill": 2.415,
+     "Sunset/Parkside": -0.876
+    }
+   }
+  },
+  {
+   "id": "q093",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "expected": "West of Twin Peaks",
+   "independent_value": "West of Twin Peaks",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "West of Twin Peaks": 1.985,
+     "Treasure Island": -0.87
+    },
+    "gt_pct_changes": {
+     "West of Twin Peaks": 1.985,
+     "Treasure Island": -0.87
+    }
+   }
+  },
+  {
+   "id": "q094",
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "area": "Oceanview/Merced/Ingleside",
+   "expected": "Oceanview/Merced/Ingleside",
+   "independent_value": "Oceanview/Merced/Ingleside",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Oceanview/Merced/Ingleside": 0.806,
+     "Outer Mission": -0.869
+    },
+    "gt_pct_changes": {
+     "Oceanview/Merced/Ingleside": 0.806,
+     "Outer Mission": -0.869
+    }
+   }
+  },
+  {
+   "id": "q095",
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "expected": "Lakeshore",
+   "independent_value": "Lakeshore",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Lakeshore": 1.562,
+     "Visitacion Valley": -0.265
+    },
+    "gt_pct_changes": {
+     "Lakeshore": 1.562,
+     "Visitacion Valley": -0.265
+    }
+   }
+  },
+  {
+   "id": "q096",
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "area": "Japantown",
+   "expected": "Japantown",
+   "independent_value": "Japantown",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Japantown": 0.649,
+     "Bayview Hunters Point": -0.216
+    },
+    "gt_pct_changes": {
+     "Japantown": 0.649,
+     "Bayview Hunters Point": -0.216
+    }
+   }
+  },
+  {
+   "id": "q097",
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "area": "North Beach",
+   "expected": "North Beach",
+   "independent_value": "North Beach",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "North Beach": 0.271,
+     "Excelsior": -0.17
+    },
+    "gt_pct_changes": {
+     "North Beach": 0.271,
+     "Excelsior": -0.17
+    }
+   }
+  },
+  {
+   "id": "q098",
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "area": "Haight Ashbury",
+   "expected": "Haight Ashbury",
+   "independent_value": "Haight Ashbury",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "Haight Ashbury": 0.197,
+     "Oceanview/Merced/Ingleside": -0.155
+    },
+    "gt_pct_changes": {
+     "Haight Ashbury": 0.197,
+     "Oceanview/Merced/Ingleside": -0.155
+    }
+   }
+  },
+  {
+   "id": "q099",
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "area": "South of Market",
+   "expected": "South of Market",
+   "independent_value": "South of Market",
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "pct_changes": {
+     "South of Market": 0.194,
+     "Tenderloin": -0.122
+    },
+    "gt_pct_changes": {
+     "South of Market": 0.194,
+     "Tenderloin": -0.122
+    }
+   }
+  },
+  {
+   "id": "q100",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "600 Valencia St, San Francisco, CA",
+   "expected": 529,
+   "independent_value": 529.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.762853648053,
+     "lon": -122.421761654874
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 562,
+     "units": 529.0
+    },
+    "n_permits_expected": 559,
+    "n_permits_delta": 3,
+    "borderline_490_510m": [
+     {
+      "permit": "202510157397",
+      "dist_m": 506.7,
+      "units_delta": -75.0,
+      "inside": false
+     },
+     {
+      "permit": "202511058972",
+      "dist_m": 497.7,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202604068964",
+      "dist_m": 508.4,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604089127",
+      "dist_m": 503.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202607024504",
+      "dist_m": 507.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604280229",
+      "dist_m": 503.6,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202512161875",
+      "dist_m": 504.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202601083428",
+      "dist_m": 507.3,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q101",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2301 Chestnut St, San Francisco, CA",
+   "expected": 27,
+   "independent_value": 27.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.800127254346,
+     "lon": -122.441235120613
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 540,
+     "units": 27.0
+    },
+    "n_permits_expected": 539,
+    "n_permits_delta": 1,
+    "borderline_490_510m": [
+     {
+      "permit": "202510177621",
+      "dist_m": 505.8,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510237971",
+      "dist_m": 502.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202603308531",
+      "dist_m": 491.5,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511048928",
+      "dist_m": 508.4,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511079188",
+      "dist_m": 493.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511038732",
+      "dist_m": 502.7,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202411074595",
+      "dist_m": 490.5,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605080907",
+      "dist_m": 503.6,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q102",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "450 10th St, San Francisco, CA",
+   "expected": 188,
+   "independent_value": 188.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.770913505052,
+     "lon": -122.410542350221
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 194,
+     "units": 188.0
+    },
+    "n_permits_expected": 194,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202510288321",
+      "dist_m": 495.8,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605131209",
+      "dist_m": 498.6,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202512151828",
+      "dist_m": 498.6,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202603177768",
+      "dist_m": 500.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202507080353",
+      "dist_m": 494.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202501098061",
+      "dist_m": 501.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202203089442",
+      "dist_m": 498.8,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202508122796",
+      "dist_m": 494.9,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q103",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2000 Mission St, San Francisco, CA",
+   "expected": 449,
+   "independent_value": 449.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.764986538796,
+     "lon": -122.419736496442
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 495,
+     "units": 449.0
+    },
+    "n_permits_expected": 491,
+    "n_permits_delta": 4,
+    "borderline_490_510m": [
+     {
+      "permit": "202510217794",
+      "dist_m": 507.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510278229",
+      "dist_m": 505.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510308510",
+      "dist_m": 509.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202508223698",
+      "dist_m": 500.6,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511210193",
+      "dist_m": 491.3,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202409090365",
+      "dist_m": 497.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202512222368",
+      "dist_m": 497.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605292134",
+      "dist_m": 493.6,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q104",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1455 Market St, San Francisco, CA",
+   "expected": 1627,
+   "independent_value": 1627.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.775961452833,
+     "lon": -122.418085649048
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 406,
+     "units": 1627.0
+    },
+    "n_permits_expected": 406,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202412046124",
+      "dist_m": 495.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202405212582",
+      "dist_m": 495.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511149635",
+      "dist_m": 507.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604149407",
+      "dist_m": 497.3,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202604169547",
+      "dist_m": 502.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202512171974",
+      "dist_m": 508.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202512171987",
+      "dist_m": 505.4,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202512192317",
+      "dist_m": 493.3,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q105",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2675 Geary Blvd, San Francisco, CA",
+   "expected": 179,
+   "independent_value": 179.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.782193130702,
+     "lon": -122.446992811287
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 319,
+     "units": 179.0
+    },
+    "n_permits_expected": 319,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202509054635",
+      "dist_m": 506.7,
+      "units_delta": 1.0,
+      "inside": false
+     },
+     {
+      "permit": "202412136782",
+      "dist_m": 506.7,
+      "units_delta": 1.0,
+      "inside": false
+     },
+     {
+      "permit": "202604028798",
+      "dist_m": 500.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202606223649",
+      "dist_m": 498.7,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202604240030",
+      "dist_m": 490.8,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202503112030",
+      "dist_m": 490.3,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202607094799",
+      "dist_m": 498.7,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202606012259",
+      "dist_m": 501.0,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q106",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "900 North Point St, San Francisco, CA",
+   "expected": 127,
+   "independent_value": 127.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.805541664357,
+     "lon": -122.42208826452
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 344,
+     "units": 127.0
+    },
+    "n_permits_expected": 343,
+    "n_permits_delta": 1,
+    "borderline_490_510m": [
+     {
+      "permit": "202503273231",
+      "dist_m": 496.3,
+      "units_delta": 1.0,
+      "inside": true
+     },
+     {
+      "permit": "202511199949",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604149371",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202605040614",
+      "dist_m": 501.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202502079962",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202502079963",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202502079958",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202502079960",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q107",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1748 Haight St, San Francisco, CA",
+   "expected": 944,
+   "independent_value": 944.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.769519210417,
+     "lon": -122.451231891001
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 375,
+     "units": 944.0
+    },
+    "n_permits_expected": 372,
+    "n_permits_delta": 3,
+    "borderline_490_510m": [
+     {
+      "permit": "202602246431",
+      "dist_m": 499.0,
+      "units_delta": 1.0,
+      "inside": true
+     },
+     {
+      "permit": "202603238077",
+      "dist_m": 500.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604018678",
+      "dist_m": 495.3,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511109258",
+      "dist_m": 504.8,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511129452",
+      "dist_m": 508.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202605070893",
+      "dist_m": 500.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202605121077",
+      "dist_m": 508.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202607104879",
+      "dist_m": 493.5,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q108",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2100 Chestnut St, San Francisco, CA",
+   "expected": 35,
+   "independent_value": 35.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.800633859604,
+     "lon": -122.438134083219
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 532,
+     "units": 35.0
+    },
+    "n_permits_expected": 531,
+    "n_permits_delta": 1,
+    "borderline_490_510m": [
+     {
+      "permit": "202606022333",
+      "dist_m": 500.8,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510238026",
+      "dist_m": 497.2,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202510278216",
+      "dist_m": 492.5,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202505206859",
+      "dist_m": 497.7,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202507291864",
+      "dist_m": 501.0,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202411084722",
+      "dist_m": 508.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604139277",
+      "dist_m": 504.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604159475",
+      "dist_m": 501.3,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q109",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "350 Rhode Island St, San Francisco, CA",
+   "expected": 287,
+   "independent_value": 287.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.765143607039,
+     "lon": -122.402669020624
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 240,
+     "units": 287.0
+    },
+    "n_permits_expected": 240,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202502271245",
+      "dist_m": 502.3,
+      "units_delta": 2.0,
+      "inside": false
+     },
+     {
+      "permit": "202201035263",
+      "dist_m": 491.9,
+      "units_delta": 1.0,
+      "inside": true
+     },
+     {
+      "permit": "202502271246",
+      "dist_m": 502.4,
+      "units_delta": -1.0,
+      "inside": false
+     },
+     {
+      "permit": "202605181472",
+      "dist_m": 491.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202606223619",
+      "dist_m": 505.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202509165380",
+      "dist_m": 501.6,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202509225834",
+      "dist_m": 501.6,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202603258234",
+      "dist_m": 502.3,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q110",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1100 Ocean Ave, San Francisco, CA",
+   "expected": 1151,
+   "independent_value": 1151.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.723341537804,
+     "lon": -122.453155319149
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 182,
+     "units": 1151.0
+    },
+    "n_permits_expected": 182,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202510026598",
+      "dist_m": 505.5,
+      "units_delta": 1.0,
+      "inside": false
+     },
+     {
+      "permit": "202504104168",
+      "dist_m": 496.4,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202508153136",
+      "dist_m": 495.3,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202601083479",
+      "dist_m": 503.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202505065919",
+      "dist_m": 505.8,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202501148246",
+      "dist_m": 507.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202412307536",
+      "dist_m": 508.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202411265716",
+      "dist_m": 498.3,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q111",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "4500 Mission St, San Francisco, CA",
+   "expected": 201,
+   "independent_value": 201.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.725743543683,
+     "lon": -122.434079216523
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 307,
+     "units": 201.0
+    },
+    "n_permits_expected": 305,
+    "n_permits_delta": 2,
+    "borderline_490_510m": [
+     {
+      "permit": "202509115095",
+      "dist_m": 509.0,
+      "units_delta": 4.0,
+      "inside": false
+     },
+     {
+      "permit": "202601224332",
+      "dist_m": 509.0,
+      "units_delta": 4.0,
+      "inside": false
+     },
+     {
+      "permit": "202209233018",
+      "dist_m": 509.0,
+      "units_delta": 4.0,
+      "inside": false
+     },
+     {
+      "permit": "202510288326",
+      "dist_m": 504.7,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202601304908",
+      "dist_m": 498.0,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202604038825",
+      "dist_m": 496.0,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202606113064",
+      "dist_m": 505.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604179661",
+      "dist_m": 505.1,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0,
+    "diagnosis_hint": "check borderline permits (DuckDB sphere-radius vs haversine differs <0.2% at the boundary) and whether the generator's H3 k=2 preclip excluded an in-disk permit (it should not: a res-9 k=2 disk contains a 500 m circle with ~80 m margin)"
+   }
+  },
+  {
+   "id": "q112",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "700 Divisadero St, San Francisco, CA",
+   "expected": 238,
+   "independent_value": 238.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.775994842566,
+     "lon": -122.437875432076
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 477,
+     "units": 238.0
+    },
+    "n_permits_expected": 477,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202508213623",
+      "dist_m": 504.6,
+      "units_delta": -10.0,
+      "inside": false
+     },
+     {
+      "permit": "202603238040",
+      "dist_m": 507.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202603268324",
+      "dist_m": 503.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510318706",
+      "dist_m": 509.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510248090",
+      "dist_m": 509.3,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511129338",
+      "dist_m": 502.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202606173452",
+      "dist_m": 500.2,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511179773",
+      "dist_m": 501.0,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q113",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1275 Columbus Ave, San Francisco, CA",
+   "expected": 153,
+   "independent_value": 153.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.805719419273,
+     "lon": -122.418119974495
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 417,
+     "units": 153.0
+    },
+    "n_permits_expected": 417,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202605181416",
+      "dist_m": 493.0,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605201603",
+      "dist_m": 506.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202605201600",
+      "dist_m": 506.1,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202510026601",
+      "dist_m": 498.6,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202602055334",
+      "dist_m": 495.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202602055329",
+      "dist_m": 495.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202401123932",
+      "dist_m": 492.8,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202602266555",
+      "dist_m": 497.1,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q114",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "601 Van Ness Ave, San Francisco, CA",
+   "expected": 957,
+   "independent_value": 957.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.781064089091,
+     "lon": -122.420623425303
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 296,
+     "units": 957.0
+    },
+    "n_permits_expected": 296,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202409191186",
+      "dist_m": 497.2,
+      "units_delta": -22.0,
+      "inside": true
+     },
+     {
+      "permit": "202604169555",
+      "dist_m": 499.2,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202508142998",
+      "dist_m": 508.7,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202604179653",
+      "dist_m": 508.5,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511250387",
+      "dist_m": 507.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511260495",
+      "dist_m": 499.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202512040981",
+      "dist_m": 499.2,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605271973",
+      "dist_m": 508.5,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q115",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "3995 24th St, San Francisco, CA",
+   "expected": 45,
+   "independent_value": 45.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.751392479818,
+     "lon": -122.431715821341
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 633,
+     "units": 45.0
+    },
+    "n_permits_expected": 633,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202510157406",
+      "dist_m": 499.2,
+      "units_delta": 2.0,
+      "inside": true
+     },
+     {
+      "permit": "202508193334",
+      "dist_m": 505.8,
+      "units_delta": 1.0,
+      "inside": false
+     },
+     {
+      "permit": "202309116276",
+      "dist_m": 495.6,
+      "units_delta": 1.0,
+      "inside": true
+     },
+     {
+      "permit": "202205174430",
+      "dist_m": 508.0,
+      "units_delta": 1.0,
+      "inside": false
+     },
+     {
+      "permit": "202504023588",
+      "dist_m": 506.9,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202511189886",
+      "dist_m": 493.1,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511199926",
+      "dist_m": 491.2,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202511260545",
+      "dist_m": 509.7,
+      "units_delta": 0.0,
+      "inside": false
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q116",
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "998 Valencia St, San Francisco, CA",
+   "expected": 70,
+   "independent_value": 70.0,
+   "delta_pct": 0.0,
+   "match": null,
+   "verdict": "confirmed",
+   "detail": {
+    "geocode": {
+     "lat": 37.756955876496,
+     "lon": -122.421196507931
+    },
+    "window": "issued 2024-07-28..2026-07-24, 500 m true disk",
+    "true_500m_disk": {
+     "n_permits": 559,
+     "units": 70.0
+    },
+    "n_permits_expected": 559,
+    "n_permits_delta": 0,
+    "borderline_490_510m": [
+     {
+      "permit": "202601153973",
+      "dist_m": 493.3,
+      "units_delta": 2.0,
+      "inside": true
+     },
+     {
+      "permit": "202305117579",
+      "dist_m": 493.3,
+      "units_delta": 2.0,
+      "inside": true
+     },
+     {
+      "permit": "202603248145",
+      "dist_m": 499.0,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202510238051",
+      "dist_m": 493.8,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202604290319",
+      "dist_m": 507.6,
+      "units_delta": 0.0,
+      "inside": false
+     },
+     {
+      "permit": "202411134953",
+      "dist_m": 493.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202605050717",
+      "dist_m": 492.9,
+      "units_delta": 0.0,
+      "inside": true
+     },
+     {
+      "permit": "202008252579",
+      "dist_m": 493.9,
+      "units_delta": 0.0,
+      "inside": true
+     }
+    ],
+    "dup_permit_rows_with_conflicting_units": 0
+   }
+  },
+  {
+   "id": "q117",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "North Beach",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 263.0,
+    "jul24_jun25": 608.0,
+    "pct_change": 1.312
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q118",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Chinatown",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 170.0,
+    "jul24_jun25": 376.0,
+    "pct_change": 1.212
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q119",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Japantown",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 137.0,
+    "jul24_jun25": 299.0,
+    "pct_change": 1.182
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q120",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Potrero Hill",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 361.0,
+    "jul24_jun25": 768.0,
+    "pct_change": 1.127
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q121",
+   "type": "temporal",
+   "metric": "evictions_filed",
+   "area": "Financial District/South Beach",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 82.0,
+    "jul24_jun25": 167.0,
+    "pct_change": 1.037
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q122",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "South of Market",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 4592.0,
+    "jul24_jun25": 9221.0,
+    "pct_change": 1.008
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q123",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Castro/Upper Market",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 1811.0,
+    "jul24_jun25": 3572.0,
+    "pct_change": 0.972
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q124",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Golden Gate Park",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 239.0,
+    "jul24_jun25": 458.0,
+    "pct_change": 0.916
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q125",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Mission",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 6001.0,
+    "jul24_jun25": 11193.0,
+    "pct_change": 0.865
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q126",
+   "type": "temporal",
+   "metric": "crime_victim_reported",
+   "area": "Lincoln Park",
+   "expected": "decrease",
+   "independent_value": {
+    "jul23_jun24": 175.0,
+    "jul24_jun25": 30.0,
+    "pct_change": -0.829
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q127",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Pacific Heights",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 320.0,
+    "jul24_jun25": 568.0,
+    "pct_change": 0.775
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q128",
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Bayview Hunters Point",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 1018.0,
+    "jul24_jun25": 1727.0,
+    "pct_change": 0.696
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q129",
+   "type": "temporal",
+   "metric": "permits_issued",
+   "area": "Bayview Hunters Point",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 698.0,
+    "jul24_jun25": 1170.0,
+    "pct_change": 0.676
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q130",
+   "type": "temporal",
+   "metric": "permits_issued",
+   "area": "Mission Bay",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 189.0,
+    "jul24_jun25": 312.0,
+    "pct_change": 0.651
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0
+   }
+  },
+  {
+   "id": "q131",
+   "type": "temporal",
+   "metric": "biz_closings",
+   "area": "Oceanview/Merced/Ingleside",
+   "expected": "increase",
+   "independent_value": {
+    "jul23_jun24": 105.0,
+    "jul24_jun25": 173.0,
+    "pct_change": 0.648
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "delta_y1_pct": 0.0,
+    "delta_y2_pct": 0.0,
+    "biz_closings_intended_semantics": {
+     "intended_jul23_jun24": 79,
+     "intended_jul24_jun25": 131,
+     "intended_direction": "increase",
+     "intended_semantics_would_flip_answer": false
+    }
+   }
+  },
+  {
+   "id": "q132",
+   "type": "trap",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "expected": "decrease",
+   "independent_value": {
+    "crime_incidents": 0.112,
+    "crime_victim_reported": -0.08,
+    "crime_enforcement": 0.436
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "embedded_number_checks": [
+     {
+      "name": "crime_incidents.last12",
+      "expected": 13464.0,
+      "live": 13466,
+      "delta_pct": 0.01
+     },
+     {
+      "name": "crime_incidents.prior12",
+      "expected": 12114.0,
+      "live": 12114,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_victim_reported.last12",
+      "expected": 4207.0,
+      "live": 4208,
+      "delta_pct": 0.02
+     },
+     {
+      "name": "crime_victim_reported.prior12",
+      "expected": 4574.0,
+      "live": 4574,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_enforcement.last12",
+      "expected": 5885.0,
+      "live": 5886,
+      "delta_pct": 0.02
+     },
+     {
+      "name": "crime_enforcement.prior12",
+      "expected": 4098.0,
+      "live": 4098,
+      "delta_pct": 0.0
+     }
+    ],
+    "worst_embedded_delta_pct": 0.02,
+    "mechanism_reproduced": true
+   }
+  },
+  {
+   "id": "q133",
+   "type": "trap",
+   "metric": "threeoneone_noise",
+   "area": "San Francisco",
+   "expected": "no",
+   "independent_value": {
+    "noise_complaints_last12": 17903,
+    "prior12": 11058,
+    "pct_change_nominal": 0.619,
+    "pct_change_refined_excl_catchall": 0.259
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "catchall_subtype": "other_excessive_noise",
+    "catchall_share_of_last12": 0.566,
+    "embedded_number_checks": [
+     {
+      "name": "noise.last12",
+      "expected": 17903.0,
+      "live": 17903,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "noise.prior12",
+      "expected": 11058.0,
+      "live": 11058,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "noise_specific.last12",
+      "expected": 7776.0,
+      "live": 7776,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "noise_specific.prior12",
+      "expected": 6175.0,
+      "live": 6175,
+      "delta_pct": 0.0
+     }
+    ],
+    "worst_embedded_delta_pct": 0.0,
+    "mechanism_reproduced": true
+   }
+  },
+  {
+   "id": "q134",
+   "type": "trap",
+   "metric": "crime_victim_reported",
+   "area": "Mission",
+   "expected": "no",
+   "independent_value": {
+    "crime_incidents": 0.041,
+    "crime_victim_reported": -0.205,
+    "crime_enforcement": 0.723
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "embedded_number_checks": [
+     {
+      "name": "crime_incidents.last12",
+      "expected": 12449.0,
+      "live": 12450,
+      "delta_pct": 0.01
+     },
+     {
+      "name": "crime_incidents.prior12",
+      "expected": 11954.0,
+      "live": 11954,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_victim_reported.last12",
+      "expected": 4883.0,
+      "live": 4884,
+      "delta_pct": 0.02
+     },
+     {
+      "name": "crime_victim_reported.prior12",
+      "expected": 6144.0,
+      "live": 6144,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_enforcement.last12",
+      "expected": 4558.0,
+      "live": 4558,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_enforcement.prior12",
+      "expected": 2645.0,
+      "live": 2645,
+      "delta_pct": 0.0
+     }
+    ],
+    "worst_embedded_delta_pct": 0.02,
+    "mechanism_reproduced": true
+   }
+  },
+  {
+   "id": "q135",
+   "type": "trap",
+   "metric": "biz_closings",
+   "area": "Financial District/South Beach",
+   "expected": "no",
+   "independent_value": 1433.0,
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "embedded_number_checks": [
+     {
+      "name": "registry_closures_last12",
+      "expected": 1431,
+      "live": 1433.0,
+      "delta_pct": 0.14
+     }
+    ],
+    "worst_embedded_delta_pct": 0.14,
+    "is_top1_by_last12_rankable": true,
+    "top3_by_last12": [
+     [
+      "Financial District/South Beach",
+      1433.0
+     ],
+     [
+      "Mission",
+      715.0
+     ],
+     [
+      "Bayview Hunters Point",
+      493.0
+     ]
+    ],
+    "biz_closings_intended_semantics": {
+     "note": "build.py intends to exclude administrative closures but the stager's truthy-value check never matches the export's '***Administratively Closed' value, so the frozen numbers include them; this shows the intended-semantics variant",
+     "admin_closures_in_last12": 451,
+     "admin_closures_in_prior12": 182,
+     "intended_last12": 982,
+     "intended_prior12": 1243,
+     "intended_pct_change": -0.21
+    },
+    "note": "the closure-lag claim itself is a documented measurement caveat (not computable from a snapshot); ironically the admin-closure inclusion shown above further supports the trap's point that the registry count is not a clean real-time closure measure"
+   }
+  },
+  {
+   "id": "q136",
+   "type": "trap",
+   "metric": "assessed_value",
+   "area": "San Francisco",
+   "expected": "no",
+   "independent_value": null,
+   "delta_pct": null,
+   "match": null,
+   "verdict": "documentary",
+   "detail": {
+    "note": "mechanism-only trap: the claim (Prop 13 caps assessed-value growth; assessor rolls are not market prices) is documented in the DataSF Assessor Historical Secured Property Tax Rolls dataset description and California Constitution art. XIII A; there is no number to re-derive from a SODA aggregate"
+   }
+  },
+  {
+   "id": "q137",
+   "type": "trap",
+   "metric": "crime_incidents",
+   "area": "San Francisco",
+   "expected": "no",
+   "independent_value": {
+    "total_pct": -0.082,
+    "enforcement_pct": 0.297,
+    "victim_pct": -0.187
+   },
+   "delta_pct": null,
+   "match": true,
+   "verdict": "confirmed",
+   "detail": {
+    "embedded_number_checks": [
+     {
+      "name": "crime_incidents.last12",
+      "expected": 88310.0,
+      "live": 88338,
+      "delta_pct": 0.03
+     },
+     {
+      "name": "crime_incidents.prior12",
+      "expected": 96276.0,
+      "live": 96277,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_enforcement.last12",
+      "expected": 19895.0,
+      "live": 19896,
+      "delta_pct": 0.01
+     },
+     {
+      "name": "crime_enforcement.prior12",
+      "expected": 15343.0,
+      "live": 15343,
+      "delta_pct": 0.0
+     },
+     {
+      "name": "crime_victim_reported.last12",
+      "expected": 44538.0,
+      "live": 44560,
+      "delta_pct": 0.05
+     },
+     {
+      "name": "crime_victim_reported.prior12",
+      "expected": 54790.0,
+      "live": 54791,
+      "delta_pct": 0.0
+     }
+    ],
+    "worst_embedded_delta_pct": 0.05,
+    "mechanism_reproduced": true
+   }
+  }
+ ],
+ "summary": {
+  "confirmed": 136,
+  "drift": 0,
+  "mismatch": 0,
+  "documentary": 1,
+  "not_verified": 0
+ }
+}

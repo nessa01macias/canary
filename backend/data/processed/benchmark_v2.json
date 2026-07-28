@@ -3,17 +3,17 @@
  "generated_at": "2026-07-28T14:50:54.340215+00:00",
  "pipeline_version": "581c820",
  "provenance": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
- "question_count": 137,
+ "question_count": 136,
  "block_counts": {
   "direction": 35,
-  "superlative": 16,
+  "superlative": 15,
   "numeric": 25,
   "pairwise": 23,
   "address_forward": 17,
   "temporal": 15,
   "trap": 6
  },
- "protocol_note": "Design per PROTOCOL_V2.md block targets (35/22/25/25/20/15/8). OSF registration did NOT precede this run; the protocol was committed to git before generation and this file is committed before any model query. Shortfalls vs targets are listed in 'shortfalls'.",
+ "protocol_note": "Design per PROTOCOL_V2.md block targets (35/22/25/25/20/15/8). OSF registration did NOT precede this run; the protocol was committed to git before generation and this file is committed before any model query. Shortfalls vs targets are listed in 'shortfalls'. q039 dropped at freeze-time verification (see dropped).",
  "shortfalls": [
   "superlative/biz_openings/drop: #1-#2 gap below 0.05",
   "superlative/crime_victim_reported/drop: #1-#2 gap below 0.05",
@@ -568,20 +568,6 @@
    },
    "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
    "id": "q038"
-  },
-  {
-   "type": "superlative",
-   "metric": "biz_closings",
-   "area": "Japantown",
-   "question": "Which San Francisco neighborhood had the largest decrease in business closures over the past year (as of mid-2026)?",
-   "expected": "Japantown",
-   "ground_truth": {
-    "pct_change": -0.423,
-    "runner_up": "Oceanview/Merced/Ingleside",
-    "runner_up_pct": -0.306
-   },
-   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
-   "id": "q039"
   },
   {
    "type": "superlative",
@@ -3434,6 +3420,13 @@
    ],
    "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
    "id": "q137"
+  }
+ ],
+ "dropped": [
+  {
+   "id": "q039",
+   "question": "Which San Francisco neighborhood had the largest decrease in business closures over the past year (as of mid-2026)?",
+   "reason": "freeze-time verification: expected winner depends on administrative closures that the documented metric was meant to exclude; a stage-time boolean parse bug made the exclusion a no-op. Under intended semantics the winner changes (Visitacion Valley). Dropped per PROTOCOL_V2.md 6; stager fixed for future builds; all other biz_closings answers verified invariant under both semantics."
   }
  ]
 }

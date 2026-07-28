@@ -80,7 +80,12 @@ SPECS: dict[str, Spec] = {
             CAST(try_strptime(nullif("Business End Date", ''),   '{DATE_US}') AS DATE) AS business_end_date,
             CAST(try_strptime(nullif("Location Start Date", ''), '{DATE_US}') AS DATE) AS location_start_date,
             CAST(try_strptime(nullif("Location End Date", ''),   '{DATE_US}') AS DATE) AS location_end_date,
-            lower(coalesce(nullif("Administratively Closed", ''), '')) IN ('true', 'yes', 'y', '1')
+            -- the live export marks these rows with the literal string
+            -- '***Administratively Closed' (not a boolean). The old truthy test
+            -- matched nothing, silently disabling the documented exclusion
+            -- (caught by benchmark v2 freeze-time verification, q039).
+            (lower(coalesce(nullif("Administratively Closed", ''), '')) IN ('true', 'yes', 'y', '1')
+             OR contains(lower(coalesce("Administratively Closed", '')), 'administratively closed'))
                                                     AS administratively_closed,
             nullif("City", '')                      AS city,
             nullif("Neighborhoods - Analysis Boundaries", '') AS neighborhood,
