@@ -2088,7 +2088,11 @@ html, body, #root, #app {
   gap: 18px;
   align-items: start;
   margin: 18px 0 4px;
+  max-width: 100%;
 }
+/* grid children default to min-width:auto, letting the wide code block push
+   the card past the page edge; min-width:0 makes the pre scroll instead */
+.agents-api-nav, .agents-api-card { min-width: 0; }
 .agents-api-nav {
   background: #f7f0e9;
   border-radius: 14px;

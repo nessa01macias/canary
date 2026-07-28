@@ -63,8 +63,7 @@ const ENDPOINTS: Endpoint[] = [
     bestFor: 'Rankings and comparisons: which area is rising, is crime actually falling',
     file: 'request.sh',
     code:
-      'curl "https://canarylayer.com/api/trajectory?area_id=Japantown\\\n' +
-      '      &area_level=neighborhood&metric=biz_openings" \\\n' +
+      'curl "https://canarylayer.com/api/trajectory?area_id=Japantown&area_level=neighborhood&metric=biz_openings" \\\n' +
       '  -H "Authorization: Bearer $CANARY_TOKEN"\n' +
       '\n' +
       '# →\n' +
@@ -153,27 +152,28 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
           Your model answers from vibes.
         </h1>
         <p className="agents-sub">
-          People bring their biggest place decisions to AI: where to live, buy, open a
-          business. These are questions about a place's future, and we tested the five
-          newest frontier models on 43 of them. Alone, they scored 37-49%, failing
-          not for lack of intelligence but because the answers were never published
-          anywhere. Reading from one Canary response, three of the five scored a
-          perfect 100%. Canary computes what no one has written down, monthly, from
-          public records, with a citation on every number.
+          Where should I live? Is this block getting better or worse? What is going up
+          next door? Your users ask; today's models improvise. We tested the five
+          newest frontier models on 43 questions like these, every one checkable
+          against San Francisco's public record. Best unassisted score: 49%. The wrong
+          answers came out confident, specific, and fluent. Then we prepended one
+          Canary response and three of the five scored 100%. The models were never the
+          problem. The answers had simply never been computed. Canary computes them
+          monthly, from public records, with a citation on every number.
         </p>
 
         <div className="agents-stats">
           <div className="agents-stat">
             <span className="agents-stat-num">24 / 25</span>
-            <span className="agents-stat-label">which-neighborhood-changed-most questions answered wrong by the five newest models. Every "rising fastest" item was missed</span>
+            <span className="agents-stat-label">"which neighborhood changed most?" answered wrong. Asked what's rising fastest, the models gave four different confident answers. All four wrong</span>
           </div>
           <div className="agents-stat">
             <span className="agents-stat-num">49% → 100%</span>
-            <span className="agents-stat-label">Claude Fable 5 on 43 checkable neighborhood questions, bare vs with one Canary response. Grok and Sol reached 100% too</span>
+            <span className="agents-stat-label">Claude Fable 5, before and after a single Canary response. Grok and GPT-5.6 Sol hit 100% too. Same model, same questions, one payload apart</span>
           </div>
           <div className="agents-stat">
             <span className="agents-stat-num">25 / 43</span>
-            <span className="agents-stat-label">Grok 4.5 answers that were confidently wrong. Newer models don't refuse anymore; they guess fluently</span>
+            <span className="agents-stat-label">Grok 4.5 answers that were confidently wrong. The new failure mode is not "I don't know". It is a fluent wrong answer your user believes</span>
           </div>
         </div>
         <button className="agents-research-link" onClick={onOpenResearch}>
