@@ -1,0 +1,3439 @@
+{
+ "name": "Canary area ground-truth benchmark v2 (San Francisco, scaled)",
+ "generated_at": "2026-07-28T14:50:54.340215+00:00",
+ "pipeline_version": "581c820",
+ "provenance": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+ "question_count": 137,
+ "block_counts": {
+  "direction": 35,
+  "superlative": 16,
+  "numeric": 25,
+  "pairwise": 23,
+  "address_forward": 17,
+  "temporal": 15,
+  "trap": 6
+ },
+ "protocol_note": "Design per PROTOCOL_V2.md block targets (35/22/25/25/20/15/8). OSF registration did NOT precede this run; the protocol was committed to git before generation and this file is committed before any model query. Shortfalls vs targets are listed in 'shortfalls'.",
+ "shortfalls": [
+  "superlative/biz_openings/drop: #1-#2 gap below 0.05",
+  "superlative/crime_victim_reported/drop: #1-#2 gap below 0.05",
+  "superlative/crime_victim_reported/most: #1 within 1.15x of #2",
+  "superlative/permits_issued/drop: #1-#2 gap below 0.05",
+  "superlative/threeoneone_encampment/drop: #1-#2 gap below 0.05",
+  "superlative/units_approved_net/most: #1 within 1.15x of #2",
+  "pairwise/crime_victim_reported: 4/5 passed floors",
+  "pairwise/evictions_filed: 4/5 passed floors",
+  "address: 3251 20th Ave, San Francisco, CA below floors (0 units, 216 permits)",
+  "address: geocode failed for 1 Warriors Way, San Francisco, CA",
+  "address: geocode failed for 1 Ferry Building, San Francisco, CA",
+  "address: 555 California St, San Francisco, CA below floors (-18 units, 2263 permits)",
+  "address: 3600 16th St, San Francisco, CA below floors (5 units, 548 permits)",
+  "address: 5800 3rd St, San Francisco, CA below floors (1 units, 95 permits)",
+  "address: 2200 Irving St, San Francisco, CA below floors (18 units, 263 permits)",
+  "address: 88 King St, San Francisco, CA below floors (-10 units, 248 permits)",
+  "address: 1200 9th Ave, San Francisco, CA below floors (2 units, 315 permits)",
+  "address: 2500 Noriega St, San Francisco, CA below floors (3 units, 307 permits)",
+  "address: 301 Cortland Ave, San Francisco, CA below floors (12 units, 520 permits)",
+  "trap: 6/8 designed traps emitted (only validated mechanisms qualify)"
+ ],
+ "questions": [
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Bernal Heights",
+   "question": "Is crime rising or falling in Bernal Heights, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 877.0,
+    "prior_12mo": 1532.0,
+    "pct_change": -0.428
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q001"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Japantown",
+   "question": "Is crime rising or falling in Japantown, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 254.0,
+    "prior_12mo": 406.0,
+    "pct_change": -0.374
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q002"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Outer Mission",
+   "question": "Is crime rising or falling in Outer Mission, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 602.0,
+    "prior_12mo": 903.0,
+    "pct_change": -0.333
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q003"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Golden Gate Park",
+   "question": "Is crime rising or falling in Golden Gate Park, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 306.0,
+    "prior_12mo": 456.0,
+    "pct_change": -0.329
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q004"
+  },
+  {
+   "type": "direction",
+   "metric": "crime_victim_reported",
+   "area": "Financial District/South Beach",
+   "question": "Is crime rising or falling in Financial District/South Beach, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 2464.0,
+    "prior_12mo": 3644.0,
+    "pct_change": -0.324
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q005"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Western Addition",
+   "question": "Are more or fewer new businesses opening in Western Addition, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 213.0,
+    "prior_12mo": 166.0,
+    "pct_change": 0.283
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q006"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Visitacion Valley",
+   "question": "Are more or fewer new businesses opening in Visitacion Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 66.0,
+    "prior_12mo": 89.0,
+    "pct_change": -0.258
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q007"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Presidio Heights",
+   "question": "Are more or fewer new businesses opening in Presidio Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 127.0,
+    "prior_12mo": 162.0,
+    "pct_change": -0.216
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q008"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Mission",
+   "question": "Are more or fewer new businesses opening in Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 785.0,
+    "prior_12mo": 969.0,
+    "pct_change": -0.19
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q009"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_openings",
+   "area": "Bernal Heights",
+   "question": "Are more or fewer new businesses opening in Bernal Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 214.0,
+    "prior_12mo": 259.0,
+    "pct_change": -0.174
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q010"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Japantown",
+   "question": "Are business closures in Japantown, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 45.0,
+    "prior_12mo": 78.0,
+    "pct_change": -0.423
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q011"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Oceanview/Merced/Ingleside",
+   "question": "Are business closures in Oceanview/Merced/Ingleside, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 120.0,
+    "prior_12mo": 173.0,
+    "pct_change": -0.306
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q012"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Glen Park",
+   "question": "Are business closures in Glen Park, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 90.0,
+    "prior_12mo": 69.0,
+    "pct_change": 0.304
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q013"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Russian Hill",
+   "question": "Are business closures in Russian Hill, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 156.0,
+    "prior_12mo": 210.0,
+    "pct_change": -0.257
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q014"
+  },
+  {
+   "type": "direction",
+   "metric": "biz_closings",
+   "area": "Inner Richmond",
+   "question": "Are business closures in Inner Richmond, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 157.0,
+    "prior_12mo": 207.0,
+    "pct_change": -0.242
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q015"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "question": "Are eviction notices in Lakeshore, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 47.0,
+    "prior_12mo": 5.0,
+    "pct_change": 8.4
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q016"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Chinatown",
+   "question": "Are eviction notices in Chinatown, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 37.0,
+    "prior_12mo": 18.0,
+    "pct_change": 1.056
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q017"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bernal Heights",
+   "question": "Are eviction notices in Bernal Heights, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 37.0,
+    "prior_12mo": 21.0,
+    "pct_change": 0.762
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q018"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Russian Hill",
+   "question": "Are eviction notices in Russian Hill, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 34.0,
+    "prior_12mo": 20.0,
+    "pct_change": 0.7
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q019"
+  },
+  {
+   "type": "direction",
+   "metric": "evictions_filed",
+   "area": "Bayview Hunters Point",
+   "question": "Are eviction notices in Bayview Hunters Point, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 49.0,
+    "prior_12mo": 31.0,
+    "pct_change": 0.581
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q020"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Lone Mountain/USF",
+   "question": "Are 311 encampment reports in Lone Mountain/USF, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 162.0,
+    "prior_12mo": 650.0,
+    "pct_change": -0.751
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q021"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Presidio",
+   "question": "Are 311 encampment reports in Presidio, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 19.0,
+    "prior_12mo": 71.0,
+    "pct_change": -0.732
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q022"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Twin Peaks",
+   "question": "Are 311 encampment reports in Twin Peaks, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 26.0,
+    "prior_12mo": 64.0,
+    "pct_change": -0.594
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q023"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Presidio Heights",
+   "question": "Are 311 encampment reports in Presidio Heights, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 91.0,
+    "prior_12mo": 220.0,
+    "pct_change": -0.586
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q024"
+  },
+  {
+   "type": "direction",
+   "metric": "threeoneone_encampment",
+   "area": "Castro/Upper Market",
+   "question": "Are 311 encampment reports in Castro/Upper Market, San Francisco, up or down over the past year (as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 1510.0,
+    "prior_12mo": 3572.0,
+    "pct_change": -0.577
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q025"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Lone Mountain/USF",
+   "question": "Is the number of new housing units approved in Lone Mountain/USF, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 244.0,
+    "prior_12mo": 38.0,
+    "pct_change": 5.421
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q026"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Outer Richmond",
+   "question": "Is the number of new housing units approved in Outer Richmond, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 97.0,
+    "prior_12mo": 27.0,
+    "pct_change": 2.593
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q027"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "question": "Is the number of new housing units approved in Nob Hill, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 987.0,
+    "prior_12mo": 289.0,
+    "pct_change": 2.415
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q028"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "question": "Is the number of new housing units approved in West of Twin Peaks, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 776.0,
+    "prior_12mo": 260.0,
+    "pct_change": 1.985
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q029"
+  },
+  {
+   "type": "direction",
+   "metric": "units_approved_net",
+   "area": "Tenderloin",
+   "question": "Is the number of new housing units approved in Tenderloin, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": -125.0,
+    "prior_12mo": 475.0,
+    "pct_change": -1.263
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q030"
+  },
+  {
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "question": "Are more or fewer building permits being issued in Lakeshore, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 205.0,
+    "prior_12mo": 80.0,
+    "pct_change": 1.562
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q031"
+  },
+  {
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Japantown",
+   "question": "Are more or fewer building permits being issued in Japantown, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 122.0,
+    "prior_12mo": 74.0,
+    "pct_change": 0.649
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q032"
+  },
+  {
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "North Beach",
+   "question": "Are more or fewer building permits being issued in North Beach, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "increase",
+   "ground_truth": {
+    "last_12mo": 413.0,
+    "prior_12mo": 325.0,
+    "pct_change": 0.271
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q033"
+  },
+  {
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Visitacion Valley",
+   "question": "Are more or fewer building permits being issued in Visitacion Valley, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 186.0,
+    "prior_12mo": 253.0,
+    "pct_change": -0.265
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q034"
+  },
+  {
+   "type": "direction",
+   "metric": "permits_issued",
+   "area": "Bayview Hunters Point",
+   "question": "Are more or fewer building permits being issued in Bayview Hunters Point, San Francisco (past year vs the year before, as of mid-2026)?",
+   "expected": "decrease",
+   "ground_truth": {
+    "last_12mo": 917.0,
+    "prior_12mo": 1170.0,
+    "pct_change": -0.216
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q035"
+  },
+  {
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Japantown",
+   "question": "Which San Francisco neighborhood had the biggest increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Japantown",
+   "ground_truth": {
+    "pct_change": 0.38,
+    "runner_up": "Western Addition",
+    "runner_up_pct": 0.283
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q036"
+  },
+  {
+   "type": "superlative",
+   "metric": "biz_openings",
+   "area": "Financial District/South Beach",
+   "question": "Which San Francisco neighborhood had the most new business openings in the past 12 months (as of mid-2026)?",
+   "expected": "Financial District/South Beach",
+   "ground_truth": {
+    "last_12mo": 1666.0,
+    "runner_up": "Mission",
+    "runner_up_last_12mo": 785.0
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q037"
+  },
+  {
+   "type": "superlative",
+   "metric": "biz_closings",
+   "area": "Twin Peaks",
+   "question": "Which San Francisco neighborhood had the largest increase in business closures over the past year (as of mid-2026)?",
+   "expected": "Twin Peaks",
+   "ground_truth": {
+    "pct_change": 0.559,
+    "runner_up": "Glen Park",
+    "runner_up_pct": 0.304
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q038"
+  },
+  {
+   "type": "superlative",
+   "metric": "biz_closings",
+   "area": "Japantown",
+   "question": "Which San Francisco neighborhood had the largest decrease in business closures over the past year (as of mid-2026)?",
+   "expected": "Japantown",
+   "ground_truth": {
+    "pct_change": -0.423,
+    "runner_up": "Oceanview/Merced/Ingleside",
+    "runner_up_pct": -0.306
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q039"
+  },
+  {
+   "type": "superlative",
+   "metric": "crime_victim_reported",
+   "area": "Lakeshore",
+   "question": "Which San Francisco neighborhood saw the largest rise in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "pct_change": 0.08,
+    "runner_up": "Inner Richmond",
+    "runner_up_pct": -0.027
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q040"
+  },
+  {
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Lakeshore",
+   "question": "Which San Francisco neighborhood had the largest rise in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "pct_change": 8.4,
+    "runner_up": "North Beach",
+    "runner_up_pct": 1.778
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q041"
+  },
+  {
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Portola",
+   "question": "Which San Francisco neighborhood had the largest drop in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Portola",
+   "ground_truth": {
+    "pct_change": -0.474,
+    "runner_up": "Potrero Hill",
+    "runner_up_pct": -0.3
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q042"
+  },
+  {
+   "type": "superlative",
+   "metric": "evictions_filed",
+   "area": "Tenderloin",
+   "question": "Which San Francisco neighborhood had the most eviction notices filed in the past 12 months (as of mid-2026)?",
+   "expected": "Tenderloin",
+   "ground_truth": {
+    "last_12mo": 210.0,
+    "runner_up": "Financial District/South Beach",
+    "runner_up_last_12mo": 177.0
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q043"
+  },
+  {
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Lakeshore",
+   "question": "Which San Francisco neighborhood had the largest increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "pct_change": 1.562,
+    "runner_up": "Japantown",
+    "runner_up_pct": 0.649
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q044"
+  },
+  {
+   "type": "superlative",
+   "metric": "permits_issued",
+   "area": "Financial District/South Beach",
+   "question": "Which San Francisco neighborhood had the most building permits issued in the past 12 months (as of mid-2026)?",
+   "expected": "Financial District/South Beach",
+   "ground_truth": {
+    "last_12mo": 2489.0,
+    "runner_up": "Sunset/Parkside",
+    "runner_up_last_12mo": 1856.0
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q045"
+  },
+  {
+   "type": "superlative",
+   "metric": "threeoneone_encampment",
+   "area": "McLaren Park",
+   "question": "Which San Francisco neighborhood had the largest increase in 311 encampment reports over the past year (as of mid-2026)?",
+   "expected": "McLaren Park",
+   "ground_truth": {
+    "pct_change": 0.6,
+    "runner_up": "Oceanview/Merced/Ingleside",
+    "runner_up_pct": 0.33
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q046"
+  },
+  {
+   "type": "superlative",
+   "metric": "threeoneone_cleaning",
+   "area": "McLaren Park",
+   "question": "Which San Francisco neighborhood had the largest increase in 311 street-cleaning requests over the past year (as of mid-2026)?",
+   "expected": "McLaren Park",
+   "ground_truth": {
+    "pct_change": 0.518,
+    "runner_up": "Presidio",
+    "runner_up_pct": 0.446
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q047"
+  },
+  {
+   "type": "superlative",
+   "metric": "threeoneone_cleaning",
+   "area": "Sunset/Parkside",
+   "question": "Which San Francisco neighborhood had the largest decrease in 311 street-cleaning requests over the past year (as of mid-2026)?",
+   "expected": "Sunset/Parkside",
+   "ground_truth": {
+    "pct_change": -0.428,
+    "runner_up": "Inner Sunset",
+    "runner_up_pct": -0.34
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q048"
+  },
+  {
+   "type": "superlative",
+   "metric": "permit_cost_issued_usd",
+   "area": "Hayes Valley",
+   "question": "Which San Francisco neighborhood had the largest increase in construction investment (cost of issued building permits) over the past year (as of mid-2026)?",
+   "expected": "Hayes Valley",
+   "ground_truth": {
+    "pct_change": 9.27,
+    "runner_up": "Chinatown",
+    "runner_up_pct": 7.342
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q049"
+  },
+  {
+   "type": "superlative",
+   "metric": "permit_cost_issued_usd",
+   "area": "Financial District/South Beach",
+   "question": "Which San Francisco neighborhood had the most construction investment by issued permit cost in the past 12 months (as of mid-2026)?",
+   "expected": "Financial District/South Beach",
+   "ground_truth": {
+    "last_12mo": 886006640.0,
+    "runner_up": "Chinatown",
+    "runner_up_last_12mo": 424903420.0
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q050"
+  },
+  {
+   "type": "superlative",
+   "metric": "crime_enforcement",
+   "area": "Mission",
+   "question": "Which San Francisco neighborhood had the largest increase in police-initiated (enforcement) incident reports over the past year (as of mid-2026)?",
+   "expected": "Mission",
+   "ground_truth": {
+    "pct_change": 0.723,
+    "runner_up": "Outer Richmond",
+    "runner_up_pct": 0.621
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q051"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Nob Hill",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Nob Hill, San Francisco, in the 12 months before July 2026?",
+   "expected": 1319,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q052"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Hayes Valley",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Hayes Valley, San Francisco, in the 12 months before July 2026?",
+   "expected": 1206,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q053"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Mission",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Mission, San Francisco, in the 12 months before July 2026?",
+   "expected": 1172,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q054"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "West of Twin Peaks",
+   "question": "Roughly how many net new housing units were approved (permits issued) in West of Twin Peaks, San Francisco, in the 12 months before July 2026?",
+   "expected": 934,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q055"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "South of Market",
+   "question": "Roughly how many net new housing units were approved (permits issued) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "expected": 511,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q056"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Western Addition",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Western Addition, San Francisco, in the 12 months before July 2026?",
+   "expected": 482,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q057"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Visitacion Valley",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Visitacion Valley, San Francisco, in the 12 months before July 2026?",
+   "expected": 453,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q058"
+  },
+  {
+   "type": "numeric",
+   "metric": "units_approved_net",
+   "area": "Chinatown",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Chinatown, San Francisco, in the 12 months before July 2026?",
+   "expected": 313,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q059"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Financial District/South Beach",
+   "question": "Roughly how many registered businesses are currently active in Financial District/South Beach, San Francisco (as of mid-2026)?",
+   "expected": 14207,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "Financial District/South Beach",
+     "active_registered_businesses": 14207,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q060"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Mission",
+   "question": "Roughly how many registered businesses are currently active in Mission, San Francisco (as of mid-2026)?",
+   "expected": 7938,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "Mission",
+     "active_registered_businesses": 7938,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q061"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "South of Market",
+   "question": "Roughly how many registered businesses are currently active in South of Market, San Francisco (as of mid-2026)?",
+   "expected": 6158,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "South of Market",
+     "active_registered_businesses": 6158,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q062"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Sunset/Parkside",
+   "question": "Roughly how many registered businesses are currently active in Sunset/Parkside, San Francisco (as of mid-2026)?",
+   "expected": 5029,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "Sunset/Parkside",
+     "active_registered_businesses": 5029,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q063"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Bayview Hunters Point",
+   "question": "Roughly how many registered businesses are currently active in Bayview Hunters Point, San Francisco (as of mid-2026)?",
+   "expected": 4719,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "Bayview Hunters Point",
+     "active_registered_businesses": 4719,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q064"
+  },
+  {
+   "type": "numeric",
+   "metric": "active_businesses",
+   "area": "Outer Richmond",
+   "question": "Roughly how many registered businesses are currently active in Outer Richmond, San Francisco (as of mid-2026)?",
+   "expected": 3557,
+   "tolerance_pct": 30,
+   "grounding_rows": [
+    {
+     "area_id": "Outer Richmond",
+     "active_registered_businesses": 3557,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q065"
+  },
+  {
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Mission",
+   "question": "Roughly how many crime incidents were reported by victims in Mission, San Francisco, in the 12 months before July 2026?",
+   "expected": 4883,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q066"
+  },
+  {
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "South of Market",
+   "question": "Roughly how many crime incidents were reported by victims in South of Market, San Francisco, in the 12 months before July 2026?",
+   "expected": 4640,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q067"
+  },
+  {
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "question": "Roughly how many crime incidents were reported by victims in Tenderloin, San Francisco, in the 12 months before July 2026?",
+   "expected": 4207,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q068"
+  },
+  {
+   "type": "numeric",
+   "metric": "crime_victim_reported",
+   "area": "Bayview Hunters Point",
+   "question": "Roughly how many crime incidents were reported by victims in Bayview Hunters Point, San Francisco, in the 12 months before July 2026?",
+   "expected": 2913,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q069"
+  },
+  {
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Tenderloin",
+   "question": "Roughly how many eviction notices were filed in Tenderloin, San Francisco, in the 12 months before July 2026?",
+   "expected": 210,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q070"
+  },
+  {
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Financial District/South Beach",
+   "question": "Roughly how many eviction notices were filed in Financial District/South Beach, San Francisco, in the 12 months before July 2026?",
+   "expected": 177,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q071"
+  },
+  {
+   "type": "numeric",
+   "metric": "evictions_filed",
+   "area": "Mission",
+   "question": "Roughly how many eviction notices were filed in Mission, San Francisco, in the 12 months before July 2026?",
+   "expected": 142,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q072"
+  },
+  {
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Financial District/South Beach",
+   "question": "Roughly how many new businesses opened (registered) in Financial District/South Beach, San Francisco, in the 12 months before July 2026?",
+   "expected": 1666,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q073"
+  },
+  {
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Mission",
+   "question": "Roughly how many new businesses opened (registered) in Mission, San Francisco, in the 12 months before July 2026?",
+   "expected": 785,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q074"
+  },
+  {
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "South of Market",
+   "question": "Roughly how many new businesses opened (registered) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "expected": 599,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q075"
+  },
+  {
+   "type": "numeric",
+   "metric": "biz_openings",
+   "area": "Sunset/Parkside",
+   "question": "Roughly how many new businesses opened (registered) in Sunset/Parkside, San Francisco, in the 12 months before July 2026?",
+   "expected": 585,
+   "tolerance_pct": 30,
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q076"
+  },
+  {
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "areas": [
+    "Japantown",
+    "Visitacion Valley"
+   ],
+   "area": "Japantown",
+   "question": "Between Japantown and Visitacion Valley in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Japantown",
+   "ground_truth": {
+    "Japantown": 0.38,
+    "Visitacion Valley": -0.258
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q077"
+  },
+  {
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "areas": [
+    "Western Addition",
+    "Presidio Heights"
+   ],
+   "area": "Western Addition",
+   "question": "Between Western Addition and Presidio Heights in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Western Addition",
+   "ground_truth": {
+    "Western Addition": 0.283,
+    "Presidio Heights": -0.216
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q078"
+  },
+  {
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "areas": [
+    "Outer Mission",
+    "Mission"
+   ],
+   "area": "Outer Mission",
+   "question": "Between Outer Mission and Mission in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Outer Mission",
+   "ground_truth": {
+    "Outer Mission": 0.155,
+    "Mission": -0.19
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q079"
+  },
+  {
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "areas": [
+    "Tenderloin",
+    "Bernal Heights"
+   ],
+   "area": "Tenderloin",
+   "question": "Between Tenderloin and Bernal Heights in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Tenderloin",
+   "ground_truth": {
+    "Tenderloin": 0.154,
+    "Bernal Heights": -0.174
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q080"
+  },
+  {
+   "type": "pairwise",
+   "metric": "biz_openings",
+   "areas": [
+    "Sunset/Parkside",
+    "Noe Valley"
+   ],
+   "area": "Sunset/Parkside",
+   "question": "Between Sunset/Parkside and Noe Valley in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "expected": "Sunset/Parkside",
+   "ground_truth": {
+    "Sunset/Parkside": 0.14,
+    "Noe Valley": -0.169
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q081"
+  },
+  {
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "areas": [
+    "Lakeshore",
+    "Bernal Heights"
+   ],
+   "area": "Lakeshore",
+   "question": "Between Lakeshore and Bernal Heights in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "Lakeshore": 0.08,
+    "Bernal Heights": -0.428
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q082"
+  },
+  {
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "areas": [
+    "Inner Richmond",
+    "Seacliff"
+   ],
+   "area": "Inner Richmond",
+   "question": "Between Inner Richmond and Seacliff in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "Inner Richmond",
+   "ground_truth": {
+    "Inner Richmond": -0.027,
+    "Seacliff": -0.384
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q083"
+  },
+  {
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "areas": [
+    "South of Market",
+    "Japantown"
+   ],
+   "area": "South of Market",
+   "question": "Between South of Market and Japantown in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "South of Market",
+   "ground_truth": {
+    "South of Market": -0.075,
+    "Japantown": -0.374
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q084"
+  },
+  {
+   "type": "pairwise",
+   "metric": "crime_victim_reported",
+   "areas": [
+    "Tenderloin",
+    "Outer Mission"
+   ],
+   "area": "Tenderloin",
+   "question": "Between Tenderloin and Outer Mission in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "expected": "Tenderloin",
+   "ground_truth": {
+    "Tenderloin": -0.08,
+    "Outer Mission": -0.333
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q085"
+  },
+  {
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "areas": [
+    "Bayview Hunters Point",
+    "Mission Bay"
+   ],
+   "area": "Bayview Hunters Point",
+   "question": "Between Bayview Hunters Point and Mission Bay in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Bayview Hunters Point",
+   "ground_truth": {
+    "Bayview Hunters Point": 0.581,
+    "Mission Bay": -0.226
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q086"
+  },
+  {
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "areas": [
+    "Castro/Upper Market",
+    "South of Market"
+   ],
+   "area": "Castro/Upper Market",
+   "question": "Between Castro/Upper Market and South of Market in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Castro/Upper Market",
+   "ground_truth": {
+    "Castro/Upper Market": 0.394,
+    "South of Market": -0.148
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q087"
+  },
+  {
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "areas": [
+    "Western Addition",
+    "Outer Richmond"
+   ],
+   "area": "Western Addition",
+   "question": "Between Western Addition and Outer Richmond in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Western Addition",
+   "ground_truth": {
+    "Western Addition": 0.325,
+    "Outer Richmond": -0.095
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q088"
+  },
+  {
+   "type": "pairwise",
+   "metric": "evictions_filed",
+   "areas": [
+    "Hayes Valley",
+    "Nob Hill"
+   ],
+   "area": "Hayes Valley",
+   "question": "Between Hayes Valley and Nob Hill in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "expected": "Hayes Valley",
+   "ground_truth": {
+    "Hayes Valley": 0.194,
+    "Nob Hill": -0.077
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q089"
+  },
+  {
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "areas": [
+    "Lone Mountain/USF",
+    "Tenderloin"
+   ],
+   "area": "Lone Mountain/USF",
+   "question": "Between Lone Mountain/USF and Tenderloin in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "expected": "Lone Mountain/USF",
+   "ground_truth": {
+    "Lone Mountain/USF": 5.421,
+    "Tenderloin": -1.263
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q090"
+  },
+  {
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "areas": [
+    "Outer Richmond",
+    "South of Market"
+   ],
+   "area": "Outer Richmond",
+   "question": "Between Outer Richmond and South of Market in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "expected": "Outer Richmond",
+   "ground_truth": {
+    "Outer Richmond": 2.593,
+    "South of Market": -0.931
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q091"
+  },
+  {
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "areas": [
+    "Nob Hill",
+    "Sunset/Parkside"
+   ],
+   "area": "Nob Hill",
+   "question": "Between Nob Hill and Sunset/Parkside in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "expected": "Nob Hill",
+   "ground_truth": {
+    "Nob Hill": 2.415,
+    "Sunset/Parkside": -0.876
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q092"
+  },
+  {
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "areas": [
+    "West of Twin Peaks",
+    "Treasure Island"
+   ],
+   "area": "West of Twin Peaks",
+   "question": "Between West of Twin Peaks and Treasure Island in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "expected": "West of Twin Peaks",
+   "ground_truth": {
+    "West of Twin Peaks": 1.985,
+    "Treasure Island": -0.87
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q093"
+  },
+  {
+   "type": "pairwise",
+   "metric": "units_approved_net",
+   "areas": [
+    "Oceanview/Merced/Ingleside",
+    "Outer Mission"
+   ],
+   "area": "Oceanview/Merced/Ingleside",
+   "question": "Between Oceanview/Merced/Ingleside and Outer Mission in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "expected": "Oceanview/Merced/Ingleside",
+   "ground_truth": {
+    "Oceanview/Merced/Ingleside": 0.806,
+    "Outer Mission": -0.869
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q094"
+  },
+  {
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "areas": [
+    "Lakeshore",
+    "Visitacion Valley"
+   ],
+   "area": "Lakeshore",
+   "question": "Between Lakeshore and Visitacion Valley in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "Lakeshore",
+   "ground_truth": {
+    "Lakeshore": 1.562,
+    "Visitacion Valley": -0.265
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q095"
+  },
+  {
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "areas": [
+    "Japantown",
+    "Bayview Hunters Point"
+   ],
+   "area": "Japantown",
+   "question": "Between Japantown and Bayview Hunters Point in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "Japantown",
+   "ground_truth": {
+    "Japantown": 0.649,
+    "Bayview Hunters Point": -0.216
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q096"
+  },
+  {
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "areas": [
+    "North Beach",
+    "Excelsior"
+   ],
+   "area": "North Beach",
+   "question": "Between North Beach and Excelsior in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "North Beach",
+   "ground_truth": {
+    "North Beach": 0.271,
+    "Excelsior": -0.17
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q097"
+  },
+  {
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "areas": [
+    "Haight Ashbury",
+    "Oceanview/Merced/Ingleside"
+   ],
+   "area": "Haight Ashbury",
+   "question": "Between Haight Ashbury and Oceanview/Merced/Ingleside in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "Haight Ashbury",
+   "ground_truth": {
+    "Haight Ashbury": 0.197,
+    "Oceanview/Merced/Ingleside": -0.155
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q098"
+  },
+  {
+   "type": "pairwise",
+   "metric": "permits_issued",
+   "areas": [
+    "South of Market",
+    "Tenderloin"
+   ],
+   "area": "South of Market",
+   "question": "Between South of Market and Tenderloin in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "expected": "South of Market",
+   "ground_truth": {
+    "South of Market": 0.194,
+    "Tenderloin": -0.122
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q099"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "600 Valencia St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 600 Valencia St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 529,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 529,
+    "n_permits": 559
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 529,
+      "n_permits": 559
+     }
+    },
+    {
+     "permit": "202506047864",
+     "issued": "2025-09-02",
+     "cost": 30916200.0,
+     "units_delta": 136.0,
+     "description": "100% affordable permanent supportive housing, 9-stories, type 1-a. 136-units. 65% studio &"
+    },
+    {
+     "permit": "202212098043",
+     "issued": "2024-09-12",
+     "cost": 27000000.0,
+     "units_delta": 21.0,
+     "description": "priority process per ab-004: to erect a 6-story & 2 basements, type iv-c, mixed used build"
+    },
+    {
+     "permit": "202505065847",
+     "issued": "2026-01-26",
+     "cost": 12658800.0,
+     "units_delta": 48.0,
+     "description": "front bldg: construction of a 6 story residential type iii-a over i-a building with 48 res"
+    },
+    {
+     "permit": "202512161892",
+     "issued": "2026-07-23",
+     "cost": 3700000.0,
+     "units_delta": 36.0,
+     "description": "alt site pa202212098043 ed13-01: increase units to 36.remove lvl b2.lvl 1:lobby space to b"
+    },
+    {
+     "permit": "202602266554",
+     "issued": "2026-03-19",
+     "cost": 1200000.0,
+     "units_delta": 0.0,
+     "description": "1st and 2nd floor. interior t.i. for non-profit: demo of finishes, lights fixtures and mil"
+    },
+    {
+     "permit": "202405091846",
+     "issued": "2024-08-07",
+     "cost": 950000.0,
+     "units_delta": 0.0,
+     "description": "project involves the renovation of portions of an extg restaurant. the project consists of"
+    },
+    {
+     "permit": "202411044296",
+     "issued": "2025-06-02",
+     "cost": 922975.0,
+     "units_delta": 0.0,
+     "description": "int renov of(e)2 stry comm bldg. no chg of occy. scope inc (n)b-rms, k-nette & stu spc. cr"
+    },
+    {
+     "permit": "201402047760",
+     "issued": "2025-06-27",
+     "cost": 913338.0,
+     "units_delta": 1.0,
+     "description": "to erect 3 stories, no basement, type v-b, single family dwelling."
+    },
+    {
+     "permit": "202509306422",
+     "issued": "2026-02-18",
+     "cost": 850000.0,
+     "units_delta": 0.0,
+     "description": "remodel of 34 private bathrooms and 23 private kitchens in kind replace 34 water heaters i"
+    },
+    {
+     "permit": "202504083978",
+     "issued": "2025-10-29",
+     "cost": 677454.0,
+     "units_delta": 0.0,
+     "description": "interior remodel of 2 (e) residential units. no change to building footprint or bedcount p"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q100"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2301 Chestnut St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2301 Chestnut St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 27,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 27,
+    "n_permits": 539
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 27,
+      "n_permits": 539
+     }
+    },
+    {
+     "permit": "202512151750",
+     "issued": "2026-05-11",
+     "cost": 1780479.0,
+     "units_delta": 1.0,
+     "description": "new horizontal addition, new vertical 4th story addition, add 1/f adu under state program "
+    },
+    {
+     "permit": "202311211273",
+     "issued": "2025-05-14",
+     "cost": 1552640.0,
+     "units_delta": 0.0,
+     "description": "renovation and addition to an existing, 3-story, 2 unit dwelling. proposed project consist"
+    },
+    {
+     "permit": "202204132114",
+     "issued": "2024-08-05",
+     "cost": 1252987.0,
+     "units_delta": 0.0,
+     "description": "horizontal expansion at levels 1,2 and 3. interior renovations at all levels. new deck at "
+    },
+    {
+     "permit": "202510308568",
+     "issued": "2026-06-23",
+     "cost": 1238704.0,
+     "units_delta": 0.0,
+     "description": "vertical addition. renovation & expansion of (e) 2 units. add level 4, set back from front"
+    },
+    {
+     "permit": "202412247367",
+     "issued": "2025-03-13",
+     "cost": 1200000.0,
+     "units_delta": 0.0,
+     "description": "1&2/fl- ti of retail for (n) retail tenants (n) retail and back of house non strucrtural p"
+    },
+    {
+     "permit": "202505206859",
+     "issued": "2025-12-08",
+     "cost": 1074125.0,
+     "units_delta": 0.0,
+     "description": "full remodel with new kitchens and bathrooms. remodel (e) 1/f to new living space for 2/f "
+    },
+    {
+     "permit": "201801088000",
+     "issued": "2026-07-23",
+     "cost": 1012058.0,
+     "units_delta": 1.0,
+     "description": "increase entry lvl height by raising ground lvl wall by 1'-0\"; convert entry lvl suite to "
+    },
+    {
+     "permit": "202504305502",
+     "issued": "2025-05-02",
+     "cost": 975000.0,
+     "units_delta": 24.0,
+     "description": "recommencement and completion of work approved under bpa#: 2014.1217.3954"
+    },
+    {
+     "permit": "202403147770",
+     "issued": "2024-09-23",
+     "cost": 690000.0,
+     "units_delta": 0.0,
+     "description": "remodel 3598 sfd. 1st fl convert 771 sf of unconditioned space into conditioned area, 2nd "
+    },
+    {
+     "permit": "202508132979",
+     "issued": "2025-11-10",
+     "cost": 675000.0,
+     "units_delta": 0.0,
+     "description": "ground floor tenant improvement. interior tenant fit out of an existing retail space. no c"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q101"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "450 10th St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 450 10th St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 188,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 188,
+    "n_permits": 194
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 188,
+      "n_permits": 194
+     }
+    },
+    {
+     "permit": "202203089442",
+     "issued": "2025-02-11",
+     "cost": 28900000.0,
+     "units_delta": 0.0,
+     "description": "renovate, rehab & seisimically retrofit (e) 2-story, 29500 sf building to provide office a"
+    },
+    {
+     "permit": "202512010601",
+     "issued": "2026-04-02",
+     "cost": 4154208.0,
+     "units_delta": 0.0,
+     "description": "level 1 ti for build out of fitness facility"
+    },
+    {
+     "permit": "202511069046",
+     "issued": "2026-04-02",
+     "cost": 3709488.0,
+     "units_delta": 0.0,
+     "description": "level 2 build out of fitness facility"
+    },
+    {
+     "permit": "202403057113",
+     "issued": "2025-03-26",
+     "cost": 2924895.0,
+     "units_delta": 0.0,
+     "description": "build out of unoccupied 3/f shell spaces, including selective demo and reconfiguration of "
+    },
+    {
+     "permit": "202210265241",
+     "issued": "2026-05-29",
+     "cost": 1975000.0,
+     "units_delta": 0.0,
+     "description": "remodel of existing nightclub and restaurant to include: interior alterations at all floor"
+    },
+    {
+     "permit": "202501228830",
+     "issued": "2025-01-28",
+     "cost": 1268881.0,
+     "units_delta": 0.0,
+     "description": "1/f & mezzanine: selective demo of interior non-structural partitions, doors, millwork & f"
+    },
+    {
+     "permit": "202509105001",
+     "issued": "2025-10-14",
+     "cost": 1000000.0,
+     "units_delta": 0.0,
+     "description": "interior only ti to (e) office space on all floors"
+    },
+    {
+     "permit": "202504255289",
+     "issued": "2025-08-26",
+     "cost": 735553.0,
+     "units_delta": 0.0,
+     "description": "new metal studs walls to divide space. new sales area flooring. removal of 1 egress door &"
+    },
+    {
+     "permit": "201705237395",
+     "issued": "2024-11-06",
+     "cost": 551000.0,
+     "units_delta": 0.0,
+     "description": "change of use from industrial to cannabis retial with consumption lounge. iknterior t.i to"
+    },
+    {
+     "permit": "202601073338",
+     "issued": "2026-01-07",
+     "cost": 550000.0,
+     "units_delta": 0.0,
+     "description": "4th fl - interior ti to include selective demolition and construction of non-structural pa"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q102"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2000 Mission St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2000 Mission St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 449,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 449,
+    "n_permits": 491
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 449,
+      "n_permits": 491
+     }
+    },
+    {
+     "permit": "202506047864",
+     "issued": "2025-09-02",
+     "cost": 30916200.0,
+     "units_delta": 136.0,
+     "description": "100% affordable permanent supportive housing, 9-stories, type 1-a. 136-units. 65% studio &"
+    },
+    {
+     "permit": "202212098043",
+     "issued": "2024-09-12",
+     "cost": 27000000.0,
+     "units_delta": 21.0,
+     "description": "priority process per ab-004: to erect a 6-story & 2 basements, type iv-c, mixed used build"
+    },
+    {
+     "permit": "202505065847",
+     "issued": "2026-01-26",
+     "cost": 12658800.0,
+     "units_delta": 48.0,
+     "description": "front bldg: construction of a 6 story residential type iii-a over i-a building with 48 res"
+    },
+    {
+     "permit": "202512161892",
+     "issued": "2026-07-23",
+     "cost": 3700000.0,
+     "units_delta": 36.0,
+     "description": "alt site pa202212098043 ed13-01: increase units to 36.remove lvl b2.lvl 1:lobby space to b"
+    },
+    {
+     "permit": "202512010636",
+     "issued": "2026-02-23",
+     "cost": 1250000.0,
+     "units_delta": 0.0,
+     "description": "minor non-structural, interior alteration of (e) building and change of planning use from "
+    },
+    {
+     "permit": "202602266554",
+     "issued": "2026-03-19",
+     "cost": 1200000.0,
+     "units_delta": 0.0,
+     "description": "1st and 2nd floor. interior t.i. for non-profit: demo of finishes, lights fixtures and mil"
+    },
+    {
+     "permit": "202603197929",
+     "issued": "2026-07-15",
+     "cost": 970200.0,
+     "units_delta": 0.0,
+     "description": "ti for proposed gallery located in vacant retail space 1st floor of (e) building w/ ground"
+    },
+    {
+     "permit": "202411044296",
+     "issued": "2025-06-02",
+     "cost": 922975.0,
+     "units_delta": 0.0,
+     "description": "int renov of(e)2 stry comm bldg. no chg of occy. scope inc (n)b-rms, k-nette & stu spc. cr"
+    },
+    {
+     "permit": "201402047760",
+     "issued": "2025-06-27",
+     "cost": 913338.0,
+     "units_delta": 1.0,
+     "description": "to erect 3 stories, no basement, type v-b, single family dwelling."
+    },
+    {
+     "permit": "202509306422",
+     "issued": "2026-02-18",
+     "cost": 850000.0,
+     "units_delta": 0.0,
+     "description": "remodel of 34 private bathrooms and 23 private kitchens in kind replace 34 water heaters i"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q103"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1455 Market St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1455 Market St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 1627,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 1627,
+    "n_permits": 406
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 1627,
+      "n_permits": 406
+     }
+    },
+    {
+     "permit": "202412035997",
+     "issued": "2025-11-07",
+     "cost": 70205789.0,
+     "units_delta": 94.0,
+     "description": "mayors directive 13-01: construction of a 17-story type i-a, 94 units of 100% affordable h"
+    },
+    {
+     "permit": "202512292849",
+     "issued": "2026-04-30",
+     "cost": 16200000.0,
+     "units_delta": 0.0,
+     "description": "ab-004 priority phase 2c: voluntary & selective renovation of (e) mep systems serving appr"
+    },
+    {
+     "permit": "202511260527",
+     "issued": "2026-05-29",
+     "cost": 15000000.0,
+     "units_delta": 0.0,
+     "description": "phase 2: new ext canopies,partial roof/skylights & column removal on 6/f,resurface payyard"
+    },
+    {
+     "permit": "202509094851",
+     "issued": "2025-12-04",
+     "cost": 13500000.0,
+     "units_delta": 0.0,
+     "description": "ab-004 priority: phase 1c - t.i.: mep upgrades to pa 202503172389. no associated increase "
+    },
+    {
+     "permit": "202506269593",
+     "issued": "2025-07-10",
+     "cost": 10634960.0,
+     "units_delta": 0.0,
+     "description": "4/f: interior demo and new construction of non-structural elements including but not limit"
+    },
+    {
+     "permit": "202506128521",
+     "issued": "2025-10-20",
+     "cost": 9682244.0,
+     "units_delta": 0.0,
+     "description": "metal roofing reroofing of the historic war memorial opera house building and alternate sc"
+    },
+    {
+     "permit": "202506128525",
+     "issued": "2025-07-14",
+     "cost": 6953380.0,
+     "units_delta": 0.0,
+     "description": "level 1 interior demolition & new construction of non structural elements including but no"
+    },
+    {
+     "permit": "202408289628",
+     "issued": "2024-10-08",
+     "cost": 4946996.0,
+     "units_delta": 0.0,
+     "description": "7th fl: interior demolition & new construction of non-structural elements including & not "
+    },
+    {
+     "permit": "202208100237",
+     "issued": "2025-06-17",
+     "cost": 4000000.0,
+     "units_delta": 348.0,
+     "description": "rev 202103227002: supplemental level 3 bracing of (e) support of excavation system for ext"
+    },
+    {
+     "permit": "202509165379",
+     "issued": "2026-07-08",
+     "cost": 4000000.0,
+     "units_delta": 0.0,
+     "description": "replacement of roofing membrane, replace sealant around skylights and curtainwall, replace"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q104"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2675 Geary Blvd, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2675 Geary Blvd, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 179,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 179,
+    "n_permits": 319
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 179,
+      "n_permits": 319
+     }
+    },
+    {
+     "permit": "202505196735",
+     "issued": "2025-12-26",
+     "cost": 15000000.0,
+     "units_delta": 0.0,
+     "description": "commercial tenant improvement for future grocery store."
+    },
+    {
+     "permit": "202212128136",
+     "issued": "2024-10-09",
+     "cost": 1600000.0,
+     "units_delta": 0.0,
+     "description": "prop h: interior remodel &play area improvements for non-profit child development center. "
+    },
+    {
+     "permit": "202406073980",
+     "issued": "2025-03-27",
+     "cost": 1345515.0,
+     "units_delta": 0.0,
+     "description": "fire alarm system migration @ the kaiser(cn31-03)medical office bldg;migrant to (n) equipm"
+    },
+    {
+     "permit": "202504295452",
+     "issued": "2025-05-06",
+     "cost": 990000.0,
+     "units_delta": 0.0,
+     "description": "installation of 89 packaged ac units including electrical and condensate drainage lines. r"
+    },
+    {
+     "permit": "202503041492",
+     "issued": "2025-10-06",
+     "cost": 990000.0,
+     "units_delta": 0.0,
+     "description": "renovation of (e) theater includng installation of new cat- walk over (e) stage"
+    },
+    {
+     "permit": "202505166648",
+     "issued": "2025-11-12",
+     "cost": 960000.0,
+     "units_delta": 0.0,
+     "description": "l3- core \"n\" shell upgrade to vacant space. hvac, electrical, plumbing upgrades. structura"
+    },
+    {
+     "permit": "202507291815",
+     "issued": "2026-03-11",
+     "cost": 848031.0,
+     "units_delta": 3.0,
+     "description": "per california government code 65852.2, turn part of garage and storage area into 3 new ad"
+    },
+    {
+     "permit": "202310269591",
+     "issued": "2024-09-27",
+     "cost": 777663.0,
+     "units_delta": 0.0,
+     "description": "remodle 3-story sfh w/ (n) bay @ front & rear @ 3rd flr. 1st flr- remove spiral stairs & r"
+    },
+    {
+     "permit": "202504184788",
+     "issued": "2025-04-22",
+     "cost": 600000.0,
+     "units_delta": 0.0,
+     "description": "interior remodel of all units, upgrade e) elect panels to 100 amp each. unit 2880: add a b"
+    },
+    {
+     "permit": "202508122793",
+     "issued": "2025-09-11",
+     "cost": 593365.0,
+     "units_delta": 0.0,
+     "description": "two units: level 1 177 sf addition, new bedroom, bath, storage, lower foundation, new wind"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q105"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "900 North Point St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 900 North Point St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 127,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 127,
+    "n_permits": 343
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 127,
+      "n_permits": 343
+     }
+    },
+    {
+     "permit": "202508132954",
+     "issued": "2026-03-11",
+     "cost": 5000000.0,
+     "units_delta": 0.0,
+     "description": "seismic upgrade to existing building. space to remain vacant per ab017. future accessibili"
+    },
+    {
+     "permit": "202409201298",
+     "issued": "2024-12-27",
+     "cost": 4000000.0,
+     "units_delta": 0.0,
+     "description": "building 1 and 2 (west) building. selective store front replacment , art displays, lightin"
+    },
+    {
+     "permit": "202511199960",
+     "issued": "2026-05-13",
+     "cost": 3500000.0,
+     "units_delta": 2.0,
+     "description": "to erect 3 stories, type v, no basement, single family residence and attached adu."
+    },
+    {
+     "permit": "202510066774",
+     "issued": "2026-05-07",
+     "cost": 2926815.0,
+     "units_delta": 0.0,
+     "description": "interior renovation with new elevator. replace windows and doors in-kind typ. remove hilla"
+    },
+    {
+     "permit": "202409201297",
+     "issued": "2024-12-27",
+     "cost": 1700000.0,
+     "units_delta": 0.0,
+     "description": "garage (east) building. selective store front replacment , art displays, lighting, cosmeti"
+    },
+    {
+     "permit": "202502069808",
+     "issued": "2025-05-02",
+     "cost": 1200000.0,
+     "units_delta": 0.0,
+     "description": "remodel of (e) test kitchen consisting of demo of (e) mllwork & appliances. proposed work "
+    },
+    {
+     "permit": "202512151796",
+     "issued": "2026-05-28",
+     "cost": 1100000.0,
+     "units_delta": 0.0,
+     "description": "building 1 & 2 (west) building l1 & l2. (n) storefronts, finishes, lighting, & led art dis"
+    },
+    {
+     "permit": "202512151790",
+     "issued": "2026-05-28",
+     "cost": 1100000.0,
+     "units_delta": 0.0,
+     "description": "garage (east) building l1 & l2 (n) storefronts, finishes, & lighting. (n) led art displays"
+    },
+    {
+     "permit": "202512151752",
+     "issued": "2026-03-04",
+     "cost": 962880.0,
+     "units_delta": 0.0,
+     "description": "2/f suite 210: interior tenant improvement to (e) office space including non-structural pa"
+    },
+    {
+     "permit": "202009305584",
+     "issued": "2025-08-05",
+     "cost": 875000.0,
+     "units_delta": 0.0,
+     "description": "repair damaged structural members.repair damages in 2/f & 3/f apts, replace fire/smoke ala"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q106"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1748 Haight St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1748 Haight St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 944,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 944,
+    "n_permits": 372
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 944,
+      "n_permits": 372
+     }
+    },
+    {
+     "permit": "202111303356",
+     "issued": "2024-09-19",
+     "cost": 16695000.0,
+     "units_delta": 6.0,
+     "description": "vertical addition to convert/legalize (e)boys/girls club to performing art school w/6 teac"
+    },
+    {
+     "permit": "202603187840",
+     "issued": "2026-04-09",
+     "cost": 752996.0,
+     "units_delta": 0.0,
+     "description": "selective demo on 1st floor & basement. new interior partition on 1st floor, (n) lighting "
+    },
+    {
+     "permit": "202212299363",
+     "issued": "2026-02-13",
+     "cost": 725800.0,
+     "units_delta": 0.0,
+     "description": "ground flr: ti for use of early childcare & education center. consists of non-structural p"
+    },
+    {
+     "permit": "202307111838",
+     "issued": "2025-04-03",
+     "cost": 700000.0,
+     "units_delta": 0.0,
+     "description": "vertical addition. to comply with nov 202037711. dmg foundation caused by work at adj prop"
+    },
+    {
+     "permit": "202510066803",
+     "issued": "2025-10-16",
+     "cost": 500000.0,
+     "units_delta": 0.0,
+     "description": "new 823 sf all electric kitchen withing (e) basement space, including all associated mecha"
+    },
+    {
+     "permit": "202407106120",
+     "issued": "2025-01-17",
+     "cost": 500000.0,
+     "units_delta": 0.0,
+     "description": "roof repair. exterior wall waterproof coating. exterior window repairs and painting. remov"
+    },
+    {
+     "permit": "202507221358",
+     "issued": "2026-02-13",
+     "cost": 490000.0,
+     "units_delta": 0.0,
+     "description": "minor interior remodel of childcare center at 1101 masonic. the building is childcare sinc"
+    },
+    {
+     "permit": "202603268319",
+     "issued": "2026-04-02",
+     "cost": 465000.0,
+     "units_delta": 0.0,
+     "description": "tenant improvement on the second floor of the building at 1639 oak street on the campus of"
+    },
+    {
+     "permit": "202511058951",
+     "issued": "2025-12-09",
+     "cost": 418000.0,
+     "units_delta": 0.0,
+     "description": "revision to 201901251261 to maintain existing 4th level with 3 beds and 2 baths. reconfigu"
+    },
+    {
+     "permit": "202507070253",
+     "issued": "2025-07-07",
+     "cost": 300000.0,
+     "units_delta": 0.0,
+     "description": "remove \"w\" roof & replace w/ flat roof to support solar (separat permit). expand e) kitche"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q107"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "2100 Chestnut St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2100 Chestnut St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 35,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 35,
+    "n_permits": 531
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 35,
+      "n_permits": 531
+     }
+    },
+    {
+     "permit": "202212289279",
+     "issued": "2025-04-08",
+     "cost": 1300000.0,
+     "units_delta": 0.0,
+     "description": "attic conversion with (n) dormers,(n) horizontal addition & roof deck at attic level. acce"
+    },
+    {
+     "permit": "202211015684",
+     "issued": "2025-04-02",
+     "cost": 1284524.0,
+     "units_delta": 0.0,
+     "description": "complete interior remodel on all floors with exterior work to include window replacement, "
+    },
+    {
+     "permit": "202412247367",
+     "issued": "2025-03-13",
+     "cost": 1200000.0,
+     "units_delta": 0.0,
+     "description": "1&2/fl- ti of retail for (n) retail tenants (n) retail and back of house non strucrtural p"
+    },
+    {
+     "permit": "202505206859",
+     "issued": "2025-12-08",
+     "cost": 1074125.0,
+     "units_delta": 0.0,
+     "description": "full remodel with new kitchens and bathrooms. remodel (e) 1/f to new living space for 2/f "
+    },
+    {
+     "permit": "202504305502",
+     "issued": "2025-05-02",
+     "cost": 975000.0,
+     "units_delta": 24.0,
+     "description": "recommencement and completion of work approved under bpa#: 2014.1217.3954"
+    },
+    {
+     "permit": "202403147770",
+     "issued": "2024-09-23",
+     "cost": 690000.0,
+     "units_delta": 0.0,
+     "description": "remodel 3598 sfd. 1st fl convert 771 sf of unconditioned space into conditioned area, 2nd "
+    },
+    {
+     "permit": "202408229253",
+     "issued": "2024-11-15",
+     "cost": 686000.0,
+     "units_delta": 0.0,
+     "description": "business ti interior remodel and accessibility upgrade at office space @ 2nd level within "
+    },
+    {
+     "permit": "202508132979",
+     "issued": "2025-11-10",
+     "cost": 675000.0,
+     "units_delta": 0.0,
+     "description": "ground floor tenant improvement. interior tenant fit out of an existing retail space. no c"
+    },
+    {
+     "permit": "202409160848",
+     "issued": "2024-09-25",
+     "cost": 600000.0,
+     "units_delta": 0.0,
+     "description": "kitchen remodel including the removal of some wall as shown on plans. new stair to basemen"
+    },
+    {
+     "permit": "202506068116",
+     "issued": "2025-08-07",
+     "cost": 558000.0,
+     "units_delta": 0.0,
+     "description": "1st/fl: t.i. new partitions, floor and wall finishes, doors, restrooms and associated mp. "
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q108"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "350 Rhode Island St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 350 Rhode Island St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 287,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 287,
+    "n_permits": 240
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 287,
+      "n_permits": 240
+     }
+    },
+    {
+     "permit": "202107235031",
+     "issued": "2025-03-28",
+     "cost": 75000000.0,
+     "units_delta": 425.0,
+     "description": "100% affordable housing mayor ed 13-01: erect a new 11 story, mixed use public housing fac"
+    },
+    {
+     "permit": "202504285348",
+     "issued": "2025-10-10",
+     "cost": 15000000.0,
+     "units_delta": 0.0,
+     "description": "full building renovation and change ofuse from office to private school (k-12) and group e"
+    },
+    {
+     "permit": "202506128526",
+     "issued": "2026-04-07",
+     "cost": 9325000.0,
+     "units_delta": 0.0,
+     "description": "**ab-004** renovate and relocate the historic clubhouse from the southeast corner of the s"
+    },
+    {
+     "permit": "202510248144",
+     "issued": "2026-06-08",
+     "cost": 6189760.0,
+     "units_delta": 0.0,
+     "description": "demolition of (e) pavement & structurs. site grading, storm drainage, paving, sediment & e"
+    },
+    {
+     "permit": "202510248147",
+     "issued": "2026-06-08",
+     "cost": 5975169.0,
+     "units_delta": 0.0,
+     "description": "demolition of (e) pavement & structurs. site grading, storm drainage, paving, sediment & e"
+    },
+    {
+     "permit": "202510248111",
+     "issued": "2026-06-03",
+     "cost": 3361665.0,
+     "units_delta": 0.0,
+     "description": "fleet charge station/parking lot: demo of (e) pavement and structures 2 site grading,storm"
+    },
+    {
+     "permit": "202506269545",
+     "issued": "2025-07-18",
+     "cost": 2335520.0,
+     "units_delta": 0.0,
+     "description": "1500 16th st was gym, now change of use as #201/2nd fl to business services. 1st/f #101 to"
+    },
+    {
+     "permit": "202407156504",
+     "issued": "2024-09-24",
+     "cost": 2000000.0,
+     "units_delta": 0.0,
+     "description": "ste #250: remodel e) medical space on 2nd fl to expand e) out patient modical office suite"
+    },
+    {
+     "permit": "202512161930",
+     "issued": "2026-06-11",
+     "cost": 1744929.0,
+     "units_delta": 0.0,
+     "description": "change of occupancy from a-2, m, b, s-1 to only b (tile showroom). tenant improvement perm"
+    },
+    {
+     "permit": "202201035263",
+     "issued": "2026-02-17",
+     "cost": 1613161.0,
+     "units_delta": 1.0,
+     "description": "rear horizontal & vertical addition. remodel/reconfig (e) sdf to add 1 new unit. add new 6"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q109"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1100 Ocean Ave, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1100 Ocean Ave, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 1151,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 1151,
+    "n_permits": 182
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 1151,
+      "n_permits": 182
+     }
+    },
+    {
+     "permit": "202503313370",
+     "issued": "2025-09-03",
+     "cost": 97000000.0,
+     "units_delta": 159.0,
+     "description": "mayoral ed13-01: erect 6 story type 1b 159 residential unit affordable housing"
+    },
+    {
+     "permit": "202207289451",
+     "issued": "2025-01-08",
+     "cost": 72464450.0,
+     "units_delta": 128.0,
+     "description": "bldg e - mayor's ed# 17-02. erect a 7-story, type 3a over type 1a construction, with 128 r"
+    },
+    {
+     "permit": "202406215053",
+     "issued": "2026-05-06",
+     "cost": 817464.0,
+     "units_delta": 0.0,
+     "description": "horizontal addition to accomodate new elevator. modifications to 2nd story to expand veter"
+    },
+    {
+     "permit": "202603207981",
+     "issued": "2026-05-27",
+     "cost": 523000.0,
+     "units_delta": 0.0,
+     "description": "new pergola (freestanding) at an existing courtyard space between the (e) classroom buildi"
+    },
+    {
+     "permit": "202406043640",
+     "issued": "2024-08-12",
+     "cost": 500000.0,
+     "units_delta": 0.0,
+     "description": "replacement of e gym floors, 2 telescoping bleachercs, 6 backstops with associated support"
+    },
+    {
+     "permit": "202508274017",
+     "issued": "2025-09-18",
+     "cost": 450000.0,
+     "units_delta": 0.0,
+     "description": "interior remodel of 1/f and replacement of interior stair."
+    },
+    {
+     "permit": "202406053777",
+     "issued": "2024-11-19",
+     "cost": 350000.0,
+     "units_delta": 0.0,
+     "description": "ground fl. remodel to have 2 bedrooms, 1 full bathrooms, family room and kitchenette. 2nd "
+    },
+    {
+     "permit": "202602025062",
+     "issued": "2026-03-31",
+     "cost": 283000.0,
+     "units_delta": 0.0,
+     "description": "construct 2 bedroom, 2 full bath, family room, & install wetbar at g/f. remodel (e) kitche"
+    },
+    {
+     "permit": "202504285339",
+     "issued": "2025-06-17",
+     "cost": 270250.0,
+     "units_delta": 0.0,
+     "description": "1) ground floor remodel: adding living space (900 sqft) included two bedrooms, one bedroom"
+    },
+    {
+     "permit": "202412166876",
+     "issued": "2024-12-20",
+     "cost": 238800.0,
+     "units_delta": 0.0,
+     "description": "remodel (e) kitchen, two bathroom and add two new full bathroom. all work at 2/f"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q110"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "4500 Mission St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 4500 Mission St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 201,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 201,
+    "n_permits": 305
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 201,
+      "n_permits": 305
+     }
+    },
+    {
+     "permit": "202512222420",
+     "issued": "2026-05-04",
+     "cost": 350000.0,
+     "units_delta": 0.0,
+     "description": "rear ext: remove (e)stair & siding, (n)sheathing & siding. 1/f: remove (e)kitchen, (e)inte"
+    },
+    {
+     "permit": "202603278470",
+     "issued": "2026-05-27",
+     "cost": 336262.0,
+     "units_delta": 0.0,
+     "description": "wells fargo: renovation of e) bank, upgrade to interior spaces, new finishes, partitions, "
+    },
+    {
+     "permit": "202503142264",
+     "issued": "2025-07-23",
+     "cost": 332615.0,
+     "units_delta": 0.0,
+     "description": "2/f: remodel (e) bath with larger shower, add 1 bedroom and 1 bath. in-fill lightwell (20s"
+    },
+    {
+     "permit": "202111222960",
+     "issued": "2025-04-28",
+     "cost": 240000.0,
+     "units_delta": 0.0,
+     "description": "comply w/ n.o.v complaint 202180293.addition of conditioned spaced. legalize unwarranted b"
+    },
+    {
+     "permit": "202506279717",
+     "issued": "2026-01-30",
+     "cost": 234000.0,
+     "units_delta": 0.0,
+     "description": "ground floor remodel and minor 1 story horizontal addition at rear yard ground floor. (n) "
+    },
+    {
+     "permit": "202601304908",
+     "issued": "2026-03-27",
+     "cost": 230000.0,
+     "units_delta": 0.0,
+     "description": "revision to # 202509266243: 1f - remodel (e) master bedroom, (e) bathroom. add (n) media r"
+    },
+    {
+     "permit": "202204293316",
+     "issued": "2026-01-29",
+     "cost": 229850.0,
+     "units_delta": 1.0,
+     "description": "per legalization ord# 43-14, convert un-permitted in-law unit into a legal 2nd unit. insta"
+    },
+    {
+     "permit": "202412307492",
+     "issued": "2025-01-07",
+     "cost": 220000.0,
+     "units_delta": 0.0,
+     "description": "revision to pa # 202410253782: construct family room, 1 bedroom, 2 full bath, media room &"
+    },
+    {
+     "permit": "202603318611",
+     "issued": "2026-04-23",
+     "cost": 218000.0,
+     "units_delta": 0.0,
+     "description": "1st flr: remodel (e) floor space to 1 master suite, media, wetbar and laundry. at 2nd flr:"
+    },
+    {
+     "permit": "202406255185",
+     "issued": "2025-01-08",
+     "cost": 200000.0,
+     "units_delta": 0.0,
+     "description": "remodel of (e) upper level and lower level bathroom, modify (e) interior stairs by kitchen"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q111"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "700 Divisadero St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 700 Divisadero St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 238,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 238,
+    "n_permits": 477
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 238,
+      "n_permits": 477
+     }
+    },
+    {
+     "permit": "201912179800",
+     "issued": "2026-05-05",
+     "cost": 71252700.0,
+     "units_delta": 203.0,
+     "description": "to erect 5 stories type iii-a over 3 stories type i-a mixed use 8 story building, with 203"
+    },
+    {
+     "permit": "202104229137",
+     "issued": "2025-05-27",
+     "cost": 1158262.0,
+     "units_delta": 0.0,
+     "description": "interior remodel throughout w/ minor expansions under overhanging areas, (n) roof deck. nf"
+    },
+    {
+     "permit": "202308084017",
+     "issued": "2024-09-20",
+     "cost": 500000.0,
+     "units_delta": 0.0,
+     "description": "enlarge ground flr unit# 1561a @ rear of bldg. enlarge 2nd flr unit# 1559 @ rear of bldg. "
+    },
+    {
+     "permit": "202105261110",
+     "issued": "2025-07-31",
+     "cost": 432000.0,
+     "units_delta": 2.0,
+     "description": "phase ii construction of 2 adu's per ordinance no. 162-16 for units c & d. reference permi"
+    },
+    {
+     "permit": "202502049670",
+     "issued": "2025-02-04",
+     "cost": 410500.0,
+     "units_delta": 1.0,
+     "description": "recommencement and completion of work approved under bpa#: 2014.1125.2470 and 2019.0514.06"
+    },
+    {
+     "permit": "202601023158",
+     "issued": "2026-01-06",
+     "cost": 375000.0,
+     "units_delta": 1.0,
+     "description": "recommencement and completion of work approved under pa# 2021-0421-9028 and pa# 2023-0518-"
+    },
+    {
+     "permit": "202408158794",
+     "issued": "2024-08-19",
+     "cost": 374256.0,
+     "units_delta": 0.0,
+     "description": "unit 241 & 243 remodel (e) kitchen & bathroom, convert (e) living room to bedroom. add 1 ("
+    },
+    {
+     "permit": "202204111986",
+     "issued": "2025-03-24",
+     "cost": 321000.0,
+     "units_delta": 1.0,
+     "description": "637b baker st: legalization of one udu at attic (per ord 43-14). remove enclosure at rear "
+    },
+    {
+     "permit": "202505277283",
+     "issued": "2025-05-29",
+     "cost": 295634.0,
+     "units_delta": 0.0,
+     "description": "unit 1904 and 1904 1/2: remodel 2 kitchens in kind no moving walls (each kitchen 150 sq ft"
+    },
+    {
+     "permit": "202409231412",
+     "issued": "2025-02-13",
+     "cost": 292000.0,
+     "units_delta": 1.0,
+     "description": "proposed new attached 2-story adu per government code sec. 65852.2."
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q112"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "1275 Columbus Ave, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1275 Columbus Ave, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 153,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 153,
+    "n_permits": 417
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 153,
+      "n_permits": 417
+     }
+    },
+    {
+     "permit": "202412176961",
+     "issued": "2025-11-07",
+     "cost": 6000000.0,
+     "units_delta": 0.0,
+     "description": "change of use a3 to a2 occupancy-partial demo, renovation and conversion of 1st floor of ("
+    },
+    {
+     "permit": "202505126240",
+     "issued": "2025-11-24",
+     "cost": 5924662.0,
+     "units_delta": 0.0,
+     "description": "interior alteration of (e) building for a new grocery store, no change of use, prior use o"
+    },
+    {
+     "permit": "202508132954",
+     "issued": "2026-03-11",
+     "cost": 5000000.0,
+     "units_delta": 0.0,
+     "description": "seismic upgrade to existing building. space to remain vacant per ab017. future accessibili"
+    },
+    {
+     "permit": "202409201298",
+     "issued": "2024-12-27",
+     "cost": 4000000.0,
+     "units_delta": 0.0,
+     "description": "building 1 and 2 (west) building. selective store front replacment , art displays, lightin"
+    },
+    {
+     "permit": "202511199960",
+     "issued": "2026-05-13",
+     "cost": 3500000.0,
+     "units_delta": 2.0,
+     "description": "to erect 3 stories, type v, no basement, single family residence and attached adu."
+    },
+    {
+     "permit": "202510026632",
+     "issued": "2026-01-13",
+     "cost": 3300000.0,
+     "units_delta": 0.0,
+     "description": "4 and 5/fl- remodel guestrooms to include (n) finishes and fixtures (plumbing). remove bar"
+    },
+    {
+     "permit": "202510066774",
+     "issued": "2026-05-07",
+     "cost": 2926815.0,
+     "units_delta": 0.0,
+     "description": "interior renovation with new elevator. replace windows and doors in-kind typ. remove hilla"
+    },
+    {
+     "permit": "202510026633",
+     "issued": "2026-01-13",
+     "cost": 2300000.0,
+     "units_delta": 0.0,
+     "description": "2 and 3/fl- remodel guestrooms to include (n) finishes and fixtures (plumbing)."
+    },
+    {
+     "permit": "202409201297",
+     "issued": "2024-12-27",
+     "cost": 1700000.0,
+     "units_delta": 0.0,
+     "description": "garage (east) building. selective store front replacment , art displays, lighting, cosmeti"
+    },
+    {
+     "permit": "202512151790",
+     "issued": "2026-05-28",
+     "cost": 1100000.0,
+     "units_delta": 0.0,
+     "description": "garage (east) building l1 & l2 (n) storefronts, finishes, & lighting. (n) led art displays"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q113"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "601 Van Ness Ave, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 601 Van Ness Ave, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 957,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 957,
+    "n_permits": 296
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 957,
+      "n_permits": 296
+     }
+    },
+    {
+     "permit": "202505156557",
+     "issued": "2026-07-01",
+     "cost": 70000000.0,
+     "units_delta": 115.0,
+     "description": "100% afforable senior housing for a 104,000sf type 1, 7 story/115 unit with commerical gro"
+    },
+    {
+     "permit": "202504214895",
+     "issued": "2025-10-07",
+     "cost": 16000000.0,
+     "units_delta": -6.0,
+     "description": "ab-004:renovate 114 sro units,1 mgr 1 br with units reduced to 108 (including #101 prev co"
+    },
+    {
+     "permit": "202506128521",
+     "issued": "2025-10-20",
+     "cost": 9682244.0,
+     "units_delta": 0.0,
+     "description": "metal roofing reroofing of the historic war memorial opera house building and alternate sc"
+    },
+    {
+     "permit": "202510157392",
+     "issued": "2026-02-18",
+     "cost": 5600000.0,
+     "units_delta": 2.0,
+     "description": "100% affordable,interior only.106(e)units to get targeted alteration.address nov#201786481"
+    },
+    {
+     "permit": "202510016481",
+     "issued": "2026-01-20",
+     "cost": 5000000.0,
+     "units_delta": 0.0,
+     "description": "(n) entrance to the third floor of the la salle building and remnovation of the interior t"
+    },
+    {
+     "permit": "202509165379",
+     "issued": "2026-07-08",
+     "cost": 4000000.0,
+     "units_delta": 0.0,
+     "description": "replacement of roofing membrane, replace sealant around skylights and curtainwall, replace"
+    },
+    {
+     "permit": "202504033691",
+     "issued": "2025-05-08",
+     "cost": 2200000.0,
+     "units_delta": 0.0,
+     "description": "modernization of passenger traction elevators #6 and #7 and related mechanical and electri"
+    },
+    {
+     "permit": "202312212924",
+     "issued": "2025-10-01",
+     "cost": 1600000.0,
+     "units_delta": 0.0,
+     "description": "alterations to(e)lobby:demo & const of stairs & ramp,reception desk,guardrails & handrails"
+    },
+    {
+     "permit": "202412046131",
+     "issued": "2025-05-06",
+     "cost": 1500000.0,
+     "units_delta": 0.0,
+     "description": "install new single ply membrane roof over existing rof membrane throughout the low slope r"
+    },
+    {
+     "permit": "202507100541",
+     "issued": "2025-07-10",
+     "cost": 1250000.0,
+     "units_delta": 0.0,
+     "description": "re-roofing w/ hot works: tear off existing roofing and insulation system. intall poly iso,"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q114"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "3995 24th St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 3995 24th St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 45,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 45,
+    "n_permits": 633
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 45,
+      "n_permits": 633
+     }
+    },
+    {
+     "permit": "202312132404",
+     "issued": "2024-08-21",
+     "cost": 1950677.0,
+     "units_delta": 2.0,
+     "description": "to erect a 4-story, 2 residential units, r-3, type vb building."
+    },
+    {
+     "permit": "201802141219",
+     "issued": "2024-10-15",
+     "cost": 1650000.0,
+     "units_delta": 1.0,
+     "description": "erect (4) stories, (1) basement, type v-b, single family residence."
+    },
+    {
+     "permit": "202112023552",
+     "issued": "2024-10-22",
+     "cost": 1296428.0,
+     "units_delta": 0.0,
+     "description": "vertical and horizontal addition to existing 2 unit 3 story building. complete interior re"
+    },
+    {
+     "permit": "202207057718",
+     "issued": "2024-08-16",
+     "cost": 1295485.0,
+     "units_delta": 2.0,
+     "description": "erect a 4 stories, 2 dwelling family dwelling with no basement.type v-b"
+    },
+    {
+     "permit": "202106011328",
+     "issued": "2025-02-03",
+     "cost": 1260000.0,
+     "units_delta": 0.0,
+     "description": "renovation of single family home. create two new habitable levels by excavating down at ex"
+    },
+    {
+     "permit": "202412036100",
+     "issued": "2025-11-24",
+     "cost": 1076040.0,
+     "units_delta": 0.0,
+     "description": "expansion at rear, interior remodel and reconfiguration of both units, infill lightwells, "
+    },
+    {
+     "permit": "202111122296",
+     "issued": "2025-07-28",
+     "cost": 990000.0,
+     "units_delta": 1.0,
+     "description": "addition of one adu to two-unit building. horizontal addition at rear of 2 lower levels an"
+    },
+    {
+     "permit": "202408269419",
+     "issued": "2025-04-29",
+     "cost": 921596.0,
+     "units_delta": 0.0,
+     "description": "convert 1st fl storage to new foundations, bathroom, bedroom, & family room. 2nd fl- reloc"
+    },
+    {
+     "permit": "202212309573",
+     "issued": "2025-02-13",
+     "cost": 750000.0,
+     "units_delta": 0.0,
+     "description": "renovation of (e) single family home & basement addition.minor exterior window/door work.n"
+    },
+    {
+     "permit": "202408219182",
+     "issued": "2026-02-13",
+     "cost": 643194.0,
+     "units_delta": 0.0,
+     "description": "partial renovation & rear yard addition to single family home. renovation of front facade."
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q115"
+  },
+  {
+   "type": "address_forward",
+   "metric": "units_approved_net",
+   "area": "998 Valencia St, San Francisco, CA",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 998 Valencia St, San Francisco, CA in the 24 months before July 2026?",
+   "expected": 70,
+   "tolerance_pct": 35,
+   "ground_truth": {
+    "total_units_500m_24mo": 70,
+    "n_permits": 559
+   },
+   "grounding_rows": [
+    {
+     "ring_summary": {
+      "radius_m": 500,
+      "window_months": 24,
+      "total_net_units_approved": 70,
+      "n_permits": 559
+     }
+    },
+    {
+     "permit": "202509246036",
+     "issued": "2026-02-20",
+     "cost": 1750000.0,
+     "units_delta": 0.0,
+     "description": "interior renovation. no veritcal or horizontal addition. preserving the front facade. repl"
+    },
+    {
+     "permit": "202008252579",
+     "issued": "2026-06-03",
+     "cost": 1740314.0,
+     "units_delta": 0.0,
+     "description": "vertical and horizontal additions to existing duplex to include: 242 liberty - great room,"
+    },
+    {
+     "permit": "202405091846",
+     "issued": "2024-08-07",
+     "cost": 950000.0,
+     "units_delta": 0.0,
+     "description": "project involves the renovation of portions of an extg restaurant. the project consists of"
+    },
+    {
+     "permit": "202211045905",
+     "issued": "2024-11-07",
+     "cost": 872860.0,
+     "units_delta": 3.0,
+     "description": "proposed legalization of three un-warranted dwelling units under local adu provisions. add"
+    },
+    {
+     "permit": "202308305610",
+     "issued": "2025-08-15",
+     "cost": 620000.0,
+     "units_delta": 0.0,
+     "description": "modify planter at front to add garage below (e) bay. rear facade alterations & deck. new v"
+    },
+    {
+     "permit": "202209092156",
+     "issued": "2025-04-09",
+     "cost": 606200.0,
+     "units_delta": 0.0,
+     "description": "2 story horizontal addition at the rear and single story horizontal garage expansion at th"
+    },
+    {
+     "permit": "202404119766",
+     "issued": "2024-07-29",
+     "cost": 599800.0,
+     "units_delta": 0.0,
+     "description": "interior remodel for four story two unit building. kitchen, bathroom and bedroom remodel f"
+    },
+    {
+     "permit": "202503061701",
+     "issued": "2025-04-28",
+     "cost": 520000.0,
+     "units_delta": 0.0,
+     "description": "1st and 2nd floor - interior conversion of existing space into overnight housing quarters "
+    },
+    {
+     "permit": "202504164505",
+     "issued": "2025-05-06",
+     "cost": 478000.0,
+     "units_delta": 0.0,
+     "description": "whole home remodel: add bathrooms at 1st and 2nd level. remove fireplace & chimney, replac"
+    },
+    {
+     "permit": "202507181130",
+     "issued": "2025-08-06",
+     "cost": 450000.0,
+     "units_delta": 0.0,
+     "description": "interior remodel including (n) kitchen w/(n) hood in each unit; bathroom remodel in each u"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q116"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "North Beach",
+   "question": "In North Beach, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 263.0,
+    "jul24_jun25": 608.0,
+    "pct_change": 1.312
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q117"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Chinatown",
+   "question": "In Chinatown, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 170.0,
+    "jul24_jun25": 376.0,
+    "pct_change": 1.212
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q118"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Japantown",
+   "question": "In Japantown, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 137.0,
+    "jul24_jun25": 299.0,
+    "pct_change": 1.182
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q119"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Potrero Hill",
+   "question": "In Potrero Hill, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 361.0,
+    "jul24_jun25": 768.0,
+    "pct_change": 1.127
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q120"
+  },
+  {
+   "type": "temporal",
+   "metric": "evictions_filed",
+   "area": "Financial District/South Beach",
+   "question": "In Financial District/South Beach, San Francisco, did eviction notices rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 82.0,
+    "jul24_jun25": 167.0,
+    "pct_change": 1.037
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q121"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "South of Market",
+   "question": "In South of Market, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 4592.0,
+    "jul24_jun25": 9221.0,
+    "pct_change": 1.008
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q122"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Castro/Upper Market",
+   "question": "In Castro/Upper Market, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 1811.0,
+    "jul24_jun25": 3572.0,
+    "pct_change": 0.972
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q123"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Golden Gate Park",
+   "question": "In Golden Gate Park, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 239.0,
+    "jul24_jun25": 458.0,
+    "pct_change": 0.916
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q124"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Mission",
+   "question": "In Mission, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 6001.0,
+    "jul24_jun25": 11193.0,
+    "pct_change": 0.865
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q125"
+  },
+  {
+   "type": "temporal",
+   "metric": "crime_victim_reported",
+   "area": "Lincoln Park",
+   "question": "In Lincoln Park, San Francisco, did victim-reported crime incidents rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "decrease",
+   "ground_truth": {
+    "jul23_jun24": 175.0,
+    "jul24_jun25": 30.0,
+    "pct_change": -0.829
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q126"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Pacific Heights",
+   "question": "In Pacific Heights, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 320.0,
+    "jul24_jun25": 568.0,
+    "pct_change": 0.775
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q127"
+  },
+  {
+   "type": "temporal",
+   "metric": "threeoneone_encampment",
+   "area": "Bayview Hunters Point",
+   "question": "In Bayview Hunters Point, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 1018.0,
+    "jul24_jun25": 1727.0,
+    "pct_change": 0.696
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q128"
+  },
+  {
+   "type": "temporal",
+   "metric": "permits_issued",
+   "area": "Bayview Hunters Point",
+   "question": "In Bayview Hunters Point, San Francisco, did building permits issued rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 698.0,
+    "jul24_jun25": 1170.0,
+    "pct_change": 0.676
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q129"
+  },
+  {
+   "type": "temporal",
+   "metric": "permits_issued",
+   "area": "Mission Bay",
+   "question": "In Mission Bay, San Francisco, did building permits issued rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 189.0,
+    "jul24_jun25": 312.0,
+    "pct_change": 0.651
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q130"
+  },
+  {
+   "type": "temporal",
+   "metric": "biz_closings",
+   "area": "Oceanview/Merced/Ingleside",
+   "question": "In Oceanview/Merced/Ingleside, San Francisco, did business closures rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "expected": "increase",
+   "ground_truth": {
+    "jul23_jun24": 105.0,
+    "jul24_jun25": 173.0,
+    "pct_change": 0.648
+   },
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q131"
+  },
+  {
+   "type": "trap",
+   "metric": "crime_victim_reported",
+   "area": "Tenderloin",
+   "question": "I'm considering moving to the Tenderloin in San Francisco. Is crime there getting better or worse as of mid-2026?",
+   "expected": "decrease",
+   "ground_truth": {
+    "crime_incidents": 0.111,
+    "crime_victim_reported": -0.08,
+    "crime_enforcement": 0.436,
+    "note": "total incidents rose on an enforcement surge; victimization fell"
+   },
+   "scoring_note": "correct = says crime/victimization is falling, or explicitly distinguishes enforcement activity from victimization",
+   "grounding_rows": [
+    {
+     "area_id": "Tenderloin",
+     "metric": "crime_incidents",
+     "last12": 13464.0,
+     "prior12": 12114.0,
+     "pct_change": 0.111,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "area_id": "Tenderloin",
+     "metric": "crime_victim_reported",
+     "last12": 4207.0,
+     "prior12": 4574.0,
+     "pct_change": -0.08,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "area_id": "Tenderloin",
+     "metric": "crime_enforcement",
+     "last12": 5885.0,
+     "prior12": 4098.0,
+     "pct_change": 0.436,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q132"
+  },
+  {
+   "type": "trap",
+   "metric": "threeoneone_noise",
+   "area": "San Francisco",
+   "question": "311 noise complaints in San Francisco rose over 60% in the year to mid-2026. Does that mean the city actually got dramatically louder?",
+   "expected": "no",
+   "ground_truth": {
+    "noise_complaints_last12": 17903.0,
+    "prior12": 11058.0,
+    "note": "step-change concentrated in one catch-all category and the mobile app channel (a reporting-flow change); the refined metric excluding it rose ~26%"
+   },
+   "scoring_note": "correct = says no / mostly a reporting or app change, complaints are not conditions; wrong = affirms the city got ~60% louder",
+   "grounding_rows": [
+    {
+     "metric": "threeoneone_noise",
+     "definition": "all noise-tagged 311 cases incl. a catch-all category",
+     "citywide_last12": 17903.0,
+     "citywide_prior12": 11058.0,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "metric": "threeoneone_noise_specific",
+     "definition": "noise cases excluding the catch-all category inflated by a March 2026 app change",
+     "citywide_last12": 7776.0,
+     "citywide_prior12": 6175.0,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q133"
+  },
+  {
+   "type": "trap",
+   "metric": "crime_victim_reported",
+   "area": "Mission",
+   "question": "Police incident counts in Mission, San Francisco, rose this past year. Should I read that as the area getting more dangerous (as of mid-2026)?",
+   "expected": "no",
+   "scoring_note": "correct = distinguishes enforcement-driven incidents from victim reports, or says victimization did not rise; wrong = affirms it got more dangerous",
+   "ground_truth": {
+    "note": "enforcement-driven incidents rose while victim-reported crime did not"
+   },
+   "grounding_rows": [
+    {
+     "area_id": "Mission",
+     "metric": "crime_incidents",
+     "last12": 12449.0,
+     "prior12": 11954.0,
+     "pct_change": 0.041,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "area_id": "Mission",
+     "metric": "crime_victim_reported",
+     "last12": 4883.0,
+     "prior12": 6144.0,
+     "pct_change": -0.205,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "area_id": "Mission",
+     "metric": "crime_enforcement",
+     "last12": 4558.0,
+     "prior12": 2645.0,
+     "pct_change": 0.723,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q134"
+  },
+  {
+   "type": "trap",
+   "metric": "biz_closings",
+   "area": "Financial District/South Beach",
+   "question": "The city's business registry shows 1431 closures in Financial District/South Beach, San Francisco, over the past year. Is the registry a reliable real-time count of business closures?",
+   "expected": "no",
+   "scoring_note": "correct = says no, closure filings lag actual closures (owners file late or never), so real-time counts understate; wrong = treats the registry count as a complete real-time measure",
+   "ground_truth": {
+    "registry_closures_last12": 1431,
+    "note": "close dates in the registry lag reality; documented measurement caveat"
+   },
+   "grounding_rows": [
+    {
+     "metric": "biz_closings",
+     "definition": "business locations with a registry end date in the window; end dates are frequently backfilled late, so recent months understate true closures",
+     "area_id": "Financial District/South Beach",
+     "last12": 1431,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q135"
+  },
+  {
+   "type": "trap",
+   "metric": "assessed_value",
+   "area": "San Francisco",
+   "question": "San Francisco assessed property values rose only about 2% last year. Does that mean market prices were roughly flat?",
+   "expected": "no",
+   "scoring_note": "correct = says no, Proposition 13 caps assessed-value growth (~2%/yr until sale), so assessed values do not track market prices; wrong = treats assessed growth as market growth",
+   "ground_truth": {
+    "note": "Prop 13 caps annual assessed-value increases; assessor rolls are NOT market price (source-documented)"
+   },
+   "grounding_rows": [
+    {
+     "source": "DataSF Assessor Historical Secured Property Tax Rolls",
+     "definition": "assessed value under Proposition 13: annual increases capped (~2%) until change of ownership; NOT market price",
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q136"
+  },
+  {
+   "type": "trap",
+   "metric": "crime_incidents",
+   "area": "San Francisco",
+   "question": "Total police incident reports in San Francisco fell about 8% this past year. Is it safe to conclude police enforcement activity also fell?",
+   "expected": "no",
+   "scoring_note": "correct = says no, enforcement-initiated incidents rose while victim reports fell; wrong = affirms enforcement fell with the total",
+   "ground_truth": {
+    "total_pct": -0.083,
+    "enforcement_pct": 0.297,
+    "victim_pct": -0.187
+   },
+   "grounding_rows": [
+    {
+     "metric": "crime_incidents",
+     "definition": "all incident reports",
+     "citywide_last12": 88310.0,
+     "citywide_prior12": 96276.0,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "metric": "crime_enforcement",
+     "definition": "police-initiated categories (drug offenses, warrants, stops)",
+     "citywide_last12": 19895.0,
+     "citywide_prior12": 15343.0,
+     "source_as_of": "2026-07-25"
+    },
+    {
+     "metric": "crime_victim_reported",
+     "definition": "victim-initiated report categories",
+     "citywide_last12": 44538.0,
+     "citywide_prior12": 54790.0,
+     "source_as_of": "2026-07-25"
+    }
+   ],
+   "receipt": "DataSF (data.sfgov.org) snapshots as_of 2026-07-25, Canary pipeline",
+   "id": "q137"
+  }
+ ]
+}

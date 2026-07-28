@@ -26,7 +26,7 @@ from app.pipeline import core
 
 QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
 RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
-OUT = core.PROCESSED_DIR / "benchmark_v1_stats.json"
+OUT = core.PROCESSED_DIR / f"{QUESTIONS.stem}_stats.json"
 
 MODEL_NAMES = {
     "anthropic:claude-fable-5": "Claude Fable 5",
@@ -45,7 +45,9 @@ BLOCK_LABELS = {
     "distractor": "Distractors",
 }
 BLOCK_ORDER = ["superlative", "numeric", "pairwise", "direction", "address_forward", "temporal", "distractor"]
-DISTRACTOR_IDS = {"q042", "q043"}
+# v1 only: its second distractor is typed 'direction' in the frozen artifact
+# (disclosed in RESEARCH.md 2.2). v2 types every trap properly.
+DISTRACTOR_IDS = {"q042", "q043"} if "v1" in QUESTIONS.stem else set()
 
 
 def wilson(correct: int, n: int, z: float = 1.959964) -> tuple[float, float]:

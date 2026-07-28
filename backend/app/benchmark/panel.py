@@ -38,7 +38,7 @@ from .judge import JUDGE_SYSTEM, build_prompt
 QUESTIONS = core.PROCESSED_DIR / os.environ.get("BENCH_FILE", "benchmark_v1.json")
 RUNS_DIR = core.PROCESSED_DIR / os.environ.get("BENCH_RUNS", "benchmark_runs_v1")
 PANEL_DIR = RUNS_DIR / "panel"
-OUT = core.PROCESSED_DIR / "benchmark_v1_panel.json"
+OUT = core.PROCESSED_DIR / f"{QUESTIONS.stem}_panel.json"
 
 # slug -> (base_url, key_env, model_env, default_model)
 PANEL_JUDGES = {
