@@ -288,10 +288,10 @@ function App() {
   const [residentUnlocked, setResidentUnlocked] = useState(
     () => localStorage.getItem('canary_resident_unlocked') === '1',
   )
-  const unlockResidents = () => {
+  const unlockResidents = (area?: string) => {
     localStorage.setItem('canary_resident_unlocked', '1')
     setResidentUnlocked(true)
-    logGateCompleted() // fake-door numerator (>15-20% completion = flywheel real)
+    logGateCompleted(area) // fake-door numerator, attributed to the reviewed area
   }
   // The hover popup is imperative MapLibre HTML, so its handler closure would
   // capture a stale unlock flag — mirror it in a ref the builder reads live.
@@ -1289,6 +1289,8 @@ function App() {
           mission={mission}
           onMission={handleMissionTab}
           onExplore={exploreInstead}
+          contributed={residentUnlocked}
+          onContribute={() => setContributing(true)}
           picks={shortlist}
           onToggle={toggleShortlist}
           onClear={clearAll}

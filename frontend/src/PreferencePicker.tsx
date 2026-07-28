@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MAX_PICKS, MISSIONS, MISSION_QUESTIONS } from './missions'
+import { logGateShown } from './lib/gateEvents'
 
 // THE preference picker — the only preference surface in the app. One screen,
 // zero steps: the mission is a TAB (tap = the spotlight refocuses live), the
@@ -8,6 +9,14 @@ import { MAX_PICKS, MISSIONS, MISSION_QUESTIONS } from './missions'
 // matters", and "Edit" all open this same component — every door, one room.
 // Picks edit the LIVE shortlist, so the map re-ranks behind the light scrim
 // while you choose.
+//
+// THE GIVE-TO-GET GATE (Kat's tier logic, founder decision 2026-07-28):
+// reading is free, ranking is earned. Your mission's spotlight + Fundamentals
+// rank the map immediately; the deeper signals show CRISP LABELS with FROSTED
+// text (real, working chips — we are data-rich, never data-poor) and unlock —
+// all of them, forever — with one neighborhood review. The locked chip itself
+// is the door: tap it and the review form opens. Facts stay readable
+// everywhere on the map and cards (the open commons is never gated).
 
 type PrefField = { label: string; available?: boolean }
 type PrefTier = { title: string; fields: PrefField[] }
@@ -95,15 +104,57 @@ type Props = {
   onDone: () => void
   onClose: () => void
   firstRun: boolean
+  /** One review unlocks every signal, forever (same flag as the resident layer). */
+  contributed: boolean
+  /** Opens the review form — a locked chip IS the door (Kat's rule). */
+  onContribute: () => void
 }
+
+const FREE_TIER = 'Fundamentals'
+// The no-mission spotlight (exploring / pre-tab): a balanced 8 across tiers.
+const DEFAULT_FREE_SPOTLIGHT = [
+  'Quiet', 'Transit access', 'New construction', 'Business openings',
+  'Tree canopy', 'Groceries & retail', 'Housing stability', 'Flood risk',
+]
 
 export function PreferencePicker({
   mission, onMission, onExplore, picks, onToggle, onClear, onDone, onClose, firstRun,
+  contributed, onContribute,
 }: Props) {
   // The catalog is always opt-in (the accordion) — the least-invested user
   // must never meet the biggest form.
   const [expanded, setExpanded] = useState(false)
   const q = mission ? MISSION_QUESTIONS[mission] : undefined
+
+  // Free to rank with: Fundamentals + the current mission's spotlight. Deeper
+  // signals frost until one review. Chips already picked are never re-locked
+  // (they were earned legitimately; locking them would trap the selection).
+  // Explorers (no mission question) get a balanced default spotlight — the
+  // least-invested user must never meet the harshest gate.
+  const freeSet = useMemo(() => {
+    const free = new Set<string>(
+      PREFERENCE_TIERS.find((t) => t.title === FREE_TIER)?.fields.map((f) => f.label) ?? [],
+    )
+    const spotlight = q?.chips ?? DEFAULT_FREE_SPOTLIGHT
+    for (const c of spotlight) free.add(c)
+    return free
+  }, [q])
+  const isLocked = (f: PrefField) =>
+    !contributed && !!f.available && !freeSet.has(f.label) && !picks.includes(f.label)
+
+  // Fake-door denominator: the moment frosted signals become visible.
+  useEffect(() => {
+    if (expanded && !contributed) logGateShown('signals_catalog')
+  }, [expanded, contributed])
+
+  // The chip the user tapped to reach the review form is their stated intent —
+  // select it for them the moment the unlock lands (unless the cap is full).
+  const [pendingUnlock, setPendingUnlock] = useState<string | null>(null)
+  useEffect(() => {
+    if (!contributed || !pendingUnlock) return
+    if (!picks.includes(pendingUnlock) && picks.length < MAX_PICKS) onToggle(pendingUnlock)
+    setPendingUnlock(null)
+  }, [contributed, pendingUnlock, picks, onToggle])
 
   const selectTab = (id: string) => {
     if (id === 'exploring') {
@@ -117,14 +168,21 @@ export function PreferencePicker({
   const chip = (f: PrefField) => {
     const sel = picks.includes(f.label)
     const atCap = picks.length >= MAX_PICKS && !sel
+    const locked = isLocked(f)
     return (
       <button
         key={f.label}
         type="button"
-        className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}`}
-        aria-pressed={sel}
-        disabled={!f.available || (!sel && atCap)}
-        onClick={() => onToggle(f.label)}
+        className={`prefs-tag${sel ? ' is-selected' : ''}${f.available ? '' : ' is-soon'}${locked ? ' is-locked' : ''}`}
+        aria-pressed={locked ? undefined : sel}
+        aria-label={locked ? `Review a neighborhood to unlock ${f.label}` : undefined}
+        disabled={!f.available || (!locked && !sel && atCap)}
+        onClick={() => {
+          if (locked) {
+            setPendingUnlock(f.label)
+            onContribute()
+          } else onToggle(f.label)
+        }}
       >
         <span className="tag-label">{f.label}</span>
         {!f.available && <span className="soon">soon</span>}
@@ -196,6 +254,12 @@ export function PreferencePicker({
                   <div className="prefs-tags">{tier.fields.map(chip)}</div>
                 </section>
               ))}
+              {!contributed && (
+                <button type="button" className="picker-locknote" onClick={onContribute}>
+                  🔒 The frosted signals are real and working — review one neighborhood
+                  you know to unlock all of them, forever.
+                </button>
+              )}
             </div>
           )}
         </section>
