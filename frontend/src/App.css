@@ -547,6 +547,13 @@ html, body, #root, #app {
   color: #111;
   letter-spacing: -0.2px;
 }
+/* "Known for" identity line — quiet, so the trajectory stays the emphasis. */
+.nb-pop-known {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8a7d6d;
+  margin-top: 1px;
+}
 .nb-pop-fit {
   display: inline-block;
   font-size: 11px;
@@ -575,11 +582,6 @@ html, body, #root, #app {
 .nb-pop-verdict--down { color: #c1443c; }
 .nb-pop-verdict--flat { color: #8a7d6d; }
 .nb-pop-fit-inline { color: #ea6a25; font-weight: 800; }
-.nb-pop-more {
-  margin-top: 5px;
-  font-size: 10.5px;
-  color: #b0a596;
-}
 
 /* ── Preferences panel: head row, edit & CTA ─────────────────── */
 .prefs-head {
@@ -2330,6 +2332,43 @@ html, body, #root, #app {
   color: #2329A8;
 }
 
+/* Recenter FAB — floats bottom-center, above the legend strip (44px). Rendered
+   always so it can fade/slide; .show flips it visible + clickable. */
+.recenter-fab {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  z-index: 30; /* above the legend strip (10), below overlays/pickers */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: #FF6624;
+  border: none;
+  border-radius: 99px;
+  padding: 10px 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 102, 36, 0.4), 0 1px 3px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.14s ease;
+}
+.recenter-fab.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+.recenter-fab:hover { background: #e85510; }
+.recenter-fab-icon { font-size: 15px; line-height: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .recenter-fab { transition: opacity 0.2s ease, background 0.14s ease; transform: translate(-50%, 0); }
+}
+
 /* ── Ask Canary — the answer canvas (omnibox asks; the map responds) ─────── */
 
 /* Markdown from the answer block — the model writes tight prose (reused). */
@@ -2608,6 +2647,68 @@ html, body, #root, #app {
   padding: 0 5px;
 }
 .pc-residents { margin-top: 12px; }
+
+/* In the news — the claims tier as clickable source headlines. Publication +
+   date lead each row (the byline where the mockup's quotation mark sat); the
+   headline is the link out. A card-within-the-card, echoing the source's own
+   masthead feel without dressing announcements up as record facts. */
+.pc-news { margin-top: 14px; }
+.pc-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pc-news-item {
+  display: block;
+  position: relative;
+  padding: 10px 26px 11px 12px;
+  border: 1px solid rgba(28, 23, 18, 0.09);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+.pc-news-item:hover {
+  background: #fff;
+  border-color: rgba(35, 41, 168, 0.28);
+  transform: translateY(-1px);
+}
+.pc-news-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.pc-news-outlet { color: #2329A8; }
+.pc-news-dot { color: #c3b6a5; font-weight: 700; }
+.pc-news-date { color: #a89a8a; letter-spacing: 0.3px; }
+.pc-news-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 560;
+  line-height: 1.4;
+  color: #1c1712;
+}
+.pc-news-item:hover .pc-news-title { color: #1a1f85; }
+.pc-news-arrow {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  font-size: 12px;
+  color: #b6a897;
+  transition: color 120ms ease;
+}
+.pc-news-item:hover .pc-news-arrow { color: #2329A8; }
+.pc-news-foot {
+  margin: 8px 0 0;
+  font-size: 10px;
+  color: #a89a8a;
+  font-style: italic;
+}
 .pc-cityfits { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
 
 /* Record rung reuses the drawer-kind, delta, stage-badge and chip styles; the
@@ -2841,16 +2942,6 @@ html, body, #root, #app {
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-/* ── Gate tease in the hover popup ──────────────────────────────────────── */
-.nb-pop-res {
-  margin-top: 5px;
-  font-size: 11px;
-  color: #8a5a1f;
-}
-.nb-pop-res b { color: #FF6624; font-weight: 700; }
-.nb-pop-res.is-locked b { filter: blur(4px); user-select: none; }
-.nb-pop-lock { font-size: 10px; }
-
 /* Gate empty state on the card */
 .answer-residents-empty { color: #a08a6c; font-style: italic; }
 
@@ -2915,3 +3006,233 @@ html, body, #root, #app {
   transition: background 0.12s ease;
 }
 .picker-locknote:hover { background: #fff1e8; }
+
+/* ── Trajectory representation compare toggle + its DOM marks ─────────────────
+   A live switch between four ways to draw the improving/worsening signal, plus
+   the arrow / pulse-blob markers that two of those modes use. */
+.viz-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.viz-toggle-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #999;
+  padding: 0 6px 0 4px;
+}
+.viz-toggle-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #6a6a6a;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.viz-toggle-btn:hover { color: #2a2a2a; }
+.viz-toggle-btn.is-on {
+  background: #ff6624;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(255, 102, 36, 0.35);
+}
+
+/* Per-neighborhood marks. MapLibre centers the marker root on the point; the
+   children are absolutely centered so they sit on the centroid. pointer-events:
+   none lets a click fall through to the neighborhood underneath. */
+.viz-marker {
+  position: relative;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  --sz: calc(7px + var(--mag, 0) * 11px);
+  --core: calc(9px + var(--mag, 0) * 12px);
+}
+.viz-marker > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+}
+.viz-marker.is-glyph .viz-glyph { display: block; }
+.viz-marker.is-pulse .viz-core { display: block; }
+.viz-marker.is-pulse .viz-ring { display: block; }
+
+/* Arrow — a CSS triangle (no glyph font needed, always renders). */
+.viz-glyph {
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  border-left: var(--sz) solid transparent;
+  border-right: var(--sz) solid transparent;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+}
+.viz-marker[data-dir='up'] .viz-glyph { border-bottom: calc(var(--sz) * 1.5) solid var(--c); }
+.viz-marker[data-dir='down'] .viz-glyph { border-top: calc(var(--sz) * 1.5) solid var(--c); }
+
+/* Pulse — a crisp colored dot (solid center + white halo, so neighbors never
+   bleed into muddy purple mixes), a tight colored glow, and an emanating "ping"
+   ring that expands and fades. Small + contained so many of them don't smear
+   together. All share the marker's --delay so hoods shimmer out of phase. */
+.viz-core {
+  width: var(--core);
+  height: var(--core);
+  border-radius: 50%;
+  background: var(--c);
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 1.6px rgba(255, 255, 255, 0.92),
+    0 1px 4px rgba(0, 0, 0, 0.3),
+    0 0 calc(6px + var(--mag, 0) * 8px) 1px var(--c);
+  animation: viz-corebreath 4s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+.viz-ring {
+  width: calc(var(--core) * 2.6);
+  height: calc(var(--core) * 2.6);
+  border-radius: 50%;
+  border: 2px solid var(--c);
+  transform: translate(-50%, -50%) scale(0.4);
+  opacity: 0;
+  animation: viz-ping 3.4s ease-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes viz-corebreath {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); }
+  50%      { transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes viz-ping {
+  0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0.6; }
+  70%  { opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .viz-core { animation: none; transform: translate(-50%, -50%) scale(1); }
+  .viz-ring { animation: none; opacity: 0; }
+}
+
+/* ── Commute preview (horizontal bottom bar) ─────────────────────────── */
+.commute-dock {
+  position: absolute;
+  left: 16px;
+  right: 392px;            /* reserve the PlaceCard's right column + nav controls */
+  bottom: 52px;            /* sit just above the 44px legend strip */
+  z-index: 15;
+}
+.commute {
+  --ctrl-h: 38px;          /* one height for every control in the bar */
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 14px;
+  background: rgba(242, 231, 225, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+.commute-head { flex: none; }
+.commute-title {
+  margin: 0; font-size: 13.5px; font-weight: 650;
+  color: #2a2320; letter-spacing: -0.01em; white-space: nowrap;
+}
+.commute-sub { margin: 1px 0 0; font-size: 11px; color: rgba(0, 0, 0, 0.5); white-space: nowrap; }
+
+.commute-list {
+  flex: none; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: row; gap: 8px;
+}
+.commute-row {
+  display: flex; align-items: center; gap: 7px;
+  height: var(--ctrl-h); box-sizing: border-box;
+  padding: 0 6px 0 9px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(0, 0, 0, 0.07);
+}
+.commute-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.commute-place {
+  max-width: 120px; flex: none;
+  font-size: 12.5px; color: #2a2320;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.commute-loading {
+  flex: none; width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15); border-top-color: rgba(0, 0, 0, 0.45);
+  animation: commute-spin 0.7s linear infinite;
+}
+@keyframes commute-spin { to { transform: rotate(360deg); } }
+.commute-remove {
+  flex: none; border: none; background: transparent; cursor: pointer;
+  font-size: 15px; line-height: 1; color: rgba(0, 0, 0, 0.3); padding: 0 1px;
+  opacity: 0; transition: opacity 0.12s ease;
+}
+.commute-row:hover .commute-remove,
+.commute-remove:focus-visible { opacity: 1; }
+.commute-remove:hover { color: #d23; }
+
+.commute-add { flex: 1 1 200px; min-width: 170px; }
+.commute-hint { flex: none; margin: 0; font-size: 11.5px; color: rgba(0, 0, 0, 0.5); white-space: nowrap; }
+
+/* The address field fills the bar; because the bar sits at the screen bottom the
+   suggestion dropdown opens UPWARD so it never clips off-screen. */
+.commute .addr-search { margin: 0; max-width: none; }
+.commute .addr-search-input { height: var(--ctrl-h); box-sizing: border-box; }
+.commute .addr-search-list { top: auto; bottom: calc(100% + 6px); }
+
+/* Each destination as a colored dot on the map. Dot color matches the
+   destination's row in the bar; the travel times ride the route line (below). */
+.commute-pin {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--c, #2e9e7e); border: 2.5px solid #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+  position: relative;
+}
+/* The time label that sits ON a destination's route line (at its midpoint): one
+   pill listing every mode's time — 🚗 12 min · 🚲 22 min · 🚶 48 min. The pill's
+   accent border ties it to the line's color. Unresolved modes read "—". */
+.commute-line-label {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff; color: #1c1815;
+  border: 1.5px solid var(--c, #2e9e7e); border-radius: 999px;
+  padding: 3px 9px; margin-bottom: 3px;
+  font-size: 11.5px; font-weight: 700; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-variant-numeric: tabular-nums; pointer-events: none;
+}
+.commute-leg { display: inline-flex; align-items: center; gap: 3px; }
+.commute-leg + .commute-leg { border-left: 1px solid rgba(0, 0, 0, 0.12); padding-left: 8px; }
+.commute-leg-icon { font-size: 12.5px; font-weight: 400; }
+/* Grey candidate dots: every location of a searched business. Click to pick —
+   the dot then becomes a colored destination (see .commute-pin). */
+.commute-candidate {
+  width: 13px; height: 13px; padding: 0; border-radius: 50%;
+  background: rgba(110, 110, 110, 0.92); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35); cursor: pointer;
+  transition: transform 0.1s ease, background 0.12s ease;
+}
+.commute-candidate:hover { background: #454545; transform: scale(1.28); }
+.commute-candidate:focus-visible { outline: 2px solid #ff6624; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .commute-loading { animation: none; }
+  .commute-candidate { transition: none; }
+}
+
+@media (max-width: 1100px) {
+  /* Narrower windows: go edge-to-edge (the card, when open, layers over on top). */
+  .commute-dock { right: 16px; }
+}
+@media (max-width: 640px) {
+  /* Mobile commute UI is a fast-follow — hide the desktop bar for now. */
+  .commute-dock { display: none; }
+}
