@@ -1,19 +1,5 @@
 /* Contribute (give-to-get review form) — split from App.css; ORDER MATTERS, see App.css. */
 /* ── Contribute (give-to-get moat) — appended in the katerina merge ──────── */
-.contribute-btn {
-  background: #FF6624;
-  color: #fff;
-  border: none;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 7px 14px;
-  border-radius: 99px;
-  cursor: pointer;
-  margin-left: 12px;
-  transition: background 0.12s ease;
-}
-.contribute-btn:hover { background: #e85510; }
-
 .contribute-overlay {
   position: absolute;
   inset: 0;

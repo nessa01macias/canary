@@ -46,29 +46,6 @@
   gap: 8px;
   pointer-events: auto;
 }
-.mlive-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  color: #111;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 99px;
-  padding: 7px 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-}
-.mlive-chip:disabled { opacity: 0.7; }
-.mlive-chip.is-flashing {
-  border-color: #ff6624;
-  box-shadow: 0 0 0 3px rgba(255, 102, 36, 0.18);
-}
-.mlive-chip.is-flashing .live-dot { background: #ff6624; }
 .mmenu-btn {
   display: flex;
   align-items: center;
@@ -86,19 +63,6 @@
 }
 .mmenu-btn.is-open { background: #fff; }
 .mmenu-dots { font-size: 22px; line-height: 1; font-weight: 800; margin-top: -6px; }
-
-/* The segmented Area/Permits control floats, centered, just below the row. */
-.mtopbar-toggle {
-  pointer-events: auto;
-  width: max-content;
-  max-width: calc(100% - 8px);
-  margin: 10px auto 0;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
-}
 
 /* Overflow menu: tap-away scrim + dropdown of the secondary actions. */
 .mmenu-scrim {
@@ -149,8 +113,6 @@
   .topbar { padding: 0 16px; }
   .brand-sub { display: none; }
   .brand-sep { display: none; }
-  .mode-toggle button { padding: 5px 11px; font-size: 12px; }
-  .contribute-btn { margin-left: 8px; }
   .legend-hint { display: none; }
 }
 
@@ -182,10 +144,10 @@
   }
 
   /* Centered modals: tighter gutters + padding, keep them scrollable. */
-  .contribute-overlay, .contrib-overlay, .research-overlay {
+  .contribute-overlay, .research-overlay {
     padding: 12px;
   }
-  .contribute-card, .contrib-card {
+  .contribute-card {
     padding: 22px 18px 18px;
     max-height: 92vh;
   }
@@ -224,37 +186,15 @@
     z-index: 2;
   }
 
-  /* Onboarding picker → full-screen sheet on phones. The header (× close) is
-     pinned at the top and the footer ("Show my map") at the bottom; only the
-     middle tier list scrolls, so you can always close it and always reach Done —
-     the tall centered card used to push both off-screen. */
-  .onboarding { padding: 0; align-items: stretch; }
-  .onboarding-card {
-    width: 100%;
-    max-width: none;
-    height: 100vh;
-    height: 100dvh; /* dodge the mobile URL bar so the footer stays visible */
-    max-height: none;
-    border-radius: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 20px 18px 0;
-  }
-  .onboarding-card .ob-title { font-size: 20px; padding-right: 40px; }
-  .onboarding-card .ob-sub { font-size: 13px; }
+  /* The catalog tier list is the scrollable middle of the full-screen picker,
+     so the header (×) stays reachable and the footer ("Show my map") stays
+     pinned — a tall centered card used to push both off-screen. */
   .ob-tiers {
     flex: 1 1 auto;
     min-height: 0; /* let the scroll area actually shrink & scroll */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     margin: 14px 0 0;
-  }
-  .onboarding-card .ob-footer {
-    flex: 0 0 auto;
-    margin: 0;
-    padding: 12px 0 16px;
-    background: rgba(242, 231, 225, 0.96);
   }
   .ob-close { top: 12px; right: 12px; }
   .docs-tabs { padding: 14px 18px 0; }
@@ -325,8 +265,7 @@
   overscroll-behavior: contain;
   padding-bottom: 12px;
 }
-/* Very small phones: shrink the mode toggle text a touch more. */
+/* Very small phones. */
 @media (max-width: 380px) {
-  .mode-toggle button { font-size: 11px; padding: 5px 8px; }
   .brand { font-size: 18px; }
 }

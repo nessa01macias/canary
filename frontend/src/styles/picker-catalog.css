@@ -1,35 +1,7 @@
 /* Onboarding catalog (ob-* tiers reused by THE picker accordion) — split from App.css; ORDER MATTERS, see App.css. */
-/* ── Onboarding picker (centered modal) ──────────────────────── */
-.onboarding {
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(28, 20, 14, 0.30);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  animation: ob-fade 0.2s ease;
-}
+/* The ob-fade / ob-rise entrance pair is shared by every centered overlay
+   (contribute form, research card, THE picker). */
 @keyframes ob-fade { from { opacity: 0; } to { opacity: 1; } }
-
-.onboarding-card {
-  position: relative;
-  width: 100%;
-  max-width: 660px;
-  max-height: 86vh;
-  overflow-y: auto;
-  padding: 28px 30px 24px;
-  background: rgba(242, 231, 225, 0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 20px;
-  box-shadow: 0 24px 70px rgba(0,0,0,0.28);
-  animation: ob-rise 0.26s cubic-bezier(0.32, 0.72, 0, 1);
-}
 @keyframes ob-rise {
   from { transform: translateY(12px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
@@ -61,14 +33,6 @@
   color: #111;
   margin: 3px 0 5px;
 }
-.ob-sub {
-  font-size: 13.5px;
-  color: #555;
-  margin: 0;
-  line-height: 1.45;
-  max-width: 46ch;
-}
-
 .ob-tiers {
   display: flex;
   flex-direction: column;
@@ -85,12 +49,13 @@
 }
 
 .ob-footer {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: clamp(10px, 1.8vh, 20px);
+  padding-top: clamp(10px, 1.5vh, 16px);
   border-top: 1px solid rgba(0,0,0,0.08);
 }
 .ob-count {
@@ -103,6 +68,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto; /* keep actions right-aligned even without a footer label */
 }
 .ob-clear {
   font-family: inherit;
@@ -136,6 +102,11 @@
   box-shadow: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .onboarding, .onboarding-card { animation-duration: 0.01ms; }
+/* The picker-catalog chip sizing (compact enough for six tiers on one screen). */
+.ob-tiers .prefs-tags { gap: clamp(5px, 0.9vh, 8px); }
+.ob-tiers .prefs-tag {
+  padding: clamp(3.5px, 0.7vh, 6px) clamp(10px, 1.3vw, 13px);
+  font-size: clamp(12px, 1.6vh, 12.5px);
 }
+
+.prefs-tag .tag-label { display: inline-block; }

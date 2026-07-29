@@ -155,30 +155,8 @@
   border-radius: 4px;
 }
 
-/* ── The ask — every rung ends in a question box ───────────────────────── */
+/* ── The ask — the card renders the thread; the DOCK above it is the input ── */
 .pc-ask { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eadfd2; }
-.pc-ask-inputrow { display: flex; gap: 7px; }
-.pc-ask-input {
-  flex: 1;
-  border: 1px solid #ddd2c4;
-  background: #fff;
-  border-radius: 10px;
-  padding: 9px 12px;
-  font-family: inherit;
-  font-size: 13px;
-}
-.pc-ask-input:focus { outline: 2px solid rgba(255,102,36,0.5); border-color: transparent; }
-.pc-ask-send {
-  background: #FF6624;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  width: 38px;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.pc-ask-send:disabled { background: #d8cbbb; cursor: not-allowed; }
 .pc-ask-busy {
   display: flex;
   align-items: center;
@@ -188,7 +166,6 @@
   font-style: italic;
   color: #8a7d6d;
 }
-.pc-ask-result { margin-top: 10px; }
 
 /* Record-scope marker highlight — the citation, physically on the map. */
 .change-marker.is-scope {
@@ -205,21 +182,6 @@
   color: #a89a8a;
 }
 
-/* ── Intake wizard step 2 — the mission's question, answered with chips ─── */
-.mission-chips {
-  justify-content: center;
-  margin: 18px 0 6px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.mission-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
-}
 /* Deep links out to the familiar gut-check (Street View) — spot/record rungs. */
 .pc-groundtruth {
   margin: 10px 0 0;

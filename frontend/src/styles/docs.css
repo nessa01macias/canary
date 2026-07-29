@@ -1,19 +1,6 @@
 /* Docs/research overlay chrome — split from App.css; ORDER MATTERS, see App.css. */
 /* Research overlay — the benchmark writeup (RESEARCH.md), rendered in-app.
    Mirrors the contribute overlay's chrome; wider card, document typography. */
-.research-btn {
-  background: transparent;
-  border: 1px solid rgba(35, 41, 168, 0.35);
-  color: #2329A8;
-  border-radius: 10px;
-  padding: 9px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.12s ease;
-}
-.research-btn:hover { background: rgba(35, 41, 168, 0.08); }
-
 .research-overlay {
   position: absolute;
   inset: 0;
