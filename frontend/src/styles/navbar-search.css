@@ -76,7 +76,7 @@
 }
 .nav-quiet:hover { color: #111; background: rgba(0,0,0,0.05); }
 
-/* AddressSearch form variant (ContributeModal) — full-width field, not a pill */
+/* AddressSearch form variant (the CommutePanel add-a-place field) — full-width, not a pill */
 .addr-search--form { max-width: none; margin: 0; }
 .addr-search--form .addr-search-input {
   border-radius: 10px;

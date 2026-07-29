@@ -1,4 +1,4 @@
-import type { AddressReport, ReportTrajectory } from './report'
+import type { AddressReport, ReportTrajectory } from '../lib/report'
 
 // The magic-moment card: everything changing around a clicked point, cited.
 // Facts + attributed directions only — no scores, no quality labels.

@@ -1,13 +1,13 @@
 import ReactMarkdown from 'react-markdown'
-import type { AskTurn, Block, Mission } from './useAsk'
-import type { ResidentAgg } from './residentLayer'
-import { outletName, type Headline } from './claims'
-import type { AddressReport } from './report'
-import { CHANGE_META, KIND_COLOR, KIND_LABEL, STAGE_META } from './samplePoints'
+import type { AskTurn, Block, Mission } from '../lib/useAsk'
+import type { ResidentAgg } from '../lib/residentLayer'
+import { outletName, type Headline } from '../lib/claims'
+import type { AddressReport } from '../lib/report'
+import { CHANGE_META, KIND_COLOR, KIND_LABEL, STAGE_META } from '../lib/samplePoints'
 import { SpotReportBody, Sparkline } from './ReportCard'
-import { directionLine, evidenceLines, verdict, type CityFacts, type NbhdCardData } from './interpreter'
-import { parentScope, type Scope } from './scope'
-import { logGateShown } from './lib/gateEvents'
+import { directionLine, evidenceLines, verdict, type CityFacts, type NbhdCardData } from '../lib/interpreter'
+import { parentScope, type Scope } from '../lib/scope'
+import { logGateShown } from '../lib/gateEvents'
 
 // THE PlaceCard — the one conversation about whatever you're pointing at.
 // Replaces the news card, the report card, the point drawer, and the answer

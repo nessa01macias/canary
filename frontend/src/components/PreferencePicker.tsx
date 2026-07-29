@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { MAX_PICKS, MISSIONS, MISSION_QUESTIONS } from './missions'
-import { logGateShown } from './lib/gateEvents'
+import { MAX_PICKS, MISSIONS, MISSION_QUESTIONS } from '../lib/missions'
+import { logGateShown } from '../lib/gateEvents'
 
 // THE preference picker — the only preference surface in the app. One screen,
 // zero steps: the mission is a TAB (tap = the spotlight refocuses live), the

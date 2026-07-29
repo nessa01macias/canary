@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, type RefObject } from 'react'
 import * as maplibregl from 'maplibre-gl'
-import { EMPTY_FC, circlePolygon, scopeKey, type Scope } from '../scope'
+import { EMPTY_FC, circlePolygon, scopeKey, type Scope } from '../lib/scope'
 import { SF_CENTER } from './constants'
 import type { NbhdMeta } from './choropleth'
 

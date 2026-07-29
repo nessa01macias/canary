@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { LineString } from 'geojson'
-import type { PickedAddress } from './AddressSearch'
+import type { PickedAddress } from '../components/AddressSearch'
 
 export type CommuteMode = 'drive' | 'bike' | 'walk' | 'transit'
 

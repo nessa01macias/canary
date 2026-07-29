@@ -5,12 +5,12 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import type { Feature } from 'geojson'
-import type { PickedAddress } from '../AddressSearch'
+import type { PickedAddress } from '../components/AddressSearch'
 import {
   ENABLED_MODES, MODES, formatDuration, routeColor,
   type CommuteMode, type CommuteState, type LegsByMode,
-} from '../commute'
-import { EMPTY_FC } from '../scope'
+} from '../lib/commute'
+import { EMPTY_FC } from '../lib/scope'
 
 // One line per destination. There's no selected mode anymore, so we draw a
 // single representative path — drive if we have it, else whichever mode

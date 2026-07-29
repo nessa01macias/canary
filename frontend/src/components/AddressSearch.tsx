@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 // THE address autocomplete — one component for every surface that asks for an
-// address (navbar search, the give-to-get ContributeModal, whatever comes next),
+// address (navbar search, the commute add-a-place field, whatever comes next),
 // so behavior can never diverge: real-time prefix matching (autocomplete=true),
 // SF-bounded, keyboard nav, verified-pick semantics (free-typed text is never a
 // pick — only selecting a real suggestion is).
@@ -41,7 +41,7 @@ type Props = {
       natural-language question (the map answers). Address picks still win. */
   onAsk?: (question: string) => void
   placeholder?: string
-  /** 'navbar' = compact pill; 'form' = full-width field (ContributeModal). */
+  /** 'navbar' = compact pill; 'form' = full-width field (CommutePanel). */
   variant?: 'navbar' | 'form'
   /** Show a ✓ once a suggestion is picked (form flows that need verified input). */
   showVerified?: boolean

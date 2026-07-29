@@ -6,7 +6,7 @@
 // run the exact same path. This is the control surface.
 
 import { AddressSearch, type PickedAddress } from './AddressSearch'
-import { routeColor, searchOverturePlaces, type CommuteState } from './commute'
+import { routeColor, searchOverturePlaces, type CommuteState } from '../lib/commute'
 
 type Props = {
   commute: CommuteState

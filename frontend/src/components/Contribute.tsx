@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { submitContribution } from './lib/contributions'
+import { submitContribution } from '../lib/contributions'
 
 // The give-to-get contribution form (the moat). Kat owns the final design; the
 // durable pieces are the call to submitContribution() and the two structural

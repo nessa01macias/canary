@@ -2,10 +2,10 @@
 // preference-fit ramp, or the trajectory ramp + the viz-mode compare toggle.
 // Pure presentation; every fact it states comes in as a prop.
 
-import { KIND_COLOR } from './samplePoints'
-import { mapCaption } from './interpreter'
-import { MATCH_STOPS, TRAJECTORY_STOPS } from './map/paint'
-import { VIZ_MODES, type VizMode } from './map/vizModes'
+import { KIND_COLOR } from '../lib/samplePoints'
+import { mapCaption } from '../lib/interpreter'
+import { MATCH_STOPS, TRAJECTORY_STOPS } from '../map/paint'
+import { VIZ_MODES, type VizMode } from '../map/vizModes'
 
 type Props = {
   zoomedIn: boolean

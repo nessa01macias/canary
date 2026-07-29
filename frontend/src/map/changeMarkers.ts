@@ -2,7 +2,7 @@
 // that own the street-zoom view. This module builds and sizes the DOM elements;
 // attach/detach bookkeeping (the zoom-jitter fix) stays with the map lifecycle.
 
-import { CHANGE_META, KIND_COLOR, type ChangePoint } from '../samplePoints'
+import { CHANGE_META, KIND_COLOR, type ChangePoint } from '../lib/samplePoints'
 import { ALTERATION_MIN_ZOOM, STREET_ZOOM } from './constants'
 
 // Marker radius encodes magnitude ($ value), on a log scale, clamped.

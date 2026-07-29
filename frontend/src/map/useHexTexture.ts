@@ -7,7 +7,7 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import type * as maplibregl from 'maplibre-gl'
 import type { FeatureCollection } from 'geojson'
-import { fetchHexTrajectory } from '../hexLayer'
+import { fetchHexTrajectory } from '../lib/hexLayer'
 
 export function useHexTexture(
   mapRef: RefObject<maplibregl.Map | null>,

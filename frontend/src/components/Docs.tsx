@@ -4,11 +4,11 @@ import remarkGfm from 'remark-gfm'
 // The canonical documents live at the repo root (single source of truth — the same
 // files the pipeline and benchmark produce). Vite inlines them at build; no copies
 // to drift. CONTEXT.md (strategy) and DEPLOY.md (ops) are deliberately NOT shipped.
-import aboutMd from '../../ABOUT.md?raw'
-import researchMd from '../../RESEARCH.md?raw'
+import aboutMd from '../../../ABOUT.md?raw'
+import researchMd from '../../../RESEARCH.md?raw'
 // SOURCES.md is the PUBLIC sources page. DATA_SOURCES.md is the internal working
 // registry (ops notes, gaps, backlog) and must never ship to the site.
-import sourcesMd from '../../SOURCES.md?raw'
+import sourcesMd from '../../../SOURCES.md?raw'
 
 // Each tab has ONE job — no two tabs repeat each other:
 //   about      plain-language, for everyone (summarizes, links down)
