@@ -1,0 +1,162 @@
+/* Address report — the magic-moment card — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Address report — the magic-moment card (click anywhere on the map) ─── */
+.report-pin {
+  width: 16px;
+  height: 16px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: #2329A8;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px rgba(35,41,168,0.45);
+}
+
+
+.rc-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #666;
+  font-size: 13px;
+  padding: 24px 0;
+}
+.rc-loading-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FF6624;
+  animation: pulse 1s infinite;
+}
+
+.rc-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #111;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+.rc-sub { font-size: 11px; font-weight: 500; color: #999; }
+
+.rc-section { margin-bottom: 14px; }
+.rc-section-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 7px;
+}
+
+/* metric trajectory rows */
+.rc-metric {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12.5px;
+  color: #333;
+}
+.rc-dir { width: 14px; font-size: 10px; flex-shrink: 0; }
+.rc-dir.up   { color: #FF6624; }
+.rc-dir.down { color: #355CF5; }
+.rc-dir.flat { color: #bbb; }
+.rc-metric-name { flex: 1; }
+.rc-spark { color: #c9beb2; flex-shrink: 0; }
+.rc-metric-val { font-weight: 700; color: #111; min-width: 44px; text-align: right; }
+.rc-metric-unit { font-weight: 400; color: #aaa; font-size: 10px; }
+
+/* reference attributes (appear as the pipeline stages them) */
+.rc-attrs { display: flex; flex-wrap: wrap; gap: 6px; }
+.rc-attr {
+  font-size: 11px;
+  background: #f6f1ea;
+  border-radius: 99px;
+  padding: 3px 10px;
+  color: #6b5c49;
+}
+.rc-attr b { color: #111; }
+
+/* recent changes */
+.rc-change {
+  display: flex;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f5f0e9;
+}
+.rc-change:last-child { border-bottom: none; }
+.rc-change-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.rc-change-body { min-width: 0; }
+.rc-change-head {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.35;
+}
+.rc-change-cost { color: #FF6624; font-weight: 700; }
+.rc-change-meta { font-size: 10.5px; color: #a39889; margin-top: 1px; }
+
+.rc-empty { font-size: 12px; color: #999; margin: 4px 0; }
+
+.rc-footer {
+  font-size: 10px;
+  color: #b3a896;
+  border-top: 1px solid #f0eae2;
+  padding-top: 8px;
+  margin: 4px 0 0;
+}
+
+/* report hero — the single biggest approved construction nearby */
+.rc-hero {
+  background: linear-gradient(135deg, #fff4ee, #ffe8dc);
+  border: 1px solid rgba(255,102,36,0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.rc-hero-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #b8430e;
+  margin-bottom: 3px;
+}
+.rc-hero-fact {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: #111;
+  line-height: 1.25;
+}
+.rc-hero-cost { color: #FF6624; }
+.rc-hero-meta { font-size: 10.5px; color: #a3765a; margin-top: 4px; }
+
+/* summarized non-construction record counts */
+.rc-counts {
+  font-size: 11px;
+  color: #999;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+/* bridge from the news card to the address report (fusion of her card + our report) */
+.news-report-btn {
+  width: 100%;
+  margin-top: 12px;
+  background: #2329A8;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.news-report-btn:hover { background: #1a1f85; }

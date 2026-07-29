@@ -1,0 +1,166 @@
+/* Preferences panel ("Looking for") + best-fit list — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Preferences panel ───────────────────────────────────────── */
+.prefs-panel {
+  position: absolute;
+  top: 76px;
+  left: 20px;
+  z-index: 15;
+  width: 300px;
+  padding: 18px 20px 20px;
+  background: rgba(242, 231, 225, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  /* Fade + rise in on load, after the map has settled. */
+  opacity: 0;
+  animation: prefs-fade-in 0.55s cubic-bezier(0.32, 0.72, 0, 1) 0.35s forwards;
+}
+
+@keyframes prefs-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prefs-panel { animation-duration: 0.01ms; animation-delay: 0ms; }
+}
+
+.prefs-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 2px;
+}
+
+.prefs-hint {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 14px;
+  line-height: 1.4;
+}
+
+.prefs-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.prefs-tag {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #333;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 99px;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease,
+              border-color 0.14s ease, transform 0.1s ease;
+}
+
+.prefs-tag:hover {
+  border-color: rgba(255, 102, 36, 0.6);
+  transform: translateY(-1px);
+}
+
+.prefs-tag.is-selected {
+  background: #FF6624;
+  color: #fff;
+  border-color: #FF6624;
+  box-shadow: 0 2px 8px rgba(255, 102, 36, 0.32);
+}
+
+/* "Best fit" readout — appears once preferences are driving the overlay. */
+.prefs-result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  animation: prefs-fade-in 0.3s ease;
+}
+.prefs-result-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: #b8430e;
+}
+.prefs-result-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prefs-result-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.1px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.prefs-result-rank {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2f80ff;
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: opacity 0.14s ease, box-shadow 0.14s ease;
+}
+.prefs-result-name { flex: 1; }
+.prefs-result-body { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.prefs-result-body .prefs-result-name { flex: none; }
+/* The WHY under each best-fit result — per-chip receipts, not just a rank. */
+.prefs-result-why {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: #8a7d6d;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.prefs-result-go {
+  color: #2f80ff;
+  font-weight: 800;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.prefs-result-item:hover,
+.prefs-result-item:focus-visible {
+  background: rgba(47, 128, 255, 0.08);
+  border-color: rgba(47, 128, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(47, 128, 255, 0.12);
+  outline: none;
+}
+.prefs-result-item:hover .prefs-result-rank,
+.prefs-result-item:focus-visible .prefs-result-rank {
+  opacity: 1;
+  box-shadow: 0 0 8px 1px rgba(47, 128, 255, 0.7);
+}
+.prefs-result-item:hover .prefs-result-go,
+.prefs-result-item:focus-visible .prefs-result-go {
+  opacity: 1;
+  transform: translateX(0);
+}

@@ -1,0 +1,100 @@
+/* Neighborhood news card + the why-ledger (headline rows reused by PlaceCard) — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Neighborhood news card (click a parcel) ─────────────────── */
+@keyframes news-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  }
+
+
+.news-verdict {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #fff;
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+.news-verdict-up   { background: #355cf5; }
+.news-verdict-down { background: #ff6624; }
+.news-verdict-flat { background: #9a8c81; }
+
+
+
+/* "Why" facts: a quiet ledger, not a stack of boxes. Typography carries the fact;
+   chrome recedes (hairline separators only); color appears ONLY where it means
+   something — the per-fact direction tick, in the map's own diverging pair. */
+.headline-row {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 9px;
+  align-items: baseline;
+  padding: 9px 2px 10px;
+}
+.headline-row + .headline-row {
+  border-top: 1px solid rgba(28, 23, 18, 0.08);
+}
+.headline-tick {
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+  color: #9a8c81;               /* neutral activity facts stay quiet (matches verdict-flat) */
+}
+.headline-up   .headline-tick { color: #355cf5; } /* favorable — map's improving blue */
+.headline-down .headline-tick { color: #e05612; } /* unfavorable — deepened brand orange (AA on cream) */
+
+.headline-title {
+  margin: 0 0 3px;
+  font-size: 13px;
+  font-weight: 560;
+  line-height: 1.35;
+  color: #1c1712;
+  font-variant-numeric: tabular-nums; /* counts and $ align like a ledger */
+}
+.headline-cite {
+  margin: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.015em;
+  color: #8a7c72;
+}
+.headline-cite time { color: #a09186; }
+.headline-sep { opacity: 0.55; padding: 0 1px; }
+.prefs-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prefs-clear {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.2px;
+}
+.prefs-clear:hover { text-decoration: underline; }
+
+/* Dashed, no-fill "empty state" button — reopens the preference picker. */
+.prefs-edit-ghost {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: 2px dotted rgba(255, 102, 36, 0.55);
+  border-radius: 99px;
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: border-color 0.14s ease, background 0.14s ease, transform 0.1s ease;
+}
+.prefs-edit-ghost:hover {
+  border-color: #FF6624;
+  background: rgba(255, 102, 36, 0.06);
+  transform: translateY(-1px);
+}

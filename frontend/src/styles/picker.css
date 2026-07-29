@@ -1,0 +1,178 @@
+/* THE preference picker + tier gate + city facts — split from App.css; ORDER MATTERS, see App.css. */
+/* ── THE preference picker — one screen, zero steps ─────────────────────── */
+.picker-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  /* LIGHT scrim — the map stays visible and re-ranks live behind it. */
+  background: rgba(28, 20, 14, 0.16);
+  animation: ob-fade 0.2s ease;
+}
+.picker-card {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 32px 36px 24px;
+  background: rgba(245, 237, 230, 0.98);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+  animation: ob-rise 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Rhythm: header, then divided sections with real air between them. */
+.picker-head { margin-bottom: 4px; }
+.picker-head .ob-title { margin: 4px 0 6px; }
+.picker-sub {
+  font-size: 13px;
+  color: #8a7d6d;
+  margin: 0;
+}
+.picker-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.picker-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: #a89a8a;
+  margin: 0 0 10px;
+}
+
+/* The mission is a TAB — tap one and the spotlight refocuses. */
+.picker-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.picker-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 99px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.picker-tab:hover { border-color: rgba(35,41,168,0.45); color: #222; }
+.picker-tab.is-active {
+  background: #2329A8;
+  border-color: #2329A8;
+  color: #fff;
+}
+
+.picker-question {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  color: #222;
+  margin: 0 0 12px;
+}
+/* The spotlight — the mission's 8, comfortable to scan. */
+.picker-spotlight { display: flex; flex-wrap: wrap; gap: 10px; }
+.picker-spotlight .prefs-tag { padding: 8px 16px; font-size: 13.5px; }
+
+.picker-section--catalog { padding-top: 10px; }
+.picker-accordion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.picker-accordion .picker-accordion-label { margin: 0; transition: color 0.12s ease; }
+.picker-accordion:hover .picker-accordion-label { color: #2329A8; }
+.picker-accordion-chevron { color: #a89a8a; font-size: 12px; }
+.picker-accordion:hover .picker-accordion-chevron { color: #2329A8; }
+.picker-catalog { margin-top: 12px; }
+.picker-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Gate empty state on the card */
+.answer-residents-empty { color: #a08a6c; font-style: italic; }
+
+/* ── City rung facts (the dossier body) ─────────────────────────────────── */
+.pc-cityrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+.pc-cityrow-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  min-width: 96px;
+}
+.pc-cityrow-label--up { color: #3f8f5c; }
+.pc-cityrow-label--down { color: #c1443c; }
+.pc-citytotals {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: #8a7d6d;
+}
+
+/* ── Kat's tier gate, restored: crisp labels, frosted text, the chip is the
+      door. Hover lightens the blur — "almost readable", a membrane not a wall. */
+.prefs-tag.is-locked {
+  cursor: pointer;
+  background: #fff;
+  border-color: rgba(0, 0, 0, 0.10);
+  box-shadow: none;
+}
+.prefs-tag.is-locked:hover {
+  border-color: rgba(255, 102, 36, 0.55);
+  transform: translateY(-1px);
+}
+.prefs-tag.is-locked .tag-label {
+  filter: blur(3.5px);
+  opacity: 0.8;
+  user-select: none;
+  transition: filter 0.16s ease;
+}
+.prefs-tag.is-locked:hover .tag-label { filter: blur(2px); }
+
+/* The one-sentence deal, under the frosted tiers. */
+.picker-locknote {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 11px 14px;
+  text-align: left;
+  background: #fff;
+  border: 1px dashed rgba(255, 102, 36, 0.5);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #d24e12;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.picker-locknote:hover { background: #fff1e8; }

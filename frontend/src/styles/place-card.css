@@ -1,0 +1,262 @@
+/* The PlaceCard + ask thread + the dock — split from App.css; ORDER MATTERS, see App.css. */
+/* ── The PlaceCard — ONE card, one conversation, scoped to the pointer ──── */
+/* Cream glass of the old news card + the report card's right-dock geometry. */
+.place-card {
+  position: absolute;
+  top: 114px;
+  right: 16px;
+  bottom: 60px;
+  z-index: 26;
+  width: 360px;
+  overflow-y: auto;
+  padding: 16px 18px 18px;
+  background: rgba(242, 231, 225, 0.95);
+  backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  animation: news-in 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+@media (prefers-reduced-motion: reduce) { .place-card { animation-duration: 0.01ms; } }
+.pc-close { position: absolute; top: 10px; right: 12px; }
+
+/* The breadcrumb ladder: SF › Mission › this spot › record. Ancestors climb. */
+.pc-crumbs {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #a89a8a;
+  margin-bottom: 8px;
+  padding-right: 28px;
+}
+.pc-crumb {
+  background: none;
+  border: none;
+  font: inherit;
+  color: #2329A8;
+  cursor: pointer;
+  padding: 0;
+}
+.pc-crumb:hover { text-decoration: underline; }
+.pc-crumb--here { color: #a89a8a; cursor: default; }
+.pc-crumb-sep { margin: 0 5px; color: #cbbfae; }
+
+.pc-title {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #111;
+  margin: 4px 0 4px;
+}
+/* The mission-framed lede — directional facts in the user's own frame. */
+.pc-direction {
+  font-size: 13px;
+  font-weight: 600;
+  color: #256abf;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+.pc-section-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #a89a8a;
+  margin: 12px 0 6px;
+}
+.pc-evidence .headline-cite { line-height: 1.5; }
+/* Scope/window badge on every evidence line — a number without its window is
+   how two surfaces end up contradicting each other. */
+.pc-badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #8a7d6d;
+  background: rgba(0,0,0,0.05);
+  border-radius: 6px;
+  padding: 0 5px;
+}
+.pc-residents { margin-top: 12px; }
+
+/* In the news — the claims tier as clickable source headlines. Publication +
+   date lead each row (the byline where the mockup's quotation mark sat); the
+   headline is the link out. A card-within-the-card, echoing the source's own
+   masthead feel without dressing announcements up as record facts. */
+.pc-news { margin-top: 14px; }
+.pc-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pc-news-item {
+  display: block;
+  position: relative;
+  padding: 10px 26px 11px 12px;
+  border: 1px solid rgba(28, 23, 18, 0.09);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+.pc-news-item:hover {
+  background: #fff;
+  border-color: rgba(35, 41, 168, 0.28);
+  transform: translateY(-1px);
+}
+.pc-news-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.pc-news-outlet { color: #2329A8; }
+.pc-news-dot { color: #c3b6a5; font-weight: 700; }
+.pc-news-date { color: #a89a8a; letter-spacing: 0.3px; }
+.pc-news-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 560;
+  line-height: 1.4;
+  color: #1c1712;
+}
+.pc-news-item:hover .pc-news-title { color: #1a1f85; }
+.pc-news-arrow {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  font-size: 12px;
+  color: #b6a897;
+  transition: color 120ms ease;
+}
+.pc-news-item:hover .pc-news-arrow { color: #2329A8; }
+.pc-news-foot {
+  margin: 8px 0 0;
+  font-size: 10px;
+  color: #a89a8a;
+  font-style: italic;
+}
+.pc-cityfits { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+
+/* Record rung reuses the drawer-kind, delta, stage-badge and chip styles; the
+   accent bar docks to the card's left edge. */
+.pc-record { position: relative; padding-left: 10px; }
+.pc-record .drawer-accent {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 4px;
+  border-radius: 4px;
+}
+
+/* ── The ask — every rung ends in a question box ───────────────────────── */
+.pc-ask { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eadfd2; }
+.pc-ask-inputrow { display: flex; gap: 7px; }
+.pc-ask-input {
+  flex: 1;
+  border: 1px solid #ddd2c4;
+  background: #fff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 13px;
+}
+.pc-ask-input:focus { outline: 2px solid rgba(255,102,36,0.5); border-color: transparent; }
+.pc-ask-send {
+  background: #FF6624;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  width: 38px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pc-ask-send:disabled { background: #d8cbbb; cursor: not-allowed; }
+.pc-ask-busy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: #8a7d6d;
+}
+.pc-ask-result { margin-top: 10px; }
+
+/* Record-scope marker highlight — the citation, physically on the map. */
+.change-marker.is-scope {
+  transform: scale(1.45);
+  z-index: 5;
+  box-shadow: 0 0 0 4px rgba(255,102,36,0.35), 0 0 18px rgba(255,102,36,0.55);
+}
+
+/* The fixed-facts area badge (spine vs map boundaries can differ near edges). */
+.rc-attr-area {
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #a89a8a;
+}
+
+/* ── Intake wizard step 2 — the mission's question, answered with chips ─── */
+.mission-chips {
+  justify-content: center;
+  margin: 18px 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mission-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+/* Deep links out to the familiar gut-check (Street View) — spot/record rungs. */
+.pc-groundtruth {
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: #a89a8a;
+}
+.pc-groundtruth a { color: #2329A8; font-weight: 600; text-decoration: none; margin-right: 8px; }
+.pc-groundtruth a:hover { text-decoration: underline; }
+
+/* ── The visible mini-thread inside the card's ask section ──────────────── */
+.pc-turn { margin-top: 12px; }
+.pc-turn:not(.is-latest) { opacity: 0.55; }
+.pc-turn:not(.is-latest):hover { opacity: 0.9; }
+/* The user's question, echoed — so an answer is never floating context-free. */
+.pc-turn-q {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a7d6d;
+  margin-bottom: 6px;
+  padding-left: 8px;
+  border-left: 2px solid #ddd2c4;
+}
+
+
+/* ── THE box — the card's handle (one column: question above, answer below) ── */
+.ask-dock {
+  position: absolute;
+  top: 64px;               /* just under the topbar, exactly where the card opens */
+  right: 16px;
+  z-index: 27;
+  width: 360px;
+}
+.ask-dock .addr-search { flex: none; max-width: none; margin: 0; width: 100%; }
+.ask-dock .addr-search-input {
+  box-shadow: 0 10px 30px rgba(28, 20, 14, 0.20);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+@media (max-width: 640px) {
+  .ask-dock { display: none; } /* mobile keeps its own header; dock is desktop */
+}

@@ -1,0 +1,57 @@
+/* Bottom legend strip — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Bottom legend strip ─────────────────────────────────────── */
+.legend-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+  height: 44px;
+  background: rgba(242, 231, 225, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,0,0,0.07);
+  font-size: 12px;
+  color: #444;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.legend-hint {
+  margin-left: auto;
+  color: #999;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+}
+
+/* Intensity ramp legend (area mode) */
+.legend-ramp { gap: 8px; color: #666; }
+.ramp-bar {
+  width: 130px;
+  height: 8px;
+  border-radius: 99px;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Size legend (permit mode) */
+.legend-size { gap: 5px; }
+.legend-size .sz-s { width: 6px;  height: 6px; }
+.legend-size .sz-l { width: 13px; height: 13px; }

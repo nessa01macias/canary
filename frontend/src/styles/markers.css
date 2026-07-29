@@ -1,0 +1,60 @@
+/* Change-point markers + the old segmented mode toggle — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Markers (size set inline = $ magnitude) ─────────────────── */
+.change-marker {
+  border-radius: 50%;
+  background: var(--color);
+  border: 2px solid rgba(255,255,255,0.95);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Structural change (densify / convert / taller / newbuild) gets an emphasis
+   ring so the eye lands on real change, not routine alterations. */
+.change-marker.structural {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2), 0 0 0 4px rgba(255,255,255,0.35), 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.change-marker:hover {
+  transform: scale(1.5);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+/* ── Mode toggle (segmented) ─────────────────────────────────── */
+.mode-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 99px;
+}
+
+.mode-toggle button {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #777;
+  background: transparent;
+  border: none;
+  border-radius: 99px;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.mode-toggle button:hover { color: #333; }
+
+.mode-toggle button.active {
+  color: #111;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}

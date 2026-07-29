@@ -1,0 +1,50 @@
+/* Neighborhood hover popup — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Neighborhood hover popup ────────────────────────────────── */
+.nb-popup .maplibregl-popup-content {
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.nb-popup .maplibregl-popup-tip { display: none; }
+.nb-pop-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.2px;
+}
+/* "Known for" identity line — quiet, so the trajectory stays the emphasis. */
+.nb-pop-known {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #8a7d6d;
+  margin-top: 1px;
+}
+.nb-pop-fit {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: #ea6a25;
+  border-radius: 99px;
+  padding: 1px 8px;
+  margin: 4px 0 2px;
+  letter-spacing: 0.2px;
+}
+.nb-pop-desc {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #256abf;
+  margin: 2px 0 8px;
+}
+/* The hover PREVIEW — two lines, a scent not a meal (the card is the meal). */
+.nb-pop--preview { min-width: 150px; }
+.nb-pop-verdict {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+.nb-pop-verdict--up { color: #3f8f5c; }
+.nb-pop-verdict--down { color: #c1443c; }
+.nb-pop-verdict--flat { color: #8a7d6d; }
+.nb-pop-fit-inline { color: #ea6a25; font-weight: 800; }

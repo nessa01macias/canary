@@ -1,0 +1,113 @@
+/* arXiv-style paper rendering for the research note — split from App.css; ORDER MATTERS, see App.css. */
+/* ---- arXiv-style paper rendering for the research note ---------------------
+   Serif, justified, centered title block, epigraph quote, booktabs tables, and
+   the rotated red identifier in the left margin. Applied via .research-body.paper */
+.research-body.paper {
+  font-family: Charter, 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  color: #1c1a17;
+  font-size: 15px;
+  line-height: 1.72;
+  text-align: justify;
+  hyphens: auto;
+  padding: 44px 60px 44px 72px;
+  position: relative;
+}
+/* the rotated identifier, arXiv's signature */
+.research-body.paper::before {
+  content: 'canary · research note v1 · 2026-07-26';
+  position: absolute;
+  top: 190px;
+  left: 26px;
+  transform-origin: 0 0;
+  transform: rotate(90deg) translateY(-100%);
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #8f1d1d;
+  white-space: nowrap;
+}
+.research-body.paper h1 {
+  text-align: center;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 10px 0 2px;
+}
+/* subsection headings (### 2.1 …): left, bold, roman */
+.research-body.paper h3 {
+  text-align: left;
+  font-weight: 700;
+  font-style: normal;
+  color: #1c1a17;
+  font-size: 14.5px;
+  margin: 20px 0 6px;
+}
+/* the subtitle (###) directly under the title, then the author/date lines */
+.research-body.paper h1 + h3 {
+  text-align: center;
+  font-weight: 400;
+  font-style: italic;
+  color: #45403a;
+  font-size: 15px;
+  margin: 2px 0 14px;
+}
+.research-body.paper h1 + h3 + p,
+.research-body.paper h1 + h3 + p + p {
+  text-align: center;
+  margin: 2px 0;
+}
+.research-body.paper h2 {
+  font-size: 16.5px;
+  font-weight: 700;
+  margin: 26px 0 8px;
+  text-align: left;
+}
+/* epigraph: centered italic, no sidebar */
+.research-body.paper blockquote {
+  border: none;
+  background: transparent;
+  margin: 20px auto;
+  padding: 0 28px;
+  max-width: 92%;
+  text-align: center;
+  font-style: italic;
+}
+/* booktabs tables: heavy top/bottom rules, light header rule, no verticals */
+.research-body.paper table {
+  margin: 16px auto;
+  width: auto;
+  min-width: 80%;
+  border-collapse: collapse;
+  border-top: 2px solid #1c1a17;
+  border-bottom: 2px solid #1c1a17;
+  font-size: 13px;
+  text-align: left;
+}
+.research-body.paper th, .research-body.paper td {
+  border: none;
+  padding: 6px 14px;
+  background: transparent;
+}
+.research-body.paper th { border-bottom: 1px solid #1c1a17; font-weight: 700; }
+/* figures: centered image, then a smaller caption paragraph right below */
+.research-body.paper p:has(> img) {
+  text-align: center;
+  margin: 22px 0 8px;
+}
+.research-body.paper p:has(> img) img { max-width: 100%; height: auto; }
+.research-body.paper p:has(> img) + p {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #45403a;
+  max-width: 94%;
+  margin: 0 auto 22px;
+}
+.research-body.paper a { color: #1a4b8b; }
+.research-body.paper hr { border: none; border-top: 1px solid #d9d2c7; margin: 24px auto; width: 40%; }
+.research-body.paper code { background: #f4f0e9; font-size: 12.5px; }
+.research-body.paper pre { background: #f8f4ee; color: #1c1a17; border: 1px solid #e6ddd0; }
+.research-body.paper pre code { color: inherit; }
+@media (max-width: 700px) {
+  .research-body.paper { padding: 34px 26px; text-align: left; }
+  .research-body.paper::before { display: none; }
+}

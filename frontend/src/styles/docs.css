@@ -1,0 +1,119 @@
+/* Docs/research overlay chrome — split from App.css; ORDER MATTERS, see App.css. */
+/* Research overlay — the benchmark writeup (RESEARCH.md), rendered in-app.
+   Mirrors the contribute overlay's chrome; wider card, document typography. */
+.research-btn {
+  background: transparent;
+  border: 1px solid rgba(35, 41, 168, 0.35);
+  color: #2329A8;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.research-btn:hover { background: rgba(35, 41, 168, 0.08); }
+
+.research-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(20, 16, 14, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.research-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+  animation: slide-up 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.research-body {
+  padding: 34px 38px 30px;
+  overflow-y: auto;
+  /* wide tables must never drag the whole card sideways; they scroll in
+     their own .table-scroll wrapper instead */
+  overflow-x: hidden;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #2a2622;
+}
+.research-body .table-scroll { max-width: 100%; overflow-x: auto; }
+.research-body a { overflow-wrap: anywhere; }
+.research-body h1 { font-size: 22px; line-height: 1.25; margin: 0 0 4px; }
+.research-body h3 { font-size: 15px; color: #6b6560; font-weight: 600; margin: 0 0 14px; }
+.research-body h2 { font-size: 17px; margin: 26px 0 8px; }
+.research-body blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 3px solid #FF6624;
+  background: #fdf3ec;
+  border-radius: 0 8px 8px 0;
+}
+.research-body blockquote p { margin: 0; }
+.research-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.research-body th, .research-body td {
+  border: 1px solid #eee2d8;
+  padding: 7px 10px;
+  text-align: left;
+}
+.research-body th { background: #f9f1ea; font-weight: 700; }
+.research-body code {
+  background: #f5efe9;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12.5px;
+}
+.research-body pre {
+  background: #201c19;
+  color: #f2e7e1;
+  border-radius: 10px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 12.5px;
+}
+.research-body pre code { background: transparent; color: inherit; padding: 0; }
+.research-body a { color: #2329A8; }
+.research-body hr { border: none; border-top: 1px solid #eee2d8; margin: 22px 0; }
+
+/* Documentation overlay: doc-switcher tabs across the top of the research card.
+   Same chip language as the map's mode-toggle. */
+.docs-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 18px 38px 0;
+  flex-wrap: wrap;
+}
+.docs-tabs button {
+  border: 1px solid #eee2d8;
+  background: #faf5ef;
+  color: #6b6560;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.docs-tabs button:hover { border-color: #FF6624; color: #2a2622; }
+.docs-tabs button.active {
+  background: #2329A8;
+  border-color: #2329A8;
+  color: #fff;
+}

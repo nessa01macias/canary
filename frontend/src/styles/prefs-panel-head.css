@@ -1,0 +1,55 @@
+/* Preferences panel: head row, edit & CTA — split from App.css; ORDER MATTERS, see App.css. */
+/* ── Preferences panel: head row, edit & CTA ─────────────────── */
+.prefs-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.prefs-edit {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6624;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.2px;
+}
+.prefs-edit:hover { text-decoration: underline; }
+
+.prefs-cta {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: #FF6624;
+  border: none;
+  border-radius: 99px;
+  padding: 9px 16px;
+  margin-top: 2px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255,102,36,0.3);
+  transition: transform 0.1s ease;
+}
+.prefs-cta:hover { transform: translateY(-1px); }
+
+/* Disabled preference chips (at the pick cap, or "soon") */
+.prefs-tag:disabled { cursor: not-allowed; }
+.prefs-tag:disabled:hover { transform: none; border-color: rgba(0,0,0,0.12); }
+.prefs-tag:disabled:not(.is-soon):not(.is-selected) { opacity: 0.45; }
+.prefs-tag.is-soon {
+  color: #b0a79f;
+  background: rgba(255,255,255,0.5);
+  border-color: rgba(0,0,0,0.07);
+}
+.prefs-tag.is-soon:hover { border-color: rgba(0,0,0,0.07); }
+.prefs-tag .soon {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #c08a5e;
+  margin-left: 6px;
+  vertical-align: 1px;
+}

@@ -1,0 +1,332 @@
+/* Mobile header, phone/tablet responsive rules, bottom sheet — split from App.css; ORDER MATTERS, see App.css. */
+/* ══════════════════════════════════════════════════════════════════
+   Responsive — the app is a full-screen map with absolute overlays.
+   On narrow screens the fixed-width topbar, side panels and legend
+   overflow, so we let the topbar wrap and turn the side cards into
+   bottom sheets that slide over the map.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Floating mobile header (Google-Maps style) ──────────────────────
+   Only rendered on phones (the @640 block flips display:block and hides
+   the desktop .topbar). Elements float as individual pills over the map;
+   gaps are pointer-transparent so the map stays pannable underneath. */
+.mtopbar {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 10px 10px 0;
+  pointer-events: none; /* children re-enable it; gaps pass through to the map */
+}
+.mtopbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.mtopbar-brand {
+  pointer-events: auto;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: #111;
+  text-transform: lowercase;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 15px;
+  border-radius: 99px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
+}
+.mtopbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+.mlive-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+  padding: 7px 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+.mlive-chip:disabled { opacity: 0.7; }
+.mlive-chip.is-flashing {
+  border-color: #ff6624;
+  box-shadow: 0 0 0 3px rgba(255, 102, 36, 0.18);
+}
+.mlive-chip.is-flashing .live-dot { background: #ff6624; }
+.mmenu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.13);
+  cursor: pointer;
+  color: #333;
+}
+.mmenu-btn.is-open { background: #fff; }
+.mmenu-dots { font-size: 22px; line-height: 1; font-weight: 800; margin-top: -6px; }
+
+/* The segmented Area/Permits control floats, centered, just below the row. */
+.mtopbar-toggle {
+  pointer-events: auto;
+  width: max-content;
+  max-width: calc(100% - 8px);
+  margin: 10px auto 0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+}
+
+/* Overflow menu: tap-away scrim + dropdown of the secondary actions. */
+.mmenu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  pointer-events: auto;
+}
+.mmenu {
+  position: absolute;
+  top: 54px;
+  right: 10px;
+  z-index: 25;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 214px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+  animation: news-in 0.16s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mmenu-item {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 9px;
+  padding: 12px 13px;
+  cursor: pointer;
+}
+.mmenu-item:hover { background: #f3ede8; }
+.mmenu-item.is-primary {
+  margin-top: 4px;
+  text-align: center;
+  color: #fff;
+  background: #ff6624;
+  box-shadow: 0 2px 8px rgba(255, 102, 36, 0.3);
+}
+
+/* Tablet / small laptop: reclaim horizontal room before anything wraps. */
+@media (max-width: 860px) {
+  .topbar { padding: 0 16px; }
+  .brand-sub { display: none; }
+  .brand-sep { display: none; }
+  .mode-toggle button { padding: 5px 11px; font-size: 12px; }
+  .contribute-btn { margin-left: 8px; }
+  .legend-hint { display: none; }
+}
+
+/* Phones: topbar becomes multi-row, side cards become bottom sheets. */
+@media (max-width: 640px) {
+  /* The solid desktop bar is replaced by the floating .mtopbar over the map. */
+  .topbar { display: none; }
+  .mtopbar { display: block; }
+
+  /* The prefs panel and the PlaceCard are hosted inside the draggable
+     <MobileSheet> — the sheet owns positioning, chrome and scroll, so the
+     cards themselves become plain flow content. */
+  .msheet .prefs-panel,
+  .msheet .place-card {
+    position: static;
+    inset: auto;
+    width: auto;
+    max-height: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+    opacity: 1; /* prefs-panel starts at opacity:0 for its fade-in; sheet skips it */
+    overflow: visible;
+    padding: 2px 14px 10px;
+  }
+
+  /* Centered modals: tighter gutters + padding, keep them scrollable. */
+  .contribute-overlay, .contrib-overlay, .research-overlay {
+    padding: 12px;
+  }
+  .contribute-card, .contrib-card {
+    padding: 22px 18px 18px;
+    max-height: 92vh;
+  }
+  /* Documentation → full-screen on phones. The tab bar stays pinned at the top
+     and the × with it; only the body scrolls. */
+  .research-overlay { padding: 0; align-items: stretch; }
+  .research-card {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+  .docs-tabs { padding: 14px 46px 0 16px; } /* right room clears the × */
+  .research-body { padding: 18px 18px 26px; }
+  .research-card .drawer-close { top: 12px; right: 12px; }
+
+  /* For AI apps → full-screen on phones. This page is one scroll container, so
+     the × is pinned to the viewport (fixed) — otherwise it scrolls away and the
+     page can't be closed. */
+  .agents-overlay { padding: 0; align-items: stretch; }
+  .agents-page {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    padding: 22px 18px 34px;
+  }
+  .agents-page .drawer-close {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+  }
+
+  /* Onboarding picker → full-screen sheet on phones. The header (× close) is
+     pinned at the top and the footer ("Show my map") at the bottom; only the
+     middle tier list scrolls, so you can always close it and always reach Done —
+     the tall centered card used to push both off-screen. */
+  .onboarding { padding: 0; align-items: stretch; }
+  .onboarding-card {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh; /* dodge the mobile URL bar so the footer stays visible */
+    max-height: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px 18px 0;
+  }
+  .onboarding-card .ob-title { font-size: 20px; padding-right: 40px; }
+  .onboarding-card .ob-sub { font-size: 13px; }
+  .ob-tiers {
+    flex: 1 1 auto;
+    min-height: 0; /* let the scroll area actually shrink & scroll */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 14px 0 0;
+  }
+  .onboarding-card .ob-footer {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 12px 0 16px;
+    background: rgba(242, 231, 225, 0.96);
+  }
+  .ob-close { top: 12px; right: 12px; }
+  .docs-tabs { padding: 14px 18px 0; }
+
+  /* Legend hidden on phones — the persistent "Looking for" peek sheet owns the
+     bottom edge, and the map's color meaning is carried by that sheet's context. */
+  .legend-strip { display: none; }
+
+  /* Pinch to zoom on touch — the +/− buttons collide with the sheet. */
+  .maplibregl-ctrl-bottom-right { display: none; }
+
+  /* Touch-size the markers: keep the dot's visual size but grow the tap target
+     to ~44px with a transparent overlay. Clicks on it dispatch to the marker
+     element (which carries the click listener), so small $-value dots become
+     reliably tappable without looking bigger. */
+  .change-marker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ── Draggable bottom sheet (Google-Maps style, phones only) ─────────
+   Hidden by default; the .msheet element only exists on mobile (the
+   MobileSheet component is a pass-through on desktop). */
+.msheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: rgba(242, 231, 225, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transition: height 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+/* The grab handle is the only drag surface, so the body below scrolls freely. */
+.msheet-handle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 6px;
+  cursor: grab;
+  touch-action: none;
+}
+.msheet-handle:active { cursor: grabbing; }
+.msheet-grip {
+  width: 40px;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.msheet-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding-bottom: 12px;
+}
+/* Very small phones: shrink the mode toggle text a touch more. */
+@media (max-width: 380px) {
+  .mode-toggle button { font-size: 11px; padding: 5px 8px; }
+  .brand { font-size: 18px; }
+}
