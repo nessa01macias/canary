@@ -147,6 +147,8 @@ def main() -> None:
     OUT.write_text(json.dumps(report, indent=1))
 
     def fmt(cell: dict) -> str:
+        if not cell["n"]:
+            return "(0 judged)"
         return f"{cell['acc']:.0%} [{cell['ci'][0]:.0%}, {cell['ci'][1]:.0%}] ({cell['correct']}/{cell['n']})"
 
     print(f"unparsed verdicts remaining after repair: {unparsed}\n")
@@ -154,7 +156,7 @@ def main() -> None:
     for r in per_model:
         p = r["mcnemar"]["p"]
         print(f"  {r['model']:<22} U {fmt(r['unassisted']):<28} G {fmt(r['grounded']):<28} "
-              f"cw {r['confident_wrong_unassisted']:>2}/43  nonans(U) {r['unassisted']['nonanswer']:>2}  "
+              f"cw {r['confident_wrong_unassisted']:>3}/{r['unassisted']['n']:<3}  nonans(U) {r['unassisted']['nonanswer']:>2}  "
               f"McNemar b={r['mcnemar']['b']} c={r['mcnemar']['c']} p={p:.2e}")
     print("\nTABLE 2 (per block, pooled)")
     for e in per_block:

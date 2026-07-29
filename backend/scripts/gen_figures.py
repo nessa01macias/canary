@@ -17,10 +17,14 @@ Usage:  python scripts/gen_figures.py   (after `python -m app.benchmark.stats`)
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 BACKEND = Path(__file__).resolve().parents[1]
-STATS = BACKEND / "data" / "processed" / "benchmark_v1_stats.json"
+# Same env contract as the benchmark harness: BENCH_FILE picks the version,
+# and the figures read that version's stats artifact.
+_BENCH = os.environ.get("BENCH_FILE", "benchmark_v1.json").removesuffix(".json")
+STATS = BACKEND / "data" / "processed" / f"{_BENCH}_stats.json"
 OUT = BACKEND.parent / "frontend" / "public" / "research"
 
 UNASSISTED = "#3A43C9"

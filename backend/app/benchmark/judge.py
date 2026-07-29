@@ -63,23 +63,30 @@ def build_prompt(item: dict, answer: str) -> str:
 
 def judge_one(key: str, model: str, item: dict, answer: str) -> dict:
     user = build_prompt(item, answer)
-    resp = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
-        json={
-            "model": model,
-            # 400: a 200 cap truncated long-reason verdicts mid-JSON (14 of the
-            # original v1 judge_error holes were exactly this)
-            "max_tokens": 400,
-            "system": JUDGE_SYSTEM,
-            "messages": [{"role": "user", "content": user}],
-        },
-        timeout=120,
-    )
-    resp.raise_for_status()
-    text = "".join(b.get("text", "") for b in resp.json()["content"])
-    match = re.search(r"\{.*\}", text, re.DOTALL)
-    return json.loads(match.group(0)) if match else {"verdict": "judge_error", "reason": text[:100]}
+    # 429/529 (rate limit / overloaded) back off and retry: a v2 judging burst
+    # hit an Anthropic 529 storm and burned 52 verdicts without this.
+    for attempt in range(5):
+        resp = requests.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={"x-api-key": key, "anthropic-version": "2023-06-01"},
+            json={
+                "model": model,
+                # 400: a 200 cap truncated long-reason verdicts mid-JSON (14 of
+                # the original v1 judge_error holes were exactly this)
+                "max_tokens": 400,
+                "system": JUDGE_SYSTEM,
+                "messages": [{"role": "user", "content": user}],
+            },
+            timeout=120,
+        )
+        if resp.status_code in (429, 529) and attempt < 4:
+            time.sleep(8 * (attempt + 1))
+            continue
+        resp.raise_for_status()
+        text = "".join(b.get("text", "") for b in resp.json()["content"])
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        return json.loads(match.group(0)) if match else {"verdict": "judge_error", "reason": text[:100]}
+    raise requests.RequestException("judge 429/529 retries exhausted")
 
 
 def main() -> None:

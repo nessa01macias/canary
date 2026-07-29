@@ -192,6 +192,13 @@ def main() -> None:
         help="Canary ON: prepend the relevant slice of our published data to each "
         "question (the ablation -- same models, plus one simulated Canary API call)",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="re-ask ONLY failed answers in the latest existing run file per "
+        "provider/condition, updating it in place (network-drop recovery; the "
+        "successful answers are never re-asked or overwritten)",
+    )
     args = parser.parse_args()
 
     if not QUESTIONS.exists():
@@ -225,6 +232,37 @@ def main() -> None:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     for name, ask in active.items():
         label = f"{name}+canary" if args.grounded else name
+
+        if args.resume:
+            slug = label.replace(":", "_").replace("/", "_")
+            files = [p for p in sorted(RUNS_DIR.glob(f"{slug}_*.json"))
+                     if not p.name.endswith(".judged.json")]
+            if not files:
+                print(f"[resume] no run file for {label}; skipping")
+                continue
+            out = files[-1]
+            doc = json.loads(out.read_text())
+            by_id = {a["id"]: a for a in doc["answers"]}
+            todo = [i for i in questions if by_id.get(i["id"], {}).get("status") != "ok"]
+            print(f"\n=== RESUME {label}: {len(todo)} failed/missing of {len(questions)} ===")
+            for item in todo:
+                prompt = item["question"]
+                if args.grounded:
+                    prompt = build_grounding(item, trajectory_rows, monthly_rows) + prompt
+                try:
+                    text, status = ask(prompt), "ok"
+                except requests.RequestException as exc:
+                    text, status = str(exc), "error"
+                by_id[item["id"]] = {"id": item["id"], "question": item["question"],
+                                     "answer": text, "status": status}
+                print(f"  [{status}] {item['id']} {item['question'][:60]}...")
+                time.sleep(0.1)
+            doc["answers"] = [by_id[i["id"]] for i in questions if i["id"] in by_id]
+            out.write_text(json.dumps(doc, indent=1))
+            n_ok = sum(1 for a in doc["answers"] if a["status"] == "ok")
+            print(f"  resumed {n_ok}/{len(doc['answers'])} ok -> {out.relative_to(core.DATA_DIR)}")
+            continue
+
         print(f"\n=== {label}: {len(questions)} questions ===")
         answers = []
         for item in questions:
