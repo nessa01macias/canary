@@ -13,6 +13,26 @@ const SF_BBOX = '-122.55,37.70,-122.35,37.83'
 export type PickedAddress = { id: string; label: string; center: [number, number] }
 type GeoFeature = { id?: string; place_name?: string; text?: string; center?: [number, number] }
 
+// Merge two suggestion lists, `primary` first, dropping cross-source duplicates
+// (same first-segment name at ~100 m). Capped at `limit`.
+function mergeCandidates(
+  primary: PickedAddress[],
+  secondary: PickedAddress[],
+  limit: number,
+): PickedAddress[] {
+  const out: PickedAddress[] = []
+  const seen = new Set<string>()
+  for (const p of primary.concat(secondary)) {
+    if (!p.center) continue
+    const key = `${p.label.split(',')[0].trim().toLowerCase()}|${p.center[1].toFixed(3)},${p.center[0].toFixed(3)}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(p)
+    if (out.length >= limit) break
+  }
+  return out
+}
+
 type Props = {
   onPick: (picked: PickedAddress) => void
   /** Fired when the user edits the text after a pick — the field is no longer verified. */
@@ -25,6 +45,19 @@ type Props = {
   variant?: 'navbar' | 'form'
   /** Show a ✓ once a suggestion is picked (form flows that need verified input). */
   showVerified?: boolean
+  /** MapTiler geocoding `types`. Default 'address'. Pass 'poi,address' to let a
+      business/place name resolve directly (e.g. "Salesforce Tower") — the caller
+      opts in so the navbar/contribute flows keep their address-only behavior. */
+  types?: string
+  /** Max geocoding results. Default 5. Raise it to surface every location of a
+      multi-location business. */
+  limit?: number
+  /** Fired whenever the live suggestion list changes (incl. [] on clear), so a
+      parent can preview candidates — e.g. a dot per location on the map. */
+  onSuggestions?: (suggestions: PickedAddress[]) => void
+  /** An extra async suggestion source merged AHEAD of MapTiler (deduped) — e.g. a
+      backend POI search for small businesses MapTiler's geocoder misses. */
+  extraSource?: (query: string, signal: AbortSignal) => Promise<PickedAddress[]>
 }
 
 export function AddressSearch({
@@ -34,6 +67,10 @@ export function AddressSearch({
   placeholder = 'Search any SF address — what’s changing there?',
   variant = 'navbar',
   showVerified = false,
+  types = 'address',
+  limit = 5,
+  onSuggestions,
+  extraSource,
 }: Props) {
   const [q, setQ] = useState('')
   const [suggestions, setSuggestions] = useState<PickedAddress[]>([])
@@ -43,6 +80,15 @@ export function AddressSearch({
   const [picked, setPicked] = useState<PickedAddress | null>(null)
   const abortRef = useRef<AbortController | null>(null)
   const skipNextFetch = useRef(false)
+  const onSuggestionsRef = useRef(onSuggestions)
+  onSuggestionsRef.current = onSuggestions
+  const extraSourceRef = useRef(extraSource)
+  extraSourceRef.current = extraSource
+
+  // Surface the live candidate set to the parent (for map preview dots).
+  useEffect(() => {
+    onSuggestionsRef.current?.(suggestions)
+  }, [suggestions])
 
   useEffect(() => {
     if (skipNextFetch.current) {
@@ -50,7 +96,7 @@ export function AddressSearch({
       return
     }
     const query = q.trim()
-    if (!MAPTILER_KEY || query.length < 3) {
+    if (query.length < 3) {
       setSuggestions([])
       setOpen(false)
       setLoading(false)
@@ -62,33 +108,39 @@ export function AddressSearch({
       abortRef.current?.abort()
       const ctl = new AbortController()
       abortRef.current = ctl
-      fetch(
-        `https://api.maptiler.com/geocoding/${encodeURIComponent(query)}.json` +
-          `?key=${MAPTILER_KEY}&autocomplete=true&limit=5&country=us&types=address&bbox=${SF_BBOX}`,
-        { signal: ctl.signal },
-      )
-        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-        .then((data: { features?: GeoFeature[] }) => {
-          const items = (data.features ?? [])
-            .filter((f): f is GeoFeature & { center: [number, number] } => !!f.center)
-            .map((f, i) => ({
-              id: f.id ?? String(i),
-              label: f.place_name ?? f.text ?? '',
-              center: f.center,
-            }))
-          setSuggestions(items)
-          setActiveIdx(-1)
-          setLoading(false)
-          setOpen(true)
-        })
-        .catch(() => {
-          if (ctl.signal.aborted) return // a newer keystroke is already fetching
-          setSuggestions([])
-          setLoading(false)
-        })
+
+      // MapTiler geocoding (addresses + POIs). No key → skip; the extra source
+      // can still answer.
+      const fromMapTiler: Promise<PickedAddress[]> = MAPTILER_KEY
+        ? fetch(
+            `https://api.maptiler.com/geocoding/${encodeURIComponent(query)}.json` +
+              `?key=${MAPTILER_KEY}&autocomplete=true&limit=${limit}&country=us&types=${types}&bbox=${SF_BBOX}`,
+            { signal: ctl.signal },
+          )
+            .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+            .then((data: { features?: GeoFeature[] }) =>
+              (data.features ?? [])
+                .filter((f): f is GeoFeature & { center: [number, number] } => !!f.center)
+                .map((f, i) => ({ id: f.id ?? `mt${i}`, label: f.place_name ?? f.text ?? '', center: f.center })),
+            )
+            .catch(() => [])
+        : Promise.resolve([])
+
+      // Optional extra source (e.g. Overture small-business search), merged first.
+      const fromExtra: Promise<PickedAddress[]> = extraSourceRef.current
+        ? extraSourceRef.current(query, ctl.signal).catch(() => [])
+        : Promise.resolve([])
+
+      Promise.all([fromExtra, fromMapTiler]).then(([extra, mt]) => {
+        if (ctl.signal.aborted) return // a newer keystroke owns the field now
+        setSuggestions(mergeCandidates(extra, mt, limit))
+        setActiveIdx(-1)
+        setLoading(false)
+        setOpen(true)
+      })
     }, 220)
     return () => clearTimeout(timer)
-  }, [q])
+  }, [q, types, limit])
 
   useEffect(() => () => abortRef.current?.abort(), [])
 

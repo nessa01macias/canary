@@ -1,18 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { CHANGE_META, KIND_COLOR, type ChangePoint } from './samplePoints'
 import { fetchSfPermits } from './sfPermits'
 import { fetchNeighborhoods } from './neighborhoods'
+import { KNOWN_FOR } from './knownFor'
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson'
 import { Contribute } from './Contribute'
 import { Docs } from './Docs'
 import { ForAgents } from './ForAgents'
 import { fetchResidentLayer, type ResidentAgg } from './residentLayer'
+import { fetchHeadlines, type Headline } from './claims'
 import { fetchReport, type AddressReport } from './report'
 import { MobileSheet, useIsMobile } from './MobileSheet'
 import { fetchSfBusinessChanges } from './bizChanges'
-import { AddressSearch } from './AddressSearch'
+import { AddressSearch, type PickedAddress } from './AddressSearch'
 import { PlaceCard, askPlaceholderFor } from './PlaceCard'
 import { useAsk, type Mission } from './useAsk'
 import { GROUNDED_TAGS, computeCityFacts, mapCaption, verdict, whyChips, type NbhdCardData, type NbhdSignals } from './interpreter'
@@ -21,22 +23,32 @@ import { HEX_METRIC_LABEL, fetchHexTrajectory, hexMetricFor } from './hexLayer'
 import { logGateCompleted } from './lib/gateEvents'
 import { MAX_PICKS, MISSIONS } from './missions'
 import { PreferencePicker } from './PreferencePicker'
+import { CommutePanel } from './CommutePanel'
+import { ENABLED_MODES, MODES, formatDuration, routeColor, useCommute, type CommuteMode, type Origin } from './commute'
 import './App.css'
 
 const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
 
 
-// Diverging ramp → neighborhood TRAJECTORY over the last few years. Orange =
-// worsening (e.g. crime climbing), blue = improving. The "Solar Shock" palette;
-// its cream midpoint matches the app's chrome so a flat neighborhood recedes into
-// the page rather than shouting. Interpolated on `traj` ∈ [-1, 1].
+// Diverging ramp → neighborhood TRAJECTORY over the last few years. Terracotta =
+// worsening (e.g. crime climbing), periwinkle = improving. Softened from the old
+// "Solar Shock" ramp: the two poles are now perceptually BALANCED in lightness
+// (indigo used to be far darker than the orange, so "improving" always shouted
+// louder), and pulled toward the cream midpoint so even strong movers read as a
+// tint the terrain shows through — not a slab. Interpolated on `traj` ∈ [-1, 1].
 const TRAJECTORY_STOPS: Array<[number, string]> = [
-  [-1, '#ff6624'],   // strongly worsening — deep orange
-  [-0.5, '#ff9b29'], // worsening — orange
+  [-1, '#e0764a'],   // strongly worsening — soft terracotta
+  [-0.5, '#eca787'], // worsening — muted clay
   [0, '#f2e7e1'],    // flat — cream neutral (matches the chrome)
-  [0.5, '#355cf5'],  // improving — blue
-  [1, '#2329a8'],    // strongly improving — indigo
+  [0.5, '#93a7e4'],  // improving — soft periwinkle
+  [1, '#6d84dd'],    // strongly improving — periwinkle (balanced against the clay)
 ]
+
+// Punchier poles for the small marks (arrows / pulse blobs) — a saturated color is
+// fine on a mark a few px wide, where the same saturation on a whole-polygon slab
+// reads harsh. Direction only; magnitude rides size/opacity.
+const TRAJ_MARK_BETTER = '#3f5fd6'
+const TRAJ_MARK_WORSE = '#e2643a'
 
 // Warm ramp → FIT to the user's selected preferences (darker = better match).
 // Deliberately a different hue from INTENSITY so "good for me" never reads as
@@ -78,23 +90,157 @@ const zoomFade = (expr: unknown) =>
   ] as maplibregl.DataDrivenPropertyValueSpecification<number>
 
 const trajectoryOpacity = () =>
-  zoomFade(['case',
-    ['boolean', ['feature-state', 'hover'], false], 0.9,
+  // Hover is drawn as an outline (nbhd-line), not a brighter fill — so the fill
+  // opacity is the resting tint at all times. Capped low so it stays a tint, never
+  // a block: a flat neighborhood ~0.07, a strong mover ~0.20 at rest and ~0.30 at
+  // the top of its breath.
+  zoomFade(
     ['+',
-      ['+', 0.1, ['*', 0.28, ['abs', ['coalesce', ['get', 'traj'], 0]]]],
+      ['+', 0.07, ['*', 0.13, ['abs', ['coalesce', ['get', 'traj'], 0]]]],
       ['*', ['coalesce', ['feature-state', 'pulse'], 0],
-        ['*', 0.2, ['coalesce', ['get', 'pulseAmp'], 0]]]],
-  ])
+        ['*', 0.1, ['coalesce', ['get', 'pulseAmp'], 0]]]],
+  )
 const matchColor = () =>
   ['interpolate', ['linear'], ['coalesce', ['feature-state', 'match'], 0], ...MATCH_STOPS.flat()] as
     maplibregl.DataDrivenPropertyValueSpecification<string>
 // match may legitimately be 0 (worst fit), so presence is tested against a
 // sentinel (-1) rather than truthiness — a 0-fit area still shows, just lightest.
 const matchOpacity = () =>
+  // Hover is drawn as an outline (nbhd-line), not a brighter fill — resting tint only.
   zoomFade(['case', ['==', ['coalesce', ['feature-state', 'match'], -1], -1],
     0.06,
-    ['case', ['boolean', ['feature-state', 'hover'], false], 0.9, 0.72],
+    0.72,
   ])
+
+// ── Trajectory representation modes (a compare toggle) ─────────────────────────
+// Four ways to render the SAME improving/worsening signal, switchable live so the
+// look can be judged on the real map:
+//   soft  — the softened diverging fill (the new baseline)
+//   muted — soft fill + a neutral wash that knocks the vivid terrain back
+//   glyph — a faint tint + ▲/▼ marks at each mover's centroid (calm, legible)
+//   pulse — a whisper of tint + breathing translucent gradient blobs (heat feel)
+// glyph/pulse are DOM markers (guaranteed to render, CSS-animated) rather than
+// GL layers, so there's no glyph-font or per-frame-repaint risk.
+type VizMode = 'soft' | 'muted' | 'glyph' | 'pulse'
+const VIZ_MODES: Array<{ key: VizMode; label: string }> = [
+  { key: 'soft', label: 'Soft fill' },
+  { key: 'muted', label: 'Muted base' },
+  { key: 'glyph', label: 'Arrows' },
+  { key: 'pulse', label: 'Pulse' },
+]
+// Only movers past this |traj| get a mark — the calm middle of the city stays bare
+// so the eye lands on what's actually changing.
+const VIZ_MARK_MIN = 0.26
+
+// Flat fill opacity for the glyph/pulse modes, where the marks (not the fill) carry
+// the signal so the fill drops to a whisper the basemap reads through. Hover is an
+// outline (nbhd-line), not a fill change, so opacity is constant.
+const faintFill = (rest: number) =>
+  zoomFade(rest)
+
+// ── Muted land mask ────────────────────────────────────────────────────────────
+// The muted base is ONE big cream polygon covering the whole world with San
+// Francisco punched out as holes: SF alone reads vivid ('soft fill'), while the rest
+// of the world stays a calm muted base — a fixed frame, independent of hover.
+const WORLD_RING: Position[] = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]]
+// 2× signed ring area (shoelace); its sign is the winding — used to keep holes wound
+// opposite the outer ring so they cut the mask rather than fill it.
+const ringArea2 = (r: Position[]): number => {
+  let s = 0
+  for (let i = 0; i + 1 < r.length; i++) s += r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1]
+  return s
+}
+// The world polygon with the given rings punched out as holes (empty → solid world).
+const maskFeature = (holeRings: Position[][]): Feature<Polygon> => {
+  const outerSign = Math.sign(ringArea2(WORLD_RING))
+  const holes = holeRings.map((r) => (Math.sign(ringArea2(r)) === outerSign ? [...r].reverse() : r))
+  return { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [WORLD_RING, ...holes] } }
+}
+// A feature's exterior rings (Polygon → one, MultiPolygon → several) — the shapes
+// used as mask holes so the hovered neighborhood reads vivid.
+const exteriorRings = (f: Feature): Position[][] => {
+  const g = f.geometry
+  const out: Position[][] = []
+  if (g?.type === 'Polygon') { if (g.coordinates[0]) out.push(g.coordinates[0]) }
+  else if (g?.type === 'MultiPolygon') for (const poly of g.coordinates) { if (poly[0]) out.push(poly[0]) }
+  return out
+}
+
+// Point the fill + wash + markers at one mode. Fill stays present (even at ~0.04)
+// in every mode so it remains the hover/click hit-target for the neighborhood.
+function applyVizMode(map: maplibregl.Map, mode: VizMode, markers: maplibregl.Marker[]) {
+  if (!map.getLayer('nbhd-fill')) return
+  map.setPaintProperty('nbhd-fill', 'fill-color', trajectoryColor())
+  map.setPaintProperty(
+    'nbhd-fill',
+    'fill-opacity',
+    mode === 'glyph' ? faintFill(0.08) : mode === 'pulse' ? faintFill(0.04) : trajectoryOpacity(),
+  )
+  if (map.getLayer('viz-wash'))
+    map.setLayoutProperty('viz-wash', 'visibility', mode === 'muted' ? 'visible' : 'none')
+  for (const mk of markers) {
+    const el = mk.getElement()
+    el.classList.toggle('is-glyph', mode === 'glyph')
+    el.classList.toggle('is-pulse', mode === 'pulse')
+  }
+}
+
+// Stand the mode extras down (match-fit view, or street zoom): hide the wash and
+// every mark. The fill paint is owned by whichever overlay is taking over.
+function clearVizExtras(map: maplibregl.Map, markers: maplibregl.Marker[]) {
+  if (map.getLayer('viz-wash')) map.setLayoutProperty('viz-wash', 'visibility', 'none')
+  for (const mk of markers) mk.getElement().classList.remove('is-glyph', 'is-pulse')
+}
+
+// Area-weighted centroid of a feature's largest ring — where a per-neighborhood
+// mark (arrow / blob) sits. Good enough for placement; blobby SF hoods keep it inside.
+function featureCentroid(f: Feature): Position {
+  const rings: Position[][] = []
+  const g = f.geometry
+  if (g?.type === 'Polygon') { if (g.coordinates[0]) rings.push(g.coordinates[0]) }
+  else if (g?.type === 'MultiPolygon') for (const poly of g.coordinates) { if (poly[0]) rings.push(poly[0]) }
+  let best: Position = [0, 0]
+  let bestArea = -1
+  for (const r of rings) {
+    let a = 0, cx = 0, cy = 0
+    for (let i = 0; i + 1 < r.length; i++) {
+      const cross = r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1]
+      a += cross
+      cx += (r[i][0] + r[i + 1][0]) * cross
+      cy += (r[i][1] + r[i + 1][1]) * cross
+    }
+    if (Math.abs(a) < 1e-12) continue
+    if (Math.abs(a) > bestArea) {
+      bestArea = Math.abs(a)
+      best = [cx / (3 * a), cy / (3 * a)]
+    }
+  }
+  return best
+}
+
+// Ray-cast point-in-ring (even-odd rule).
+function pointInRing(ring: Position[], x: number, y: number): boolean {
+  let inside = false
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1]
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
+  }
+  return inside
+}
+// Is (x,y) inside this feature? Even-odd across each polygon's rings so holes
+// (a ring inside the outer) correctly punch out. Used to assign a permit to the
+// neighborhood that actually contains it — independent of any name field.
+function pointInFeature(f: Feature, x: number, y: number): boolean {
+  const g = f.geometry
+  const polys: Position[][][] =
+    g?.type === 'Polygon' ? [g.coordinates] : g?.type === 'MultiPolygon' ? g.coordinates : []
+  for (const poly of polys) {
+    let inThis = false
+    for (const ring of poly) if (pointInRing(ring, x, y)) inThis = !inThis
+    if (inThis) return true
+  }
+  return false
+}
 
 // Axis-aligned bounds [[w,s],[e,n]] of a polygon/multipolygon feature — used to
 // fit the map to a neighborhood when it's clicked in the Best-fit list.
@@ -110,90 +256,6 @@ function featureBounds(f: Feature): [[number, number], [number, number]] {
   else if (g?.type === 'MultiPolygon') for (const poly of g.coordinates) poly.forEach(scan)
   return [[w, s], [e, n]]
 }
-
-// 2× the signed area of a ring (shoelace). Sign encodes winding: it's the channel
-// MapLibre uses to tell an exterior ring from a hole.
-function ringArea2(r: Position[]): number {
-  let s = 0
-  for (let i = 0; i + 1 < r.length; i++) s += r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1]
-  return s
-}
-
-// Every vertex across all neighborhood polygons — the input to the convex hull
-// that defines the SF cutout.
-function collectVertices(geo: FeatureCollection): Position[] {
-  const pts: Position[] = []
-  for (const f of geo.features) {
-    const g = f.geometry
-    if (g?.type === 'Polygon') for (const r of g.coordinates) pts.push(...r)
-    else if (g?.type === 'MultiPolygon')
-      for (const poly of g.coordinates) for (const r of poly) pts.push(...r)
-  }
-  return pts
-}
-
-// Andrew's monotone-chain convex hull → the tightest single ring enclosing all of
-// SF. One clean polygon (no inter-neighborhood seams) is what lets the cutout show
-// continuous water and parkland, instead of leaving the gaps between the individual
-// neighborhood shapes — the ocean, the bay margins, big parks — flat white.
-function convexHull(pts: Position[]): Position[] {
-  const p = [...pts].sort((a, b) => a[0] - b[0] || a[1] - b[1])
-  if (p.length < 3) return p
-  const cross = (o: Position, a: Position, b: Position) =>
-    (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-  const lower: Position[] = []
-  for (const pt of p) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], pt) <= 0) lower.pop()
-    lower.push(pt)
-  }
-  const upper: Position[] = []
-  for (let i = p.length - 1; i >= 0; i--) {
-    const pt = p[i]
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], pt) <= 0) upper.pop()
-    upper.push(pt)
-  }
-  lower.pop()
-  upper.pop()
-  const hull = lower.concat(upper)
-  hull.push(hull[0]) // close the ring
-  return hull
-}
-
-// One big white polygon covering the whole pannable area, with a SINGLE hole cut
-// over San Francisco. Everything outside the hole is flat white; inside it the real
-// basemap — water, parks, trees, streets — shows through untouched. The hole is the
-// convex hull of every neighborhood vertex, expanded slightly so a margin of the
-// surrounding ocean and bay reads as water rather than getting clipped to the coast.
-function buildSfMask(geo: FeatureCollection): Feature<Polygon> {
-  const hull = convexHull(collectVertices(geo))
-
-  // Push each hull vertex out from the centroid so open water around the city is
-  // revealed too — otherwise the hull hugs the coastline and hides the ocean/bay.
-  const cx = hull.reduce((s, p) => s + p[0], 0) / hull.length
-  const cy = hull.reduce((s, p) => s + p[1], 0) / hull.length
-  const PAD = 1.12 // ~12% ≈ a ~1.5 km ring of visible water around SF
-  const sfHole: Position[] = hull.map(([x, y]) => [cx + (x - cx) * PAD, cy + (y - cy) * PAD])
-
-  // Outer ring — the WHOLE world, so every zoom level outside SF reads as the
-  // blank white globe (the mask hides the basemap everywhere but the SF hole).
-  const outer: Position[] = [
-    [-180, -85],
-    [180, -85],
-    [180, 85],
-    [-180, 85],
-    [-180, -85],
-  ]
-  // A hole must wind opposite the exterior or earcut fills it instead of cutting it.
-  const outerSign = Math.sign(ringArea2(outer))
-  const hole = Math.sign(ringArea2(sfHole)) === outerSign ? [...sfHole].reverse() : sfHole
-
-  return {
-    type: 'Feature',
-    properties: {},
-    geometry: { type: 'Polygon', coordinates: [outer, hole] },
-  }
-}
-
 
 // Marker radius encodes magnitude ($ value), on a log scale, clamped.
 function markerSize(cost?: number): number {
@@ -245,12 +307,23 @@ function App() {
   // neighborhood name → k-anonymised resident-review aggregates (the moat's read
   // side, GET /api/resident-layer). Read lazily by the hover popup.
   const residentRef = useRef<Map<string, ResidentAgg>>(new Map())
+  // neighborhood name → recent local-news headlines (the CLAIMS tier, GET
+  // /api/claims). Read lazily by the PlaceCard so a card can cite where its
+  // picture comes from; empty for areas outside the news pilot.
+  const headlinesRef = useRef<Map<string, Headline[]>>(new Map())
   // Read by the (once-created) hover popup closure to append a fit line.
   const matchInfoRef = useRef<{ active: boolean; count: number }>({ active: false, count: 0 })
   // Per-polygon pulse phase (built with the choropleth) + the running rAF handle
   // that drives the "breathing" trajectory overlay.
   const pulseMetaRef = useRef<Array<{ id: number; phase: number }>>([])
   const pulseRafRef = useRef<number | null>(null)
+  // Per-neighborhood DOM marks (▲/▼ arrows + pulse blobs), built once with the
+  // choropleth; the active VizMode toggles which — if any — are shown.
+  const vizMarkersRef = useRef<maplibregl.Marker[]>([])
+  // Which trajectory representation is on — a live compare toggle (see VizMode).
+  // Default 'muted': the whole map reads as a calm base and the neighborhood you
+  // hover pops to the vivid 'soft' look (the wash cuts out under the hovered area).
+  const [vizMode, setVizMode] = useState<VizMode>('muted')
   const [sfCount, setSfCount] = useState<number | null>(null)
   const [contributing, setContributing] = useState(false)
   // The magic-moment report — fetched whenever the scope ladder is on its SPOT
@@ -264,6 +337,9 @@ function App() {
   // One layer, zoom as the axis: past STREET_ZOOM the map is about individual
   // permits/businesses; below it, area trajectory. Replaces the old mode toggle.
   const [zoomedIn, setZoomedIn] = useState(false)
+  // SF is the one lit-up city, so when it's panned/zoomed out of the viewport we
+  // surface a bottom-center "back to SF" button (see the map init effect).
+  const [sfOffscreen, setSfOffscreen] = useState(false)
   const zoomToCity = () => {
     const map = mapRef.current
     if (map && map.getZoom() >= STREET_ZOOM) map.easeTo({ zoom: 12.4, duration: 700 })
@@ -293,10 +369,6 @@ function App() {
     setResidentUnlocked(true)
     logGateCompleted(area) // fake-door numerator, attributed to the reviewed area
   }
-  // The hover popup is imperative MapLibre HTML, so its handler closure would
-  // capture a stale unlock flag — mirror it in a ref the builder reads live.
-  const residentUnlockedRef = useRef(residentUnlocked)
-  residentUnlockedRef.current = residentUnlocked
   // Same pattern for the mission — the hover verdict is mission-framed.
   const missionRef = useRef<string | null>(mission)
   missionRef.current = mission
@@ -454,6 +526,152 @@ function App() {
   openScopeRef.current = openScope
 
   const isMobile = useIsMobile()
+
+  // Commute preview — the origin is wherever you're looking (the scoped spot /
+  // neighborhood centroid / record); destinations are your saved places. The
+  // hook fetches routes; the effect below draws them.
+  const origin = useMemo<Origin | null>(() => {
+    const s = scope
+    if (!s) return null
+    if (s.kind === 'spot') return { lat: s.lat, lng: s.lon }
+    if (s.kind === 'record') return { lat: s.point.lat, lng: s.point.lng }
+    if (s.kind === 'neighborhood') {
+      if (s.clickLngLat) return { lat: s.clickLngLat[1], lng: s.clickLngLat[0] }
+      const meta = nbhdMetaRef.current.get(s.nhood)
+      if (meta) {
+        const [[minLng, minLat], [maxLng, maxLat]] = meta.bounds
+        return { lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2 }
+      }
+    }
+    return null // city (or neighborhood before its metadata loads)
+  }, [scope])
+  const commute = useCommute(origin)
+  const commuteMarkersRef = useRef<maplibregl.Marker[]>([])
+  const candidateMarkersRef = useRef<maplibregl.Marker[]>([])
+  // Live geocoder candidates for the "add a place" field — every location of a
+  // searched business, shown as grey dots you can click to pick.
+  const [candidates, setCandidates] = useState<PickedAddress[]>([])
+  const [addFieldKey, setAddFieldKey] = useState(0)
+  // Promote a candidate (a map dot OR a dropdown row — same path) to a real
+  // destination: it takes the next color, the grey candidates clear, and the
+  // add-field resets so you can add another.
+  const pickPlace = (p: PickedAddress) => {
+    commute.addDestination({ label: p.label.split(',')[0].trim(), lng: p.center[0], lat: p.center[1] })
+    setCandidates([])
+    setAddFieldKey((k) => k + 1)
+  }
+  const pickPlaceRef = useRef(pickPlace)
+  pickPlaceRef.current = pickPlace
+
+  // Draw the commute routes (color-coded lines) + a time badge at each
+  // destination, whenever the results change.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapReady) return
+
+    if (!map.getSource('commute-routes')) {
+      map.addSource('commute-routes', { type: 'geojson', data: EMPTY_FC })
+      // white casing under the colored line so routes read over any basemap
+      map.addLayer({
+        id: 'commute-routes-casing', type: 'line', source: 'commute-routes',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': '#ffffff', 'line-opacity': 0.9,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 10, 5.5, 16, 10],
+        },
+      })
+      map.addLayer({
+        id: 'commute-routes-line', type: 'line', source: 'commute-routes',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': ['get', 'color'], 'line-opacity': 0.95,
+          'line-width': ['interpolate', ['linear'], ['zoom'], 10, 3, 16, 6],
+        },
+      })
+    }
+
+    // One line per destination. There's no selected mode anymore, so we draw a
+    // single representative path — drive if we have it, else whichever mode
+    // resolved — and hang every mode's time off it as one label below.
+    const legsByDest = commute.destinations.map((dest) => commute.legsFor(dest.id))
+    const repGeomFor = (byMode: ReturnType<typeof commute.legsFor>) => {
+      for (const m of ['drive', 'bike', 'walk'] as CommuteMode[]) {
+        const leg = byMode[m]
+        if (leg?.ok && leg.geometry) return leg.geometry
+      }
+      return null
+    }
+    const features: Feature[] = commute.destinations.flatMap((_dest, i) => {
+      const geom = repGeomFor(legsByDest[i])
+      return geom ? [{ type: 'Feature', properties: { color: routeColor(i) }, geometry: geom }] : []
+    })
+    ;(map.getSource('commute-routes') as maplibregl.GeoJSONSource | undefined)?.setData({
+      type: 'FeatureCollection', features,
+    })
+
+    // Rebuild the overlays: a colored dot at each destination, plus ONE label on
+    // its route line (at the line's midpoint) reading every mode's time — 🚗 · 🚲
+    // · 🚶. Modes that haven't resolved read "—", so the label is complete the
+    // moment a destination exists. Dot color matches the destination's row.
+    commuteMarkersRef.current.forEach((m) => m.remove())
+    commuteMarkersRef.current = []
+    commute.destinations.forEach((dest, i) => {
+      const byMode = legsByDest[i]
+      const color = routeColor(i)
+
+      const dot = document.createElement('div')
+      dot.className = 'commute-pin'
+      dot.style.setProperty('--c', color)
+      commuteMarkersRef.current.push(
+        new maplibregl.Marker({ element: dot, anchor: 'center' }).setLngLat([dest.lng, dest.lat]).addTo(map),
+      )
+
+      // Times ride on the line: anchor the label at the geometry's midpoint when
+      // we have a path, otherwise float it just above the destination dot.
+      const geom = repGeomFor(byMode)
+      const coords = geom?.coordinates
+      const at: [number, number] = coords?.length
+        ? (coords[Math.floor(coords.length / 2)] as [number, number])
+        : [dest.lng, dest.lat]
+
+      const label = document.createElement('div')
+      label.className = 'commute-line-label'
+      label.style.setProperty('--c', color)
+      label.title = dest.label
+      label.innerHTML = ENABLED_MODES.map((m) => {
+        const leg = byMode[m]
+        const time = leg?.ok && leg.duration_s != null ? formatDuration(leg.duration_s) : '—'
+        const icon = MODES.find((x) => x.id === m)?.icon ?? ''
+        return `<span class="commute-leg"><span class="commute-leg-icon" aria-hidden="true">${icon}</span>${time}</span>`
+      }).join('')
+      commuteMarkersRef.current.push(
+        new maplibregl.Marker({ element: label, anchor: 'bottom' }).setLngLat(at).addTo(map),
+      )
+    })
+  }, [commute.resultsByMode, commute.destinations, mapReady])
+
+  // Grey candidate dots for the live "add a place" search — one per location of
+  // the searched business. Click a dot (or its dropdown row) to pick that spot;
+  // they clear on pick or when the field empties.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapReady) return
+    candidateMarkersRef.current.forEach((m) => m.remove())
+    candidateMarkersRef.current = []
+    candidates.forEach((c) => {
+      const el = document.createElement('button')
+      el.type = 'button'
+      el.className = 'commute-candidate'
+      el.title = c.label
+      el.addEventListener('click', (e) => {
+        e.stopPropagation()
+        pickPlaceRef.current(c)
+      })
+      candidateMarkersRef.current.push(
+        new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat(c.center).addTo(map),
+      )
+    })
+  }, [candidates, mapReady])
 
   // Camera + drawing, ONE effect — so what the map frames and what it draws
   // can never disagree with what the card describes.
@@ -640,12 +858,13 @@ function App() {
       style: MAPTILER_KEY
         ? `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MAPTILER_KEY}`
         : 'https://demotiles.maplibre.org/style.json',
-      // Open on the San Francisco peninsula, but let the user zoom all the way
-      // out: the world renders as a blank white globe with SF as the only lit
-      // patch — the coverage map IS the story (one metro colored in, more coming).
+      // Open on the San Francisco peninsula. minZoom caps how far out the user
+      // can pull back — the inner-Bay framing (SF + Marin, Oakland/Berkeley, down
+      // to South SF) is the floor, so SF never shrinks to a lost dot on the wider
+      // basemap. Calibrated against the intended framing; nudge to reframe.
       center: [-122.44, 37.75],
       zoom: 12.3,
-      minZoom: 1,
+      minZoom: 11,
       pitch: isMobileInit ? 0 : 50,
       bearing: isMobileInit ? 0 : -10,
       maxPitch: 85,
@@ -670,9 +889,9 @@ function App() {
     map.addControl(new maplibregl.NavigationControl(), 'bottom-right')
 
     // "Take me home": the browser asks for location permission; on allow, fly to
-    // the user (blue dot). Their city may be blank white — that's the coverage
-    // story, not a bug. On deny/error nothing moves; the SF control below always
-    // offers the one lit-up city as home.
+    // the user (blue dot). Their city may have no scored neighborhoods yet — that's
+    // the coverage story, not a bug. On deny/error nothing moves; the SF control
+    // below always offers the one lit-up city as home.
     map.addControl(
       new maplibregl.GeolocateControl({
         positionOptions: { enableHighAccuracy: false },
@@ -703,14 +922,45 @@ function App() {
     map.addControl(homeControl, 'bottom-right')
     mapRef.current = map
 
-    // Reveal/hide routine alteration markers as the user crosses the zoom gate.
+    // Change-point markers are DOM overlays, and MapLibre re-projects EVERY
+    // attached marker on every move frame — with 3D terrain each reprojection also
+    // samples elevation, so a few hundred markers reprojecting per frame is what
+    // makes zooming lurch. They're hidden below STREET_ZOOM anyway, so keep them
+    // OFF the map there and only attach once the user is zoomed in far enough to
+    // see them. (Reveal/hide of routine alterations still happens via the gate.)
+    const markers: maplibregl.Marker[] = []
+    let markersOnMap = map.getZoom() >= STREET_ZOOM
     map.on('zoom', () => {
       const z = map.getZoom()
-      applyMarkerVisibility(markerElsRef.current, z)
+      const shouldShow = z >= STREET_ZOOM
+      if (shouldShow !== markersOnMap) {
+        for (const m of markers) {
+          if (shouldShow) m.addTo(map)
+          else m.remove()
+        }
+        markersOnMap = shouldShow
+      }
+      if (shouldShow) applyMarkerVisibility(markerElsRef.current, z)
       setZoomedIn(z >= STREET_ZOOM)
     })
 
-    const markers: maplibregl.Marker[] = []
+    // Surface the "back to San Francisco" button the moment SF leaves the frame.
+    // We test the SF center in *screen* space (project) rather than getBounds()
+    // so pitch and the globe projection are handled correctly, with a margin so
+    // the button appears just before SF fully slides off the edge.
+    const syncSfOffscreen = () => {
+      const canvas = map.getCanvas()
+      const p = map.project([-122.44, 37.75])
+      const margin = 48
+      setSfOffscreen(
+        p.x < margin ||
+          p.y < margin ||
+          p.x > canvas.clientWidth - margin ||
+          p.y > canvas.clientHeight - margin,
+      )
+    }
+    map.on('move', syncSfOffscreen)
+    map.on('resize', syncSfOffscreen)
 
     const addPoint = (point: ChangePoint) => {
       const el = document.createElement('div')
@@ -732,12 +982,12 @@ function App() {
       el.addEventListener('click', () => openScopeRef.current({ kind: 'record', point }))
       markerElsRef.current.push(el)
       markerByIdRef.current.set(point.id, el) // record-scope highlight lookup
-      markers.push(
-        new maplibregl.Marker({ element: el }).setLngLat([point.lng, point.lat]).addTo(map),
-      )
+      const marker = new maplibregl.Marker({ element: el }).setLngLat([point.lng, point.lat])
+      if (markersOnMap) marker.addTo(map)
+      markers.push(marker)
     }
 
-    const buildChoropleth = (geo: FeatureCollection) => {
+    const buildChoropleth = (geo: FeatureCollection, permits: ChangePoint[]) => {
       // Trajectory stats are already baked into each feature's properties by the
       // backend (/api/sf/neighborhoods); we only render + rank here.
 
@@ -813,6 +1063,57 @@ function App() {
         phase: (i % 12) * ((Math.PI * 2) / 12),
       }))
 
+      // Development hotspot per neighborhood: the $-weighted centroid of its
+      // permits, so the mark (esp. the pulse blob) sits where building is actually
+      // concentrated — not the geometric center of the polygon. Each permit is
+      // assigned to the polygon that CONTAINS it (point-in-polygon, authoritative
+      // and independent of any name field); weight by construction cost, with a
+      // net-units proxy when cost is missing. Hoods with no permits fall back to
+      // the area centroid.
+      const bounds = geo.features.map((f) => featureBounds(f))
+      const acc = geo.features.map(() => ({ x: 0, y: 0, w: 0 }))
+      for (const pt of permits) {
+        if (!Number.isFinite(pt.lng) || !Number.isFinite(pt.lat)) continue
+        for (let i = 0; i < geo.features.length; i++) {
+          const b = bounds[i]
+          if (pt.lng < b[0][0] || pt.lng > b[1][0] || pt.lat < b[0][1] || pt.lat > b[1][1]) continue
+          if (!pointInFeature(geo.features[i], pt.lng, pt.lat)) continue
+          const w = pt.cost && pt.cost > 0 ? pt.cost : Math.abs(pt.netUnits ?? 0) * 1e5 + 1
+          acc[i].x += pt.lng * w
+          acc[i].y += pt.lat * w
+          acc[i].w += w
+          break // a permit belongs to exactly one neighborhood
+        }
+      }
+      const hotspot = (i: number): Position =>
+        acc[i].w > 0 ? [acc[i].x / acc[i].w, acc[i].y / acc[i].w] : featureCentroid(geo.features[i])
+
+      // Per-neighborhood DOM marks for the glyph/pulse view modes. Built once,
+      // hidden until a mode shows them; only clear movers (past VIZ_MARK_MIN) get
+      // one so the calm middle of the city stays bare. pointer-events:none (CSS)
+      // so a click falls through to the neighborhood underneath.
+      for (const mk of vizMarkersRef.current) mk.remove()
+      vizMarkersRef.current = geo.features.flatMap((f, i) => {
+        const traj = Number((f.properties as { traj?: number })?.traj ?? 0)
+        const atraj = Math.abs(traj)
+        if (atraj < VIZ_MARK_MIN) return []
+        const up = traj > 0
+        const el = document.createElement('div')
+        el.className = 'viz-marker'
+        el.dataset.dir = up ? 'up' : 'down'
+        el.style.setProperty('--c', up ? TRAJ_MARK_BETTER : TRAJ_MARK_WORSE)
+        el.style.setProperty('--mag', atraj.toFixed(3))
+        // Spread the breathing/ping phase so the blobs shimmer, not blink in unison.
+        el.style.setProperty('--delay', `${(-(i % 6) * 0.9).toFixed(2)}s`)
+        // ring = the emanating "ping"; core = the crisp breathing dot (both pulse
+        // mode only); glyph = the arrow (arrows mode).
+        el.innerHTML = '<span class="viz-ring"></span><span class="viz-core"></span><span class="viz-glyph"></span>'
+        const mk = new maplibregl.Marker({ element: el })
+          .setLngLat(hotspot(i) as [number, number])
+          .addTo(map)
+        return [mk]
+      })
+
       // Everything the PlaceCard needs, per neighborhood — captured AFTER the
       // traj write-back so the card's verdict matches the polygon's color, and
       // typed here so no `Number(queryRenderedFeatures)` coercion survives.
@@ -837,26 +1138,6 @@ function App() {
         }),
       )
 
-      // Paint everything OUTSIDE San Francisco flat white, while letting the bay
-      // and ocean read as water. The mask is one big polygon (the whole pannable
-      // area) with the SF area punched out as one hole, inserted just below the
-      // basemap's water layer so water still renders on top of the white.
-      const layers = map.getStyle().layers ?? []
-      const waterBeforeId =
-        layers.find((l) => l.type === 'fill' && /^water($|[_-])/i.test(l.id))?.id ??
-        layers.find((l) => l.type !== 'symbol' && /water/i.test(l.id))?.id ??
-        layers.find((l) => l.type === 'symbol')?.id
-      map.addSource('sf-mask', { type: 'geojson', data: buildSfMask(geo) })
-      map.addLayer(
-        {
-          id: 'sf-mask-fill',
-          type: 'fill',
-          source: 'sf-mask',
-          paint: { 'fill-color': '#ffffff', 'fill-opacity': 1 },
-        },
-        waterBeforeId,
-      )
-
       map.addSource('nbhd', { type: 'geojson', data: geo })
 
       map.addLayer({
@@ -871,6 +1152,31 @@ function App() {
           'fill-opacity': trajectoryOpacity(),
         },
       })
+
+      // The muted LAND mask: ONE big cream polygon over the whole world with SAN
+      // FRANCISCO permanently punched out — so SF alone reads as vivid 'soft fill'
+      // while the rest of the world stays a calm muted base (independent of hover).
+      // Inserted BELOW the water layer (water keeps its natural blue) and below the
+      // first symbol layer (labels stay crisp on top).
+      const sfHoles = geo.features.flatMap(exteriorRings)
+      map.addSource('viz-mask', { type: 'geojson', data: maskFeature(sfHoles) })
+      const styleLayers = map.getStyle().layers ?? []
+      const maskBefore =
+        styleLayers.find((l) => l.type === 'fill' && /^water($|[_-])/i.test(l.id))?.id ??
+        styleLayers.find((l) => l.type === 'symbol')?.id
+      map.addLayer(
+        {
+          id: 'viz-wash', // kept: applyVizMode/clearVizExtras toggle this id's visibility
+          type: 'fill',
+          source: 'viz-mask',
+          layout: { visibility: 'none' },
+          paint: {
+            'fill-color': '#efe8df',
+            'fill-opacity': zoomFade(0.8), // strong enough to calm saturated terrain (parks/hills), not just urban gray
+          },
+        },
+        maskBefore,
+      )
 
       // The hex texture — "which corner is changing". Sits between the fill and
       // the borders; visible only while a neighborhood scope is open (the scope
@@ -916,25 +1222,30 @@ function App() {
         type: 'line',
         source: 'nbhd',
         paint: {
-          'line-color': 'rgba(11,11,11,0.28)',
+          // Resting borders are a faint hairline; on hover the border alone marks
+          // the neighborhood — a crisp dark outline instead of a brighter fill.
+          'line-color': [
+            'case', ['boolean', ['feature-state', 'hover'], false], 'rgba(11,11,11,0.9)', 'rgba(11,11,11,0.28)',
+          ] as maplibregl.DataDrivenPropertyValueSpecification<string>,
           'line-width': [
-            'case', ['boolean', ['feature-state', 'hover'], false], 2.4, 0.8,
+            'case', ['boolean', ['feature-state', 'hover'], false], 2.6, 0.8,
           ] as maplibregl.DataDrivenPropertyValueSpecification<number>,
         },
       })
 
-      // Glowing blue border for the neighborhood the Best-fit list is pointing at.
-      // Two coincident lines: a wide, blurred halo + a crisp core. Both ride the
-      // `glow` feature-state, so they're invisible until the list sets it.
+      // Highlighted-neighborhood border: ONE thin crisp BLACK line, with just a
+      // whisper of soft black glow so it reads as a single line, not a thick band.
+      // The crisp core is the line; the faint blurred halo only softens its edge
+      // outward. Both ride the `glow` feature-state (invisible until pointed at).
       const glowOn = (w: number, blur: number, op: number) =>
         ({
-          'line-color': '#2f80ff',
+          'line-color': '#0b0b0b',
           'line-blur': blur,
           'line-width': ['case', ['boolean', ['feature-state', 'glow'], false], w, 0],
           'line-opacity': ['case', ['boolean', ['feature-state', 'glow'], false], op, 0],
         }) as maplibregl.LineLayerSpecification['paint']
-      map.addLayer({ id: 'nbhd-glow-halo', type: 'line', source: 'nbhd', paint: glowOn(11, 6, 0.6) })
-      map.addLayer({ id: 'nbhd-glow-core', type: 'line', source: 'nbhd', paint: glowOn(2.5, 0.6, 1) })
+      map.addLayer({ id: 'nbhd-glow-halo', type: 'line', source: 'nbhd', paint: glowOn(2.5, 2.5, 0.25) })
+      map.addLayer({ id: 'nbhd-glow-core', type: 'line', source: 'nbhd', paint: glowOn(1.5, 0, 1) })
 
       // Hover: highlight + neutral verdict popup.
       let hoveredId: number | string | null = null
@@ -945,9 +1256,12 @@ function App() {
         if (!e.features?.length) return
         map.getCanvas().style.cursor = 'pointer'
         const f = e.features[0]
-        if (hoveredId !== null) map.setFeatureState({ source: 'nbhd', id: hoveredId }, { hover: false })
-        hoveredId = f.id ?? null
-        if (hoveredId !== null) map.setFeatureState({ source: 'nbhd', id: hoveredId }, { hover: true })
+        const newId = f.id ?? null
+        if (newId !== hoveredId) {
+          if (hoveredId !== null) map.setFeatureState({ source: 'nbhd', id: hoveredId }, { hover: false })
+          hoveredId = newId
+          if (hoveredId !== null) map.setFeatureState({ source: 'nbhd', id: hoveredId }, { hover: true })
+        }
         const p = f.properties as Record<string, number | string>
         const st = hoveredId !== null ? map.getFeatureState({ source: 'nbhd', id: hoveredId }) : {}
         const { active, count } = matchInfoRef.current
@@ -958,27 +1272,19 @@ function App() {
           active && typeof st.match === 'number'
             ? ` · <span class="nb-pop-fit-inline">${Math.round(st.match * 100)}% fit${count > 1 ? ` on your ${count} picks` : ''}</span>`
             : ''
-        // The give-to-get tease at the highest-traffic surface. While locked,
-        // EVERY hover carries the lock (Glassdoor's trick isn't where the blur
-        // sits — it's that you can't avoid seeing it): blurred values where
-        // reviews exist, "be the first" where they don't. Unlocked → values
-        // only where they exist. Open civic data is never gated (canon #6).
-        const res = residentRef.current.get(String(p.nhood))
-        const unlocked = residentUnlockedRef.current
-        const fmtR = (x: number | null) => (x == null ? '–' : x.toFixed(1))
-        const resLine = res
-          ? `<div class="nb-pop-res${unlocked ? '' : ' is-locked'}">residents: safety <b>${fmtR(res.safety)}</b> · quiet <b>${fmtR(res.noise)}</b> · better <b>${fmtR(res.trajectory)}</b>${unlocked ? '' : ' <span class="nb-pop-lock">🔒</span>'}</div>`
-          : unlocked
-            ? ''
-            : `<div class="nb-pop-res is-empty">residents: <span class="nb-pop-lock">🔒</span> none yet — be the first</div>`
+        // The hover is a short scent: name, one "known for" identity line, and
+        // trajectory. The residents tease and the give-to-get unlock live one
+        // click deeper, on the PlaceCard, where there's room to make the pitch
+        // instead of crowding the highest-traffic surface with filler.
+        const knownFor = KNOWN_FOR[String(p.nhood)]
+        const knownLine = knownFor ? `<div class="nb-pop-known">${knownFor}</div>` : ''
         popup
           .setLngLat(e.lngLat)
           .setHTML(
             `<div class="nb-pop nb-pop--preview">
                <div class="nb-pop-name">${p.nhood}</div>
+               ${knownLine}
                <div class="nb-pop-verdict nb-pop-verdict--${v.tone}">${v.glyph} ${v.label}${fitLine}</div>
-               ${resLine}
-               <div class="nb-pop-more">click to read this area</div>
              </div>`,
           )
           .addTo(map)
@@ -993,14 +1299,67 @@ function App() {
     }
 
     map.on('load', () => {
-      if (MAPTILER_KEY) {
-        map.addSource('terrain', {
-          type: 'raster-dem',
-          url: `https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`,
-          tileSize: 256,
-        })
-        map.setTerrain({ source: 'terrain', exaggeration: 1.8 })
+      // No 3D terrain: a raster-dem + setTerrain makes MapLibre re-anchor the camera
+      // to the elevation under the cursor every frame, and as DEM tiles refine that
+      // anchor drifts — the map steps up and down and you "can't zoom into a parcel".
+      // A flat basemap samples no elevation at all, so zoom/drag are dead smooth.
+
+      // Hide outdoor-v2's neon route overlays — magenta bike routes ("Bicycle
+      // local"/"longdistance") and the red/colored hiking trails — all of which
+      // live on the `trail` source-layer. Pure noise for a neighborhood product,
+      // and not something we draw. We match by source-layer rather than hardcode
+      // the ~17 vendor layer IDs, so a MapTiler style bump can't silently bring
+      // the lines back.
+      try {
+        for (const layer of map.getStyle().layers ?? []) {
+          const srcLayer = (layer as { 'source-layer'?: string })['source-layer']
+          if (srcLayer === 'trail') {
+            map.setLayoutProperty(layer.id, 'visibility', 'none')
+          }
+          // Mountain peak triangles ("Mount Sutro 912 ft", …) are pure clutter at
+          // city scale — hide both peak layers (the US customary-ft one and the
+          // metric fallback), which live on the `mountain_peak` source-layer. A
+          // future "show peaks" filter can flip these back on by source-layer.
+          if (srcLayer === 'mountain_peak') {
+            map.setLayoutProperty(layer.id, 'visibility', 'none')
+          }
+        }
+      } catch {
+        /* non-fatal: a validation throw just leaves the lines drawn */
       }
+
+      // Transit stops: outdoor-v2's `Station` layer draws every named bus/tram/
+      // subway stop from ~z12, which buries SF in icons at the city-wide framing.
+      // We tighten it in two ways, and let it relax back as you zoom in to the
+      // street. The base filter keeps `has name` (unnamed stops never show), so
+      // the only question is WHICH named stops appear this far out.
+      // outdoor-v2 marks the Station label `text-optional`, so the icon still
+      // draws when its name is culled by label-collision — that's the bare,
+      // "unnamed"-looking icons. Tie the icon to its label: no visible name,
+      // no icon.
+      if (map.getLayer('Station')) map.setLayoutProperty('Station', 'text-optional', false)
+
+      const setStationScope = (z: number) => {
+        if (!map.getLayer('Station')) return
+        // Below street zoom, only the landmark stations — major interchanges the
+        // vendor tags with subclass `station` (Caltrain, the big Muni/BART halls,
+        // ferry terminals). Individual bus_stop / tram_stop / subway platforms are
+        // dropped until you're zoomed in far enough to actually route by them.
+        const farOut: maplibregl.FilterSpecification = [
+          'all',
+          ['in', 'class', 'bus', 'railway'],
+          ['has', 'name'],
+          ['==', 'subclass', 'station'],
+        ]
+        const closeIn: maplibregl.FilterSpecification = [
+          'all',
+          ['in', 'class', 'bus', 'railway'],
+          ['has', 'name'],
+        ]
+        map.setFilter('Station', z >= STREET_ZOOM ? closeIn : farOut)
+      }
+      setStationScope(map.getZoom())
+      map.on('zoom', () => setStationScope(map.getZoom()))
 
       // Scope drawing: the dashed circle that shows EXACTLY what a spot card is
       // counting ("within ~500 m" as pixels, not a caption nobody reads).
@@ -1047,6 +1406,12 @@ function App() {
         .then((byArea) => { residentRef.current = byArea })
         .catch(() => {}) // no reviews yet / endpoint down → popup simply omits the line
 
+      // Local-news headlines load independently too — a card cites its sources
+      // when we have them, and simply omits the section when we don't.
+      fetchHeadlines()
+        .then((byArea) => { headlinesRef.current = byArea })
+        .catch(() => {}) // claims state not built / endpoint down → no news section
+
       // Only real data draws on the map — live permits + pipeline trends. The old
       // hardcoded CA "flavor points" are gone (LA/San Diego/etc. return when their
       // metros get live feeds).
@@ -1054,7 +1419,7 @@ function App() {
         .then(([permits, nbhd]) => {
           permits.forEach(addPoint)
           setSfCount(permits.length)
-          if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection)
+          if (nbhd) buildChoropleth(nbhd as unknown as FeatureCollection, permits)
         })
         .catch((err) => console.error('SF data failed:', err))
 
@@ -1104,8 +1469,11 @@ function App() {
 
     if (tags.length === 0) {
       for (const it of items) map.setFeatureState({ source: 'nbhd', id: it.id }, { match: null })
-      map.setPaintProperty('nbhd-fill', 'fill-color', trajectoryColor())
-      map.setPaintProperty('nbhd-fill', 'fill-opacity', trajectoryOpacity())
+      // The active representation mode owns the fill paint + its marks/wash. Fill
+      // always applies (it zoom-fades); the marks + wash show only at area scale,
+      // so they never linger over the street view.
+      applyVizMode(map, vizMode, vizMarkersRef.current)
+      if (zoomedIn) clearVizExtras(map, vizMarkersRef.current)
       matchInfoRef.current = { active: false, count: 0 }
       setMatchTop([])
       // Breathe only while the trajectory overlay is actually the visible view
@@ -1115,8 +1483,10 @@ function App() {
       return
     }
 
-    // Preferences picked → static fit overlay; stand the pulse down.
+    // Preferences picked → static fit overlay; stand the pulse and the mode
+    // marks/wash down (the fit ramp is its own, separate encoding).
     stopPulse()
+    clearVizExtras(map, vizMarkersRef.current)
     // Mean fit across the chosen preferences, then min-max stretched across
     // neighborhoods so the ramp always uses its full contrast range.
     const scored = items.map((it) => {
@@ -1141,7 +1511,7 @@ function App() {
     setMatchTop(
       [...scored].sort((a, b) => b.fit - a.fit).slice(0, 3).map((s) => s.nhood).filter(Boolean),
     )
-  }, [priorities, zoomedIn, sfCount])
+  }, [priorities, zoomedIn, sfCount, vizMode])
 
   const matchActive = priorities.size > 0
 
@@ -1261,6 +1631,7 @@ function App() {
             onScope={openScope}
             mission={(mission as Mission) ?? null}
             nbhd={scope.kind === 'neighborhood' ? nbhdPropsRef.current.get(scope.nhood) ?? null : null}
+            headlines={scope.kind === 'neighborhood' ? headlinesRef.current.get(scope.nhood) ?? [] : []}
             residents={scope.kind === 'neighborhood' ? residentRef.current.get(scope.nhood) ?? null : null}
             report={report}
             reportLoading={reportLoading}
@@ -1302,6 +1673,30 @@ function App() {
 
       {/* Map */}
       <div ref={mapContainer} id="map" />
+
+      {/* Rescue hatch: when SF drifts out of frame, a bottom-center button flies
+          the camera back to the lit-up city. Mirrors the "SF" map control but is
+          impossible to miss for anyone lost on the globe. */}
+      <button
+        type="button"
+        className={`recenter-fab${sfOffscreen && scope === null ? ' show' : ''}`}
+        aria-hidden={!(sfOffscreen && scope === null)}
+        tabIndex={sfOffscreen && scope === null ? 0 : -1}
+        onClick={() => {
+          const map = mapRef.current
+          if (!map) return
+          map.flyTo({
+            center: [-122.44, 37.75],
+            zoom: 12.3,
+            pitch: isMobile ? 0 : 50,
+            bearing: isMobile ? 0 : -10,
+            duration: 2000,
+          })
+        }}
+      >
+        <span className="recenter-fab-icon" aria-hidden>⌖</span>
+        Back to San Francisco
+      </button>
 
       {/* Preferences panel — the shorthand summary of your picks. Both of its
           doors (Choose what matters / Edit) open THE picker. */}
@@ -1395,6 +1790,18 @@ function App() {
       </aside>
       </MobileSheet>
 
+      {/* Commute preview — floats bottom-left; usable any time, comes alive once
+          a spot is scoped (the origin routes run from). */}
+      <aside className="commute-dock">
+        <CommutePanel
+          commute={commute}
+          originReady={origin !== null}
+          onAddPick={pickPlace}
+          onSuggestions={setCandidates}
+          addFieldKey={addFieldKey}
+        />
+      </aside>
+
       {/* Bottom legend strip — swaps with the mode */}
       <footer className="legend-strip">
         {zoomedIn ? (
@@ -1447,6 +1854,20 @@ function App() {
                 }}
               />
               <span>getting better</span>
+            </div>
+            <div className="viz-toggle" role="group" aria-label="Trajectory style">
+              <span className="viz-toggle-label">style</span>
+              {VIZ_MODES.map((m) => (
+                <button
+                  key={m.key}
+                  type="button"
+                  className={`viz-toggle-btn${vizMode === m.key ? ' is-on' : ''}`}
+                  aria-pressed={vizMode === m.key}
+                  onClick={() => setVizMode(m.key)}
+                >
+                  {m.label}
+                </button>
+              ))}
             </div>
             <div className="legend-hint">{mapCaption(false, 0, hexMetric ? HEX_METRIC_LABEL[hexMetric] : null)}</div>
           </>

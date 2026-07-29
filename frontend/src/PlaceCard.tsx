@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import type { AskTurn, Block, Mission } from './useAsk'
 import type { ResidentAgg } from './residentLayer'
+import { outletName, type Headline } from './claims'
 import type { AddressReport } from './report'
 import { CHANGE_META, KIND_COLOR, KIND_LABEL, STAGE_META } from './samplePoints'
 import { SpotReportBody, Sparkline } from './ReportCard'
@@ -139,7 +140,7 @@ function ResidentsSay({
         </div>
       ) : (
         <div className="answer-residents-vals answer-residents-empty">
-          No resident reviews here yet — the layer no dataset can replace.
+          No resident reviews here yet.
         </div>
       )}
       {!unlocked ? (
@@ -154,6 +155,52 @@ function ResidentsSay({
         </button>
       ) : null}
     </div>
+  )
+}
+
+// In the news — the CLAIMS tier surfaced as its OWN card: 3–5 recent, clickable
+// headlines so a reader can leave our report and go read the source. Publication
+// + date leads each row (the byline the mockup's quotation mark used to hold);
+// the headline itself is the link out. Announced/unverified by nature — the card
+// says so once, quietly, rather than dressing claims up as record facts.
+function fmtNewsDate(date: string | null): string {
+  if (!date) return ''
+  const d = new Date(`${date}T00:00:00`)
+  if (isNaN(d.getTime())) return ''
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+function NewsHeadlines({ headlines }: { headlines: Headline[] }) {
+  if (!headlines.length) return null
+  const top = headlines.slice(0, 5)
+  return (
+    <section className="pc-news" aria-label="In the news">
+      <p className="pc-section-label">In the news</p>
+      <div className="pc-news-list">
+        {top.map((h) => (
+          <a
+            key={h.url}
+            className="pc-news-item"
+            href={h.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="pc-news-meta">
+              <span className="pc-news-outlet">{outletName(h.outlet)}</span>
+              {h.date && (
+                <>
+                  <span className="pc-news-dot">·</span>
+                  <time className="pc-news-date" dateTime={h.date}>{fmtNewsDate(h.date)}</time>
+                </>
+              )}
+            </span>
+            <span className="pc-news-title">{h.title}</span>
+            <span className="pc-news-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+      <p className="pc-news-foot">Announced in local press · read the source, then check the record above</p>
+    </section>
   )
 }
 
@@ -258,6 +305,7 @@ type Props = {
   onScope: (next: Scope | null) => void
   mission: Mission | null
   nbhd?: NbhdCardData | null            // resolved for neighborhood scope
+  headlines?: Headline[]                // news claims for this area (neighborhood scope)
   residents?: ResidentAgg | null        // for neighborhood scope
   report?: AddressReport | null         // for spot scope
   reportLoading?: boolean
@@ -303,6 +351,7 @@ export function PlaceCard({
   onScope,
   mission,
   nbhd,
+  headlines = [],
   residents,
   report,
   reportLoading,
@@ -376,20 +425,36 @@ export function PlaceCard({
 
             <p className="pc-section-label">Why — from the public record</p>
             <div className="pc-evidence">
-              {evidence.map((h, i) => (
-                <div key={i} className={`headline-row headline-${h.tone}`}>
-                  <span className="headline-tick" aria-hidden="true">
-                    {h.tone === 'up' ? '▲' : h.tone === 'down' ? '▼' : '·'}
-                  </span>
-                  <div className="headline-body">
-                    <div className="headline-title">{h.text}</div>
-                    <div className="headline-cite">
-                      {h.source} · {h.date} · <span className="pc-badge">this neighborhood · 12 vs 12 mo</span>
+              {evidence.map((h, i) => {
+                // One citation per run of same-source rows: show it on the LAST
+                // row of the run so the two construction lines read as sharing
+                // the source below them, not repeating it. Badge reflects the
+                // row's real basis (snapshot count vs 12-vs-12 trend).
+                const citeKey = `${h.source}·${h.date}·${h.basis}`
+                const next = evidence[i + 1]
+                const showCite = !next || `${next.source}·${next.date}·${next.basis}` !== citeKey
+                return (
+                  <div key={i} className={`headline-row headline-${h.tone}`}>
+                    <span className="headline-tick" aria-hidden="true">
+                      {h.tone === 'up' ? '▲' : h.tone === 'down' ? '▼' : '·'}
+                    </span>
+                    <div className="headline-body">
+                      <div className="headline-title">{h.text}</div>
+                      {showCite && (
+                        <div className="headline-cite">
+                          {h.source} · {h.date} ·{' '}
+                          <span className="pc-badge">
+                            this neighborhood · {h.basis === 'snapshot' ? 'snapshot' : '12 vs 12 mo'}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
+
+            <NewsHeadlines headlines={headlines} />
 
             <ResidentsSay
               area={nbhd.nhood}

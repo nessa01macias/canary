@@ -122,14 +122,26 @@ export function directionLine(s: NbhdCardData, mission: Mission | null): string 
     .sort((a, b) => Math.abs(b.rank - 0.5) - Math.abs(a.rank - 0.5))
     .slice(0, 2)
     .map(({ p, rank }) => (rank >= HI ? p.hi : p.lo))
-  return hits.length ? hits.join(' · ') : s.descriptor
+  if (hits.length) return hits.join(' · ')
+  // No single signal crossed a threshold. Fall back to a line that AGREES with
+  // the verdict pill (both driven by traj) — never the raw descriptor, which
+  // describes the permit MIX ("mostly minor alterations") and reads as a
+  // contradictory trajectory under an "Improving"/"Getting worse" pill.
+  const v = verdict(s.traj)
+  if (v.tone === 'up') return 'Improving on balance — no single signal stands out'
+  if (v.tone === 'down') return 'Slipping on balance — no single signal stands out'
+  return s.descriptor
 }
 
 // ---------------------------------------------------------------------------
 // Evidence lines — the cited "why", mission-ordered. (Absorbs headlines.ts.)
 // ---------------------------------------------------------------------------
 export type Tone = 'up' | 'down' | 'neutral'
-export type EvidenceLine = { key: string; text: string; tone: Tone; source: string; date: string }
+// basis distinguishes a point-in-time count (permits/$ ON RECORD right now) from
+// a year-over-year comparison — so the citation badge can't claim "12 vs 12 mo"
+// on a snapshot number.
+export type Basis = 'snapshot' | 'yoy'
+export type EvidenceLine = { key: string; text: string; tone: Tone; source: string; date: string; basis: Basis }
 
 // Which evidence leads, per mission (QUESTION_MAP lead order).
 const MISSION_EVIDENCE_ORDER: Record<string, string[]> = {
@@ -140,17 +152,21 @@ const MISSION_EVIDENCE_ORDER: Record<string, string[]> = {
 }
 
 export function evidenceLines(s: NbhdCardData, mission: Mission | null): EvidenceLine[] {
-  const asOf = s.trendsAsOf ?? 'latest snapshot'
+  // 'latest data' (not 'latest snapshot') so it doesn't double with the basis
+  // badge, which now carries the snapshot-vs-12-vs-12 distinction itself.
+  const asOf = s.trendsAsOf ?? 'latest data'
   const out: EvidenceLine[] = []
-  const push = (key: string, text: string, source: string, tone: Tone = 'neutral') =>
-    out.push({ key, text, tone, source, date: asOf })
+  // Default basis is 'yoy' — most lines below ARE year-over-year trends; the
+  // snapshot counts opt out explicitly.
+  const push = (key: string, text: string, source: string, tone: Tone = 'neutral', basis: Basis = 'yoy') =>
+    out.push({ key, text, tone, source, date: asOf, basis })
 
   if (s.permits > 0)
-    push('construction', `${s.permits} building permit${s.permits === 1 ? '' : 's'} on record in the recent window`, 'DataSF · Building Permits')
+    push('construction', `${s.permits} building permit${s.permits === 1 ? '' : 's'} on record in the recent window`, 'DataSF · Building Permits', 'neutral', 'snapshot')
   if (s.netUnits >= 3)
-    push('construction', `+${Math.round(s.netUnits)} net housing units approved`, 'DataSF · Building Permits')
+    push('construction', `+${Math.round(s.netUnits)} net housing units approved`, 'DataSF · Building Permits', 'neutral', 'snapshot')
   if (s.totalCost >= 1_000_000)
-    push('construction', `$${(s.totalCost / 1e6).toFixed(1)}M in construction investment filed`, 'DataSF · Building Permits')
+    push('construction', `$${(s.totalCost / 1e6).toFixed(1)}M in construction investment filed`, 'DataSF · Building Permits', 'neutral', 'snapshot')
 
   if (s.crimeTrend >= HI)
     push('crime', 'Police-reported incidents rising faster than most of SF, year over year', 'DataSF · Police reports', 'down')
