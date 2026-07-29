@@ -10,8 +10,7 @@ import { parentScope, type Scope } from '../lib/scope'
 import { logGateShown } from '../lib/gateEvents'
 
 // THE PlaceCard — the one conversation about whatever you're pointing at.
-// Replaces the news card, the report card, the point drawer, and the answer
-// strip. Its SCOPE morphs along the ladder (city → neighborhood → spot →
+// Its SCOPE morphs along the ladder (city → neighborhood → spot →
 // record); the camera+drawing effect in App keeps the map framing exactly what
 // this card describes. Same anatomy at every rung, so a user learns it once:
 // direction line → evidence (cited, with scope badges) → residents (gated) →
@@ -33,7 +32,7 @@ const METRIC_LABEL: Record<string, string> = {
 const fmt5 = (v: number | null) => (v == null ? '–' : v.toFixed(1))
 
 // ---------------------------------------------------------------------------
-// Ask blocks (moved from AnswerStrip) — the model arranges, the server
+// Ask blocks — the model arranges, the server
 // hydrated every number; this only renders.
 // ---------------------------------------------------------------------------
 function BlockView({

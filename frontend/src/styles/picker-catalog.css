@@ -1,4 +1,4 @@
-/* Onboarding catalog (ob-* tiers reused by THE picker accordion) — split from App.css; ORDER MATTERS, see App.css. */
+/* The picker's signal catalog: ob-* tiers, footer, entrance keyframes — split from App.css; ORDER MATTERS, see App.css. */
 /* The ob-fade / ob-rise entrance pair is shared by every centered overlay
    (contribute form, research card, THE picker). */
 @keyframes ob-fade { from { opacity: 0; } to { opacity: 1; } }

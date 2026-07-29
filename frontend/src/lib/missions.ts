@@ -1,6 +1,6 @@
 // The mission vocabulary — shared by the picker (tabs), the dock (placeholder
-// voice), and the ask flow (framing). A mission is a LENS, not an onboarding
-// step: it's changeable any time from the picker's tab row.
+// voice), and the ask flow (framing). A mission is a LENS, not a gate:
+// it's changeable any time from the picker's tab row.
 
 export const MAX_PICKS = 6
 

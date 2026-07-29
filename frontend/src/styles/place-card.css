@@ -1,6 +1,6 @@
 /* The PlaceCard + ask thread + the dock — split from App.css; ORDER MATTERS, see App.css. */
 /* ── The PlaceCard — ONE card, one conversation, scoped to the pointer ──── */
-/* Cream glass of the old news card + the report card's right-dock geometry. */
+/* Cream glass, docked right over the map. */
 .place-card {
   position: absolute;
   top: 114px;

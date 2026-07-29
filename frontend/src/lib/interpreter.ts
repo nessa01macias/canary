@@ -70,7 +70,7 @@ export type NbhdCardData = NbhdSignals & {
 
 // ---------------------------------------------------------------------------
 // Verdict — the one-glance direction of a whole area (hover + card header).
-// Same ±0.12 thresholds the old news card used.
+// ±0.12 keeps most of the city "holding steady"; only clear movers get a verdict.
 // ---------------------------------------------------------------------------
 export type Verdict = { label: string; glyph: string; tone: 'up' | 'down' | 'flat' }
 
@@ -134,7 +134,7 @@ export function directionLine(s: NbhdCardData, mission: Mission | null): string 
 }
 
 // ---------------------------------------------------------------------------
-// Evidence lines — the cited "why", mission-ordered. (Absorbs headlines.ts.)
+// Evidence lines — the cited "why", mission-ordered.
 // ---------------------------------------------------------------------------
 export type Tone = 'up' | 'down' | 'neutral'
 // basis distinguishes a point-in-time count (permits/$ ON RECORD right now) from

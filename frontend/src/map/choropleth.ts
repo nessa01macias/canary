@@ -140,8 +140,8 @@ export function addNbhdLayers(map: maplibregl.Map, geo: FeatureCollection) {
     id: 'nbhd-fill',
     type: 'fill',
     source: 'nbhd',
-    // Start hidden; the visibility effect reveals it once onboarding is
-    // dismissed (the choropleth itself zoom-fades past STREET_ZOOM).
+    // Start hidden; the bookkeeping effect reveals it once the data lands
+    // (the choropleth itself zoom-fades past STREET_ZOOM).
     layout: { visibility: 'none' },
     paint: {
       'fill-color': trajectoryColor(),

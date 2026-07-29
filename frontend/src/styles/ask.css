@@ -1,5 +1,5 @@
 /* Ask Canary — answer markdown, actions, compare + residents blocks — split from App.css; ORDER MATTERS, see App.css. */
-/* ── Ask Canary — the answer canvas (omnibox asks; the map responds) ─────── */
+/* ── Ask blocks — rendered inside the PlaceCard's visible thread ─────────── */
 
 /* Markdown from the answer block — the model writes tight prose (reused). */
 .ask-md p { margin: 0 0 6px; }
@@ -33,11 +33,8 @@
 }
 .ask-followup:hover { color: #FF6624; }
 
-/* The answer canvas: a transient card under the navbar. The MAP is the real
-   response (rank_map / flyto auto-execute above); this is the receipt. */
-
-
-/* "what the map just did" line — the receipt for an executed action block. */
+/* "what the map just did" line — the MAP is the real response (rank_map /
+   flyto auto-execute); this line is the receipt for the executed block. */
 .answer-did { margin: 8px 0 2px; }
 .answer-did-item {
   font-size: 12px;

@@ -7,10 +7,10 @@
 export const SF_CENTER: [number, number] = [-122.44, 37.75]
 export const SF_ZOOM = 12.3
 
-// ONE LAYER, ZOOM AS THE AXIS (no mode toggle). At city scale you care about
+// ONE LAYER, ZOOM AS THE AXIS. At city scale you care about
 // areas — the trajectory choropleth. Fly past STREET_ZOOM and the story becomes
 // individual permits and businesses: the choropleth melts to a faint tint while
-// the markers fade up. What used to be two tabs is now just… zooming.
+// the markers fade up.
 export const STREET_ZOOM = 14
 
 // Routine "OTC alteration" permits are low-signal noise even at street zoom —

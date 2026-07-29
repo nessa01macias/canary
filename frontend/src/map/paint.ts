@@ -7,11 +7,10 @@ import type * as maplibregl from 'maplibre-gl'
 import { STREET_ZOOM } from './constants'
 
 // Diverging ramp → neighborhood TRAJECTORY over the last few years. Terracotta =
-// worsening (e.g. crime climbing), periwinkle = improving. Softened from the old
-// "Solar Shock" ramp: the two poles are now perceptually BALANCED in lightness
-// (indigo used to be far darker than the orange, so "improving" always shouted
-// louder), and pulled toward the cream midpoint so even strong movers read as a
-// tint the terrain shows through — not a slab. Interpolated on `traj` ∈ [-1, 1].
+// worsening (e.g. crime climbing), periwinkle = improving. The two poles are
+// perceptually BALANCED in lightness (a darker pole would shout louder and bias
+// the read), and pulled toward the cream midpoint so even strong movers read as
+// a tint the terrain shows through — not a slab. Interpolated on `traj` ∈ [-1, 1].
 export const TRAJECTORY_STOPS: Array<[number, string]> = [
   [-1, '#e0764a'],   // strongly worsening — soft terracotta
   [-0.5, '#eca787'], // worsening — muted clay

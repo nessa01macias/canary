@@ -94,7 +94,7 @@ function App() {
   const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
   const [agentsOpen, setAgentsOpen] = useState(false)
   // One layer, zoom as the axis: past STREET_ZOOM the map is about individual
-  // permits/businesses; below it, area trajectory. Replaces the old mode toggle.
+  // permits/businesses; below it, area trajectory.
   const [zoomedIn, setZoomedIn] = useState(false)
   // SF is the one lit-up city, so when it's panned/zoomed out of the viewport we
   // surface a bottom-center "back to SF" button (see the map init effect).
@@ -104,7 +104,7 @@ function App() {
     if (map && map.getZoom() >= STREET_ZOOM) map.easeTo({ zoom: 12.4, duration: 700 })
   }
   const [priorities, setPriorities] = useState<Set<string>>(new Set())
-  // The shortlist = the chips shown in the panel (chosen in onboarding). `priorities`
+  // The shortlist = the chips shown in the panel (chosen in THE picker). `priorities`
   // is the ACTIVE subset that drives the map. A chip toggled off in the panel leaves
   // `priorities` but STAYS in `shortlist`, rendered as an empty-state button.
   const [shortlist, setShortlist] = useState<string[]>([])
@@ -128,10 +128,10 @@ function App() {
     setResidentUnlocked(true)
     logGateCompleted(area) // fake-door numerator, attributed to the reviewed area
   }
-  // The wizard's receipt line, shown on the city rung after chips seed.
+  // The picker's receipt line, shown on the city rung after chips seed.
   const [cityIntro, setCityIntro] = useState<string | null>(null)
 
-  // Onboarding: add/remove a field from the shortlist (activating it on add). The
+  // Picker: add/remove a field from the shortlist (activating it on add). The
   // MAX_PICKS cap applies to shortlist membership.
   const toggleShortlist = (tag: string) => {
     const inList = shortlist.includes(tag)
@@ -159,7 +159,7 @@ function App() {
     if (activating) zoomToCity()
   }
 
-  // Full reset from the onboarding "Clear" button.
+  // Full reset from the picker's "Clear" button.
   const clearAll = () => {
     setShortlist([])
     setPriorities(new Set())
@@ -543,7 +543,7 @@ function App() {
       matchInfoRef.current = { active: false, count: 0 }
       setMatchTop([])
       // Breathe only while the trajectory overlay is actually the visible view
-      // (area scale, onboarding dismissed).
+      // (area scale, no fit overlay).
       if (!zoomedIn) pulse.start()
       else pulse.stop()
       return

@@ -1,4 +1,4 @@
-/* Neighborhood news card + the why-ledger (headline rows reused by PlaceCard) — split from App.css; ORDER MATTERS, see App.css. */
+/* The verdict pill + the why-ledger (PlaceCard) + prefs-panel header buttons — split from App.css; ORDER MATTERS, see App.css. */
 /* The card entrance shared by the PlaceCard and the mobile sheet. */
 @keyframes news-in {
   from { opacity: 0; transform: translateY(-6px) scale(0.985); }
