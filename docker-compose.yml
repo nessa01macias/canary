@@ -28,9 +28,19 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      # Commute routing (Stadia/Valhalla). Optional: absent → /api/commute
+      # answers ok:false "routing_unconfigured" and the UI shows times as "—".
+      STADIA_API_KEY: ${STADIA_API_KEY:-}
     volumes:
       # The pushed artifact, mounted read-only. Nothing in this container writes it.
       - ./backend/data/canary.duckdb:/data/canary.duckdb:ro
+      # Small derived artifacts read straight off disk by the API (claims.json
+      # for /api/claims + the news cards, freshness.json for /api/freshness).
+      # The code resolves them relative to the backend dir → /app inside the image.
+      - ./backend/data/processed:/app/data/processed:ro
+      # Overture Places snapshot (~2MB) for /api/places/search — the small-business
+      # lookup behind the commute "add a place" field. Absent → [] (MapTiler only).
+      - ./backend/data/raw/overture_places:/app/data/raw/overture_places:ro
     expose:
       - "8000"
 
