@@ -29,11 +29,11 @@ measured in the small pilot. The deficit is therefore not recency: aggregates th
 were never published cannot be recalled from any training vintage or retrieved by
 live search, which scored lowest (25%).
 Validity is checked from three directions: every expected answer was re-derived
-from the city's own APIs by a script independent of our pipeline (42 of 43
-confirmed; the exception is disclosed as an erratum), verdicts were replicated by a
-cross-vendor judge panel (Fleiss kappa 0.95, no measurable self-preference), and
-all results carry Wilson 95% intervals with exact McNemar tests (p < 4 × 10⁻⁵ for
-every model). We interpret these results as evidence that the failure is one of
+from the city's own APIs by a script independent of our pipeline, at freeze time,
+before any model query (136 of 137 confirmed; the failing item was dropped
+pre-run), verdicts were replicated by a cross-vendor judge panel (Fleiss kappa
+0.95, no measurable self-preference), and all results carry Wilson 95% intervals
+with exact McNemar tests (p < 2 × 10⁻¹³ for every model). We interpret these results as evidence that the failure is one of
 data availability rather than model capability or retrieval freshness: the target
 facts had not previously been computed or published, and therefore cannot be
 recalled or retrieved at any capability level.
@@ -185,11 +185,12 @@ the incident is disclosed here.
 
 Provider-default temperature was used throughout, on the grounds that it reflects
 deployed consumer behavior, and because several current APIs reject non-default
-temperature settings. One run per condition (this is a pilot; stability replicates
-are planned for v1.1). Total API cost was approximately $25. Exact model
-identifiers: `claude-fable-5`, `gpt-5.6-sol`, `gpt-5-search-api`, `sonar-pro`,
-`grok-4.5`. Gemini could not be included due to account constraints and is planned
-for v1.1.
+temperature settings. One run per condition, under an explicit cost cap
+(stability replicates belong to the registered regeneration). Total API cost was
+approximately $150 across the pilot and this run. Exact model identifiers:
+`claude-fable-5`, `gpt-5.6-sol`, `gpt-5-search-api`, `sonar-pro`, `grok-4.5`.
+Gemini could not be included due to account constraints and joins the next
+regeneration.
 
 ### 2.4 Judging
 
@@ -272,9 +273,10 @@ value, two unassisted answers (Grok 4.5's "100 to 200" and Claude Fable 5's
 unassisted accuracy from 13% to at most 27%. The error therefore harmed the
 models, not our thesis, and no conclusion changes. The grounded condition is
 unaffected in kind, since it grades whether models commit to the supplied
-payload, which carried the same ring value. The geometry is fixed in the
-generator and in the production lookup path, q037 regenerates correctly in
-v1.1, and this note is the erratum of record.
+payload, which carried the same ring value. The geometry was fixed in the
+generator and in the production lookup path; the v2 freeze-time verification
+subsequently reproduced all 17 of v2's ring totals exactly under true-disk
+geometry, closing the erratum. This note remains the record of it.
 
 ## 3. Results
 

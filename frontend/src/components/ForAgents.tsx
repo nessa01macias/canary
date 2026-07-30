@@ -185,7 +185,7 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
         <p className="agents-provenance">
           Four ways in, one contract: every number arrives with its definition, its
           source, and two dates. In the benchmark, one such response took frontier
-          models from 2% to 100% on counting questions; the field documentation is
+          models from 25-47% overall to 95-99%; the field documentation is
           load-bearing, not a nicety.
         </p>
 
