@@ -208,7 +208,6 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
                 onClick={() => { setActiveKey(e.key); setCopied(false) }}
               >
                 <span className="agents-api-need">{e.need}</span>
-                <span className="agents-api-needsub">{e.needSub}</span>
               </button>
             ))}
           </div>
@@ -231,7 +230,6 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
               <span className="agents-api-method">{ep.method}</span>
               <code className="agents-api-path">{ep.path}</code>
             </div>
-            <p className="agents-api-tagline">{ep.tagline}</p>
             <p className="agents-api-desc">{ep.desc}</p>
             <div className="agents-api-meta">
               <div>
@@ -250,17 +248,10 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
           </div>
         </div>
 
-        <p className="agents-api-foot">
-          Machine-readable discovery: <code>/api/catalog</code> (every metric, with
-          definition) · <code>/api/freshness</code> (each source's two dates). The
-          copy icon hands your agent the whole contract as markdown.
-        </p>
-
         <div className="agents-cta">
           <a className="agents-cta-btn" href={`mailto:${EARLY_ACCESS_EMAIL}?subject=Canary%20API%20early%20access`}>
             Request early access
           </a>
-          <span className="agents-cta-note">Tokens go to early-access partners. SF live today; the consumer map stays free.</span>
         </div>
       </div>
     </div>
