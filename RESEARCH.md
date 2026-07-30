@@ -414,12 +414,19 @@ and machine-legibility of the data itself.
 
 ## 4. Discussion
 
-**The deficit is informational, not cognitive.** Three observations triangulate this
-conclusion: capability improved between generations while diagnostic-block accuracy
-did not; search-native configurations failed alongside parametric ones; and supplying
-the missing data recovered near-ceiling performance in every model tested.
-Aggregations that have never been published cannot be retrieved, and additional model
-scale does not conjure them.
+**The deficit is informational, not cognitive, and not temporal.** Four
+observations triangulate this conclusion: capability improved between generations
+while diagnostic-block accuracy did not; search-native configurations failed
+alongside parametric ones, the live-search system scoring lowest; supplying the
+missing data recovered near-ceiling performance in every model tested; and, new at
+this scale, questions whose answers fall entirely inside training windows failed
+almost as badly (37%) as questions about the recent present. The pilot's
+near-perfect temporal control turns out to have sampled exactly the aggregates
+extreme enough to have been written about. The general case is the opposite: an
+aggregation that was never published cannot be recalled from any training vintage,
+retrieved by any search engine, or conjured by additional model scale. The
+constraint is whether the number was ever computed and written down, and for the
+class of facts studied here, it almost never was.
 
 **Fluency without grounding harms users.** The shift from refusal to confident error
 means the cost of the missing data layer is rising with model quality. The
@@ -435,10 +442,12 @@ answers are correct.
 adjustments (enforcement versus victimization, the 311 reporting artifact, closure
 lag) before it could fairly grade anyone. Systems that ingest raw public records
 without such corrections inherit exactly the errors this benchmark penalizes. The
-same discipline applies to ourselves: the independent verification of §2.5 caught a
-geometry bug in our own generator that internal review had not, and we regard
-external re-derivation as a standing requirement of benchmark practice rather than
-a one-time exercise.
+same discipline applies to ourselves: independent verification has now caught one
+real bug in each version (v1's ring geometry post hoc; v2's silent failure of a
+documented exclusion, at freeze time, before any model ran), neither of which
+internal review had found. We regard external re-derivation as a standing
+requirement of benchmark practice rather than a one-time exercise, and the v2
+sequencing, verify before querying, is the version we recommend.
 
 **Scope of claims.** These results establish the failure and its remediability at
 pilot scale, on our question dimensions, in one metropolitan area. They do not
