@@ -3,6 +3,8 @@
 // touches Supabase. No DB client, no keys in the browser. Same-origin /api/* is
 // proxied to FastAPI (Vite proxy in dev, Caddy in prod).
 
+import { apiFetch } from './api'
+
 export type ContributionRatings = {
   safety?: number
   noise?: number
@@ -36,7 +38,7 @@ export type SubmitResult = { ok: true } | { ok: false; error: string }
 
 export async function submitContribution(input: ContributionInput): Promise<SubmitResult> {
   try {
-    const resp = await fetch('/api/contributions', {
+    const resp = await apiFetch('/api/contributions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...input, session_id: sessionId() }),

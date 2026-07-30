@@ -4,6 +4,8 @@
 // trajectory list. All aggregation runs server-side (see backend app/api/sf_live.py).
 
 // Minimal GeoJSON typing — enough for what we join onto.
+import { apiFetch } from './api'
+
 export type NbhdFeature = {
   type: 'Feature'
   properties: Record<string, unknown> & { nhood: string }
@@ -31,7 +33,7 @@ export type NbhdCollection = {
 }
 
 export async function fetchNeighborhoods(): Promise<NbhdCollection> {
-  const res = await fetch('/api/sf/neighborhoods')
+  const res = await apiFetch('/api/sf/neighborhoods')
   if (!res.ok) throw new Error(`/api/sf/neighborhoods failed: ${res.status}`)
   return res.json()
 }

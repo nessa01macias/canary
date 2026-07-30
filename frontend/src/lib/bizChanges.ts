@@ -1,4 +1,5 @@
 import type { ChangePoint } from './samplePoints'
+import { apiFetch } from './api'
 
 // Business openings/closures for the map — green/red dots that tell the "block
 // alive or dying" story next to the construction markers. Served by our backend
@@ -25,7 +26,7 @@ function sinceMonthsAgo(months: number): string {
 
 export async function fetchSfBusinessChanges(): Promise<ChangePoint[]> {
   const url = `/api/changes?bbox=${SF_BBOX}&category=business&since=${sinceMonthsAgo(3)}&limit=300`
-  const res = await fetch(url)
+  const res = await apiFetch(url)
   if (!res.ok) throw new Error(`/api/changes (business) failed: ${res.status}`)
   const raw: ApiChange[] = await res.json()
 

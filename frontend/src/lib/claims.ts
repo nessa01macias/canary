@@ -6,6 +6,8 @@
 
 // One clickable headline = one source article. Multiple claims can be extracted
 // from the same URL, so we dedupe to the article and keep the best lead sentence.
+import { apiFetch } from './api'
+
 export type Headline = {
   url: string
   outlet: string   // publication, e.g. "sfstandard.com"
@@ -73,7 +75,7 @@ function bestTitle(claims: ApiClaim[]): string {
 }
 
 export async function fetchHeadlines(): Promise<Map<string, Headline[]>> {
-  const res = await fetch('/api/claims?limit=1000')
+  const res = await apiFetch('/api/claims?limit=1000')
   if (!res.ok) throw new Error(`/api/claims failed: ${res.status}`)
   const data: { claims: ApiClaim[] } = await res.json()
 

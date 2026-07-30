@@ -7,6 +7,8 @@
 //   - call logGateShown(area) when the gate becomes visible (deduped per session+area)
 //   - call logGateCompleted(area) after a successful contribution submit
 
+import { apiFetch } from './api'
+
 export type GateVariant = 'report_unlock' | 'founding'
 
 function sessionId(): string {
@@ -30,7 +32,7 @@ export function gateVariant(): GateVariant {
 
 function send(event: 'gate_shown' | 'gate_completed', area?: string) {
   // Fire-and-forget: analytics must never break the product.
-  void fetch('/api/gate-events', {
+  void apiFetch('/api/gate-events', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ event, variant: gateVariant(), session_id: sessionId(), area }),

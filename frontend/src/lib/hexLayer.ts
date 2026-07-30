@@ -5,6 +5,7 @@
 // rows as polygons (server-cached; ~700 rankable hexes per metric).
 
 import type { FeatureCollection } from 'geojson'
+import { apiFetch } from './api'
 
 // Which metric textures the hexes, given the user's leading active chip.
 // Only trend-metrics appear here — attribute chips (schools, flood…) have no
@@ -36,7 +37,7 @@ export function hexMetricFor(activeChips: string[]): string {
 }
 
 export async function fetchHexTrajectory(metric: string): Promise<FeatureCollection> {
-  const res = await fetch(`/api/hex-trajectory?metric=${encodeURIComponent(metric)}`)
+  const res = await apiFetch(`/api/hex-trajectory?metric=${encodeURIComponent(metric)}`)
   if (!res.ok) throw new Error(`/api/hex-trajectory failed: ${res.status}`)
   return res.json()
 }

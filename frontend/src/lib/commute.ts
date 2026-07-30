@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { LineString } from 'geojson'
 import type { PickedAddress } from '../components/AddressSearch'
+import { apiFetch } from './api'
 
 export type CommuteMode = 'drive' | 'bike' | 'walk' | 'transit'
 
@@ -115,7 +116,7 @@ export async function searchOverturePlaces(
   signal?: AbortSignal,
 ): Promise<PickedAddress[]> {
   try {
-    const res = await fetch(`/api/places/search?q=${encodeURIComponent(query)}&limit=8`, { signal })
+    const res = await apiFetch(`/api/places/search?q=${encodeURIComponent(query)}&limit=8`, { signal })
     if (!res.ok) return []
     const rows = (await res.json()) as { id: string; label: string; center: [number, number] }[]
     return rows.map((r) => ({ id: r.id, label: r.label, center: r.center }))
@@ -130,7 +131,7 @@ export async function fetchCommute(
   mode: CommuteMode,
   signal?: AbortSignal,
 ): Promise<CommuteResult> {
-  const res = await fetch('/api/commute', {
+  const res = await apiFetch('/api/commute', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     signal,

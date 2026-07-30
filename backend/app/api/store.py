@@ -54,6 +54,51 @@ async def fetch_resident_layer(view: str) -> list[dict]:
     return resp.json()
 
 
+async def fetch_api_keys() -> list[dict]:
+    """Active API keys for the auth path (backend/app/api/auth.py).
+
+    Reads `api_keys` with the server key. The table is RLS-locked to the service
+    role, so SUPABASE_SERVICE_KEY must be set — with only the anon key this
+    returns [] and every gated endpoint fails closed. Returns [] (not an error)
+    when Supabase is unconfigured or the table is absent, so local dev without
+    Supabase simply has no valid keys rather than crashing on boot.
+    """
+    if not supabase_configured():
+        return []
+    headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+    params = "active=eq.true&select=key_hash,prefix,label,tier,rate_limit_per_min,daily_quota"
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.get(f"{SUPABASE_URL}/rest/v1/api_keys?{params}", headers=headers)
+    if resp.status_code == 404:  # table not created yet
+        return []
+    resp.raise_for_status()
+    return resp.json()
+
+
+async def insert_api_key(row: dict) -> None:
+    """Store one issued key (hash + metadata). Plaintext is never passed here."""
+    await _insert("api_keys", row)
+
+
+async def revoke_api_key(prefix: str) -> None:
+    """Deactivate a key by its prefix (PATCH active=false)."""
+    if not supabase_configured():
+        raise RuntimeError("Supabase not configured (set SUPABASE_URL and a key).")
+    endpoint = f"{SUPABASE_URL}/rest/v1/api_keys?prefix=eq.{prefix}"
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+    async with httpx.AsyncClient(timeout=10) as client:
+        resp = await client.patch(endpoint, headers=headers, json={"active": False})
+    if resp.status_code >= 400:
+        raise RuntimeError(f"Supabase revoke failed ({resp.status_code}): {resp.text}")
+    if not resp.json():
+        raise RuntimeError(f"No key with prefix '{prefix}'.")
+
+
 async def insert_contribution(row: dict) -> None:
     """Insert one contribution row. Raises RuntimeError on any failure."""
     await _insert("contributions", row)

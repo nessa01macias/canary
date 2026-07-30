@@ -99,31 +99,6 @@ const ENDPOINTS: Endpoint[] = [
       '    "mission": "opening_business"\n' +
       '  }\'',
   },
-  {
-    key: 'mcp',
-    need: 'Native to my agent',
-    needSub: 'canary-mcp',
-    method: 'MCP',
-    path: 'canary-mcp',
-    tagline: 'The same tools, speaking MCP',
-    desc:
-      'report, trajectory, and the metric catalog as tools your agent runtime ' +
-      'discovers by itself, field documentation included. Ships to early-access ' +
-      'partners first.',
-    returns: 'report, trajectory, and catalog as discoverable tools',
-    bestFor: 'Claude and other MCP-native agent runtimes',
-    file: 'mcp.json',
-    params: 'one URL + bearer token; tools are self-describing',
-    code:
-      '{\n' +
-      '  "mcpServers": {\n' +
-      '    "canary": {\n' +
-      '      "url": "https://canarylayer.com/api/mcp",\n' +
-      '      "headers": { "Authorization": "Bearer $CANARY_TOKEN" }\n' +
-      '    }\n' +
-      '  }\n' +
-      '}',
-  },
 ]
 
 // What the corner icon copies: the endpoint contract as agent-ready markdown,

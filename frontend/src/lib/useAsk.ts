@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import type { AskContext } from './scope'
+import { apiFetch } from './api'
 
 // The ask flow — question in, block-composed answer out. The model arranges
 // components; the server hydrated every number from DuckDB. This hook owns the
@@ -77,7 +78,7 @@ export function useAsk() {
     const append = (result: AskResult) =>
       setTurns((prev) => [...prev, { question: q, result }].slice(-MAX_VISIBLE_TURNS))
     try {
-      const resp = await fetch('/api/ask', {
+      const resp = await apiFetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -3,6 +3,8 @@
 // reviews are structurally unreadable. This module fetches both granularities
 // and folds them into one per-neighborhood lookup for the hover popup.
 
+import { apiFetch } from './api'
+
 export type ResidentAgg = {
   n: number
   safety: number | null
@@ -30,7 +32,7 @@ type ApiResidentLayer = {
 }
 
 export async function fetchResidentLayer(): Promise<Map<string, ResidentAgg>> {
-  const res = await fetch('/api/resident-layer')
+  const res = await apiFetch('/api/resident-layer')
   if (!res.ok) throw new Error(`/api/resident-layer failed: ${res.status}`)
   const data: ApiResidentLayer = await res.json()
 

@@ -3,6 +3,8 @@
 // trajectories, reference attributes. Mirrors backend AddressReport
 // (app/api/schemas.py); the same object the $29 PDF and the agent API serve.
 
+import { apiFetch } from './api'
+
 export type ReportCitation = {
   source: string
   source_as_of: string | null
@@ -65,7 +67,7 @@ export async function fetchReport(lat: number, lon: number): Promise<AddressRepo
     since: sinceMonthsAgo(24),
     window_months: '24',
   })
-  const res = await fetch(`/api/report?${params}`)
+  const res = await apiFetch(`/api/report?${params}`)
   if (!res.ok) throw new Error(`/api/report failed: ${res.status}`)
   return res.json()
 }

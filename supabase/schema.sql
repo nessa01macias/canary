@@ -102,3 +102,47 @@ create or replace view resident_layer_by_area as
   where place_label is not null
   group by place_label
   having count(*) >= 3;
+
+-- ---------------------------------------------------------------------------
+-- api_keys — the gate for the paid API surface (backend/app/api/auth.py).
+-- Only the sha256 HASH of a key is stored; the plaintext is shown once at
+-- issuance by scripts/issue_api_key.py and never persisted. The backend reads
+-- this table with the SERVICE key (RLS below blocks everyone else), so
+-- SUPABASE_SERVICE_KEY MUST be set on the server for auth to work — with only
+-- the anon key, reads return [] and every gated endpoint fails closed (401).
+--
+-- Two tiers keep the free consumer map working alongside paid partners:
+--   anon      one publishable key shipped in the frontend build (low limit,
+--             browser Origin-locked by CORS). Powers the free map.
+--   partner   issued per customer (higher limit, metered, server-to-server).
+--   internal  our own tools / benchmarks.
+-- ---------------------------------------------------------------------------
+create table if not exists api_keys (
+  id                 uuid primary key default gen_random_uuid(),
+  created_at         timestamptz not null default now(),
+  key_hash           text not null unique,     -- sha256(plaintext); never the key itself
+  prefix             text not null,            -- e.g. 'canary_sk_ab12cd' — display + revoke handle
+  label              text,                     -- partner name / purpose
+  tier               text not null default 'partner',  -- anon | partner | internal
+  active             boolean not null default true,
+  rate_limit_per_min integer not null default 60,
+  daily_quota        integer,                  -- null = unlimited (Phase 2 enforces)
+  revoked_at         timestamptz
+);
+create index if not exists api_keys_hash on api_keys (key_hash);
+
+-- api_usage — durable per-key metering (Phase 2). One row per key/day/endpoint,
+-- incremented fire-and-forget so metering never blocks or fails a response.
+create table if not exists api_usage (
+  prefix    text not null,
+  day       date not null default current_date,
+  endpoint  text not null,
+  count     integer not null default 0,
+  primary key (prefix, day, endpoint)
+);
+
+-- RLS: secrets. Enable it with NO policies ⇒ anon/authenticated clients get
+-- nothing; only the service key (which bypasses RLS) can read/write. This is
+-- why the backend must use SUPABASE_SERVICE_KEY for the auth path.
+alter table api_keys  enable row level security;
+alter table api_usage enable row level security;
