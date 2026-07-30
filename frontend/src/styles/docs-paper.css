@@ -14,7 +14,7 @@
 }
 /* the rotated identifier, arXiv's signature */
 .research-body.paper::before {
-  content: 'canary · research note v1 · 2026-07-26';
+  content: 'canary · research note v2 · 2026-07-29';
   position: absolute;
   top: 190px;
   left: 26px;

@@ -1,0 +1,6 @@
+{
+ "provider": "openai:gpt-5.6-sol+canary",
+ "judge_model": "grok-4.5",
+ "run_file": "openai_gpt-5.6-sol+canary_20260729T043745Z.json",
+ "verdicts": []
+}

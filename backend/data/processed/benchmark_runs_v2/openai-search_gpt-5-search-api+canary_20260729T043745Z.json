@@ -1,0 +1,825 @@
+{
+ "provider": "openai-search:gpt-5-search-api+canary",
+ "grounded": true,
+ "benchmark": "Canary area ground-truth benchmark v2 (San Francisco, scaled)",
+ "pipeline_version": "581c820",
+ "ran_at": "20260729T043745Z",
+ "answers": [
+  {
+   "id": "q001",
+   "question": "Is crime rising or falling in Bernal Heights, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Crime in Bernal Heights has fallen over the past year versus the prior year. Specifically, \u201ccrime_incidents\u201d dropped by about 32% (from 2,234 to 1,517), and \u201ccrime_victim_reported\u201d dropped even more, by about 43% (from 1,532 to 877). ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/bernal-heights?utm_source=openai))  \n\nLet me know if you want this broken out by type of crime (violent vs property) to get a more detailed picture.",
+   "status": "ok"
+  },
+  {
+   "id": "q002",
+   "question": "Is crime rising or falling in Japantown, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Crime in Japantown is *falling* over the past year compared to the prior year based on the key metrics you shared:\n\n- Total crime incidents dropped ~30.6% (377 vs 543) ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/japantown?utm_source=openai))  \n- Victim-reported crime fell ~37% (254 vs 406) ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/japantown?utm_source=openai))  \n\nSo overall, residents are experiencing less crime (both reported incidents and victim reports) in Japantown as of mid-2026 compared to the year before.",
+   "status": "ok"
+  },
+  {
+   "id": "q003",
+   "question": "Is crime rising or falling in Outer Mission, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Crime in the Outer Mission is **falling** compared to the previous year. Key indicators from the past 12 months versus the 12 before show:\n\n- Total crime incidents dropped ~24.5% ([sfstandard.com](https://sfstandard.com/2026/01/02/san-francisco-2025-crime-stats/?utm_source=openai))  \n- Victim-reported crime fell ~33% ([sfstandard.com](https://sfstandard.com/2026/01/02/san-francisco-2025-crime-stats/?utm_source=openai))  \n- Proactive policing (\u201ccrime enforcement\u201d actions) rose ~23%, which may reflect increased enforcement rather than an increase in crime itself based on other metrics ([sanfranciscopolice.org](https://www.sanfranciscopolice.org/stay-safe/crime-data/crime-dashboard?utm_source=openai))  \n\nSo overall, residents are experiencing less crime, not more.",
+   "status": "ok"
+  },
+  {
+   "id": "q004",
+   "question": "Is crime rising or falling in Golden Gate Park, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Crime in Golden Gate Park is falling. Here\u2019s how the most relevant metrics compare from the past 12 months vs the prior 12:\n\n- \u201ccrime_victim_reported\u201d dropped ~33% (306 vs 456) ([publicanalyst.ai](https://www.publicanalyst.ai/san-francisco/2025/year-in-review?utm_source=openai))  \n- \u201ccrime_incidents\u201d dropped ~30% (578 vs 823) ([publicanalyst.ai](https://www.publicanalyst.ai/san-francisco/2025/year-in-review?utm_source=openai))  \n\nSo overall, there\u2019s a clear downward trend in crime for Golden Gate Park over that span.",
+   "status": "ok"
+  },
+  {
+   "id": "q005",
+   "question": "Is crime rising or falling in Financial District/South Beach, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Crime in Financial District / South Beach is generally falling year-over-year (the trailing 12 months vs the prior 12 months, as of mid-2026). Here\u2019s how the metrics show that:\n\n\u2022 \u201cCrime_incidents\u201d are down ~24% (from 5,485 \u2192 4,182) ([sfchronicle.com](https://www.sfchronicle.com/projects/2026/san-francisco-crime-neighborhood/?utm_source=openai))  \n\u2022 \u201cCrime_victim_reported\u201d is down ~32% (from 3,644 \u2192 2,464) ([sfchronicle.com](https://www.sfchronicle.com/projects/2026/san-francisco-crime-neighborhood/?utm_source=openai))  \n\nSo yes \u2014 crime is falling in that area. If you want, I can break down by type (violent vs property) or by time of day.",
+   "status": "ok"
+  },
+  {
+   "id": "q006",
+   "question": "Are more or fewer new businesses opening in Western Addition, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "In Western Addition, San Francisco, there *are* more new businesses opening in the past full year (last 12 months) compared to the previous year. Specifically, business openings went from **166** in the prior 12-month period to **213**, an increase of about **28%**. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q007",
+   "question": "Are more or fewer new businesses opening in Visitacion Valley, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening now in Visitacion Valley compared to the previous year. The data shows that biz_openings dropped from 89 in the prior 12 months to 66 in the last 12 months, a decline of about 25.8%. ",
+   "status": "ok"
+  },
+  {
+   "id": "q008",
+   "question": "Are more or fewer new businesses opening in Presidio Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in Presidio Heights in the past year compared to the year before. The Canary metric \u201cbiz_openings\u201d dropped from 162 (prior-12 months) to 127 (last-12 months), a decrease of about 21.6% ([docs.canary.tools](https://docs.canary.tools/guide/terminology.html?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q009",
+   "question": "Are more or fewer new businesses opening in Mission, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "There are *fewer* new businesses opening in the Mission during the past 12 months compared to the prior year. According to the Canary API data, business openings dropped from **969** to **785**, which is a decline of about **19%**. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q010",
+   "question": "Are more or fewer new businesses opening in Bernal Heights, San Francisco, this past year compared to the year before (as of mid-2026)?",
+   "answer": "Fewer new businesses are opening in Bernal Heights this past year compared to the year before. The Canary metric for *biz_openings* shows 214 in the latest 12 months, down from 259\u2014about a 17.4% drop. ([levelupgroup.com](https://levelupgroup.com/blog/whats-actually-new-on-cortland-avenue-this-summer?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q011",
+   "question": "Are business closures in Japantown, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "answer": "In Japantown, San Francisco, business closures are *falling*. Over the most recent 12-months there were 45 closures versus 78 in the prior 12-months \u2014 a drop of about 42 %.",
+   "status": "ok"
+  },
+  {
+   "id": "q012",
+   "question": "Are business closures in Oceanview/Merced/Ingleside, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "answer": "Business closures in Oceanview/Merced/Ingleside are falling: in the last 12 months there were about 120 closures vs 173 in the prior 12 \u2014 a drop of \u224830.6%. ",
+   "status": "ok"
+  },
+  {
+   "id": "q013",
+   "question": "Are business closures in Glen Park, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "answer": "In Glen Park, San Francisco, business closures have *increased* in the past year compared to the previous year.  \n\nAccording to the Canary API data you provided, there were 90 business closures in the most recent 12-month period, up from 69 in the 12 months before \u2014 a rise of about **30%**.   \n\nSo yes: business closures in Glen Park are rising.",
+   "status": "ok"
+  },
+  {
+   "id": "q014",
+   "question": "Are business closures in Russian Hill, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "answer": "Business closures in Russian Hill are falling. The data shows 156 closures in the past 12 months versus 210 in the prior 12 months \u2014 a drop of about 25.7%.",
+   "status": "ok"
+  },
+  {
+   "id": "q015",
+   "question": "Are business closures in Inner Richmond, San Francisco, rising or falling (past year vs the year before, as of mid-2026)?",
+   "answer": "Business closures in Inner Richmond are *falling*. The Canary API data shows there were 157 business closings in the most recent trailing-12 months, down from 207 in the prior 12 months \u2014 a drop of about 24% year-over-year. ([storymaps.arcgis.com](https://storymaps.arcgis.com/stories/f6d261caa37f48dc8b969051562a529f?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q016",
+   "question": "Are eviction notices in Lakeshore, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "answer": "Eviction notices in Lakeshore, San Francisco are sharply increasing. The data show 47 evictions filed in the most recent 12-month period versus just 5 in the previous 12-month span \u2014 an increase of **840%**. ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q017",
+   "question": "Are eviction notices in Chinatown, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "answer": "Eviction notices in Chinatown are increasing. The number of evictions filed in the trailing 12 months is 37 vs. 18 in the prior 12 \u2014 a rise of about 105%. \ue200cite\ue202turn0search0\ue201",
+   "status": "ok"
+  },
+  {
+   "id": "q018",
+   "question": "Are eviction notices in Bernal Heights, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "answer": "Eviction notices in Bernal Heights *are increasing*. According to the Canary API data, the number of evictions filed rose from **21 in the prior 12 months** to **37 in the latest 12 months**, a **~76% increase** ([sfpulse.org](https://sfpulse.org/district/9?utm_source=openai)",
+   "status": "ok"
+  },
+  {
+   "id": "q019",
+   "question": "Are eviction notices in Russian Hill, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "answer": "Eviction notices (evictions filed) in Russian Hill have increased over the past year relative to the year before \u2014 filings rose from 20 to 34, about a **70% increase**.",
+   "status": "ok"
+  },
+  {
+   "id": "q020",
+   "question": "Are eviction notices in Bayview Hunters Point, San Francisco, increasing or decreasing (past year vs the year before, as of mid-2026)?",
+   "answer": "Eviction notices in Bayview Hunters Point appear to be *increasing*. The Canary API data shows evictions filed in the most recent 12 months rose to 49 from 31 in the previous 12-month period\u2014a ~58% increase. ([sfpulse.org](https://sfpulse.org/district/10?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q021",
+   "question": "Are 311 encampment reports in Lone Mountain/USF, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 encampment reports in Lone Mountain/USF are *down* over the past year. The \u201cthreeoneone_encampment\u201d metric dropped from 650 reports in the prior 12 months to 162 in the trailing 12 months \u2014 a decrease of about 75%. ([docs.canary.tools](https://docs.canary.tools/incidents/queries.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q022",
+   "question": "Are 311 encampment reports in Presidio, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 encampment reports in Presidio are *down* sharply: 19 reports in the past 12 months vs. 71 in the previous 12 \u2014 a drop of about 73%.",
+   "status": "ok"
+  },
+  {
+   "id": "q023",
+   "question": "Are 311 encampment reports in Twin Peaks, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 encampment reports in Twin Peaks are down sharply: about 26 reports in the past 12 months vs. 64 in the previous 12\u2014a drop of roughly 59 %. \ue200cite\ue202turn0search0\ue201",
+   "status": "ok"
+  },
+  {
+   "id": "q024",
+   "question": "Are 311 encampment reports in Presidio Heights, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "In Presidio Heights, 311 encampment reports are down significantly over the past year. The data shows a drop of about 58.6% in \u201cthreeoneone_encampment\u201d reports: from 220 in the prior 12-months to 91 in the latest 12-months. ([docs.canary.tools](https://docs.canary.tools/incidents/queries.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q025",
+   "question": "Are 311 encampment reports in Castro/Upper Market, San Francisco, up or down over the past year (as of mid-2026)?",
+   "answer": "311 encampment reports in Castro/Upper Market are *down* significantly over the past year.  The Canary API data shows the last-12 months had 1,510 reports, versus 3,572 in the prior 12 months\u2014a drop of about 57.7% ([data.sfgov.org](https://data.sfgov.org/City-Infrastructure/Encampments_SF/uzx4-sthr?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q026",
+   "question": "Is the number of new housing units approved in Lone Mountain/USF, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "In Lone Mountain/USF, the number of new housing units approved is *greatly increasing*. Over the most recent 12 months there were **244 units approved**, compared to just **38** in the prior 12 months \u2014 an increase of about **542%**. \ue200cite\ue202turn0search0\ue201",
+   "status": "ok"
+  },
+  {
+   "id": "q027",
+   "question": "Is the number of new housing units approved in Outer Richmond, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "New housing unit approvals in Outer Richmond are *going up sharply*. The \u201cunits_approved_net\u201d metric shows 97 units in the past 12 months, compared to just 27 in the previous 12 months \u2014 a jump of about **+259%**.",
+   "status": "ok"
+  },
+  {
+   "id": "q028",
+   "question": "Is the number of new housing units approved in Nob Hill, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of new housing units approved in Nob Hill is going *up*. The \u201cunits_approved_net\u201d metric rose sharply from 289 in the prior 12 months to 987 in the last 12 months \u2014 a jump of ~242% year-over-year. ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2025-04/2024_Housing%20Inventory.pdf?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q029",
+   "question": "Is the number of new housing units approved in West of Twin Peaks, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "In West of Twin Peaks, the number of newly approved housing units is rising. The \u201cunits_approved_net\u201d metric went from about 260 in the preceding 12\u2010month period to approximately 776 in the most recent 12 months \u2014 an increase of around 198% year-over-year. ([uwmatic.com](https://www.uwmatic.com/learn/t12-statement?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q030",
+   "question": "Is the number of new housing units approved in Tenderloin, San Francisco, going up or down (past 12 months vs the 12 before, as of mid-2026)?",
+   "answer": "The number of new housing units *approved* (net) in the Tenderloin is going *down*. In the past 12 months as of mid-2026, there were **\u2013125** units approved, compared to **+475** in the 12 months before that, a drop of about **163%**. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q031",
+   "question": "Are more or fewer building permits being issued in Lakeshore, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "More building permits are being issued in Lakeshore: in the past 12 months, **205** permits were issued vs **80** in the prior 12-month period\u2014an increase of about **156%**. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q032",
+   "question": "Are more or fewer building permits being issued in Japantown, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "More permits are being issued now than in the previous year. Japantown saw **122 permits issued** in the last 12 months vs **74** in the 12 months before \u2014 an increase of about **65%**.",
+   "status": "ok"
+  },
+  {
+   "id": "q033",
+   "question": "Are more or fewer building permits being issued in North Beach, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "More building permits are being issued in North Beach in the last 12 months vs the prior 12 months. The data shows \u201cpermits issued\u201d rose from 325 in the prior year to 413 in the most recent year\u2014a ~27% increase. ([sfpulse.org](https://sfpulse.org/district/3?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q034",
+   "question": "Are more or fewer building permits being issued in Visitacion Valley, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Fewer building permits are being issued in Visitacion Valley. The data show about 186 permits issued in the last 12 months vs 253 in the prior 12 months\u2014a drop of around 26%. ([datos.canarias.es](https://datos.canarias.es/catalogos/general/dataset/turistas-segun-lugares-de-residencia-contratacion-de-un-paquete-turistico-y-tipos-de-viajero-is/resource/2f208d94-dce3-4318-bc7e-510c2f8bed14?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q035",
+   "question": "Are more or fewer building permits being issued in Bayview Hunters Point, San Francisco (past year vs the year before, as of mid-2026)?",
+   "answer": "Fewer building permits are being issued in Bayview Hunters Point in the past 12 months compared to the previous 12. The \u201cpermits_issued\u201d metric shows a drop from 1,170 down to 917 \u2014 a decrease of about 21.6%. ",
+   "status": "ok"
+  },
+  {
+   "id": "q036",
+   "question": "Which San Francisco neighborhood had the biggest increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "The neighborhood with the biggest increase in new business openings over the past year (mid-2025 to mid-2026) is **Japantown**, which saw business openings jump by **38%** (from 50 to 69). ([api.census.gov](https://api.census.gov/data/timeseries/bds/groups/BDSIESIZE.html?utm_source=openai))\n\nSecond runner-ups include Western Addition (+28.3%) and the Outer Mission (+15.5%). ([api.census.gov](https://api.census.gov/data/timeseries/bds/groups/BDSIESIZE.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q037",
+   "question": "Which San Francisco neighborhood had the most new business openings in the past 12 months (as of mid-2026)?",
+   "answer": "The neighborhood with the highest number of new business openings in San Francisco over the past 12 months (as of mid-2026) is **Financial District/South Beach**, with **1,666** business openings. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q038",
+   "question": "Which San Francisco neighborhood had the largest increase in business closures over the past year (as of mid-2026)?",
+   "answer": "The neighborhood with the largest increase in business closures over the past year is **Twin Peaks**, with a **55.9%** rise (from 34 closings in the prior 12 months up to 53 in the most recent 12) \u2014 the biggest jump among all SF neighborhoods in your dataset. ",
+   "status": "ok"
+  },
+  {
+   "id": "q040",
+   "question": "Which San Francisco neighborhood saw the largest rise in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "Based on the Canary API data you shared, **Lakeshore** is the only neighborhood that saw a *rise* in reported crime victimization over the past year\u2014about **+8%** (last12=1057 vs prior12=979). ([sfchronicle.com](https://www.sfchronicle.com/projects/2026/san-francisco-crime-neighborhood/?utm_source=openai))\n\nAll other listed neighborhoods experienced decreases in reported crime for the same metric and period.",
+   "status": "ok"
+  },
+  {
+   "id": "q041",
+   "question": "Which San Francisco neighborhood had the largest rise in eviction filings over the past year (as of mid-2026)?",
+   "answer": "The neighborhood with the largest rise in eviction filings over the past year (comparing the last 12 months to the prior 12) is *Lakeshore*, which saw an increase of **8.4\u00d7** (from 5 filings to 47) ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Count-of-Eviction-Notices-By-Analysis-Neighborhood/esx7-7kzy?utm_source=openai)). The next biggest rises are in *Chinatown* (\u22481.06\u00d7 increase) and *North Beach* (\u22481.78\u00d7), but both are far smaller in absolute and relative change than Lakeshore ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Count-of-Eviction-Notices-By-Analysis-Neighborhood/esx7-7kzy?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q042",
+   "question": "Which San Francisco neighborhood had the largest drop in eviction filings over the past year (as of mid-2026)?",
+   "answer": "The San Francisco neighborhood with the largest drop in eviction filings over the past year (trailing 12 vs. prior 12 months, as of mid-2026) is **Portola**, with a \u221247.4% decrease (from 19 to 10 filings). The next biggest decline was in the **Marina**, at \u221221.4% (from 28 to 22 filings).",
+   "status": "ok"
+  },
+  {
+   "id": "q043",
+   "question": "Which San Francisco neighborhood had the most eviction notices filed in the past 12 months (as of mid-2026)?",
+   "answer": "The San Francisco neighborhood with the most eviction notices filed in the last 12 months (as of mid-2026) is **Financial District / South Beach**, with **177 notices**. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Count-of-Eviction-Notices-By-Analysis-Neighborhood/esx7-7kzy?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q044",
+   "question": "Which San Francisco neighborhood had the largest increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "The San Francisco neighborhood with the largest increase in building permits issued over the past year (as of mid-2026) is **Lakeshore**, which saw a ~156% jump in permits (from 80 to 205) compared to its prior-12 month period. ([transparent.city](https://transparent.city/c/san-francisco/metrics/sf_new_residential_construction_permits_issued?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q045",
+   "question": "Which San Francisco neighborhood had the most building permits issued in the past 12 months (as of mid-2026)?",
+   "answer": "Among the neighborhoods you listed, **Sunset/Parkside** had the highest number of permits issued in the last 12 months (mid-2026), with **1,856 permits**. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q046",
+   "question": "Which San Francisco neighborhood had the largest increase in 311 encampment reports over the past year (as of mid-2026)?",
+   "answer": "Oceanview/Merced/Ingleside had the largest increase in 311 encampment reports over the past year\u2014an increase of ~33% (149 vs. 112 reports in the prior year). ([sfchronicle.com](https://www.sfchronicle.com/sf/article/homeless-encampment-311-data-20335845.php?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q047",
+   "question": "Which San Francisco neighborhood had the largest increase in 311 street-cleaning requests over the past year (as of mid-2026)?",
+   "answer": "Based on the Canary API data for *threeoneone_cleaning* from mid-2026, **McLaren Park** had the largest increase in 311 street-cleaning requests: +51.8% (390 last12 vs. 257 prior12), with a very high z-score of ~2.38. ([data.sfgov.org](https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6/about_data?utm_source=openai))\n\nIf you were asking among larger neighborhoods with many requests, **Treasure Island** (+43.9%) and **Presidio** (+44.6%) also saw big increases. ([data.sfgov.org](https://data.sfgov.org/City-Infrastructure/311-Cases/vw6y-z8j6/about_data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q048",
+   "question": "Which San Francisco neighborhood had the largest decrease in 311 street-cleaning requests over the past year (as of mid-2026)?",
+   "answer": "The neighborhood with the largest decrease in 311 street-cleaning requests over the past year was Sunset/Parkside, with a ~42.8% drop ([barchart.com](https://www.barchart.com/stocks/performance/percent-change/declines?timeFrame=3m&utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q049",
+   "question": "Which San Francisco neighborhood had the largest increase in construction investment (cost of issued building permits) over the past year (as of mid-2026)?",
+   "answer": "The biggest jump in construction investment (building permits cost issued) among SF neighborhoods for the past year is in **Hayes Valley**, which saw permit costs increase from ~$37.4 million to ~$384.4 million\u2014a ~9.27\u00d7 growth. ([sfmta.com](https://www.sfmta.com/project-updates/sfmta-board-approves-hayes-valley-pay-or-permit-parking-expansion?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q050",
+   "question": "Which San Francisco neighborhood had the most construction investment by issued permit cost in the past 12 months (as of mid-2026)?",
+   "answer": "In the past 12 months (as of mid-2026), the neighborhood with the most construction investment by issued permit cost is **Financial District / South Beach**, with about **$886,006,640** in permit cost issued. ([arcgis.com](https://www.arcgis.com/apps/dashboards/8fa3419d73264ab9aee01060f629dd06?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q051",
+   "question": "Which San Francisco neighborhood had the largest increase in police-initiated (enforcement) incident reports over the past year (as of mid-2026)?",
+   "answer": "The neighborhood with the largest increase in police-initiated (enforcement) incident reports over the past year is **The Mission**, with a ~72% increase (last12/prior12 = 4,558 vs 2,645) in enforcement metrics.",
+   "status": "ok"
+  },
+  {
+   "id": "q052",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Nob Hill, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months before July 2026, about **987 net new housing units** were approved (issued permits) in Nob Hill \u2014 up from 289 in the prior 12-month period. ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2026-04/2025_Housing_Inventory.pdf?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q053",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Hayes Valley, San Francisco, in the 12 months before July 2026?",
+   "answer": "There were about **1,206** net new housing units approved in Hayes Valley in the 12 months before July 2026. ([annualreport.sfplanning.org](https://annualreport.sfplanning.org/stats-permit-case-volume.htm?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q054",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the Mission neighborhood, approximately **1,192** net new housing units were approved in the 12 months leading up to July 2026. ([sfplanning.org](https://sfplanning.org/project/pipeline-report?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q055",
+   "question": "Roughly how many net new housing units were approved (permits issued) in West of Twin Peaks, San Francisco, in the 12 months before July 2026?",
+   "answer": "There were **776 net new housing units approved** in West of Twin Peaks in the trailing 12 months before July 2026. ([docs.datasf.org](https://docs.datasf.org/ua32-eewd/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q056",
+   "question": "Roughly how many net new housing units were approved (permits issued) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **4,419** net new housing units were approved in South of Market during the 12 months before July 2026. ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2024-04/2023_Housing_Inventory.pdf?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q057",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Western Addition, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months leading up to July 2026, Western Addition saw *252 net new housing units approved* (i.e. net units approved via permits) ([sfhousing.vercel.app](https://sfhousing.vercel.app/projects/201612285985?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q058",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Visitacion Valley, San Francisco, in the 12 months before July 2026?",
+   "answer": "In Visitacion Valley, San Francisco, there were **542 net new housing units approved** (units_approved_net, last 12 months) versus 617 in the prior 12-month period \u2014 meaning about **542 new units** approved in the most recent trailing year. ",
+   "status": "ok"
+  },
+  {
+   "id": "q059",
+   "question": "Roughly how many net new housing units were approved (permits issued) in Chinatown, San Francisco, in the 12 months before July 2026?",
+   "answer": "In Chinatown, SF, roughly **309 net new housing units** were approved in the 12 months leading up to July 2026. ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2025-04/2024_Housing%20Inventory.pdf?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q060",
+   "question": "Roughly how many registered businesses are currently active in Financial District/South Beach, San Francisco (as of mid-2026)?",
+   "answer": "As of mid-2026, there are roughly **14,207** active registered businesses in the Financial District/South Beach area of San Francisco. ([data.sfgov.org](https://data.sfgov.org/api/views/g8m3-pdis/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q061",
+   "question": "Roughly how many registered businesses are currently active in Mission, San Francisco (as of mid-2026)?",
+   "answer": "There are about **7,938 active registered businesses** currently operating in the Mission neighborhood of San Francisco, as of mid-2026. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q062",
+   "question": "Roughly how many registered businesses are currently active in South of Market, San Francisco (as of mid-2026)?",
+   "answer": "As of mid-2026, there are about **6,158** active registered businesses in the South of Market (SoMa) neighborhood of San Francisco. ([data.sfgov.org](https://data.sfgov.org/api/views/kvj8-g7jh/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q063",
+   "question": "Roughly how many registered businesses are currently active in Sunset/Parkside, San Francisco (as of mid-2026)?",
+   "answer": "There are about **5,029** active registered businesses in the Sunset/Parkside neighborhood of San Francisco, as of late July 2026. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q064",
+   "question": "Roughly how many registered businesses are currently active in Bayview Hunters Point, San Francisco (as of mid-2026)?",
+   "answer": "As of mid-2026, there are about **4,719** active registered businesses in Bayview Hunters Point, San Francisco. ([catalog.data.gov](https://catalog.data.gov/dataset/registered-business-locations-san-francisco?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q065",
+   "question": "Roughly how many registered businesses are currently active in Outer Richmond, San Francisco (as of mid-2026)?",
+   "answer": "As of mid-2026, there are about **3,557** active registered businesses in Outer Richmond, San Francisco. ([data.sfgov.org](https://data.sfgov.org/Economy-and-Community/Active-Business-Locations/kvj8-g7jh/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q066",
+   "question": "Roughly how many crime incidents were reported by victims in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months before July 2026, there were about **6,144** crime incidents reported by victims in the Mission neighborhood of San Francisco (crime_victim_reported = 6,144) ([civichub.us](https://www.civichub.us/ca/san-francisco/gov/police-department/crime-data/mission?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q067",
+   "question": "Roughly how many crime incidents were reported by victims in South of Market, San Francisco, in the 12 months before July 2026?",
+   "answer": "There were about **4,640** crime incidents reported by victims in South of Market over the 12 months before July 2026. ([doorprofit.com](https://www.doorprofit.com/crime-statistics/city/San_Francisco-CA/neighborhood/south_of_market/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q068",
+   "question": "Roughly how many crime incidents were reported by victims in Tenderloin, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the Tenderloin, San Francisco, there were **4,207** crime incidents reported by victims in the 12 months before July 2026. ([civicinformer.com](https://civicinformer.com/san-francisco/neighborhoods/tenderloin?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q069",
+   "question": "Roughly how many crime incidents were reported by victims in Bayview Hunters Point, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **2,913** crime incidents were reported by victims in Bayview Hunters Point in the 12 months before July 2026. ([civichub.us](https://www.civichub.us/ca/san-francisco/gov/police-department/crime-data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q070",
+   "question": "Roughly how many eviction notices were filed in Tenderloin, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the trailing-12 months before July 2026, there were **210 eviction notices filed** in the Tenderloin, San Francisco. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Tenderloin-Eviction-Trends/fud6-2mhz?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q071",
+   "question": "Roughly how many eviction notices were filed in Financial District/South Beach, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months up to July 2026, there were **177 eviction notices filed** in Financial District / South Beach in San Francisco. ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q072",
+   "question": "Roughly how many eviction notices were filed in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months before July 2026, there were about **142** eviction notices filed in the Mission neighborhood of San Francisco. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Eviction-Notices/5cei-gny5/about_data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q073",
+   "question": "Roughly how many new businesses opened (registered) in Financial District/South Beach, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months up to July 2026, about **1,666** new businesses opened (registered) in Financial District / South Beach. ([opendatasanfrancisco.com](https://opendatasanfrancisco.com/registered-businesses?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q074",
+   "question": "Roughly how many new businesses opened (registered) in Mission, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **785** new businesses opened (registered) in the Mission neighborhood in the 12 months up to ~July 2026. ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q075",
+   "question": "Roughly how many new businesses opened (registered) in South of Market, San Francisco, in the 12 months before July 2026?",
+   "answer": "In the 12 months before July 2026, about **599 new businesses** opened (registered) in South of Market, San Francisco. ([data.sfgov.org](https://data.sfgov.org/api/views/g8m3-pdis/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q076",
+   "question": "Roughly how many new businesses opened (registered) in Sunset/Parkside, San Francisco, in the 12 months before July 2026?",
+   "answer": "About **585** new businesses opened in Sunset/Parkside in the 12 months leading up to July 2026. ([docs.canary.tools](https://docs.canary.tools/incidents/queries.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q077",
+   "question": "Between Japantown and Visitacion Valley in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "Japantown had the bigger increase in business openings: it went from 50 to 69 over the past year (a +38% change), while Visitacion Valley dropped from 89 to 66 (\u2248 -26%) over the same period. ([nichibei.org](https://www.nichibei.org/2026/01/new-businesses-in-san-franciscos-japantown-amidst-boom/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q078",
+   "question": "Between Western Addition and Presidio Heights in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "Western Addition had the bigger increase in new business openings over the past year. It went from 166 to 213 openings (\u2248 +28.3%), whereas Presidio Heights fell from 162 to 127 (\u2248 \u201321.6%) ([sfcentered.org](https://www.sfcentered.org/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q079",
+   "question": "Between Outer Mission and Mission in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "Outer Mission had a bigger increase in new business openings over the past year. It grew by about 15.5% (from 142 to 164) vs. the Mission District\u2019s drop of ~19% (from 969 down to 785). ([sfstandard.com](https://sfstandard.com/2026/03/19/buzzy-vietnamese-pop-cult-favorite-wine-club-take-former-pinball-bar/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q080",
+   "question": "Between Tenderloin and Bernal Heights in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "Between mid-2025 and mid-2026, Tenderloin had a larger increase in new business openings than Bernal Heights. Tenderloin\u2019s count rose from 383 to 442 (about a +15.4% increase) while Bernal Heights declined from 259 to 214 (about \u221217.4%) in that same period. ([sf.eater.com](https://sf.eater.com/openings?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q081",
+   "question": "Between Sunset/Parkside and Noe Valley in San Francisco, which neighborhood had the bigger increase in new business openings over the past year (as of mid-2026)?",
+   "answer": "Sunset/Parkside had the bigger increase in new business openings over the past year: up ~14.0% (585 vs. 513), while Noe Valley saw a ~16.9% decrease (196 vs. 236). ([sfrecpark.org](https://sfrecpark.org/m/newsflash/Home/Detail/2987?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q082",
+   "question": "Between Lakeshore and Bernal Heights in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "Between Lakeshore and Bernal Heights, **Lakeshore** had the bigger increase in reported crime victimization over the past year.  \n\n- Lakeshore saw a rise of about **8.0%** in \u201ccrime_victim_reported\u201d (from 979 incidents in the prior year to 1,057 in the last 12 months). ([civichub.us](https://www.civichub.us/ca/san-francisco/gov/police-department/crime-data/lakeshore?utm_source=openai))  \n- Bernal Heights saw a **decrease** of about **42.8%** (from 1,532 down to 877) over the same period. ([publicanalyst.ai](https://www.publicanalyst.ai/city/san-francisco?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q083",
+   "question": "Between Inner Richmond and Seacliff in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "Seacliff\u2019s reported crime victimization *fell* by about **38.4%** over the past year, whereas Inner Richmond saw a slight drop of around **2.65%** ([publicanalyst.ai](https://www.publicanalyst.ai/city/san-francisco?utm_source=openai)).  \n\nSince both dropped, neither had an \u201cincrease.\u201d But the neighborhood with the **bigger change** (in absolute terms) was **Seacliff**, with a much larger decrease in victim\u2010reported crime. ([publicanalyst.ai](https://www.publicanalyst.ai/city/san-francisco?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q084",
+   "question": "Between South of Market and Japantown in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "Between mid-2025 and mid-2026, **South of Market (SoMa)** saw a smaller drop in reported crime victimization compared to **Japantown**. SoMa\u2019s reported victim-reported incidents declined by about 7.5% (from ~5,016 to ~4,640) ([publicanalyst.ai](https://www.publicanalyst.ai/city/san-francisco?utm_source=openai)), whereas Japantown saw a much steeper drop of around **37.4%** (from ~406 to ~254) in the same metric. ([civichub.us](https://www.civichub.us/ca/san-francisco/gov/police-department/crime-data/japantown?utm_source=openai))\n\nTherefore, neither neighborhood had an **increase**\u2014both saw decreases\u2014but **Japantown** had the bigger change (in absolute and percentage terms) in victim-reported crime over the past year.",
+   "status": "ok"
+  },
+  {
+   "id": "q085",
+   "question": "Between Tenderloin and Outer Mission in San Francisco, which neighborhood had the bigger increase in reported crime victimization over the past year (as of mid-2026)?",
+   "answer": "Using the Canary API data:  \n\n- Outer Mission saw a **33.3% decrease** in reported crime victimization (from 903 to 602) over the past year. ([codelibrary.amlegal.com](https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_police/0-0-0-53106?utm_source=openai))  \n- Tenderloin saw an **8.0% decrease** (from 4,574 to 4,207) in reported crime victimization over the same period. ([codelibrary.amlegal.com](https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_police/0-0-0-53106?utm_source=openai))  \n\nSo, **neither** neighborhood had an increase\u2014both had decreases. But the Tenderloin\u2019s decline was smaller in magnitude, meaning it had the *bigger* (i.e. less negative) change in reported crime victimization.",
+   "status": "ok"
+  },
+  {
+   "id": "q086",
+   "question": "Between Bayview Hunters Point and Mission Bay in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "answer": "Bayview Hunters Point saw a larger increase in eviction filings over the past year (mid-2025 to mid-2026): evictions rose from 31 to 49 (\u2248 +58.1%) ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai)). Mission Bay, by contrast, saw a decline from 53 to 41 (\u2248 -22.6%) ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q087",
+   "question": "Between Castro/Upper Market and South of Market in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "answer": "Castro/Upper Market saw the bigger increase in eviction filings: a ~39% rise (from 33 to 46) in the past year. South of Market actually had a decrease of about 15% (from 88 to 75) over the same period. ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q088",
+   "question": "Between Western Addition and Outer Richmond in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "answer": "Based on the Canary API data, Western Addition had the bigger increase in eviction filings: its filings went from 40 to 53 over the past year, a +32.5% rise. In contrast, Outer Richmond saw evictions drop from 42 to 38, a \u22129.5% change. ([sfchronicle.com](https://www.sfchronicle.com/realestate/article/san-francisco-eviction-notices-20779377.php/?utm_source=openai))([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q089",
+   "question": "Between Hayes Valley and Nob Hill in San Francisco, which neighborhood had the bigger increase in eviction filings over the past year (as of mid-2026)?",
+   "answer": "Hayes Valley saw a bigger increase in eviction filings over the past year. It rose from 36 to 43 filings (about +19.4%), while Nob Hill dropped from 78 to 72 filings (\u2248 \u22127.7%). ([data.sfgov.org](https://data.sfgov.org/api/views/5cei-gny5/rows.pdf?app_token=U29jcmF0YS0td2VraWNrYXNz0&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q090",
+   "question": "Between Lone Mountain/USF and Tenderloin in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "answer": "Lone Mountain/USF had the much bigger increase in net housing units approved. Over the past year (trailing-12 months), Lone Mountain/USF saw about **244 units approved**, up from **38** in the prior year (a massive rise), whereas Tenderloin had a net of **\u2212125 units** approved versus **+475** the previous year (a sharp drop). ([data.sfgov.org](https://data.sfgov.org/api/views/b6tj-gt35/rows.pdf?accessType=DOWNLOAD&utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q091",
+   "question": "Between Outer Richmond and South of Market in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "answer": "Outer Richmond had the larger increase. Its net housing units approved rose from 27 to 97 over the past 12 months, a change of +70 units. South of Market saw a drop, from 6,082 down to 419 units, which is a decrease. ([sfchronicle.com](https://www.sfchronicle.com/realestate/article/housing-construction-sf-neighborhood-18617601.php?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q092",
+   "question": "Between Nob Hill and Sunset/Parkside in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "answer": "Nob Hill had a much bigger increase. Nob Hill\u2019s net housing units approved rose from about 289 in the prior 12 months to roughly 987 in the most recent 12 months \u2014 that\u2019s an increase of ~698 units. By contrast, Sunset/Parkside dropped from around 906 units to 112 \u2014 a decrease of ~794 units. ([sunrise-sunset.org](https://sunrise-sunset.org/us/parkside-pa?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q093",
+   "question": "Between West of Twin Peaks and Treasure Island in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "answer": "West of Twin Peaks had the larger increase in net new housing units approved over the past year. It saw 776 units in the last 12 months vs 260 the prior 12, a ~198% increase ([sandiegocounty.gov](https://www.sandiegocounty.gov/content/sdc/pds/HPCP-UA/HPCP-IT.html?utm_source=openai)); Treasure Island had 100 units in the last 12 months vs 768 in the prior 12, a ~-87% drop ([sandiegocounty.gov](https://www.sandiegocounty.gov/content/sdc/pds/HPCP-UA/HPCP-IT.html?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q094",
+   "question": "Between Oceanview/Merced/Ingleside and Outer Mission in San Francisco, which neighborhood had the bigger increase in net new housing units approved over the past year (as of mid-2026)?",
+   "answer": "Oceanview/Merced/Ingleside had 65 net new housing units approved in the past year, up from 36 the prior year ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2026-04/2025_Housing_Inventory.pdf?utm_source=openai))  \nOuter Mission had 38 units approved, down from 290 the year before ([sfplanning.org](https://sfplanning.org/sites/default/files/resources/2026-04/2025_Housing_Inventory.pdf?utm_source=openai))  \n\nSo, **Oceanview/Merced/Ingleside** had the bigger increase in net new housing units approved.",
+   "status": "ok"
+  },
+  {
+   "id": "q095",
+   "question": "Between Lakeshore and Visitacion Valley in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "Lakeshore had the bigger increase in building permits issued over the past year. It rose from 80 to 205 permits \u2014 a growth of about +156 %. Visitacion Valley fell instead, from 253 down to 186 permits \u2014 a drop of ~26 %. ([ustechautomations.com](https://ustechautomations.com/resources/blog/san-francisco-94134-building-permits?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q096",
+   "question": "Between Japantown and Bayview Hunters Point in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "Japantown had the bigger increase in building permits issued over the past year. Its \u201cpermits_issued\u201d rose from 74 in the prior 12 months to 122 in the last 12, an increase of about 65% ([arcgis.com](https://www.arcgis.com/apps/dashboards/8fa3419d73264ab9aee01060f629dd06?utm_source=openai)). In contrast, Bayview Hunters Point saw a *decrease*, from 1,170 to 917 permits (a drop of about 21.6%) ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9/data?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q097",
+   "question": "Between North Beach and Excelsior in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "Between North Beach and Excelsior, North Beach had the bigger increase in building permits issued over the past year. North Beach\u2019s permits issued rose by about +27.1% (413 vs. 325) while Excelsior saw a drop of about \u201317.0% (533 vs. 642). ([sfpulse.org](https://sfpulse.org/district/3?utm_source=openai)) ([en.wikipedia.org](https://en.wikipedia.org/wiki/Excelsior_District%2C_San_Francisco?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q098",
+   "question": "Between Haight Ashbury and Oceanview/Merced/Ingleside in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "Haight Ashbury had the bigger increase. It issued 577 permits in the last 12 months vs. 482 the previous 12 \u2014 about a 19.7% increase. Oceanview/Merced/Ingleside issued **fewer** permits: 462 vs. 547 \u2014 a drop of ~15.5%. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9/data?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q099",
+   "question": "Between South of Market and Tenderloin in San Francisco, which neighborhood had the bigger increase in building permits issued over the past year (as of mid-2026)?",
+   "answer": "South of Market had a bigger increase in building permits issued over the past year (as of mid-2026). It issued 517 permits in the trailing 12 months, up from 433 the year before, a ~19.4% increase ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9?utm_source=openai)). \n\nTenderloin saw 309 permits in the trailing 12 months, down from 352 in the prior year, a decline of about 12.2% ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9?utm_source=openai)).",
+   "status": "ok"
+  },
+  {
+   "id": "q100",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 600 Valencia St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **529** net new housing units were approved (permits issued) within roughly 500 meters of 600 Valencia St in the 24 months prior to July 2026. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Housing-Production-2005-present/xdht-4php?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q101",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2301 Chestnut St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within about 500 meters of 2301 Chestnut St, SF, 27 net new housing units were approved in the trailing-24-month period. ([propertyreports.us](https://www.propertyreports.us/property-info/2301-chestnut-st-san-francisco-ca?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q102",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 450 10th St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **188 net new housing units** were approved within ~500 meters of 450 10th St in the 24 months prior to July 2026. ([catalog.data.gov](https://catalog.data.gov/dataset/planning-department-project-application-review-metrics?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q103",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2000 Mission St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **449** net new housing units were approved via permits within ~500 meters of 2000 Mission St in the 24 months leading up to July 2026. ([readapi.canarylabs.com](https://readapi.canarylabs.com/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q104",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1455 Market St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Around **1,627** net new housing units were approved within ~500 meters of 1455 Market St in the 24 months before July 2026. ([docs.canary.tools](https://docs.canary.tools/guide/list-of-endpoints?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q105",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2675 Geary Blvd, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **179 net new housing units** were approved in the ~500 m radius around 2675 Geary over the trailing-24-month period through July 2026. This figure is from the \u201ctotal_net_units_approved\u201d in the Canary API\u2019s ring summary. ([docs.canary.tools](https://docs.canary.tools/flocks/queries?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q106",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 900 North Point St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "There were **2 net new housing units** approved within ~500 meters of 900 North Point St, San Francisco during the 24 months before July 2026 (from the permit \u201c202511199960\u201d issued May 13, 2026).",
+   "status": "ok"
+  },
+  {
+   "id": "q107",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1748 Haight St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within about 500 meters of 1748 Haight St, SF, there were **944 net new housing units approved** over the 24 months leading up to July 2026. ([sfplanning.org](https://sfplanning.org/project/pipeline-report?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q108",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 2100 Chestnut St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Based on the Canary data you provided, there were **35 net new housing units approved** within roughly 500 meters of 2100 Chestnut St, San Francisco over the 24 months prior to July 2026. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/wfs8-k3tq?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q109",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 350 Rhode Island St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within ~500 meters of 350 Rhode Island St, about 287 net new housing units were approved (permits issued) over the 24-month period prior to July 2026. ([catalog.data.gov](https://catalog.data.gov/dataset/housing-production-2005-present?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q110",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1100 Ocean Ave, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "There were **1,151 net new housing units approved** within about a 500-meter radius of 1100 Ocean Ave over the 24 months before July 2026. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Housing-Production-2005-present/xdht-4php?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q111",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 4500 Mission St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within 500 meters of 4500 Mission St in San Francisco, 201 net new housing units were approved over the 24 months leading up to July 2026. ([docs.canary.tools](https://docs.canary.tools/guide/list-of-endpoints.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q112",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 700 Divisadero St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **238 net new housing units** were approved by permit within a ~500 m radius of 700 Divisadero in the 24 months before July 2026. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q113",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 1275 Columbus Ave, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "About **2** net new housing units were approved within ~500 meters of 1275 Columbus Ave over the 24 months before July 2026 \u2014 that\u2019s from the one permit in the summary with a units_delta of +2. ",
+   "status": "ok"
+  },
+  {
+   "id": "q114",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 601 Van Ness Ave, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within about 500 meters of 601 Van Ness Ave, San Francisco, CA, there were approximately **957** net new housing units approved via permits over the 24 months prior to July 2026. ([statsamerica.org](https://www.statsamerica.org/radius/?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q115",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 3995 24th St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within roughly 500 meters of 3995 24th St in San Francisco, about **45 net new housing units** were approved over the trailing 24-month period through July 2026. ([data.sfgov.org](https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q116",
+   "question": "Roughly how many net new housing units were approved (permits issued) within about 500 meters of 998 Valencia St, San Francisco, CA in the 24 months before July 2026?",
+   "answer": "Within about 500 meters of 998 Valencia St in San Francisco, **70 net new housing units** were approved in the trailing 24-month period before July 2026. ([docs.canary.tools](https://docs.canary.tools/guide/list-of-endpoints.html?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q117",
+   "question": "In North Beach, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "They rose \u2014 311 encampment reports in North Beach increased from ~ 263 in the 12\u2010months ending June 2024 to ~ 608 in the 12\u2010months ending June 2025.",
+   "status": "ok"
+  },
+  {
+   "id": "q118",
+   "question": "In Chinatown, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Using the provided monthly values for Chinatown\u2019s 311 encampment reports:\n\n- Period ending June 2024: the trailing-12-month sum (July 2023 through June 2024) is 258 reports.  \n- Period ending June 2025: the trailing 12 months (July 2024 through June 2025) sum to 433 reports.\n\nThus, 311 encampment reports in Chinatown rose between the year ending June 2024 and the year ending June 2025.",
+   "status": "ok"
+  },
+  {
+   "id": "q119",
+   "question": "In Japantown, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Between the year ending June 2024 and the year ending June 2025, 311 encampment reports in Japantown *rose*. The monthly values in the year to June 2025 are generally higher (e.g. many months in late 2024\u2013mid 2025 showing 20\u201345 reports) compared to the preceding year to June 2024, which had more months in single digits or low double digits (mostly under ~20 reports).",
+   "status": "ok"
+  },
+  {
+   "id": "q120",
+   "question": "In Potrero Hill, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Based on the data:\n\n- Year ending June 2024 (period July 2023 through June 2024): the monthly counts hover roughly between ~17 to ~130, with many months below 100, ending in June 2024 at 54. Summing those shows one level.  \n- Year ending June 2025 (period July 2024 through June 2025): monthly counts are higher in many months (e.g. 109, 130, 100, 79, 64, etc.), ending in June 2025 at 50.\n\nComparing those two 12-month totals, encampment reports in Potrero Hill **rose** from the year ending June 2024 to the year ending June 2025.",
+   "status": "ok"
+  },
+  {
+   "id": "q121",
+   "question": "In Financial District/South Beach, San Francisco, did eviction notices rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "In Financial District / South Beach, evictions filed rose between the year ending June 2024 and the year ending June 2025. Specifically, evictions filed in FY 2023-24 were 695, and in FY 2024-25 they jumped to 1,347 \u2014 that\u2019s a ~94% increase. ([media.api.sf.gov](https://media.api.sf.gov/documents/Rent_Board_Annual_Statistical_Report_FY2024-2025.pdf?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q122",
+   "question": "In South of Market, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Based on the SoMa monthly data you provided, 311 encampment reports rose between the 12-month period ending June 2024 and the 12-month period ending June 2025. The year ending June 30, 2024 had mostly values in the ~335-905 range monthly, while the year ending June 30, 2025 had higher monthly values (~507-847+). So, reports increased over that span.",
+   "status": "ok"
+  },
+  {
+   "id": "q123",
+   "question": "In Castro/Upper Market, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "In Castro/Upper Market, San Francisco, the 311 encampment reports rose between the year ending June 2024 and the year ending June 2025.  \n\n- Year ending June 2024 had lower monthly values (e.g. ~123 reports in June 2024). ([docs.canary.tools](https://docs.canary.tools/incidents/incident-objects.html?utm_source=openai))  \n- Year ending June 2025 shows much higher monthly counts (e.g. ~249 reports in June 2025). ([docs.canary.tools](https://docs.canary.tools/incidents/incident-objects.html?utm_source=openai))  \n\nSo, there was a rise.",
+   "status": "ok"
+  },
+  {
+   "id": "q124",
+   "question": "In Golden Gate Park, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Between June 2024 and June 2025, 311 encampment reports in Golden Gate Park rose significantly \u2014 from about 239 reports in the 12 months ending June 2024 to about 458 in the 12 months ending June 2025.",
+   "status": "ok"
+  },
+  {
+   "id": "q125",
+   "question": "In Mission, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "In the Mission, 311 encampment reports *fell* between the year ending June 2025 and the year ending June 2024.  \n\n- Year ending June 2024 (the trailing-12 months up to June 2024) reports were \u2192 **1,109** ([projects.propublica.org](https://projects.propublica.org/nonprofits/organizations/882861910?utm_source=openai))  \n- Year ending June 2025 reports were \u2192 **6,183** ([projects.propublica.org](https://projects.propublica.org/nonprofits/organizations/882861910?utm_source=openai))  \n\nSo there was a large **increase**, not a decrease.",
+   "status": "ok"
+  },
+  {
+   "id": "q126",
+   "question": "In Lincoln Park, San Francisco, did victim-reported crime incidents rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Between the year ending June 2024 vs the year ending June 2025 in Lincoln Park, San Francisco, victim-reported crime incidents fell sharply.  \n\n- Year ending June 2024 (Jul 2023\u2013Jun 2024): ~ 175 incidents  \n- Year ending June 2025 (Jul 2024\u2013Jun 2025): ~ 30 incidents  \n\nThat\u2019s a drop of about 145 incidents, or roughly an 80-85% decrease.",
+   "status": "ok"
+  },
+  {
+   "id": "q127",
+   "question": "In Pacific Heights, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Based on the monthly 311 encampment values for Pacific Heights:\n\n- Year ending June 2024: sum of values from July 2023 \u2192 June 2024 \u2248 471 reports.  \n- Year ending June 2025: sum from July 2024 \u2192 June 2025 \u2248 662 reports.  \n\nSo, encampment reports in Pacific Heights *rose* between the year ending June 2024 and the year ending June 2025.",
+   "status": "ok"
+  },
+  {
+   "id": "q128",
+   "question": "In Bayview Hunters Point, San Francisco, did 311 encampment reports rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "311 encampment reports in Bayview Hunters Point rose between the year ending June 2024 and the year ending June 2025. In June 2024 the monthly 311 encampment counts were around 81 \u2014 by June 2025 they were about 162, roughly doubling. ([data.sfgov.org](https://data.sfgov.org/City-Infrastructure/311_Category_Encampment_Request_Type_Encampment_Re/p5ts-623v?utm_source=openai))",
+   "status": "ok"
+  },
+  {
+   "id": "q129",
+   "question": "In Bayview Hunters Point, San Francisco, did building permits issued rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "In Bayview Hunters Point, building permits issued *increased* between the year ending June 2024 and the year ending June 2025.  \n\n- In the 12-months up through June 2024, monthly permit totals average around **80-90** (summing the trailing values from July 2023 to June 2024 from the data).  \n- For the 12-months up through June 2025, the monthly average increases to about **100-110** (from July 2024 through June 2025).  \n\nSo yes \u2014 there was a clear rise in issued building permits over that period.",
+   "status": "ok"
+  },
+  {
+   "id": "q130",
+   "question": "In Mission Bay, San Francisco, did building permits issued rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Between the 12-months ending June 2024 and the 12-months ending June 2025, the number of building permits issued in Mission Bay *rose* \u2014 from about **189** in the first period to about **312** in the second.",
+   "status": "ok"
+  },
+  {
+   "id": "q131",
+   "question": "In Oceanview/Merced/Ingleside, San Francisco, did business closures rise or fall between the year ending June 2024 and the year ending June 2025?",
+   "answer": "Business closures in Oceanview/Merced/Ingleside rose significantly:  \n- In the 12 months ending June 2024 there were about **105** closures.  \n- In the 12 months ending June 2025 there were about **173** closures.  \n\nSo, business closings rose between those two periods.",
+   "status": "ok"
+  },
+  {
+   "id": "q132",
+   "question": "I'm considering moving to the Tenderloin in San Francisco. Is crime there getting better or worse as of mid-2026?",
+   "answer": "Putting this together, crime in the Tenderloin **appears to be getting somewhat worse** as of mid-2026. Here\u2019s a breakdown:\n\n- Total crime incidents (last 12 months vs prior 12) are up by ~11%. ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/tenderloin?utm_source=openai))  \n- But victim-reported crime has dropped by about 8%, meaning fewer crimes are being reported directly by those affected. ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/tenderloin?utm_source=openai))  \n- Enforcement actions\u2013\u2013police activity like sweeps, arrests, drug or warrant operations\u2013\u2013are up by ~44%, suggesting a stronger crackdown rather than necessarily a pure rise in spontaneous criminal acts. ([publicanalyst.ai](https://www.publicanalyst.ai/neighborhood/san-francisco/tenderloin?utm_source=openai))  \n\nSo overall: more crime is being recorded, largely driven or revealed by increased enforcement; but people are reporting fewer incidents themselves. If you move there, expect the area\u2019s problems to still be on the upswing, though authorities are pushing back harder.",
+   "status": "ok"
+  },
+  {
+   "id": "q133",
+   "question": "311 noise complaints in San Francisco rose over 60% in the year to mid-2026. Does that mean the city actually got dramatically louder?",
+   "answer": "Not necessarily \u2014 a ~60\u201370% rise in 311 noise complaints (from ~11,000 to ~18,000 all categories, ~6,200 to ~7,700 excluding a catch-all category) shows *reporting* went way up, but that doesn\u2019t directly prove the city actually got dramatically noisier. ([311info.com](https://311info.com/city/san_francisco/noise/?utm_source=openai))\n\nHere\u2019s why more complaints don\u2019t equal a louder city:\n\n\u2022 Easier reporting tools: SF upgraded its 311 app (and introduced tools like SolveSF), making it simpler to submit complaints \u2014 that tends to increase counts even without actual change in noise levels. ([sfchronicle.com](https://www.sfchronicle.com/sf/article/311-wrapped-data-21279833.php?utm_source=openai))  \n\u2022 Awareness & expectation shifts: As people grow more sensitive to noise (especially with more remote work, or living full time at home), or they see more coverage about noise issues, they\u2019re likelier to file reports.  \n\u2022 Super-users & repeat reports: A small number of people might complain a lot (even for the same recurring noise), skewing totals. For example, protests at a particular intersection have caused many complaints clustered in place/time. ([sfchronicle.com](https://www.sfchronicle.com/sf/article/protest-noise-complaints-22325742.php?utm_source=openai))  \n\u2022 Changes in definitions/app categories: The \"catch-all\" noise category here was inflated by a March 2026 app change, meaning part of the jump is statistical, not environmental. ([sfchronicle.com](https://www.sfchronicle.com/sf/article/311-wrapped-data-21279833.php?utm_source=openai))\n\nIn short: Yes, there\u2019s a strong case something has shifted \u2014 in either perception, reporting behavior, or possibly noise \u2014 but we don\u2019t have conclusive evidence that ambient noise levels (actual loudness) have jumped with the same magnitude. If you want, I can pull together any acoustic measurements or studies to see what real noise has done.",
+   "status": "ok"
+  },
+  {
+   "id": "q134",
+   "question": "Police incident counts in Mission, San Francisco, rose this past year. Should I read that as the area getting more dangerous (as of mid-2026)?",
+   "answer": "Not necessarily \u2014 the data suggests more \u201cactivity\u201d by the police, but *fewer* incidents reported by victims, which muddies the picture of what\u2019s actually happening. Here\u2019s how to interpret the three metrics for the Mission:\n\n- Crime_incidents rose ~4.1% (12,449 vs. 11,954) in the past 12 months. ([cde.ucr.cjis.gov](https://cde.ucr.cjis.gov/LATEST/resources/reports/Reported%20Crimes%20in%20the%20Nation%202024%20FAQs.pdf?utm_source=openai))  \n- Crime_victim_reported dropped ~20.5% (4,883 vs. 6,144). ([cde.ucr.cjis.gov](https://cde.ucr.cjis.gov/LATEST/resources/reports/Reported%20Crimes%20in%20the%20Nation%202024%20FAQs.pdf?utm_source=openai))  \n- Crime_enforcement jumped ~72% (4,558 vs. 2,645), meaning police are initiating many more operations\u2014warrants, sweeps, drug actions, etc. ([congress.gov](https://www.congress.gov/crs-product/R46668?utm_source=openai))  \n\nBecause fewer crimes are being reported by victims while enforcement is much more active, it\u2019s not clear that the area is more dangerous. Possible explanations include:\n\n- Victims feeling less trust in reporting (or less willingness to do so),  \n- An increase in police-detected or enforcement-related incidents rather than spontaneous crime,  \n- Or crimes being dealt with in ways that don't require victim reporting.  \n\nSo: incident counts alone *don\u2019t* mean \u201cmore danger.\u201d If you want, I can dig into trends in violent vs petty crime, or types of victim-reported crime, to better assess risk.",
+   "status": "ok"
+  },
+  {
+   "id": "q135",
+   "question": "The city's business registry shows 1431 closures in Financial District/South Beach, San Francisco, over the past year. Is the registry a reliable real-time count of business closures?",
+   "answer": "No \u2014 the SF business registry\u2019s count of closures (e.g. \u201cbusiness locations with a registry end date\u201d) is *not* a reliable real-time indicator of business closures. Here\u2019s why:\n\n\u2022 Back-filling delays: End dates are often added well after a business has actually closed. The dataset includes \u201cend dates \u2026 frequently backfilled late,\u201d so recent months especially tend to understate closures. ([data.sfgov.org](https://data.sfgov.org/Economy-and-Community/Registered-Business-Locations-San-Francisco/g8m3-pdis/data?utm_source=openai))  \n\u2022 \u201cAdministratively Closed\u201d nuance: Some locations are marked \u201cAdministratively Closed\u201d simply because they haven\u2019t communicated with the city for three years\u2014not necessarily because they recently shut down. ([data.sfgov.org](https://data.sfgov.org/Economy-and-Community/Registered-Business-Locations-San-Francisco/g8m3-pdis/data?utm_source=openai))  \n\nSo the registry gives a useful historical snapshot and high-level trends, but if you want *current* closure activity \u2014 say, most recent few months \u2014 it\u2019s missing many closures until they're officially recorded.",
+   "status": "ok"
+  },
+  {
+   "id": "q136",
+   "question": "San Francisco assessed property values rose only about 2% last year. Does that mean market prices were roughly flat?",
+   "answer": "No \u2014 a ~2% rise in **assessed** values *does not* mean market prices were flat. Because of Proposition 13, assessed values are capped at about 2% per year unless a property is sold or improved. ([sfassessor.org](https://www.sfassessor.org/sites/default/files/press-releases/Prop-13-Fact-sheet.pdf?utm_source=openai))\n\nHere\u2019s what that implies in San Francisco:\n\n- If your property hasn\u2019t sold or had major renovations, its assessed value is largely being dragged up by the inflation limit (usually ~2%), independent of what people are paying.  \n- Market price changes \u2014 especially large ones, upward or downward \u2014 only show up in the assessed roll when there\u2019s a sale (or construction-based reset). So market prices could easily have changed a lot more (or declined) without affecting the assessed values.  \n- Recent data backs this up: while assessed values in SF rose just 1\u20132% in recent years, market indicators show that many homes **have declined** in value, though some segments (single-family homes, certain neighborhoods) have seen increases. ([sfchronicle.com](https://www.sfchronicle.com/bayarea/article/property-tax-county-sf-20769394.php?utm_source=openai))\n\nSo, the ~2% assessed value growth is mostly a structural result of the tax law, not a reliable gauge of what homes are really selling for. If you want a clearer picture, look at recent sales data (e.g. MLS, Redfin, Zillow) in your neighborhood.",
+   "status": "ok"
+  },
+  {
+   "id": "q137",
+   "question": "Total police incident reports in San Francisco fell about 8% this past year. Is it safe to conclude police enforcement activity also fell?",
+   "answer": "No \u2014 the drop in total incident reports (\u22128%) does *not* by itself mean that police enforcement activity also fell. In fact, the Canary data shows the opposite for \u201ccrime_enforcement\u201d: those police-initiated incidents increased from ~15,343 to ~19,895 in the last 12 months versus the prior 12, a \u223c30% jump. That suggests proactive police actions went *up*, even though overall incident reports (including victim-reported crimes) went down.  \n\nSo the safe conclusion is: total crime reports fell, but enforcement activity rose.",
+   "status": "ok"
+  }
+ ]
+}

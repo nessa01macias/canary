@@ -1,0 +1,824 @@
+{
+ "provider": "xai:grok-4.5+canary",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "xai_grok-4.5+canary_20260728T153823Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers (877 vs 1532, ~43% decrease)"
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (406\u2192254, -37%)."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling with matching numbers 602 vs 903 (-33%), consistent with ground truth."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling with 456\u2192306 (-33%), matching ground truth direction and numbers."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling with 3644->2464 (-32%), matching ground truth exactly."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 166 to 213 (~28%)."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States decrease with matching numbers 66 vs 89 (-26%), matching ground truth."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from 162 to 127 (~21.6%)"
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches decrease direction and numbers (785 vs 969, -19%)"
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches decrease direction with exact figures 214 vs 259 (-17%)"
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct figures (78 to 45, ~42% decline)."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with numbers matching ground truth (173\u2192120, ~31%)."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States rising, matching 69->90, ~30% increase, consistent with ground truth."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected decrease with correct numbers 210->156 (~26%)"
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states falling with matching numbers 207->157 (-24%), consistent with ground truth."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches ground truth: increase, 47 vs 5, correctly notes ~840% increase."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers (18 to 37, ~106% increase)."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 21 to 37, ~76% rise."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states increase with matching numbers 20 to 34, 70% change."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers exactly (31 to 49, ~58% increase)."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (162 vs 650, -75%)"
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from 71 to 19 (~73% drop)."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease, 26 vs 64, ~59% drop"
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers (91 vs 220, ~59% decrease)."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers (3,572 to 1,510, ~58% decrease)."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (38 to 244, ~542% increase)."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 27 to 97 (~259%)"
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (289 to 987, ~241% increase)."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction (increase) and exact figures 260\u2192776, ~198%."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states decrease with matching numbers (475 to -125)."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (80\u2192205, ~156% increase)."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers exactly (74->122, ~65% increase)."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and numbers (325\u2192413, +27%)."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states fewer permits with matching numbers 253\u2192186 (~26% decline), matching ground truth decrease."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States decrease with matching numbers 1170->917 (~22%), matching ground truth."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Names Japantown with 38% increase, matching ground truth; runner-up Western Addition at 28% also matches."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth neighborhood and figures exactly (1,666 vs Mission 785)."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Twin Peaks with ~56% increase, matching ground truth exactly, and correctly notes Glen Park as runner-up at ~30%."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore with ~8% rise, matching ground truth."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore as the neighborhood with largest rise, matching ground truth."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Portola with matching ~-47% change, aligning with ground truth."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Tenderloin with 210 evictions, matching ground truth and runner-up figures."
+  },
+  {
+   "id": "q044",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly names Lakeshore with ~156% increase, matching the 1.562 pct_change in ground truth."
+  },
+  {
+   "id": "q045",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth neighborhood and figures (2489 vs runner-up 1856)."
+  },
+  {
+   "id": "q046",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names McLaren Park with 60% increase matching ground truth pct_change 0.6, and correctly notes runner-up Oceanview/Merced/Ingleside at 33%."
+  },
+  {
+   "id": "q047",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Mission as the neighborhood with the largest increase, not McLaren Park as per ground truth."
+  },
+  {
+   "id": "q048",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches ground truth neighborhood and pct_change (-42.8%)."
+  },
+  {
+   "id": "q049",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Hayes Valley as the top neighborhood and Chinatown as runner-up, matching ground truth despite a scaling error in the percentage figures.",
+   "repaired": true
+  },
+  {
+   "id": "q050",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth neighborhood and values closely."
+  },
+  {
+   "id": "q051",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Mission with ~72% increase, matching ground truth exactly."
+  },
+  {
+   "id": "q052",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 falls within 30% tolerance of expected 1319 (range ~923-1715)"
+  },
+  {
+   "id": "q053",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 1,206, matching expected value exactly."
+  },
+  {
+   "id": "q054",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1,192 is within 30% tolerance of expected 1,172"
+  },
+  {
+   "id": "q055",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 falls within 30% tolerance of expected 934 (653.8\u20131214.2)"
+  },
+  {
+   "id": "q056",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within 30% tolerance of expected 511 (range ~358-664)"
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 252, outside the 30% tolerance band around expected 482 (337.4-626.6)"
+  },
+  {
+   "id": "q058",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "542 falls within 30% tolerance of expected 453 (range ~317-589)."
+  },
+  {
+   "id": "q059",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "309 is within 30% tolerance of 313"
+  },
+  {
+   "id": "q060",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 14,207 exactly"
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states ~7,938-7,940 active businesses, matching expected 7938 within tolerance."
+  },
+  {
+   "id": "q062",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches expected value exactly (6,158)."
+  },
+  {
+   "id": "q063",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 5029 exactly"
+  },
+  {
+   "id": "q064",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 4,719/~4,720 matching expected value exactly"
+  },
+  {
+   "id": "q065",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 3557 exactly."
+  },
+  {
+   "id": "q066",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 4,883, matching expected value exactly."
+  },
+  {
+   "id": "q067",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 4,640, matching expected value exactly."
+  },
+  {
+   "id": "q068",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 4,207, matching expected value exactly."
+  },
+  {
+   "id": "q069",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 2,913, matching expected value exactly."
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 210, matching expected value exactly."
+  },
+  {
+   "id": "q071",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 177 exactly"
+  },
+  {
+   "id": "q072",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 142, matching ground truth exactly."
+  },
+  {
+   "id": "q073",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches expected value exactly (1666)."
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 785, matching expected value exactly."
+  },
+  {
+   "id": "q075",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 599, matching expected value exactly."
+  },
+  {
+   "id": "q076",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected value of 585 exactly."
+  },
+  {
+   "id": "q077",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer selects Japantown with 38% increase vs -26% for Visitacion Valley, matching ground truth."
+  },
+  {
+   "id": "q078",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Western Addition with matching percentage changes (+28% vs -22%), consistent with ground truth."
+  },
+  {
+   "id": "q079",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer picks Outer Mission with matching ~+15.5% vs ~-19% figures, consistent with ground truth."
+  },
+  {
+   "id": "q080",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer identifies Tenderloin with matching +15% vs -17% figures, consistent with ground truth."
+  },
+  {
+   "id": "q081",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Selects Sunset/Parkside with ~14% increase vs Noe Valley ~17% decrease, matching ground truth."
+  },
+  {
+   "id": "q082",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: Lakeshore +8.0% vs Bernal Heights -42.8%, correctly identifies Lakeshore as bigger increase."
+  },
+  {
+   "id": "q083",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Inner Richmond as having the smaller decrease (larger algebraic value), matching ground truth values -0.027 vs -0.384."
+  },
+  {
+   "id": "q084",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies South of Market as having the smaller decrease/larger relative value, matching ground truth numbers exactly."
+  },
+  {
+   "id": "q085",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Tenderloin with matching values -8.0% vs -33.3%, consistent with ground truth."
+  },
+  {
+   "id": "q086",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer matches ground truth: Bayview Hunters Point +58% vs Mission Bay -23%, aligning with expected values."
+  },
+  {
+   "id": "q087",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer identifies Castro/Upper Market as bigger increase with +39% vs -15%, matching ground truth direction and values closely."
+  },
+  {
+   "id": "q088",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer picks Western Addition with matching percentages (32.5% vs -9.5%), consistent with ground truth."
+  },
+  {
+   "id": "q089",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer identifies Hayes Valley with matching +19.4% vs -7.7% figures."
+  },
+  {
+   "id": "q090",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lone Mountain/USF as having the bigger increase, matching ground truth direction and magnitude (~5.42)."
+  },
+  {
+   "id": "q091",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer selects Outer Richmond as having the bigger increase, matching ground truth direction and roughly matching percentage figures."
+  },
+  {
+   "id": "q092",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Nob Hill having bigger increase, matching ground truth direction."
+  },
+  {
+   "id": "q093",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies West of Twin Peaks with matching percentage figures (+198% vs -87%)."
+  },
+  {
+   "id": "q094",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Oceanview/Merced/Ingleside with matching percentage changes (+81% vs -87%)"
+  },
+  {
+   "id": "q095",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly identifies Lakeshore with matching magnitude (+156% vs +156.2%) and Visitacion Valley decline (-26% vs -26.5%)"
+  },
+  {
+   "id": "q096",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Japantown with ~65% increase vs ~-22% for Bayview, matching ground truth direction and magnitudes."
+  },
+  {
+   "id": "q097",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer picks North Beach with +27% vs Excelsior -17%, matching ground truth direction and values within tolerance."
+  },
+  {
+   "id": "q098",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: Haight Ashbury +19.7% vs Oceanview -15.5%"
+  },
+  {
+   "id": "q099",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer identifies South of Market with matching percentage changes (19.4% vs -12.2%)."
+  },
+  {
+   "id": "q100",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 529 units from 559 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q101",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth value of 27 units"
+  },
+  {
+   "id": "q102",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 188 units from 194 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q103",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 449 units from 491 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q104",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth exactly: 1627 units, 406 permits."
+  },
+  {
+   "id": "q105",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 179 units across 319 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q106",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected 127 units and 343 permits exactly."
+  },
+  {
+   "id": "q107",
+   "verdict": "correct",
+   "confident_wrong": true,
+   "reason": "Answer states 944 units and 372 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q108",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches expected 35 units and 531 permits exactly."
+  },
+  {
+   "id": "q109",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 287 units and 240 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q110",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth value of 1151 units from 182 permits."
+  },
+  {
+   "id": "q111",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "States 201 units from 305 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q112",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 238 units, matching ground truth exactly."
+  },
+  {
+   "id": "q113",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 153 units from 417 permits, matching ground truth exactly."
+  },
+  {
+   "id": "q114",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 957 units, matching ground truth exactly."
+  },
+  {
+   "id": "q115",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 45 units, matching ground truth exactly."
+  },
+  {
+   "id": "q116",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth of 70 net new units."
+  },
+  {
+   "id": "q117",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth increase, 263 to 608"
+  },
+  {
+   "id": "q118",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 170 to 376"
+  },
+  {
+   "id": "q119",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth increase from 137 to 299."
+  },
+  {
+   "id": "q120",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increase from 361 to 768, matching ground truth."
+  },
+  {
+   "id": "q121",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states eviction notices rose, with matching figures 82 to 167, consistent with ground truth."
+  },
+  {
+   "id": "q122",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: rose from 4,592 to 9,221"
+  },
+  {
+   "id": "q123",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction (increase) and exact figures 1,811 and 3,572."
+  },
+  {
+   "id": "q124",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 239 to 458."
+  },
+  {
+   "id": "q125",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth direction and figures (6,001 -> 11,193, increase)."
+  },
+  {
+   "id": "q126",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: decrease from 175 to 30."
+  },
+  {
+   "id": "q127",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states reports rose, with matching numbers 320 to 568, aligning with ground truth increase."
+  },
+  {
+   "id": "q128",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states rise with matching figures 1,018 to 1,727."
+  },
+  {
+   "id": "q129",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 698 to 1170."
+  },
+  {
+   "id": "q130",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states permits rose from 189 to 312, matching ground truth increase and figures."
+  },
+  {
+   "id": "q131",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches ground truth: increase from 105 to 173"
+  },
+  {
+   "id": "q132",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly reports victim-reported crime down ~8% and distinguishes enforcement surge from victimization, matching ground truth."
+  },
+  {
+   "id": "q133",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, attributes rise to reporting/app change, matches ground truth numbers and ~26% refined figure."
+  },
+  {
+   "id": "q134",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says area is not more dangerous, distinguishing enforcement-driven rise from falling victim-reported crime, matching ground truth."
+  },
+  {
+   "id": "q135",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 'No' and explains lag/underreporting, matching expected trap answer."
+  },
+  {
+   "id": "q136",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no and correctly attributes ~2% growth to Prop 13 cap, matching expected reasoning."
+  },
+  {
+   "id": "q137",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer says no, cites enforcement rising ~30% and victim reports falling, matching ground truth direction and figures."
+  }
+ ]
+}

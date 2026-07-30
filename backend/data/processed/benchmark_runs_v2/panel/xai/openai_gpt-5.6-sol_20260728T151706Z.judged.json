@@ -1,0 +1,759 @@
+{
+ "provider": "openai:gpt-5.6-sol",
+ "judge_model": "grok-4.5",
+ "run_file": "openai_gpt-5.6-sol_20260728T151706Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to falling/decrease direction matching ground truth."
+  },
+  {
+   "id": "q006",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decrease/fewer openings; GT is clear increase (~28%)."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer openings (decrease), matching GT direction"
+  },
+  {
+   "id": "q008",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Claims increase (~20-30% rise) but GT is decrease (-21.6%)"
+  },
+  {
+   "id": "q009",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to increase; GT is decrease (~-19%)."
+  },
+  {
+   "id": "q010",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant claims slight increase; GT is clear decrease (-17%)."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling/decrease, matching GT direction"
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to falling/fewer closures; GT shows increase (90 vs 69)."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to falling/decrease direction (improving), matching GT."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q016",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to decreasing but GT is clear increase (47 vs 5)."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increasing, matching ground truth direction."
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decreasing but ground truth is clear increase (~76%)."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decreasing; GT is increase (34 vs 20)."
+  },
+  {
+   "id": "q020",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to decreasing; ground truth is increase (49 vs 31)."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to 'down'/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease/down, matching ground truth direction."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Down/decrease, matching ground truth."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to down/decline, matching ground-truth decrease."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to down/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decrease but GT is clear increase (244 vs 38)."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to down/fewer but GT is increase (97 vs 27)."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to 'Down' but GT is clear increase (987 vs 289)."
+  },
+  {
+   "id": "q029",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decrease while GT is clear increase (776 vs 260)."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease/down, matching ground truth direction."
+  },
+  {
+   "id": "q031",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fewer/decline but GT is increase (205 vs 80)."
+  },
+  {
+   "id": "q032",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decrease/fewer, but GT is increase (122 vs 74)."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fewer/downward; GT is increase (413 vs 325)."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant correctly commits to fewer/decrease, matching GT direction."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer/decrease, matching ground-truth direction"
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Financial District/Downtown instead of ground-truth Japantown"
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa instead of ground-truth Twin Peaks"
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission Bay instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q042",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant names Tenderloin but GT is Portola"
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Tenderloin as having the most eviction notices."
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa rather than ground-truth Lakeshore"
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Sunset/Parkside instead of ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District rather than ground-truth McLaren Park"
+  },
+  {
+   "id": "q047",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth McLaren Park"
+  },
+  {
+   "id": "q048",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin rather than ground-truth Sunset/Parkside"
+  },
+  {
+   "id": "q049",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant names Inner Sunset instead of ground-truth Hayes Valley"
+  },
+  {
+   "id": "q050",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa rather than ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q051",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Tenderloin; ground truth is Mission"
+  },
+  {
+   "id": "q052",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~30 units vs GT 1319 (far outside 30% tolerance)"
+  },
+  {
+   "id": "q053",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to ~200 units, far outside 1206 \u00b130% tolerance."
+  },
+  {
+   "id": "q054",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~300, far outside 30% tolerance of GT 1172"
+  },
+  {
+   "id": "q055",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~40 units, far outside 30% tolerance of ground-truth 934"
+  },
+  {
+   "id": "q056",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to ~120, far outside 30% tolerance of 511"
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~70, far outside 30% tolerance of 482"
+  },
+  {
+   "id": "q058",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~90 units, far outside 30% tolerance of GT 453"
+  },
+  {
+   "id": "q059",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~0, far outside 313\u00b130% range"
+  },
+  {
+   "id": "q060",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~24000, outside 30% tolerance of 14207 (max ~18500)"
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "9000 is within 30% tolerance of 7938"
+  },
+  {
+   "id": "q062",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "14k far outside 30% tolerance of 6158"
+  },
+  {
+   "id": "q063",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "~6000 (range 5500-6500) falls within 30% tolerance of 5029"
+  },
+  {
+   "id": "q064",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "6000 is within 30% tolerance of 4719"
+  },
+  {
+   "id": "q065",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "2700 is within 30% tolerance of 3557"
+  },
+  {
+   "id": "q066",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "5000 is within 30% tolerance of 4883"
+  },
+  {
+   "id": "q067",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "7500 exceeds 30% tolerance around GT 4640 (~3250-6030)"
+  },
+  {
+   "id": "q068",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "5500 is outside 30% tolerance of 4207 (~2945-5469) despite rough/estimate hedging"
+  },
+  {
+   "id": "q069",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~4000-4200, outside 30% tolerance of 2913"
+  },
+  {
+   "id": "q070",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~500, far outside 30% tolerance of expected 210"
+  },
+  {
+   "id": "q071",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "150 is within 30% tolerance of 177"
+  },
+  {
+   "id": "q072",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~200, outside 30% tolerance of 142 (max ~185)."
+  },
+  {
+   "id": "q073",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Read timed out. (read timeout=120)"
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "900 is within 30% tolerance of expected 785"
+  },
+  {
+   "id": "q075",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Read timed out. (read timeout=120)"
+  },
+  {
+   "id": "q076",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q077",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q078",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q079",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q080",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q081",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q082",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q083",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q084",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q085",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q086",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q087",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q088",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q089",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q090",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q091",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q092",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q093",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q094",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q095",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q096",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q097",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q098",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q099",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q100",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q101",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q102",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q103",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q104",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q105",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q106",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q107",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q108",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q109",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q110",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q111",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q112",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q113",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q114",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q115",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q116",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q117",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q118",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q119",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q120",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q121",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q122",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q123",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q124",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q125",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q126",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q127",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q128",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q129",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q130",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q131",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q132",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q133",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q134",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q135",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q136",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q137",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  }
+ ]
+}

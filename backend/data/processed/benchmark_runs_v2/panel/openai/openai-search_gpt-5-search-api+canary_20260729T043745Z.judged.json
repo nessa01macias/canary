@@ -1,0 +1,6 @@
+{
+ "provider": "openai-search:gpt-5-search-api+canary",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "openai-search_gpt-5-search-api+canary_20260729T043745Z.json",
+ "verdicts": []
+}

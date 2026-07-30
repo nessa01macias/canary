@@ -1,0 +1,687 @@
+{
+ "provider": "perplexity:sonar-pro+canary",
+ "judge_model": "grok-4.5",
+ "run_file": "perplexity_sonar-pro+canary_20260728T152953Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q002",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q003",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q004",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q005",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q006",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q007",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q008",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q009",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q010",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q011",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q012",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q013",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q014",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q015",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q016",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q017",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q018",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q019",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q020",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q021",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q022",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q023",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q024",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q025",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q026",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q027",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q028",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q029",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q030",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q031",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q032",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q033",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q034",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q035",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q036",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q037",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q038",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q040",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q041",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q042",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q043",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q044",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q045",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q046",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q047",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q048",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q049",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q050",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q051",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q052",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q053",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q054",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q055",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q056",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q057",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q058",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q059",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q060",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q061",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q062",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q063",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q064",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q065",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q066",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q067",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q068",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q069",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q070",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q071",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q072",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q073",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q074",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q075",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q076",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q077",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q078",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q079",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q080",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q081",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q082",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q083",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q084",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q085",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q086",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q087",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q088",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q089",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q090",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q091",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q092",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q093",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q094",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q095",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q096",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q097",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q098",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q099",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q100",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q101",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q102",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q103",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q104",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q105",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q106",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q107",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q108",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q109",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q110",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q111",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q112",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q113",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q114",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q115",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q116",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q117",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q118",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q119",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q120",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q121",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q122",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q123",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q124",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q125",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q126",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q127",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q128",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q129",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q130",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q131",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q132",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q133",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q134",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q135",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q136",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  },
+  {
+   "id": "q137",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.x.ai', port=443): Max retries exceeded with url: /v1/chat/completions "
+  }
+ ]
+}

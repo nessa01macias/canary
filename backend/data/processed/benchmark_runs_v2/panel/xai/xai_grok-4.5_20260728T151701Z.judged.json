@@ -1,0 +1,823 @@
+{
+ "provider": "xai:grok-4.5",
+ "judge_model": "grok-4.5",
+ "run_file": "xai_grok-4.5_20260728T151701Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth."
+  },
+  {
+   "id": "q006",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fewer/decrease; GT is increase."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer/decline, matching ground-truth decrease"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer openings, matching ground-truth decrease."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decline, matching ground-truth decrease."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer openings, matching ground-truth decrease."
+  },
+  {
+   "id": "q011",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to rising/higher closures; GT is decrease"
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decreasing, matching GT decrease."
+  },
+  {
+   "id": "q013",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to falling/eased; GT is increase (90 vs 69)."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease, matching ground truth."
+  },
+  {
+   "id": "q016",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to decreasing; GT is increase (5->47)"
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states increasing, matching ground truth direction."
+  },
+  {
+   "id": "q018",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to decreasing; GT is increase (37 vs 21)."
+  },
+  {
+   "id": "q019",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to decreasing; GT is increase (34 vs 20)."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increasing, matching ground truth direction."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to down/decrease, matching GT direction"
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant correctly commits to down/decrease matching ground truth."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to down/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to down/decrease, matching ground truth."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to down/decrease, matching ground truth direction."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to down/decrease but GT is increase."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to up/increase, matching ground truth."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to down/decrease; GT is clear increase (987 vs 289)."
+  },
+  {
+   "id": "q029",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to down/decrease but GT is increase (776 vs 260)."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Down/decrease, matching ground truth."
+  },
+  {
+   "id": "q031",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fewer/decrease; GT is clear increase (205 vs 80)."
+  },
+  {
+   "id": "q032",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fewer/decrease; GT is increase (122 vs 74)."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fewer/decrease but GT is increase"
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decrease, matching GT direction."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decline, matching ground-truth decrease."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Hayes Valley rather than ground-truth Japantown"
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Financial District/Downtown instead of ground-truth Twin Peaks"
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin rather than ground-truth Lakeshore"
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth Lakeshore"
+  },
+  {
+   "id": "q042",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin rather than ground-truth Portola"
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly names Tenderloin, matching ground truth superlative."
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa rather than ground-truth Lakeshore"
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa instead of ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to Tenderloin (not McLaren Park) while hedging on mid-2026 data verifiability"
+  },
+  {
+   "id": "q047",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission District instead of ground-truth McLaren Park"
+  },
+  {
+   "id": "q048",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Committed to Mission District rather than ground-truth Sunset/Parkside"
+  },
+  {
+   "id": "q049",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to SoMa, not ground-truth Hayes Valley."
+  },
+  {
+   "id": "q050",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission Bay instead of ground-truth Financial District/South Beach"
+  },
+  {
+   "id": "q051",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin instead of ground-truth Mission"
+  },
+  {
+   "id": "q052",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 0-50 units vs ground truth 1319 (far outside 30% tolerance)"
+  },
+  {
+   "id": "q053",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 80-120 units, far outside 1206\u00b130% range"
+  },
+  {
+   "id": "q054",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 200-400 units, far outside GT 1172 \u00b130% (~820-1524)"
+  },
+  {
+   "id": "q055",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 20-50 vs ground truth 934 (far outside 30% tolerance)"
+  },
+  {
+   "id": "q056",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 1800-2200, far outside 511\u00b130% tolerance."
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 150-250, outside 30% tolerance of 482 (~337-627)"
+  },
+  {
+   "id": "q058",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 150-250, outside 30% tolerance of GT 453 (~317-589)."
+  },
+  {
+   "id": "q059",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to ~0 units, far outside 313 \u00b130% tolerance."
+  },
+  {
+   "id": "q060",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 5-7k, outside 30% tolerance of 14207 (~10k-18k)."
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "~6000 midpoint is within 30% tolerance of 7938"
+  },
+  {
+   "id": "q062",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 8k-10k range; GT 6158 allows only ~4.3k-8.0k (30% tol), so answer sits at/above upper bound and exceeds it"
+  },
+  {
+   "id": "q063",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 2500-3500, outside 30% tolerance band around 5029 (~3520-6538)"
+  },
+  {
+   "id": "q064",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 1500-2500, well below 4719\u00b130% range (~3300-6135)"
+  },
+  {
+   "id": "q065",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to ~1500, outside 30% tolerance of 3557; some hedging present"
+  },
+  {
+   "id": "q066",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 6500-8000, outside 4883 \u00b130% (~3418-6348); some hedging on finality."
+  },
+  {
+   "id": "q067",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Range 4500-6000 overlaps GT 4640 and lies within 30% tolerance"
+  },
+  {
+   "id": "q068",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 7k-9k, outside 30% tolerance of 4207 (~2945-5469)"
+  },
+  {
+   "id": "q069",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 5000-7000, far outside GT 2913 +/-30% (~2040-3787)."
+  },
+  {
+   "id": "q070",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 400-600, outside 210\u00b130% tolerance"
+  },
+  {
+   "id": "q071",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 80-120, outside 177\u00b130% tolerance (~124-230)"
+  },
+  {
+   "id": "q072",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Range 150-250 sits mostly above GT 142 (30% tol ~99-185) and excludes it; mild hedging present."
+  },
+  {
+   "id": "q073",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 400-600, far outside 1666 \u00b130% range (~1166-2166)"
+  },
+  {
+   "id": "q074",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 400-600, outside/below 785 \u00b130% tolerance (~550-1020)"
+  },
+  {
+   "id": "q075",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Assistant commits to 800-1000, outside 30% tolerance of 599 (approx 419-779)"
+  },
+  {
+   "id": "q076",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 300-500 range whose values fall mostly/entirely outside 585\u00b130% tolerance"
+  },
+  {
+   "id": "q077",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Japantown as having the bigger increase."
+  },
+  {
+   "id": "q078",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Western Addition, matching ground truth."
+  },
+  {
+   "id": "q079",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission; GT shows Outer Mission up and Mission down"
+  },
+  {
+   "id": "q080",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Bernal Heights but GT shows Tenderloin had the increase (0.154 vs -0.174)."
+  },
+  {
+   "id": "q081",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Noe Valley but GT shows Sunset/Parkside had the increase (0.14 vs -0.169)."
+  },
+  {
+   "id": "q082",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Bernal Heights as bigger increase, but GT shows Lakeshore (+0.08) vs Bernal Heights (-0.428)."
+  },
+  {
+   "id": "q083",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Inner Richmond, matching GT expected (lesser decrease = bigger increase)"
+  },
+  {
+   "id": "q084",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names South of Market as having the bigger increase (less decrease) per GT values."
+  },
+  {
+   "id": "q085",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Tenderloin, matching expected (lesser decrease = bigger relative increase)"
+  },
+  {
+   "id": "q086",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Bayview Hunters Point as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q087",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa having larger rise, but GT shows Castro +0.394 vs SoMa -0.148"
+  },
+  {
+   "id": "q088",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Western Addition, matching ground truth"
+  },
+  {
+   "id": "q089",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Hayes Valley, matching GT direction/increase"
+  },
+  {
+   "id": "q090",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Tenderloin but GT shows Lone Mountain/USF had the larger (positive) change"
+  },
+  {
+   "id": "q091",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to SoMa as bigger increase; GT is Outer Richmond (positive vs negative)."
+  },
+  {
+   "id": "q092",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Sunset/Parkside as bigger increase, but GT shows Nob Hill +2.415 vs Sunset -0.876"
+  },
+  {
+   "id": "q093",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Treasure Island but GT shows West of Twin Peaks higher (1.985 vs -0.87)"
+  },
+  {
+   "id": "q094",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to Outer Mission as having bigger increase, but GT is Oceanview/Merced/Ingleside."
+  },
+  {
+   "id": "q095",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant confidently picks Visitacion Valley but GT shows Lakeshore had the increase (VV declined)."
+  },
+  {
+   "id": "q096",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant confidently picks Bayview Hunters Point, but GT shows Japantown had the increase while Bayview decreased."
+  },
+  {
+   "id": "q097",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to Excelsior as bigger increase, but GT shows North Beach (+0.271) vs Excelsior (-0.17)."
+  },
+  {
+   "id": "q098",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to OMI larger increase; GT shows Haight +0.197 vs OMI -0.155"
+  },
+  {
+   "id": "q099",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to South of Market, matching ground truth."
+  },
+  {
+   "id": "q100",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 100-200 units, far outside GT 529 \u00b135% (~344-714)"
+  },
+  {
+   "id": "q101",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to ~0 units, outside GT 27 \u00b135% range"
+  },
+  {
+   "id": "q102",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer's ~200-400 (couple hundred) overlaps GT 188 within 35% tol (~122-254) at lower end"
+  },
+  {
+   "id": "q103",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 100-200, outside 35% tolerance of 449"
+  },
+  {
+   "id": "q104",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 0-100 vs GT 1627 (tol 35%, ~1058-2196)"
+  },
+  {
+   "id": "q105",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 0-50 units, outside 35% tolerance of GT 179"
+  },
+  {
+   "id": "q106",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 0, far outside GT 127 \u00b135%"
+  },
+  {
+   "id": "q107",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to 0-20 units, far outside 944 \u00b135% tolerance."
+  },
+  {
+   "id": "q108",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer range 0-40 includes GT 35 (within 35% tolerance)"
+  },
+  {
+   "id": "q109",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 120-180, outside 35% tolerance of GT 287 (~187-387)"
+  },
+  {
+   "id": "q110",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 200-400 units, far below GT 1151 (tol. ~748-1554)"
+  },
+  {
+   "id": "q111",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 0-50 units, far outside GT 201 \u00b135%."
+  },
+  {
+   "id": "q112",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer range 150-250 includes GT 238 and lies within 35% tolerance"
+  },
+  {
+   "id": "q113",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~0 units vs ground truth 153 (outside 35% tol)"
+  },
+  {
+   "id": "q114",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 0-50 units, far outside GT 957 \u00b135%."
+  },
+  {
+   "id": "q115",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to 80-120, outside GT 45 \u00b135% (~29-61)"
+  },
+  {
+   "id": "q116",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 120-180 units, outside GT 70 +/-35% (~46-95)"
+  },
+  {
+   "id": "q117",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fall/decline; GT is increase (263 to 608)."
+  },
+  {
+   "id": "q118",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fell/declined; GT is increase (170->376)."
+  },
+  {
+   "id": "q119",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fall/decrease but GT is clear increase (137->299)."
+  },
+  {
+   "id": "q120",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fell/decrease; GT is increase (361->768)."
+  },
+  {
+   "id": "q121",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states increased/rose, matching ground-truth direction."
+  },
+  {
+   "id": "q122",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fell/decrease; GT is increase (~100%)."
+  },
+  {
+   "id": "q123",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "GT is increase (~97%); answer confidently asserts fell/decline."
+  },
+  {
+   "id": "q124",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to 'fell' but GT shows clear increase (239->458)."
+  },
+  {
+   "id": "q125",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fell/decline; GT is clear increase (~87%)."
+  },
+  {
+   "id": "q126",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease/fell, matching ground truth."
+  },
+  {
+   "id": "q127",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant committed to fall/decrease; GT is clear increase (320->568)."
+  },
+  {
+   "id": "q128",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fell/decrease; GT is increase (~70%)."
+  },
+  {
+   "id": "q129",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fall/decline; GT is increase (698->1170)."
+  },
+  {
+   "id": "q130",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to fell/decrease but GT is increase (189 to 312)."
+  },
+  {
+   "id": "q131",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to fell/decline but GT is increase (105 to 173)"
+  },
+  {
+   "id": "q132",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to crime getting worse; GT is victimization decrease (correct only if falling or distinguishes enforcement)."
+  },
+  {
+   "id": "q133",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant correctly says no and attributes rise to reporting/app changes rather than actual noise."
+  },
+  {
+   "id": "q134",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no and distinguishes enforcement/incidents from actual victimization risk."
+  },
+  {
+   "id": "q135",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to no; registry lags actual closures and is not real-time."
+  },
+  {
+   "id": "q136",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no and explains Prop 13 cap on assessed values"
+  },
+  {
+   "id": "q137",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to no, matching GT that enforcement rose while totals fell."
+  }
+ ]
+}

@@ -1,0 +1,801 @@
+{
+ "provider": "anthropic:claude-fable-5",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "anthropic_claude-fable-5_20260728T151659Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q002",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q003",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q004",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q005",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q006",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q007",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q008",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q009",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q010",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q011",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q012",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q013",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q014",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q015",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q016",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q017",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q018",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q019",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q020",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q021",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q022",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer explicitly says reports are down, matching the verified decrease from 64 to 26."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly says reports are down, matching the verified 58.6% decrease."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to a decrease, matching the ground-truth direction."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly says approvals went down, while the verified data show an increase from 38 to 244 units."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to an increase in approved housing units, matching the ground truth."
+  },
+  {
+   "id": "q028",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says approvals went down, while the verified data show an increase from 289 to 987 units."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to an increase ('Slightly up'), matching the ground-truth direction."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to a decrease ('Down'), matching the ground-truth direction."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to more permits being issued, matching the verified increase."
+  },
+  {
+   "id": "q032",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer firmly says permits decreased, but the verified data show an increase from 74 to 122 (about 64.9%)."
+  },
+  {
+   "id": "q033",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says fewer permits, while the verified data show an increase from 325 to 413 (27.1%)."
+  },
+  {
+   "id": "q034",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says more permits were issued, while the ground truth shows a decrease from 253 to 186."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to fewer permits, matching the verified 21.6% decrease."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer names Hayes Valley, but the verified neighborhood with the biggest increase was Japantown; wording such as \u201clikely\u201d adds some hedging."
+  },
+  {
+   "id": "q037",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects the Mission District, but the verified leader was Financial District/South Beach; wording such as \u201clikely\u201d and \u201cstrongest bet\u201d adds hedging."
+  },
+  {
+   "id": "q038",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer identifies Union Square/Downtown, but the verified largest increase was in Twin Peaks; it meaningfully hedges due to lacking mid-2026 data."
+  },
+  {
+   "id": "q040",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer names the Mission, while the verified neighborhood with the largest rise was Lakeshore; however, it explicitly hedges due to incomplete mid-2026 data."
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer names Tenderloin, but the verified neighborhood with the largest rise was Lakeshore."
+  },
+  {
+   "id": "q042",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer identifies Tenderloin, but the verified neighborhood with the largest drop was Portola (-47.4%)."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies the Tenderloin as the neighborhood with the most eviction notices, matching the ground truth."
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer names Bayview\u2013Hunters Point, while the verified neighborhood with the largest increase was Lakeshore; it explicitly hedges this as an informed projection."
+  },
+  {
+   "id": "q045",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to Mission, but the verified leader was Financial District/South Beach with 2,489 permits."
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects the Mission District, but the verified largest increase was in McLaren Park; wording it as a 'best answer' adds some hedging."
+  },
+  {
+   "id": "q047",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly names the Mission, but the verified neighborhood with the largest increase was McLaren Park."
+  },
+  {
+   "id": "q048",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer identifies Tenderloin, but the verified neighborhood with the largest decrease was Sunset/Parkside."
+  },
+  {
+   "id": "q049",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer commits to SoMa, while the verified largest increase was in Hayes Valley; however, it explicitly hedges that it cannot verify mid-2026 figures and calls SoMa only the most likely leader."
+  },
+  {
+   "id": "q050",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer identifies South of Market (SoMa), but the verified leader was Financial District/South Beach."
+  },
+  {
+   "id": "q051",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to Tenderloin, but the verified neighborhood with the largest increase was Mission."
+  },
+  {
+   "id": "q052",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to about 20 units, far below the verified value of roughly 1,319 and outside the 30% tolerance."
+  },
+  {
+   "id": "q053",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to 100\u2013150 units, far below the verified 1,206 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q054",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer estimates 150\u2013250 units, far below the verified roughly 1,172 units and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q055",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 20\u201340 units, far below the verified 934 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q056",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer centers its estimate at 400 units, which is within 30% of the verified value of 511."
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer estimates about 100 units (50\u2013150), far below the verified 482 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q058",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer's committed estimate of about 100 units is well below the ground-truth value of 453 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q059",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 10\u201330 units, far below the verified 313 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q060",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 20,000, which is above the 30% tolerance upper bound of about 18,469 for the verified count of 14,207."
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The estimate of 6,000\u20137,000 falls within the allowed \u00b130% tolerance around 7,938."
+  },
+  {
+   "id": "q062",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The stated 10,000\u201312,000 is well above the verified count of 6,158 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q063",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The estimate of about 4,500 is within 30% of the verified count of 5,029."
+  },
+  {
+   "id": "q064",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The stated range of 2,500\u20133,000 is below the 30% tolerance around the verified count of 4,719 (minimum acceptable \u22483,303)."
+  },
+  {
+   "id": "q065",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The stated range of 2,000\u20132,500 is materially below the verified count of 3,557 and is mostly outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q066",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The stated estimate of 8,000\u20139,000 is well above the tolerated range around 4,883 (approximately 3,418\u20136,348)."
+  },
+  {
+   "id": "q067",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 10,000\u201312,000 incidents, well above the expected 4,640 and outside the \u00b130% tolerance."
+  },
+  {
+   "id": "q068",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer emphasizes the lower end of 5,000\u20136,000; about 5,000 is within 30% of the verified 4,207."
+  },
+  {
+   "id": "q069",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to about 4,200 incidents, which is outside the 30% tolerance around the verified value of 2,913."
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The estimate of 175 is within the allowed 30% tolerance around 210."
+  },
+  {
+   "id": "q071",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer's best estimate of about 120 is below the 30% tolerance range for the verified value of 177 (approximately 124\u2013230), though it is explicitly framed as an estimate."
+  },
+  {
+   "id": "q072",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to about 250 filings, which is outside the 30% tolerance around the verified value of 142."
+  },
+  {
+   "id": "q073",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The stated 2,000\u20132,500 range centers above the 30% tolerance around 1,666 and excludes the verified estimate itself, though the lower endpoint overlaps the tolerance band."
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The estimate of 600\u2013700 falls within the \u00b130% tolerance around the verified value of 785."
+  },
+  {
+   "id": "q075",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer estimates 1,200, well outside the allowed range of about 419\u2013779 around the verified value of 599."
+  },
+  {
+   "id": "q076",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer\u2019s best estimate of about 600 is within 30% of the verified value of 585."
+  },
+  {
+   "id": "q077",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to Japantown having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q078",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Western Addition, matching the ground truth."
+  },
+  {
+   "id": "q079",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer selects Mission, but the ground truth shows Outer Mission had the bigger increase (15.5% versus Mission\u2019s 19% decrease)."
+  },
+  {
+   "id": "q080",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Tenderloin as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q081",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Sunset/Parkside as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q082",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q083",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Inner Richmond, matching the ground truth."
+  },
+  {
+   "id": "q084",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to South of Market, matching the ground-truth expected neighborhood."
+  },
+  {
+   "id": "q085",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects Outer Mission, but the ground truth indicates Tenderloin had the larger year-over-year change (-0.08 versus -0.333); the word \u201clikely\u201d adds some hedging."
+  },
+  {
+   "id": "q086",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly identifies Bayview Hunters Point, matching the ground truth."
+  },
+  {
+   "id": "q087",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects South of Market, but the verified data show Castro/Upper Market had the bigger increase (39.4% versus a 14.8% decrease); \u201clikely\u201d adds some hedging."
+  },
+  {
+   "id": "q088",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Western Addition as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q089",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects Nob Hill, but the verified data show Hayes Valley had the bigger increase (19.4% versus Nob Hill\u2019s 7.7% decrease); \u201clikely\u201d adds some hedging."
+  },
+  {
+   "id": "q090",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly selects Tenderloin, but the verified data show Lone Mountain/USF had the bigger increase (5.421 versus -1.263)."
+  },
+  {
+   "id": "q091",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer firmly selects South of Market, but the ground truth shows Outer Richmond had the bigger increase (2.593 versus -0.931)."
+  },
+  {
+   "id": "q092",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly selects Sunset/Parkside, but the verified data show Nob Hill had the bigger increase (2.415 versus -0.876)."
+  },
+  {
+   "id": "q093",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly selects Treasure Island, but the ground truth shows West of Twin Peaks had the bigger increase (1.985 versus -0.87)."
+  },
+  {
+   "id": "q094",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly identifies Oceanview/Merced/Ingleside as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q095",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly selects Visitacion Valley, while the ground truth shows Lakeshore had the bigger increase."
+  },
+  {
+   "id": "q096",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to Bayview Hunters Point, but the ground truth shows Japantown had the bigger increase (0.649 vs. -0.216)."
+  },
+  {
+   "id": "q097",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly chooses Excelsior, but the ground truth shows North Beach had the bigger increase (27.1% versus -17.0%)."
+  },
+  {
+   "id": "q098",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer selects Oceanview/Merced/Ingleside, but the verified data show Haight Ashbury had the bigger increase (19.7% versus -15.5%)."
+  },
+  {
+   "id": "q099",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies South of Market as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q100",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 150\u2013300 units (about 200), well below the tolerated range around the verified total of 529."
+  },
+  {
+   "id": "q101",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to about 20 net new units, which is within the \u00b135% tolerance around the ground-truth value of 27."
+  },
+  {
+   "id": "q102",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The best point estimate of 300 is outside the allowed range around 188 (approximately 122\u2013254), though the answer meaningfully hedges with a broad range that includes 188."
+  },
+  {
+   "id": "q103",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer\u2019s committed estimate of about 200 units is below the tolerated range around the verified total of 449, though it includes meaningful uncertainty."
+  },
+  {
+   "id": "q104",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to about 300 units, far below the verified 1,627 and outside the \u00b135% tolerance."
+  },
+  {
+   "id": "q105",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The estimate of 50\u2013100 net new units is below the acceptable range around the verified total of 179 (approximately 116\u2013242)."
+  },
+  {
+   "id": "q106",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to 5\u201320 net new units, far below the verified 127 and outside the \u00b135% tolerance."
+  },
+  {
+   "id": "q107",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 170\u2013180 net units, far below the verified 944 and outside the \u00b135% tolerance range."
+  },
+  {
+   "id": "q108",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer commits to roughly 15\u201330 units, which excludes the verified total of 35, though its approximate range constitutes meaningful hedging."
+  },
+  {
+   "id": "q109",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer\u2019s central estimate of about 200 units is within the \u00b135% tolerance around the ground-truth value of 287."
+  },
+  {
+   "id": "q110",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer commits to about 300 net new units, far below the verified 1,151 and outside the \u00b135% tolerance."
+  },
+  {
+   "id": "q111",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer commits to about 75 units, well below the tolerated range around the verified total of 201, though it meaningfully hedges with a possible 150\u2013200 scenario."
+  },
+  {
+   "id": "q112",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to 50\u2013100 units, well below the verified total of 238 and outside the \u00b135% tolerance."
+  },
+  {
+   "id": "q113",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to roughly 20\u201340 units, far below the verified total of 153 and outside the \u00b135% tolerance."
+  },
+  {
+   "id": "q114",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer estimates 300\u2013500 units (best estimate 400), below the tolerated ground-truth range of about 622\u20131,292 around 957, though it includes meaningful caveats."
+  },
+  {
+   "id": "q115",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The best estimate of 25\u201330 is mostly below the accepted 29.25\u201360.75 range around the ground-truth value of 45, though the answer is hedged as a broad range."
+  },
+  {
+   "id": "q116",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "The answer's best point estimate is 100 units, above the accepted range of about 46\u201395 around the verified total of 70, though its broad hedged range includes 70."
+  },
+  {
+   "id": "q117",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell, but verified North Beach reports increased from 263 to 608."
+  },
+  {
+   "id": "q118",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell, but Chinatown reports increased from 170 to 376."
+  },
+  {
+   "id": "q119",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer confidently says reports fell, but they increased from 137 to 299."
+  },
+  {
+   "id": "q120",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer explicitly says reports rose in Potrero Hill, matching the verified increase from 361 to 768."
+  },
+  {
+   "id": "q121",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly states that eviction notices rose, matching the verified increase from 82 to 167."
+  },
+  {
+   "id": "q122",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell, but verified records show they increased from 4,592 to 9,221."
+  },
+  {
+   "id": "q123",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell by 20\u201330%, but the verified data show they increased from 1,811 to 3,572 (about 97.2%)."
+  },
+  {
+   "id": "q124",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell, but the verified data show they increased from 239 to 458 (about 91.6%)."
+  },
+  {
+   "id": "q125",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly says reports fell, but verified records show they increased from 6,001 to 11,193."
+  },
+  {
+   "id": "q126",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer states that victim-reported crime incidents fell, matching the verified decrease."
+  },
+  {
+   "id": "q127",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer explicitly says reports fell, but verified records show they increased from 320 to 568."
+  },
+  {
+   "id": "q128",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says reports fell, but verified records show they increased from 1,018 to 1,727 (about 69.6%)."
+  },
+  {
+   "id": "q129",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer states permits fell, but verified records show they increased from 698 to 1,170."
+  },
+  {
+   "id": "q130",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer clearly says permits fell, but verified counts increased from 189 to 312."
+  },
+  {
+   "id": "q131",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to business closures rising, matching the verified increase from 105 to 173."
+  },
+  {
+   "id": "q132",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly commits to crime in the Tenderloin improving, matching the ground-truth decrease in victim-reported crime."
+  },
+  {
+   "id": "q133",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "It clearly says no and explains that the complaint surge reflects reporting behavior and app usage rather than a comparable rise in actual noise."
+  },
+  {
+   "id": "q134",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly rejects equating higher incident counts with greater danger and distinguishes enforcement-driven increases from underlying victimization."
+  },
+  {
+   "id": "q135",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "It clearly says no and explains that registry filings lag actual closures and may miss closures never officially recorded."
+  },
+  {
+   "id": "q136",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly says no and explains that Proposition 13's roughly 2% annual cap means assessed values do not track market prices."
+  },
+  {
+   "id": "q137",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly says no and explains that enforcement activity can rise even while total and victim-reported incidents fall."
+  }
+ ]
+}

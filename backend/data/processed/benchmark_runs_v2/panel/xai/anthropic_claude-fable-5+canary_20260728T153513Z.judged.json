@@ -1,0 +1,823 @@
+{
+ "provider": "anthropic:claude-fable-5+canary",
+ "judge_model": "grok-4.5",
+ "run_file": "anthropic_claude-fable-5+canary_20260728T153513Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease with exact matching stats."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling with exact matching numbers and ~37% drop."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease with exact matching stats."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states crime is falling with exact matching numbers and pct decrease."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches GT decrease direction and exact numbers (~32% drop)."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase with exact matching counts and pct change"
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer/decrease matching GT direction and exact counts"
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states fewer openings with exact matching numbers and decline."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decrease and matches GT numbers exactly."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to fewer/decrease with exact matching counts"
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states closures are falling with exact matching numbers and ~42% decline."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states falling/decrease with matching numbers 173 to 120 (~31%)"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states closures are rising with matching numbers (90 vs 69)."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states closures are falling with matching numbers."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decrease with exact matching counts and pct."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase with exact matching counts (47 vs 5)."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increase with matching 37 vs 18 figures"
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase with exact matching counts (21->37)"
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increasing with exact matching numbers 20 to 34."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increasing with exact matching numbers 49 vs 31."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease and matches GT numbers exactly"
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease with exact matching counts and pct change."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states decrease and matches exact GT numbers (64 to 26, ~59% decline)."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease with exact matching counts and pct."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decrease and exact matching counts/pct."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to increase with exact GT numbers (38 to 244)."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to increase/up with matching numbers"
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states increase matching GT numbers and direction."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase with exact matching figures from ground truth."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to decrease and matches GT numbers exactly"
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to more/increase with exact matching counts 80->205"
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to increase with exact matching counts (122 vs 74)"
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches GT increase with exact 413 vs 325 figures"
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decrease with exact matching numbers (253 to 186)."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fewer/decrease with matching numbers 1170 to 917."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Japantown as having the biggest increase, matching GT."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Matches GT neighborhood and exact counts"
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Twin Peaks as having the largest increase, matching GT pct_change."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Lakeshore as the neighborhood with the largest rise (~8%), matching GT."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Lakeshore as the neighborhood with the largest rise, matching GT."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Portola as largest % drop, matching GT."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Tenderloin as the top neighborhood with matching counts."
+  },
+  {
+   "id": "q044",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Lakeshore as the neighborhood with the largest increase."
+  },
+  {
+   "id": "q045",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Financial District/South Beach with matching 2489 count"
+  },
+  {
+   "id": "q046",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to McLaren Park as largest pct increase, matching GT."
+  },
+  {
+   "id": "q047",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to McLaren Park as largest % increase, matching GT"
+  },
+  {
+   "id": "q048",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Sunset/Parkside with ~43% drop matching GT"
+  },
+  {
+   "id": "q049",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer explicitly names Hayes Valley as having the largest increase (relative), matching GT."
+  },
+  {
+   "id": "q050",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Financial District/South Beach with matching ~$886M figure"
+  },
+  {
+   "id": "q051",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant correctly commits to Mission as the neighborhood with the largest increase, matching GT."
+  },
+  {
+   "id": "q052",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 is within 30% tolerance of 1319"
+  },
+  {
+   "id": "q053",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to ~1200 (exactly 1206), matching GT within tolerance."
+  },
+  {
+   "id": "q054",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "1192/1200 within 30% tolerance of 1172"
+  },
+  {
+   "id": "q055",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 within 30% tolerance of 934"
+  },
+  {
+   "id": "q056",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "420 within 30% tolerance of 511"
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 252, outside 30% tolerance of GT 482"
+  },
+  {
+   "id": "q058",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "540 is within 30% tolerance of 453"
+  },
+  {
+   "id": "q059",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "309 is within 30% tolerance of 313"
+  },
+  {
+   "id": "q060",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 14207/14200, matching GT within tolerance."
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 7900/7938, matching GT 7938 within tolerance"
+  },
+  {
+   "id": "q062",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states ~6200 and exact 6158, matching GT within tolerance"
+  },
+  {
+   "id": "q063",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states exactly 5029, within tolerance of GT."
+  },
+  {
+   "id": "q064",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to 4719, matching GT within tolerance"
+  },
+  {
+   "id": "q065",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 3557 (and range containing it), matching GT within tolerance."
+  },
+  {
+   "id": "q066",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to 4883, within tolerance of ground truth."
+  },
+  {
+   "id": "q067",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to 4640, within 30% tolerance of GT."
+  },
+  {
+   "id": "q068",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "4200 is within 30% tolerance of 4207"
+  },
+  {
+   "id": "q069",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 2913 (within 30% tolerance of GT 2913)."
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant commits to exactly 210, matching expected value within tolerance."
+  },
+  {
+   "id": "q071",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 177, matching GT within tolerance."
+  },
+  {
+   "id": "q072",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to the ground-truth figure of 142."
+  },
+  {
+   "id": "q073",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 1666, matching GT within tolerance."
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to 785, within tolerance of ground truth."
+  },
+  {
+   "id": "q075",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states about 599, matching the expected value within tolerance."
+  },
+  {
+   "id": "q076",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits exactly to the ground-truth figure of 585."
+  },
+  {
+   "id": "q077",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Japantown with exact matching +38% vs -26% figures"
+  },
+  {
+   "id": "q078",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Western Addition as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q079",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Outer Mission as having the bigger increase, matching GT direction and magnitudes."
+  },
+  {
+   "id": "q080",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to Tenderloin with matching +15% vs -17% figures."
+  },
+  {
+   "id": "q081",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Sunset/Parkside and matches the +14% vs -17% figures."
+  },
+  {
+   "id": "q082",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Assistant correctly commits to Lakeshore as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q083",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Inner Richmond as the one with bigger (less negative) change, matching GT"
+  },
+  {
+   "id": "q084",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to SoMa as relatively worse (smaller drop), matching GT expected"
+  },
+  {
+   "id": "q085",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Tenderloin as worse/less decline, matching GT direction"
+  },
+  {
+   "id": "q086",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Bayview Hunters Point and matches the +58% vs -23% changes."
+  },
+  {
+   "id": "q087",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Castro/Upper Market as having the bigger increase, matching GT direction and magnitudes."
+  },
+  {
+   "id": "q088",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly identifies Western Addition as having the bigger increase, matching GT values."
+  },
+  {
+   "id": "q089",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Hayes Valley as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q090",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Lone Mountain/USF as having the bigger increase."
+  },
+  {
+   "id": "q091",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Outer Richmond as the neighborhood with the bigger increase."
+  },
+  {
+   "id": "q092",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Nob Hill as having the bigger increase, matching GT."
+  },
+  {
+   "id": "q093",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to West of Twin Peaks as having the bigger increase, matching GT"
+  },
+  {
+   "id": "q094",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Oceanview/Merced/Ingleside as having the bigger increase."
+  },
+  {
+   "id": "q095",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Lakeshore with matching +156% vs -26% figures"
+  },
+  {
+   "id": "q096",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Japantown having the bigger increase, matching GT direction and magnitudes."
+  },
+  {
+   "id": "q097",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to North Beach as having the bigger increase, matching GT direction and magnitudes."
+  },
+  {
+   "id": "q098",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to Haight Ashbury having the bigger increase, matching GT direction and approx. magnitudes."
+  },
+  {
+   "id": "q099",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to South of Market as having the bigger increase, matching GT rates."
+  },
+  {
+   "id": "q100",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states ~530 (explicitly 529) net units, matching GT 529 within tolerance."
+  },
+  {
+   "id": "q101",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 27 net new units, matching GT within tolerance."
+  },
+  {
+   "id": "q102",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to ~190/188 net units, matching GT within tolerance."
+  },
+  {
+   "id": "q103",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 450/449 net units, matching GT within tolerance."
+  },
+  {
+   "id": "q104",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 1627 units, matching GT within tolerance"
+  },
+  {
+   "id": "q105",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 179 units, matching GT within tolerance."
+  },
+  {
+   "id": "q106",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly matches GT 127 net units within tolerance"
+  },
+  {
+   "id": "q107",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly matches GT 944 units within tolerance"
+  },
+  {
+   "id": "q108",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 35 net units, matching ground truth within tolerance."
+  },
+  {
+   "id": "q109",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly matches GT 287 net units within tolerance"
+  },
+  {
+   "id": "q110",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states 1,150/1,151 units, matching GT 1151 within tolerance."
+  },
+  {
+   "id": "q111",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly matches GT of 201 net units within tolerance."
+  },
+  {
+   "id": "q112",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly states 238 net new units, matching GT."
+  },
+  {
+   "id": "q113",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer exactly matches GT 153 net units within tolerance."
+  },
+  {
+   "id": "q114",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 957 (within 950-960), matching GT exactly"
+  },
+  {
+   "id": "q115",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 45 units, matching GT within tolerance"
+  },
+  {
+   "id": "q116",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to exactly 70 net new units, matching GT within tolerance."
+  },
+  {
+   "id": "q117",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to rise/increase with numbers matching GT exactly"
+  },
+  {
+   "id": "q118",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to rise/increase with numbers matching GT exactly"
+  },
+  {
+   "id": "q119",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states rise/increase with exact matching counts 137 to 299."
+  },
+  {
+   "id": "q120",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to rise and matches GT numbers exactly."
+  },
+  {
+   "id": "q121",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states filings rose sharply and cites matching numbers 82 to 167."
+  },
+  {
+   "id": "q122",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to rise/increase with exact GT numbers"
+  },
+  {
+   "id": "q123",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states reports rose and matches GT numbers/direction exactly."
+  },
+  {
+   "id": "q124",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states reports rose, matching GT increase with exact numbers."
+  },
+  {
+   "id": "q125",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states reports rose sharply with matching numbers and ~85-90% increase."
+  },
+  {
+   "id": "q126",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to fall/decrease and exact GT numbers."
+  },
+  {
+   "id": "q127",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly commits to rise/increase with matching GT figures"
+  },
+  {
+   "id": "q128",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to rise/increase with exact matching counts"
+  },
+  {
+   "id": "q129",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states rise/increase and matches GT numbers exactly."
+  },
+  {
+   "id": "q130",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states permits rose, matching GT numbers and direction."
+  },
+  {
+   "id": "q131",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to rise/increase matching GT direction and exact counts"
+  },
+  {
+   "id": "q132",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly states victimization fell and distinguishes enforcement surge from actual crime."
+  },
+  {
+   "id": "q133",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no, attributes jump to app/reporting artifact, notes refined ~26% rise, and that complaints != actual noise."
+  },
+  {
+   "id": "q134",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no, distinguishes enforcement rise from falling victim-reported crime"
+  },
+  {
+   "id": "q135",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no and explains lag/understatement matching GT"
+  },
+  {
+   "id": "q136",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no and explains Prop 13 cap so assessed values do not track market prices"
+  },
+  {
+   "id": "q137",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly says no and reports enforcement rose ~30% while victim reports fell ~19%."
+  }
+ ]
+}

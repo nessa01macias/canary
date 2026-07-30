@@ -1,0 +1,427 @@
+{
+ "provider": "openai-search:gpt-5-search-api",
+ "judge_model": "grok-4.5",
+ "run_file": "openai-search_gpt-5-search-api_20260728T151706Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime fallen/decrease, matching GT direction"
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to crime falling/decreasing, matching ground truth direction."
+  },
+  {
+   "id": "q003",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Assistant commits to rising (+71%) but GT is decrease (-33%)."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to decrease (via citywide fall + GGP drops similar/better) matching GT direction"
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/declining, matching ground-truth decrease."
+  },
+  {
+   "id": "q006",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges heavily without committing to Western Addition specifically increasing; only calls it plausible based on city-wide data."
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with no data found and no commitment to more/fewer"
+  },
+  {
+   "id": "q008",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges and refuses to commit to more/fewer without data"
+  },
+  {
+   "id": "q009",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to stable/no change instead of the GT decrease, despite heavy initial hedging."
+  },
+  {
+   "id": "q010",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 'more' (increase) while GT is decrease, with some hedging"
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling/decreasing closures, matching ground truth direction."
+  },
+  {
+   "id": "q012",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to rising/closures increasing despite GT decrease, with some hedging on data quality"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to rising/increase, matching ground truth direction despite partial hedging."
+  },
+  {
+   "id": "q014",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with no data found; does not commit to rising or falling."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to falling (decrease) matching GT direction, despite light hedging"
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with no data found; does not commit to increase or decrease for Lakeshore."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase, matching ground truth direction."
+  },
+  {
+   "id": "q018",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges that it could not find neighborhood YoY data and only discusses unrelated citywide/short-term figures without committing to increase/decrease."
+  },
+  {
+   "id": "q019",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Does not commit on Russian Hill; states no data found and only reports citywide trend."
+  },
+  {
+   "id": "q020",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant says it could not find neighborhood-level data and never commits to increase/decrease for Bayview."
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges and states it could not find data for the specific area, without committing to up or down."
+  },
+  {
+   "id": "q022",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges; does not commit to up or down for Presidio"
+  },
+  {
+   "id": "q023",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to up or down for Twin Peaks specifically"
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to up/increase but GT is decrease for Presidio Heights."
+  },
+  {
+   "id": "q025",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer commits to up/increase while ground truth is decrease."
+  },
+  {
+   "id": "q026",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answers completions (down) instead of approvals (which increased)"
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to down/flat while GT is clear increase"
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase/going up, matching ground-truth direction"
+  },
+  {
+   "id": "q029",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with no data found and no commitment to increase or decrease"
+  },
+  {
+   "id": "q030",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to rising/approvals up, opposite of GT decrease; some hedging on data availability"
+  },
+  {
+   "id": "q031",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses specific Lakeshore data and only cites unrelated citywide stats without committing to GT direction."
+  },
+  {
+   "id": "q032",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answers different question (units completed/net housing) rather than permits issued"
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission Bay instead of ground-truth Japantown"
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to Financial District (matching GT Financial District/South Beach) as having the most openings"
+  },
+  {
+   "id": "q038",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges with no data found; does not commit to any neighborhood."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Commits to correct neighborhood Lakeshore"
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin as largest rise, not ground-truth Lakeshore"
+  },
+  {
+   "id": "q042",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant declines to identify any neighborhood and claims data is unavailable."
+  },
+  {
+   "id": "q043",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Financial District/South Beach instead of ground-truth Tenderloin"
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Mission/Bernal Heights (District 9) rather than ground-truth Lakeshore"
+  },
+  {
+   "id": "q045",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer correctly names Financial District/South Beach as the top neighborhood"
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to North Beach as having one of the largest increases, not ground-truth McLaren Park"
+  },
+  {
+   "id": "q047",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses, cites lack of data, and does not name any neighborhood."
+  },
+  {
+   "id": "q048",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges and refuses to name any neighborhood as having the largest decrease"
+  },
+  {
+   "id": "q049",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant hedges/refuses without naming any neighborhood."
+  },
+  {
+   "id": "q050",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to Inner Richmond/Laurel Heights (and similar) instead of Financial District/South Beach, with hedging on full-year data"
+  },
+  {
+   "id": "q051",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to Tenderloin rather than ground-truth Mission"
+  },
+  {
+   "id": "q052",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to +38, far outside 30% tolerance of 1319"
+  },
+  {
+   "id": "q053",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses/hedges without committing to any approved-units figure; cites unrelated completions instead."
+  },
+  {
+   "id": "q054",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses/hedges without committing to ~1172; offers unrelated ~70 instead"
+  },
+  {
+   "id": "q055",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant explicitly says it could not find the data and gives no committed figure for the requested metric/period."
+  },
+  {
+   "id": "q056",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to any number and only offers to estimate later."
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 50-150 estimate, far outside 482\u00b130% range, though with some hedging"
+  },
+  {
+   "id": "q058",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 172 (or 12), far outside 30% tolerance of 453"
+  },
+  {
+   "id": "q059",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses and hedges without committing to any number near 313."
+  },
+  {
+   "id": "q060",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 22k-43k, far outside 30% tolerance of 14207"
+  },
+  {
+   "id": "q061",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 10-12k active businesses, outside GT 7938 \u00b130% (max ~10.3k)"
+  },
+  {
+   "id": "q062",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "18.2k far outside 30% tolerance of 6158"
+  },
+  {
+   "id": "q063",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~14000 active businesses, far outside 5029 \u00b130% tolerance"
+  },
+  {
+   "id": "q064",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to an active-businesses figure near 4719; cites ~13270 total registrations instead."
+  },
+  {
+   "id": "q065",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Commits to 4000-6000 active businesses, outside GT 3557 \u00b130% (max ~4624), though with some hedging."
+  },
+  {
+   "id": "q066",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to 7525, outside 30% tolerance of 4883"
+  },
+  {
+   "id": "q067",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Hedges without committing to any specific number for victim-reported incidents"
+  },
+  {
+   "id": "q068",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Commits to ~1951, far outside 30% tolerance of 4207"
+  },
+  {
+   "id": "q069",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "3466 is within 30% tolerance of 2913"
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer estimates 200-400, which includes GT 210 and overlaps the 30% tolerance band."
+  },
+  {
+   "id": "q071",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Refuses neighborhood figure and gives only citywide total without committing to ~177."
+  },
+  {
+   "id": "q072",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant hedges/refuses without committing to any number."
+  },
+  {
+   "id": "q073",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Estimate 1300-1600 falls within 30% tolerance of 1666"
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer estimates ~780, within 30% of GT 785"
+  }
+ ]
+}

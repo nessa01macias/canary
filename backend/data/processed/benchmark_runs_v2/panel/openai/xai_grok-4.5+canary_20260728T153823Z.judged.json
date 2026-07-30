@@ -1,0 +1,823 @@
+{
+ "provider": "xai:grok-4.5+canary",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "xai_grok-4.5+canary_20260728T153823Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and matches the verified figures: 877 vs. 1,532, about a 43% decline."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and exactly matches the ground-truth figures: 406 to 254 incidents, about a 37% decline."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states crime is falling and matches the verified figures: 602 vs. 903 incidents, approximately a 33% decrease."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately reports victim-reported crime falling from 456 to 306 incidents, about 33%."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and matches the verified counts and approximately \u221232% change."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: openings increased from 166 to 213, about 28%."
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease: 66 openings versus 89, approximately a 26% decline."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 162 to 127 openings, approximately 21.6%."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 969 to 785 openings, approximately 19%."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 259 to 214 openings, approximately 17%."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: closures decreased from 78 to 45, about a 42% decline."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that closures fell from 173 to 120, approximately a 31% decrease."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: closures increased from 69 to 90, approximately 30.4%."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 210 to 156 closures, approximately 25.7%."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 207 to 157, approximately 24%."
+  },
+  {
+   "id": "q016",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 5 to 47, an 840% increase."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 18 to 37, approximately 106%."
+  },
+  {
+   "id": "q018",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: evictions increased from 21 to 37, approximately 76%."
+  },
+  {
+   "id": "q019",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: eviction filings increased from 20 to 34, a 70% rise."
+  },
+  {
+   "id": "q020",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: evictions increased from 31 to 49, approximately 58%."
+  },
+  {
+   "id": "q021",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states a decrease and matches the verified counts and approximately 75% decline."
+  },
+  {
+   "id": "q022",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease: 19 reports versus 71, approximately a 73% drop."
+  },
+  {
+   "id": "q023",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease: 26 reports versus 64, about a 59% drop."
+  },
+  {
+   "id": "q024",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states a decrease and matches the verified counts (91 vs. 220) and approximately 59% decline."
+  },
+  {
+   "id": "q025",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease, including the counts and approximately 58% decline."
+  },
+  {
+   "id": "q026",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states an increase from 38 to 244 units, matching the ground truth."
+  },
+  {
+   "id": "q027",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified increase from 27 to 97 units, approximately 259%."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: approvals increased from 289 to 987, about 241%."
+  },
+  {
+   "id": "q029",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: approvals increased from 260 to 776, about a 198% rise."
+  },
+  {
+   "id": "q030",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly states a decrease and matches the ground-truth values of 475 prior versus -125 in the last 12 months."
+  },
+  {
+   "id": "q031",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: permits increased from 80 to 205, approximately 156%."
+  },
+  {
+   "id": "q032",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: permits increased from 74 to 122, about 65%."
+  },
+  {
+   "id": "q033",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified increase from 325 to 413 permits, approximately 27%."
+  },
+  {
+   "id": "q034",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 253 to 186 permits, approximately 26.5%."
+  },
+  {
+   "id": "q035",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the verified decrease from 1,170 to 917 permits, approximately 22%."
+  },
+  {
+   "id": "q036",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Japantown and a 38% increase, matching the ground truth."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: Financial District/South Beach with 1,666 openings."
+  },
+  {
+   "id": "q038",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Twin Peaks, matching the ground truth, and its approximately 56% increase aligns with the verified 55.9%."
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore, matching the verified ground truth, and cites the correct approximate 8% rise."
+  },
+  {
+   "id": "q041",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore, matching the verified ground truth."
+  },
+  {
+   "id": "q042",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Portola and gives an approximately 47% decrease, matching the ground truth."
+  },
+  {
+   "id": "q043",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Tenderloin with 210 eviction notices, matching the ground truth."
+  },
+  {
+   "id": "q044",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Lakeshore, matching the verified ground truth, and its stated 156% increase aligns with the 1.562 change."
+  },
+  {
+   "id": "q045",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Financial District/South Beach and gives 2,489 permits, exactly matching the ground truth."
+  },
+  {
+   "id": "q046",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies McLaren Park, matching the verified ground truth, and states the correct 60% increase."
+  },
+  {
+   "id": "q047",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The verified answer is McLaren Park (51.8% increase), but the assistant commits to Mission by using absolute rather than percentage increase."
+  },
+  {
+   "id": "q048",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Sunset/Parkside and a 42.8% decrease, matching the ground truth."
+  },
+  {
+   "id": "q049",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Hayes Valley as the neighborhood with the largest increase."
+  },
+  {
+   "id": "q050",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Financial District/South Beach and gives the verified total of about $886 million."
+  },
+  {
+   "id": "q051",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Mission and gives an approximately 72% increase, matching the ground truth of 72.3%."
+  },
+  {
+   "id": "q052",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "987 is within the stated 30% tolerance of the expected 1,319."
+  },
+  {
+   "id": "q053",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 1,206 net new housing units, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q054",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 1,192 units, which is within 30% of the verified value of 1,172."
+  },
+  {
+   "id": "q055",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "776 is within the stated \u00b130% tolerance of the expected 934."
+  },
+  {
+   "id": "q056",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "419 is within the stated 30% tolerance of the expected 511."
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "The answer commits to 252 units, which is outside the 30% tolerance around the verified value of 482."
+  },
+  {
+   "id": "q058",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "542 is within the \u00b130% tolerance of the expected 453 net units."
+  },
+  {
+   "id": "q059",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 309 net approved units, which is within 30% of the expected 313."
+  },
+  {
+   "id": "q060",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 14,207 active businesses, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q061",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 7,938\u20137,940 active businesses, matching the expected 7,938."
+  },
+  {
+   "id": "q062",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the verified count of 6,158 active businesses."
+  },
+  {
+   "id": "q063",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth count of 5,029 active businesses."
+  },
+  {
+   "id": "q064",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 4,719 active businesses, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q065",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth count of 3,557 active businesses."
+  },
+  {
+   "id": "q066",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 4,883, exactly matching the verified ground-truth value."
+  },
+  {
+   "id": "q067",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground-truth estimate of 4,640 incidents."
+  },
+  {
+   "id": "q068",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 4,207, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q069",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer gives 2,913 incidents, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 210 eviction filings, exactly matching the ground truth."
+  },
+  {
+   "id": "q071",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 177 eviction notices, exactly matching the ground truth."
+  },
+  {
+   "id": "q072",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 142 eviction filings, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q073",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the verified value of 1,666 business openings."
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 785, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q075",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 599 business openings, exactly matching the ground truth."
+  },
+  {
+   "id": "q076",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer states 585 new businesses, exactly matching the verified ground truth."
+  },
+  {
+   "id": "q077",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Japantown, matching the ground truth, and its stated changes align with 0.38 versus -0.258."
+  },
+  {
+   "id": "q078",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Western Addition, matching the ground truth, with percentage changes consistent with the verified values."
+  },
+  {
+   "id": "q079",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies Outer Mission and reports changes matching the ground truth: +15.5% versus Mission's -19%."
+  },
+  {
+   "id": "q080",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Tenderloin, matching the ground truth; its cited changes also align with approximately +15.4% versus -17.4%."
+  },
+  {
+   "id": "q081",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Sunset/Parkside and matches the ground-truth changes of about +14% versus -16.9% for Noe Valley."
+  },
+  {
+   "id": "q082",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Lakeshore, matching the ground truth, and cites the correct directional changes."
+  },
+  {
+   "id": "q083",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Inner Richmond, matching the ground truth, and accurately notes its smaller decline (-2.7% versus -38.4%)."
+  },
+  {
+   "id": "q084",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies South of Market, matching the ground truth because its \u22127.5% change was larger than Japantown\u2019s \u221237.4%."
+  },
+  {
+   "id": "q085",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Tenderloin, matching the ground truth; its cited changes of -8.0% versus -33.3% are also consistent."
+  },
+  {
+   "id": "q086",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Bayview Hunters Point, matching the ground truth, with percentage changes consistent with the verified values."
+  },
+  {
+   "id": "q087",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Castro/Upper Market and gives changes matching the ground truth: about +39.4% versus -14.8% for South of Market."
+  },
+  {
+   "id": "q088",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Western Addition and matches the verified changes: +32.5% versus -9.5% for Outer Richmond."
+  },
+  {
+   "id": "q089",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Hayes Valley and matches the verified changes: +19.4% versus Nob Hill's -7.7%."
+  },
+  {
+   "id": "q090",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Lone Mountain/USF, matching the ground truth."
+  },
+  {
+   "id": "q091",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Outer Richmond as having the bigger increase, consistent with the ground truth."
+  },
+  {
+   "id": "q092",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Nob Hill as having the bigger increase, matching the ground truth."
+  },
+  {
+   "id": "q093",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to West of Twin Peaks, matching the ground-truth comparison."
+  },
+  {
+   "id": "q094",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies Oceanview/Merced/Ingleside and gives changes consistent with the ground truth (+80.6% versus -86.9%)."
+  },
+  {
+   "id": "q095",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Lakeshore, matching the ground truth; its stated percentage changes also align with the provided values."
+  },
+  {
+   "id": "q096",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to Japantown and gives changes consistent with the ground truth: about +64.9% versus -21.6% for Bayview Hunters Point."
+  },
+  {
+   "id": "q097",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer identifies North Beach and gives changes of +27% versus Excelsior's -17%, matching the ground truth."
+  },
+  {
+   "id": "q098",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer selects Haight Ashbury and gives changes matching the ground truth: +19.7% versus -15.5%."
+  },
+  {
+   "id": "q099",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly identifies South of Market and matches the ground-truth changes of +19.4% versus -12.2% for Tenderloin."
+  },
+  {
+   "id": "q100",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth of 529 net new housing units and 559 permits."
+  },
+  {
+   "id": "q101",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 27 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q102",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 188 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q103",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 449 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q104",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth of 1,627 net new housing units and 406 permits."
+  },
+  {
+   "id": "q105",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth of 179 net new housing units within 500 meters over 24 months."
+  },
+  {
+   "id": "q106",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth: 127 net new housing units across 343 permits."
+  },
+  {
+   "id": "q107",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth: 944 net units across 372 permits."
+  },
+  {
+   "id": "q108",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 35 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q109",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 287 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q110",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth: 1,151 net units from 182 permits within 500 meters over 24 months."
+  },
+  {
+   "id": "q111",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth: 201 net new housing units from 305 permits."
+  },
+  {
+   "id": "q112",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 238 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q113",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the ground truth of 153 net new housing units within 500 meters over 24 months."
+  },
+  {
+   "id": "q114",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer exactly matches the verified total of 957 net new housing units and the 296-permit count."
+  },
+  {
+   "id": "q115",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 45 net new housing units, exactly matching the ground truth."
+  },
+  {
+   "id": "q116",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to 70 net new units, exactly matching the ground truth."
+  },
+  {
+   "id": "q117",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 263 to 608."
+  },
+  {
+   "id": "q118",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 170 to 376."
+  },
+  {
+   "id": "q119",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 137 to 299."
+  },
+  {
+   "id": "q120",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 361 to 768, matching the ground truth."
+  },
+  {
+   "id": "q121",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to an increase and gives the verified totals of 82 and 167."
+  },
+  {
+   "id": "q122",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 4,592 to 9,221."
+  },
+  {
+   "id": "q123",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose and matches the verified totals of 1,811 and 3,572."
+  },
+  {
+   "id": "q124",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 239 to 458, matching the ground truth."
+  },
+  {
+   "id": "q125",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, matching the increase from 6,001 to 11,193."
+  },
+  {
+   "id": "q126",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that incidents fell, from 175 to 30."
+  },
+  {
+   "id": "q127",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 320 to 568."
+  },
+  {
+   "id": "q128",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that reports rose, from 1,018 to 1,727."
+  },
+  {
+   "id": "q129",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that permits rose, from 698 to 1,170."
+  },
+  {
+   "id": "q130",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that permits rose, from 189 to 312, matching the ground truth."
+  },
+  {
+   "id": "q131",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that business closures rose, from 105 to 173."
+  },
+  {
+   "id": "q132",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to victim-reported crime decreasing by about 8% and correctly distinguishes the rise in total incidents as enforcement-driven."
+  },
+  {
+   "id": "q133",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer clearly says no and correctly attributes most of the increase to an app/reporting-flow change, distinguishing complaints from actual noise conditions."
+  },
+  {
+   "id": "q134",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "It correctly says the rise was enforcement-driven and that victim-reported crime fell, so the total does not indicate Mission became more dangerous."
+  },
+  {
+   "id": "q135",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly says the registry is not a reliable real-time count because closure filings lag and therefore understate recent closures."
+  },
+  {
+   "id": "q136",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly says no and explains that Proposition 13 caps annual assessed-value growth at about 2%, so assessed values do not track market prices."
+  },
+  {
+   "id": "q137",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly says no and states enforcement-initiated incidents rose about 30% while victim reports fell."
+  }
+ ]
+}

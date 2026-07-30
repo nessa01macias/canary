@@ -1,0 +1,446 @@
+{
+ "provider": "openai-search:gpt-5-search-api",
+ "judge_model": "claude-sonnet-5",
+ "run_file": "openai-search_gpt-5-search-api_20260728T151706Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime has fallen significantly, matching expected decrease direction."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to decreasing crime, matching ground truth direction, though cited magnitude (21%) differs from actual (37.4%).",
+   "repaired": true
+  },
+  {
+   "id": "q003",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states crime is rising (+71%) while ground truth shows a 33% decrease"
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to falling crime trend, consistent with the -32.9% decrease in ground truth, despite hedging on park-specific data availability"
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer states crime is falling, matching ground truth decrease of ~32%."
+  },
+  {
+   "id": "q006",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to an increase (plausible more businesses), matching ground truth direction, despite hedging on exact local data."
+  },
+  {
+   "id": "q007",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly refuses to commit, stating no clear trend was found rather than stating an increase or decrease."
+  },
+  {
+   "id": "q008",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant explicitly states it could not find data confirming the direction and does not commit to increase or decrease."
+  },
+  {
+   "id": "q009",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit, stating evidence suggests stability rather than the expected decrease.",
+   "repaired": true
+  },
+  {
+   "id": "q010",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer leans toward 'more' openings while ground truth shows a decrease (-17.4%)."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to closures 'falling', matching ground truth decrease.",
+   "repaired": true
+  },
+  {
+   "id": "q012",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer concludes closures are rising while ground truth shows a 30.6% decrease"
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to closures rising, matching the ground truth increase direction, despite hedging on data completeness."
+  },
+  {
+   "id": "q014",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit to a direction, citing lack of data."
+  },
+  {
+   "id": "q015",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to 'falling' as the likely direction, matching ground truth decrease, despite hedging on data specificity."
+  },
+  {
+   "id": "q016",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant admits it couldn't find Lakeshore-specific data and only cites citywide figures without committing to a Lakeshore direction."
+  },
+  {
+   "id": "q017",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increase, matching ground truth direction."
+  },
+  {
+   "id": "q018",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer hedges, admits lack of clear data, and ultimately suggests a decrease rather than committing clearly to the correct increase."
+  },
+  {
+   "id": "q019",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant explicitly states it lacks Russian Hill-specific data and only cites citywide figures, not committing to the neighborhood's direction.",
+   "repaired": true
+  },
+  {
+   "id": "q020",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer explicitly declines to state neighborhood-level direction, only cites citywide data without committing to Bayview Hunters Point trend",
+   "repaired": true
+  },
+  {
+   "id": "q021",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant admits it couldn't find neighborhood-specific data and only offers a vague citywide claim, not committing to the ground-truth decrease for Lone Mountain/USF."
+  },
+  {
+   "id": "q022",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit to Presidio-specific trend, citing lack of data, rather than stating a direction."
+  },
+  {
+   "id": "q023",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Explicitly states it could not find Twin Peaks-specific data and does not commit to a direction for that area."
+  },
+  {
+   "id": "q024",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer claims encampment reports are up 12%, contradicting ground truth decrease of ~59%."
+  },
+  {
+   "id": "q025",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states encampment reports are up, contradicting ground truth of a ~58% decrease."
+  },
+  {
+   "id": "q026",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer claims 'down' (completions) while ground truth metric (approvals) shows a large increase; direction and metric both mismatched."
+  },
+  {
+   "id": "q027",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer concludes 'down' while ground truth shows an increase (97 vs 27 units)."
+  },
+  {
+   "id": "q028",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer commits to increasing direction, matching ground truth despite different numbers/source."
+  },
+  {
+   "id": "q029",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer refuses to commit, stating no strong evidence of rise or fall rather than affirming increase."
+  },
+  {
+   "id": "q030",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer concludes approvals are rising, contradicting ground truth decrease, though it hedges on data reliability."
+  },
+  {
+   "id": "q031",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to answer for Lakeshore specifically, only cites citywide data."
+  },
+  {
+   "id": "q032",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Ground truth shows a large increase in permits issued (74->122), but the answer claims fewer/no increase, even a slight decline."
+  },
+  {
+   "id": "q036",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Mission Bay, not Japantown as verified."
+  },
+  {
+   "id": "q037",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Financial District as the neighborhood with most new business openings, matching ground truth."
+  },
+  {
+   "id": "q038",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to a specific neighborhood, only mentions general hard-hit areas without naming Twin Peaks.",
+   "repaired": true
+  },
+  {
+   "id": "q040",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Correctly names Lakeshore as the neighborhood with the largest rise; percentage differs but direction/name matches."
+  },
+  {
+   "id": "q041",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin instead of the ground-truth Lakeshore."
+  },
+  {
+   "id": "q042",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit, states data insufficient, no neighborhood named.",
+   "repaired": true
+  },
+  {
+   "id": "q043",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Financial District/South Beach, but ground truth is Tenderloin.",
+   "repaired": true
+  },
+  {
+   "id": "q044",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Mission/Bernal Heights (District 9) instead of Lakeshore, the verified ground truth."
+  },
+  {
+   "id": "q045",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Answer names Financial District/South Beach, matching ground truth.",
+   "repaired": true
+  },
+  {
+   "id": "q046",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names North Beach, but ground truth is McLaren Park"
+  },
+  {
+   "id": "q047",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to commit to any specific neighborhood, offering only to look further."
+  },
+  {
+   "id": "q048",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to a specific neighborhood, mentions Mission District only as an example without asserting it as the answer, and offers to compute further."
+  },
+  {
+   "id": "q049",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The assistant refuses to commit to any neighborhood, offering no answer."
+  },
+  {
+   "id": "q050",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Inner Richmond/Laurel Heights (ZIP 94118), not Financial District/South Beach as per ground truth.",
+   "repaired": true
+  },
+  {
+   "id": "q051",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer names Tenderloin, but ground truth is Mission"
+  },
+  {
+   "id": "q052",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states 38 units vs ground truth ~1319 (tolerance range ~923-1715), far outside tolerance.",
+   "repaired": true
+  },
+  {
+   "id": "q053",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer does not commit to a permits-issued figure; gives unrelated completions number and states data unavailable.",
+   "repaired": true
+  },
+  {
+   "id": "q054",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer gives ~70 units, far outside tolerance of expected 1172, though it hedges about uncertainty regarding permits specifically."
+  },
+  {
+   "id": "q055",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Answer explicitly states it couldn't find the specific figure and offers unrelated citywide/2024 data instead of committing to a number for the requested period."
+  },
+  {
+   "id": "q056",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to provide a numeric estimate and asks for clarification instead of committing to a value."
+  },
+  {
+   "id": "q057",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer estimates 50-150 units, well outside tolerance range of ~338-626 around expected 482."
+  },
+  {
+   "id": "q058",
+   "verdict": "wrong",
+   "confident_wrong": false,
+   "reason": "Answer gives 172 (or 12), far outside tolerance of expected 453, though hedged with alternative figure.",
+   "repaired": true
+  },
+  {
+   "id": "q059",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "The answer explicitly states it could not find the figure and offers no committed estimate for the 12-month period before July 2026."
+  },
+  {
+   "id": "q060",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~22,650 or ~43,100, far outside the tolerance range around the expected 14,207.",
+   "repaired": true
+  },
+  {
+   "id": "q061",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer estimates ~10,000-12,000 active businesses, exceeding the tolerance range around the true value of 7,938 (\u00b130% = 5,557-10,319).",
+   "repaired": true
+  },
+  {
+   "id": "q062",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "18,200 is far outside the 30% tolerance range around the expected 6,158 active businesses."
+  },
+  {
+   "id": "q063",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~14,000 active businesses, far outside tolerance range around expected 5,029"
+  },
+  {
+   "id": "q064",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer states ~13,270, far outside the 3,303\u20136,135 tolerance range around ground truth 4,719.",
+   "repaired": true
+  },
+  {
+   "id": "q065",
+   "verdict": "judge_error",
+   "reason": "",
+   "repaired": true
+  },
+  {
+   "id": "q066",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer gives 7,525, outside the 30% tolerance range around ground truth 4,883."
+  },
+  {
+   "id": "q067",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to a specific total figure, only mentions partial category counts and hedges on the exact number."
+  },
+  {
+   "id": "q068",
+   "verdict": "wrong",
+   "confident_wrong": true,
+   "reason": "Answer gives ~1,951 vs expected ~4,207 (tolerance 30%, range 2945-5469), outside range.",
+   "repaired": true
+  },
+  {
+   "id": "q069",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "3466 is within 30% tolerance of 2913 (range ~2039-3787)",
+   "repaired": true
+  },
+  {
+   "id": "q070",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Estimated range 200-400 includes the expected value 210, within tolerance, and commits to a plausible numeric range."
+  },
+  {
+   "id": "q071",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Does not provide a neighborhood-specific estimate; explicitly states inability to find data and offers citywide figure instead.",
+   "repaired": true
+  },
+  {
+   "id": "q072",
+   "verdict": "nonanswer",
+   "confident_wrong": false,
+   "reason": "Assistant refuses to commit to a specific number, offering only to estimate if asked."
+  },
+  {
+   "id": "q073",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Estimated range 1,300\u20131,600 falls within the 30% tolerance band around the true value of 1,666 (1,166\u20132,166)."
+  },
+  {
+   "id": "q074",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "Estimated ~780, within tolerance of expected 785, despite hedging language."
+  }
+ ]
+}

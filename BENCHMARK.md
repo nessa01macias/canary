@@ -1,28 +1,30 @@
-# AI Area Benchmark v1: results snapshot
+# AI Area Benchmark v2: results snapshot
 
 **The full study (method, findings, conclusions, limitations) lives in
 [RESEARCH.md](RESEARCH.md).** This file is the quick-reference table only.
 
-43 checkable questions about SF neighborhoods (frozen pre-run at `064dc90`), five
+136 checkable questions about SF neighborhoods (frozen at `d891dac` and
+independently verified against the city's APIs before any model ran), five
 frontier models, LLM-judged against fixed receipts. "Canary ON" = one simulated
 Canary API response (data slice + field docs) prepended.
 
 | Model | Bare | Canary ON | Confidently wrong (bare) |
 |---|---|---|---|
-| claude-fable-5 | 49% | **100%** | 19/43 |
-| grok-4.5 | 42% | **100%** | 25/43 |
-| gpt-5.6-sol | 44% | **100%** | 23/43 |
-| gpt-5-search-api | 37% | **95%**¹ | 11/43 (+13 refusals) |
-| perplexity sonar-pro (live search) | 47% | **93%** | 21/43 |
+| claude-fable-5 | 40% | **99%** | 72/136 |
+| grok-4.5 | 32% | **99%** | 89/135 |
+| gpt-5.6-sol | 36% | **99%**¹ | 85/136 |
+| gpt-5-search-api | 25%¹ | **95%** | 22/69 (+25 refusals) |
+| perplexity sonar-pro (live search) | 47% | **95%** | 62/135 |
 
-¹ 40/42 judged (one verdict failed to parse after retries; excluded, not assumed).
-All counts from `python -m app.benchmark.stats` (Wilson 95% CIs and McNemar tests
-in RESEARCH.md); 19 originally unparsed verdicts completed via `judge --repair`,
-disclosed there.
+¹ Two cells carry reduced coverage from a mid-run network failure (search bare
+69/136 answered; sol grounded 86/136); all cells report over exact answered-and-
+judged denominators. All counts from `python -m app.benchmark.stats` (Wilson 95%
+CIs and McNemar p between 1e-13 and 1e-27 in RESEARCH.md).
 
-Headline blocks (bare, pooled): **superlatives 1/25 · numeric 1/40 · pairwise 67%**
-(vs 50% coin-flip) · temporal-in-training-window 95% (the control that shows the gap
-is the present, not the past).
+Headline blocks (bare, pooled): **superlatives 12% · numeric 20% · pairwise 45%**
+(below the 50% coin-flip) · **temporal-in-training-window 37%** (at scale, even
+in-window aggregates fail unless they were published: the gap is unpublished
+computation, not recency). v1 pilot (43q, `064dc90`) in git history.
 
 Reproduce: `cd backend && python -m app.benchmark.generate_v1 && python -m app.benchmark.run
 && python -m app.benchmark.run --grounded && python -m app.benchmark.judge

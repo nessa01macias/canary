@@ -154,25 +154,26 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
         <p className="agents-sub">
           Where should I live? Is this block getting better or worse? What is going up
           next door? Your users ask; today's models improvise. We tested the five
-          newest frontier models on 43 questions like these, every one checkable
-          against San Francisco's public record. Best unassisted score: 49%. The wrong
-          answers came out confident, specific, and fluent. Then we prepended one
-          Canary response and three of the five scored 100%. The models were never the
-          problem. The answers had simply never been computed. Canary computes them
-          monthly, from public records, with a citation on every number.
+          newest frontier models on 136 questions like these, every one checkable
+          against San Francisco's public record and verified against the city's own
+          APIs before any model ran. Best unassisted score: 47%. The wrong answers
+          came out confident, specific, and fluent. Then we prepended one Canary
+          response and accuracy jumped to 95-99%. The models were never the problem.
+          The answers had simply never been computed. Canary computes them monthly,
+          from public records, with a citation on every number.
         </p>
 
         <div className="agents-stats">
           <div className="agents-stat">
-            <span className="agents-stat-num">24 / 25</span>
+            <span className="agents-stat-num">66 / 75</span>
             <span className="agents-stat-label">"which neighborhood changed most?" answered wrong. Asked what's rising fastest, the models gave four different confident answers. All four wrong</span>
           </div>
           <div className="agents-stat">
-            <span className="agents-stat-num">49% → 100%</span>
-            <span className="agents-stat-label">Claude Fable 5, before and after a single Canary response. Grok and GPT-5.6 Sol hit 100% too. Same model, same questions, one payload apart</span>
+            <span className="agents-stat-num">40% → 99%</span>
+            <span className="agents-stat-label">Claude Fable 5, before and after a single Canary response. Grok and GPT-5.6 Sol hit 99% too. Same model, same questions, one payload apart</span>
           </div>
           <div className="agents-stat">
-            <span className="agents-stat-num">25 / 43</span>
+            <span className="agents-stat-num">89 / 135</span>
             <span className="agents-stat-label">Grok 4.5 answers that were confidently wrong. The new failure mode is not "I don't know". It is a fluent wrong answer your user believes</span>
           </div>
         </div>

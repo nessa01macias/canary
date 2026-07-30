@@ -1,0 +1,700 @@
+{
+ "provider": "anthropic:claude-fable-5+canary",
+ "judge_model": "gpt-5.6-sol",
+ "run_file": "anthropic_claude-fable-5+canary_20260728T153513Z.json",
+ "verdicts": [
+  {
+   "id": "q001",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately cites about a 43% drop, from 1,532 to 877 incidents."
+  },
+  {
+   "id": "q002",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states crime is falling and matches the verified 37.4% decrease from 406 to 254 victim-reported incidents."
+  },
+  {
+   "id": "q003",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately cites a roughly 33% drop from 903 to 602."
+  },
+  {
+   "id": "q004",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately states the verified 33% drop from 456 to 306 victim-reported incidents."
+  },
+  {
+   "id": "q005",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately cites the roughly 32% drop from 3,644 to 2,464 victim-reported incidents."
+  },
+  {
+   "id": "q006",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.openai.com', port=443): Read timed out. (read timeout=120)"
+  },
+  {
+   "id": "q007",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer commits to a decrease and accurately reports openings falling from 89 to 66, about 26%."
+  },
+  {
+   "id": "q008",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that openings decreased from 162 to 127, about a 22% decline."
+  },
+  {
+   "id": "q009",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that openings decreased from 969 to 785, about a 19% decline."
+  },
+  {
+   "id": "q010",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that openings decreased from 259 to 214, about a 17% decline."
+  },
+  {
+   "id": "q011",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that closures decreased from 78 to 45, about a 42% decline."
+  },
+  {
+   "id": "q012",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that closures are falling, from 173 to 120, a decrease of about 31%."
+  },
+  {
+   "id": "q013",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer matches the ground truth: closures increased from 69 to 90, approximately 30%."
+  },
+  {
+   "id": "q014",
+   "verdict": "correct",
+   "confident_wrong": false,
+   "reason": "The answer correctly states that closures fell from 210 to 156, a decline of about 26%, matching the ground truth."
+  },
+  {
+   "id": "q015",
+   "verdict": "judge_error",
+   "reason": "HTTPSConnectionPool(host='api.openai.com', port=443): Read timed out. (read timeout=120)"
+  },
+  {
+   "id": "q016",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q017",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q018",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q019",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q020",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q021",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q022",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q023",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q024",
+   "verdict": "judge_error",
+   "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+  },
+  {
+   "id": "q025",
+   "verdict": "judge_error",
+   "reason": "('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))"
+  },
+  {
+   "id": "q026",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q027",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q028",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q029",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q030",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q031",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q032",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q033",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q034",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q035",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q036",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q037",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q038",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q040",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q041",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q042",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q043",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q044",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q045",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q046",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q047",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q048",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q049",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q050",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q051",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q052",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q053",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q054",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q055",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q056",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q057",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q058",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q059",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q060",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q061",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q062",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q063",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q064",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q065",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q066",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q067",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q068",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q069",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q070",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q071",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q072",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q073",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q074",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q075",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q076",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q077",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q078",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q079",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q080",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q081",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q082",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q083",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q084",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q085",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q086",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q087",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q088",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q089",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q090",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q091",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q092",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q093",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q094",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q095",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q096",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q097",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q098",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q099",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q100",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q101",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q102",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q103",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q104",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q105",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q106",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q107",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q108",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q109",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q110",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q111",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q112",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q113",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q114",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q115",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q116",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q117",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q118",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q119",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q120",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q121",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q122",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q123",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q124",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q125",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q126",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q127",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q128",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q129",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q130",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q131",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q132",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q133",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q134",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q135",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q136",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  },
+  {
+   "id": "q137",
+   "verdict": "judge_error",
+   "reason": "429 Client Error: Too Many Requests for url: https://api.openai.com/v1/chat/completions"
+  }
+ ]
+}

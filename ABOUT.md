@@ -51,16 +51,18 @@ known ways. Three real examples from building this:
 
 ## What we found about AI assistants
 
-We tested the five newest AI models, including ones with live web search, on 43
-checkable questions about San Francisco neighborhoods. They scored 37-49%, and
-unlike older models they rarely admit uncertainty anymore. One was confidently wrong
-on 25 of its 43 answers. When we asked which neighborhood was rising fastest, the
-five models gave four different confident answers, and all of them were wrong.
+We tested the five newest AI models, including ones with live web search, on 136
+checkable questions about San Francisco neighborhoods, each answer verified against
+the city's own records before any model ran. They scored 25-47%, and unlike older
+models they rarely admit uncertainty anymore. One was confidently wrong on two of
+every three answers. When we asked which neighborhood was rising fastest, the five
+models gave four different confident answers, and all of them were wrong.
 
 The reason is simple: these answers were never written down anywhere on the
-internet, so no AI can find them, no matter how smart it gets. Someone has to compute
-them from the raw records first. When we gave the same models Canary's data, three of
-them scored perfectly and the other two came close. The full study is in the
+internet, so no AI can find them, no matter how smart it gets. They even failed on
+questions about past years they were trained on, whenever the answer had never been
+published. Someone has to compute these numbers from the raw records first. When we
+gave the same models Canary's data, they scored 95-99%. The full study is in the
 **Research** tab.
 
 ## Who this is for
