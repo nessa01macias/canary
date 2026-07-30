@@ -1,90 +1,114 @@
-# Deploying Canary
+# Deploying Canary (living doc — updated 2026-07-29)
 
-## The one thing to understand first: what ships and what doesn't
+Internal working note, never shipped to the site. This is the deployment lane's canon:
+live infra, the redeploy playbook, and every gotcha that cost real debugging time.
+The Claude memory directory does not travel across laptops; this file does.
 
-`backend/data/` is ~3.5 GB, but it is three different things with opposite needs:
+## Live infrastructure
 
-| Path | Size | What it is | Ships to server? |
-|------|------|-----------|------------------|
-| `data/raw/` | ~3.2 GB | Immutable source snapshots — **the archive/moat** | **No.** Stays on your laptop. |
-| `data/staged/` | ~94 MB | Intermediate parquet (pipeline internals) | No. |
-| `data/canary.duckdb` | ~208 MB | Derived metrics/events the API serves | **Yes — this is the only data on the server.** |
+- **https://canarylayer.com** (+ www) — Hetzner **CPX11** (2 vCPU / 2GB / 40GB, ~€12/mo
+  with IPv4), Ubuntu 24.04, Hillsboro us-west. IP **5.78.144.35**. Repo dir: `/opt/canary`.
+- DNS: Cloudflare, both A records **grey-cloud (DNS only)** — Caddy owns the Let's
+  Encrypt cert and auto-renews. Never flip to orange-cloud without also setting
+  Cloudflare SSL to Full (strict), or you get redirect/cert loops.
+- Stack (`docker-compose.yml`):
+  - `web` — Caddy: serves the Vite bundle, reverse-proxies `/api/*` → `api:8000`
+    (prefix preserved), auto-HTTPS, gzip, **immutable cache on `/assets/*`**,
+    **no-cache on HTML**, `.mjs` forced to `text/javascript`, `/assets/*` never falls
+    back to index.html (missing asset = clean 404), JSON access logs → stdout
+    (`docker compose logs web`).
+  - `api` — FastAPI/uvicorn, non-root, slim image from **`backend/requirements-serve.txt`**,
+    DuckDB opened read-only per request, H3 extension pre-baked at image build.
+- Server data (mounted read-only into `api`):
+  - `backend/data/canary.duckdb` — the compacted derived DB (only DB on the server)
+  - `backend/data/processed/` — small artifacts read off disk (claims.json, freshness.json)
+  - `backend/data/raw/overture_places/` — ~2MB slice for `/api/places/search`
+- Server env (`/opt/canary/.env` — never in git, never overwritten by rsync):
+  `SITE_ADDRESS` (apex + www), `VITE_MAPTILER_KEY`, `SUPABASE_URL`/`SUPABASE_KEY` (anon),
+  optional slots wired in compose: `SUPABASE_SERVICE_KEY`, `ANTHROPIC/OPENAI/GEMINI_API_KEY`,
+  `STADIA_API_KEY` (absent → `/api/commute` returns routing_unconfigured, UI shows "—").
 
-The pipeline (ingestion + build) runs **off-box** (your laptop). The server only ever
-holds the derived DuckDB, so a tiny/cheap instance handles it comfortably.
-
-```
-laptop:  ingestion -> data/raw (moat, kept local)
-                   -> pipeline -> canary.duckdb --push--> server
-server:  Caddy (React static + /api proxy)  +  FastAPI (reads canary.duckdb :ro)
-```
-
-## Server size
-
-A Hetzner **CX22** (2 vCPU / 4 GB / 40 GB, ~€4/mo) is plenty: serving a 208 MB
-read-only DuckDB plus a static bundle is negligible load. Location: whichever is
-closest to you/users (Falkenstein is fine). Image: Ubuntu 24.04 or 26.04. Add your
-SSH key at create time.
-
-## First deploy (once)
-
-From the **Hetzner console**, create the server (above) with your SSH key.
-
-Then, from your laptop:
+## The routine: "commit, push, redeploy"
 
 ```bash
-# 1. Prepare the server (installs Docker + Compose + firewall).
-ssh root@<server-ip> 'bash -s' < deploy/bootstrap-server.sh
+# 0) hygiene: review what's staged; never commit .env / *.duckdb / data/raw / data/logs
+git status --short
+git add -A && git commit && git push
 
-# 2. Push the derived DB (must exist before compose can mount it).
-#    Build it first if needed:  cd backend && python -m app.pipeline.build
-CANARY_HOST=root@<server-ip> ./deploy/push-duckdb.sh
+# 1) code → server. --delete is REQUIRED (see gotcha 4); excludes protect .env + data.
+rsync -a --delete --exclude .git --exclude 'backend/data' --exclude node_modules \
+  --exclude venv --exclude '*.duckdb' --exclude .env ./ root@5.78.144.35:/opt/canary/
 
-# 3. Copy the repo (code only — .dockerignore keeps data/ out) and env.
-rsync -avz --exclude .git --exclude 'backend/data' --exclude node_modules \
-      --exclude venv ./ root@<server-ip>:/opt/canary/
-scp .env.example root@<server-ip>:/opt/canary/.env   # then edit values on the server
+# 2) small data artifacts, only when they changed
+rsync -a backend/data/processed/ root@5.78.144.35:/opt/canary/backend/data/processed/
+rsync -a backend/data/raw/overture_places/ root@5.78.144.35:/opt/canary/backend/data/raw/overture_places/
 
-# 4. Bring it up.
-ssh root@<server-ip> 'cd /opt/canary && docker compose up -d --build'
+# 3) DuckDB, only when the pipeline rebuilt it — COMPACT first (halves it), then atomic swap
+backend/venv/bin/python -c "import duckdb; c=duckdb.connect(); \
+  c.execute(\"ATTACH 'backend/data/canary.duckdb' AS src (READ_ONLY)\"); \
+  c.execute(\"ATTACH 'backend/data/canary_compact.duckdb' AS dst\"); \
+  c.execute('COPY FROM DATABASE src TO dst')"
+rsync -a --partial backend/data/canary_compact.duckdb \
+  root@5.78.144.35:/opt/canary/backend/data/canary.duckdb.tmp
+ssh root@5.78.144.35 'mv -f /opt/canary/backend/data/canary.duckdb.tmp \
+  /opt/canary/backend/data/canary.duckdb'
+rm -f backend/data/canary_compact.duckdb
+
+# 4) build FIRST (old site keeps serving = zero downtime), then swap, then verify
+ssh root@5.78.144.35 'cd /opt/canary && docker compose build > /tmp/b.log 2>&1 \
+  && docker compose up -d || tail -30 /tmp/b.log'
+ssh root@5.78.144.35 'for p in / /api/catalog /api/sf/neighborhoods \
+  /assets/maplibre-gl-worker.mjs /assets/maplibre-gl-shared.mjs; do \
+  curl -s --resolve canarylayer.com:443:127.0.0.1 -o /dev/null -w "%{http_code}  $p\n" \
+  https://canarylayer.com$p; done'
 ```
 
-Visit `http://<server-ip>` — the map should load.
+Ordering rule for combined code+DB deploys: build images while the DB uploads, but only
+`up -d` AFTER the DB swap — new code must never run against a DB missing its tables.
 
-## Add a domain + HTTPS (when ready)
+## Gotchas (each cost hours — do not re-learn)
 
-1. Point an A record at the server IP.
-2. On the server, set `SITE_ADDRESS=canary.yourdomain.com` in `/opt/canary/.env`.
-3. `docker compose up -d` — Caddy provisions a Let's Encrypt cert automatically.
+1. **MapLibre v6 blank map.** The render worker `/assets/maplibre-gl-worker.mjs` AND its
+   import `/assets/maplibre-gl-shared.mjs` must exist in `dist/assets/`
+   (frontend/Dockerfile copies both from the maplibre-gl package). Missing either →
+   the worker dies silently → the map never fires `load` → every data fetch (they all
+   live inside `map.on('load')`) never runs → blank map, stuck "Loading…", NO console
+   error. Diagnose via the Caddy access-log waterfall, not the console.
+2. **Slim serve image.** `api` installs `backend/requirements-serve.txt`, NOT
+   requirements.txt (the supabase SDK conflicts with the pinned websockets). Any new
+   third-party import under `backend/app/api/` or `main.py` must be added there, or the
+   container crash-loops with ModuleNotFoundError and every endpoint 502s.
+3. **Web build context = repo root** (not `./frontend`): Docs.tsx imports repo-root
+   `../../*.md`. The Dockerfile globs `COPY *.md /app/` — never list docs explicitly
+   (an explicit list broke the build the day ABOUT.md appeared).
+4. **`rsync --delete` always.** Without it, locally-deleted .tsx files ghost on the
+   server, `tsc -b` type-checks them, and the build fails on code that no longer exists.
+5. **The work laptop lies about prod (RELEX).** On VPN the domain is blocked outright
+   (ERR_CONNECTION_CLOSED). Off VPN, corporate SSL inspection (issuer "Retail Logistics
+   Excellence - Forward Trust CA") breaks curl/openssl from the laptop. Only trust
+   server-side checks: `curl --resolve canarylayer.com:443:127.0.0.1 ...`. The
+   user-level truth test is a phone on cellular.
+6. **Headless ground truth on the server.** `docker run zenika/alpine-chrome` against
+   the live site (chmod 777 the output dir first — Chrome runs non-root). `--screenshot`
+   fires at DOM load, far too early for the map; add `--virtual-time-budget`. The
+   definitive "map works" signal is `/api/sf/*` hits appearing in the api logs — those
+   only fire after the map fully renders.
+7. **No schedulers on the work laptop** (RELEX security flagged the launchd ratchet
+   2026-07-29; removed). Until an off-laptop runner exists, refresh manually:
+   `cd backend && ./venv/bin/python -m app.ingestion.refresh` — staleness is visible at
+   `/api/freshness`.
 
-## Routine: ship fresh data
+## Costs and backups
 
-After running the pipeline locally, one command republishes:
+- Total burn: Hetzner ~€12/mo + domain ~$11/yr. Nothing else.
+- `backend/data/raw` is now **~16 GB** and partially non-refetchable — it exceeds R2's
+  10GB free tier, so the "free backup later" plan needs revisiting (Hetzner Object
+  Storage ~€5/mo/TB, or B2). The archive is the company; losing the server loses
+  nothing, losing the laptop's data folder loses the moat.
 
-```bash
-CANARY_HOST=root@<server-ip> CANARY_RESTART=1 ./deploy/push-duckdb.sh
-```
+## First-deploy-from-scratch (server rebuild)
 
-Atomic (rsync to temp + remote `mv`), so the API never reads a half-written file.
-
-## Redeploy code
-
-```bash
-rsync -avz --exclude .git --exclude 'backend/data' --exclude node_modules \
-      --exclude venv ./ root@<server-ip>:/opt/canary/
-ssh root@<server-ip> 'cd /opt/canary && docker compose up -d --build'
-```
-
-## Notes / current state
-
-- The frontend fetches SF permits **directly from `data.sfgov.org`** client-side
-  (`frontend/src/sfPermits.ts`) and needs no backend to render today. Caddy proxies
-  `/api/*` to FastAPI, so DuckDB-backed endpoints work same-origin the moment they
-  land in `backend/app/main.py` — no CORS, no config change.
-- `canary.duckdb` is mounted **read-only**. Serving code must open it read-only
-  (`duckdb.connect(path, read_only=True)`); it never mutates the served DB.
-- `MAPTILER` key is a client key inlined at build time — safe to be public, but keep
-  it referrer-restricted in the MapTiler dashboard.
-- Backups: the moat is `data/raw` on your laptop — that is the thing to back up
-  (Time Machine / an external drive / object storage later). Losing the server loses
-  nothing you can't rebuild by re-running the pipeline and re-pushing.
+`deploy/bootstrap-server.sh` (Docker + compose + ufw + 2GB swap for small-box builds),
+push DB, rsync code, scp the root `.env`, `docker compose up -d --build`. DNS grey-cloud
+A records → Caddy self-provisions the cert. Details of the original walkthrough are in
+git history of this file.

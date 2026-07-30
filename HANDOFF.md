@@ -159,3 +159,43 @@ email `hello@canary-placeholder.example` still needs replacing before deploy.
 - Competitors to watch: mireye.com (YC, hazard/terrain API+MCP, "Plug into the
   earth" dev page), VOYGR (YC, place-level venue freshness). Both adjacent, not
   head-on; Canary's differentiator is the *change* layer + bitemporal dates.
+
+---
+
+# Deployment lane (appended by the deployment chat, 2026-07-29)
+
+The deployment chat owns everything around shipping canarylayer.com: the Hetzner box,
+Docker/Caddy, DNS, the redeploy routine, and prod debugging. Its full canon is
+**DEPLOY.md** (rewritten 2026-07-29 to current truth — live infra, the
+commit-push-redeploy playbook, and all seven hard-won gotchas: MapLibre worker chunks,
+the slim serve image, repo-root build context, rsync --delete ghosts, the RELEX
+network lying about prod, headless-Chrome ground truth, no-schedulers-on-laptop).
+Read DEPLOY.md before any deploy on the new machine.
+
+## ⚠️ Laptop-migration checklist (do BEFORE retiring the old machine)
+
+Git does NOT carry these — copy manually (AirDrop / drive / Migration Assistant):
+
+1. **`~/.ssh/id_ed25519` (+ .pub)** — the only key the server (root@5.78.144.35)
+   trusts. Without it: no deploys, no server login. Fallback: Hetzner web console.
+   Or from the OLD laptop pre-authorize the new one:
+   `cat newkey.pub | ssh root@5.78.144.35 'cat >> ~/.ssh/authorized_keys'`
+2. **The three gitignored env files** (all real keys live here, none in git):
+   root `.env` (deploy env), `backend/.env` (Firecrawl, Supabase service key, LLM keys),
+   `frontend/.env` (local dev).
+3. **`backend/data/`** — ~16 GB raw archive (the moat; partially non-refetchable) +
+   `canary.duckdb` + `processed/`. The most valuable data on the machine.
+4. On the new laptop: recreate `backend/venv` (`pip install -r requirements.txt`),
+   `cd frontend && npm ci`, then verify `ssh root@5.78.144.35 'echo ok'`.
+
+## State at handoff (deployment lane, 2026-07-29)
+
+- Server runs the **Jul 26** build + DB; commits since (ForAgents rebuild, **API
+  gating `bfbbc7c`**) are NOT deployed. The API-gating deploy has manual
+  prerequisites — see "Melany's open manual steps" above; deploying backend+frontend
+  without them 401s the live map.
+- Server containers healthy; `STADIA_API_KEY` not set on the server (commute shows "—").
+- Open deployment threads: off-laptop pipeline runner (Hetzner cron or GH Actions) to
+  replace the dead laptop ratchet; raw-archive backup (16GB now exceeds the R2 free
+  tier — Hetzner Object Storage or B2 when funded); `/api/explain` LLM endpoint (env
+  slots wired server-side, endpoint not built — cache + rate-limit it when it lands).
