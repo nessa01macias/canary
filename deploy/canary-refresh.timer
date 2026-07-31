@@ -1,0 +1,17 @@
+[Unit]
+Description=Run the Canary daily capture at 09:00 UTC
+Documentation=file:/opt/canary/DEPLOY.md
+
+[Timer]
+# 09:00 UTC = 01:00/02:00 Pacific — after the overnight DataSF/state refreshes have
+# landed and while the site is quiet.
+OnCalendar=*-*-* 09:00:00
+# Spread the start so every fetcher does not hit its source on the same second.
+RandomizedDelaySec=15m
+# If the box was down at 09:00, run once it is back. This replaces the behaviour
+# the old launchd job had on the laptop (it ran missed jobs on wake).
+Persistent=true
+Unit=canary-refresh.service
+
+[Install]
+WantedBy=timers.target

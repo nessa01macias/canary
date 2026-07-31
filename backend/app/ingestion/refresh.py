@@ -12,6 +12,13 @@ while capping disk/bandwidth). Light or diff-critical sources pull daily.
     python -m app.ingestion.refresh --dry-run    # show what's due, do nothing
     python -m app.ingestion.refresh              # run due fetches + rebuild attrs + freshness
     python -m app.ingestion.refresh --only ca_abc_licenses --force
+    python -m app.ingestion.refresh --tier daily --fetch-only   # the Hetzner runner
+
+`--tier`/`--fetch-only` carve out the subset the off-laptop runner can safely do.
+The server is a 2 vCPU / 2GB / 40GB box that also serves canarylayer.com, so it
+captures the perishable daily sources (state dumps and rolling windows that are
+gone tomorrow) and skips every downstream rebuild. The heavy weekly/monthly
+archives and `make pipeline` need a workstation and stay off the server.
 """
 
 from __future__ import annotations
@@ -157,10 +164,29 @@ def _last_fetched_hours(key: str) -> float | None:
         return None
 
 
-def run(*, dry_run: bool = False, only: str | None = None, force: bool = False) -> int:
+def run(
+    *,
+    dry_run: bool = False,
+    only: str | None = None,
+    force: bool = False,
+    tiers: set[str] | None = None,
+    fetch_only: bool = False,
+) -> int:
+    """Fetch every due source, then (unless fetch_only) rebuild everything downstream.
+
+    `tiers` and `fetch_only` exist for the off-laptop runner: the Hetzner box is a
+    2GB/40GB machine that also serves production, so it captures the perishable
+    daily sources and nothing else. The heavy weekly/monthly archives and the full
+    `make pipeline` rebuild stay on a workstation with room for them.
+    """
     jobs = [(k, t, f) for k, t, f in JOBS if only is None or k == only]
     if only and not jobs:
         raise SystemExit(f"No job {only!r}. Keys: {[k for k, _, _ in JOBS]}")
+    if tiers:
+        unknown = tiers - set(TIER_HOURS)
+        if unknown:
+            raise SystemExit(f"Unknown tier(s) {sorted(unknown)}. Known: {sorted(TIER_HOURS)}")
+        jobs = [(k, t, f) for k, t, f in jobs if t in tiers]
 
     failures = 0
     ran = 0
@@ -187,7 +213,9 @@ def run(*, dry_run: bool = False, only: str | None = None, force: bool = False) 
 
     # Downstream rebuilds: served attributes + freshness manifest (ours), then the
     # pipeline (other lane; tolerate failure — e.g. DuckDB locked by a running API).
-    if ran:
+    if ran and fetch_only:
+        print(f"[fetch-only] captured {ran} source(s); skipping attrs/pipeline/claims/publish")
+    if ran and not fetch_only:
         try:
             from app.api import nbhd_attributes
 
@@ -211,9 +239,13 @@ def run(*, dry_run: bool = False, only: str | None = None, force: bool = False) 
             )
             print("[publish]", "ok" if p.returncode == 0 else f"FAILED (rc={p.returncode}):\n{p.stdout[-400:]}{p.stderr[-400:]}")
 
-    from app.ingestion import freshness
+    # NOT in fetch-only mode: freshness.json is a *served* artifact, and the small
+    # runner only holds the daily sources — regenerating it there would report every
+    # weekly/monthly source as missing on the live site.
+    if not fetch_only:
+        from app.ingestion import freshness
 
-    freshness.main()
+        freshness.main()
     return failures
 
 
@@ -231,6 +263,18 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--only")
     parser.add_argument("--force", action="store_true")
+    parser.add_argument(
+        "--tier",
+        action="append",
+        dest="tiers",
+        metavar="TIER",
+        help="only run sources in this pull tier (repeatable): daily|weekly|monthly|quarterly",
+    )
+    parser.add_argument(
+        "--fetch-only",
+        action="store_true",
+        help="capture snapshots but skip attrs/pipeline/claims/publish (for the small off-laptop runner)",
+    )
     args = parser.parse_args()
 
     # single-instance lock (stale after 12h)
@@ -242,7 +286,13 @@ def main() -> None:
     if not args.dry_run:
         LOCK.write_text(base.now_iso())
     try:
-        failures = run(dry_run=args.dry_run, only=args.only, force=args.force)
+        failures = run(
+            dry_run=args.dry_run,
+            only=args.only,
+            force=args.force,
+            tiers=set(args.tiers) if args.tiers else None,
+            fetch_only=args.fetch_only,
+        )
     finally:
         if not args.dry_run:
             LOCK.unlink(missing_ok=True)

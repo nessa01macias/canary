@@ -1,0 +1,33 @@
+[Unit]
+Description=Canary daily capture (perishable sources only)
+Documentation=file:/opt/canary/DEPLOY.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/canary/deploy/refresh-runner.sh
+WorkingDirectory=/opt/canary/backend
+
+# The fetchers need API keys (Firecrawl, Census, HF) from the backend env file.
+EnvironmentFile=-/opt/canary/backend/.env
+
+# This box also serves canarylayer.com on 2 shared vCPUs. The capture must always
+# lose to the API: low CPU weight, soft memory ceiling well under the 2GB total,
+# and a hard cap that fails the job rather than inviting the kernel OOM killer to
+# pick a victim (which could be the api container).
+CPUWeight=20
+IOWeight=20
+MemoryHigh=512M
+MemoryMax=1G
+TasksMax=256
+
+# Filesystem containment: it only ever writes the raw archive and its own logs.
+ProtectSystem=strict
+ReadWritePaths=/opt/canary/backend/data /var/log/canary
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
