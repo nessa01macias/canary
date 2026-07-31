@@ -38,6 +38,8 @@ VERIFY = json.loads((PROCESSED / "benchmark_v2_verification.json").read_text(enc
 RESEARCH = (ROOT / "RESEARCH.md").read_text(encoding="utf-8")
 ABOUT = (ROOT / "ABOUT.md").read_text(encoding="utf-8")
 BENCHMARK_MD = (ROOT / "BENCHMARK.md").read_text(encoding="utf-8")
+# The B2B page states the same results in its own words, so it drifts on its own.
+FORAGENTS = (ROOT / "frontend" / "src" / "components" / "ForAgents.tsx").read_text(encoding="utf-8")
 
 # Block label in the RESEARCH.md design table -> key in the artifact's block_counts.
 BLOCK_ROWS = {
@@ -241,7 +243,44 @@ check(
     f"top three names are {share:.0%} of wrong superlative answers that name an area",
 )
 
-# --- 8. No v1 residue presented as current ------------------------------------
+# --- 8. The ForAgents page quotes results too ---------------------------------
+sup_stats = [b for b in STATS["per_block"] if b["block"] == "Superlative"][0]["unassisted"]
+sup_wrong = sup_stats["n"] - sup_stats["correct"]
+check(
+    "ForAgents superlative stat",
+    f"{sup_wrong} / {sup_stats['n']}" in FORAGENTS,
+    f"expected '{sup_wrong} / {sup_stats['n']}' wrong of answered",
+)
+claude = [m for m in STATS["per_model"] if m["model"] == "Claude Fable 5"][0]
+check(
+    "ForAgents Claude before/after",
+    f"{pct(claude['unassisted']['acc'])}% → {pct(claude['grounded']['acc'])}%" in FORAGENTS,
+    f"expected '{pct(claude['unassisted']['acc'])}% -> {pct(claude['grounded']['acc'])}%'",
+)
+grok = [m for m in STATS["per_model"] if m["model"] == "Grok 4.5"][0]
+check(
+    "ForAgents Grok confidently-wrong stat",
+    f"{grok['confident_wrong_unassisted']} / {grok['unassisted']['n']}" in FORAGENTS,
+    f"expected '{grok['confident_wrong_unassisted']} / {grok['unassisted']['n']}'",
+)
+check(
+    "ForAgents accuracy ranges",
+    states_range(FORAGENTS, pct(min(unassisted)), pct(max(unassisted)))
+    and states_range(FORAGENTS, pct(min(grounded)), pct(max(grounded))),
+    "the B2B page quotes an accuracy range that no longer matches the artifacts",
+)
+check(
+    "ForAgents question count",
+    f"{BENCH['question_count']} verified questions" in FORAGENTS,
+    f"expected '{BENCH['question_count']} verified questions'",
+)
+check(
+    "ForAgents carries no v1 anecdote",
+    "four different confident answers" not in FORAGENTS,
+    "the v1 'four different answers' claim is back on the B2B page",
+)
+
+# --- 9. No v1 residue presented as current ------------------------------------
 STALE = {
     "generate_v1": "the v1 generator is quoted as if it rebuilds this study",
     "verify_v1_answers.py`)": "the v1 verifier is quoted as this study's verifier",

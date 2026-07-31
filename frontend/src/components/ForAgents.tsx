@@ -154,7 +154,7 @@ export function ForAgents({ onClose, onOpenResearch }: Props) {
         <div className="agents-stats">
           <div className="agents-stat">
             <span className="agents-stat-num">66 / 75</span>
-            <span className="agents-stat-label">"which neighborhood changed most?" answered wrong. On rising-fastest, four different confident answers. All wrong</span>
+            <span className="agents-stat-label">"which neighborhood changed most?" answered wrong. Three quarters of those wrong answers name the same three famous neighborhoods</span>
           </div>
           <div className="agents-stat">
             <span className="agents-stat-num">40% → 99%</span>
