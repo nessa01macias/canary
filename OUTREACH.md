@@ -19,14 +19,17 @@ about THEIR experience and offers the report; the API comes up only if they bite
 
 ## Email #1 (send as-is, ~90 seconds to read)
 
-> **Subject:** asked 3 AIs which SF neighborhood is rising — all 3 picked the one that's declining
+> **Subject:** we asked 5 frontier models 136 checkable SF neighborhood questions — they averaged a third
 >
 > Hi {name} — we test AI assistants on checkable neighborhood questions (the "should
-> I move here?" class), graded against city records. Three findings from the first run:
-> every model failed most of the 46 questions; the web-search one answered all of
-> them and was confidently wrong 61% of the time; and all three named the Mission as
-> SF's fastest-growing area for new businesses — the records show it had the city's
-> biggest decline.
+> I move here?" class), graded against city records that we re-derived from the
+> city's own APIs before any model ran. Three findings from the latest run:
+> the five newest models scored 25-47% unassisted, and rarely hedge (one was
+> confidently wrong on two of every three questions); the model with live web search
+> scored the *lowest* of the five, at 25%, because the answers were never published
+> anywhere for it to find; and when they guess, they guess famous — the Tenderloin,
+> the Mission and SoMa account for about two thirds of the wrong ranking answers,
+> while the real answers were places like Japantown and Lakeshore.
 >
 > Full method + numbers: {link to canarylayer.com → Documentation → Research}
 >
@@ -42,9 +45,10 @@ the whole point (H3 = their stories, not our pitch).
 ## Follow-up (if any reply)
 
 Offer to run the benchmark against THEIR assistant and send a private scorecard.
-(Zero marginal cost for us: `python -m app.benchmark.run` with their endpoint or
-manual paste; the scorecard is the wedge — nobody declines a free audit of
-themselves.) If they ask "can we get the data": that's H4 — log it, send the
+(`python -m app.benchmark.run` with their endpoint or manual paste, then `judge`.
+The scorecard is the wedge — nobody declines a free audit of themselves. Not zero
+cost, though: their answers may be free if they paste them, but judging still
+costs API calls, so agree the scope before promising a turnaround.) If they ask "can we get the data": that's H4 — log it, send the
 ForAgents page, get on a call.
 
 ## Log every response in this table (the ledger needs receipts)

@@ -75,7 +75,12 @@ no self-preference. The v1 pilot (43q) is superseded but kept in git.
   BENCH_RUNS=benchmark_runs_v2`. Figures: `scripts/gen_figures.py` (reads
   `BENCH_FILE`).
 - **Any doc still showing "43 questions" or "37-49%" is stale** — those are the v1
-  pilot numbers. Canonical is 136 / 25-47% / 95-99%.
+  pilot numbers. Canonical is 136 / 25-47% / 95-99%. Enforced mechanically as of
+  2026-07-31: `venv\Scripts\python.exe scripts/check_research_consistency.py` from
+  `backend/` runs 37 checks of ABOUT/RESEARCH/BENCHMARK against the frozen
+  artifacts (block table, per-block accuracies, verdict counts, panel,
+  verification, stale-marker greps) and exits 1 on any drift. Run it after
+  touching a shipped doc; add a check whenever you publish a new derived number.
 
 **2. Research note v2 — shipped to the frontend.** RESEARCH.md is the paper (arXiv
 styling via `frontend/src/styles/docs-paper.css`, margin stamp says "v2"). Two
@@ -210,7 +215,14 @@ carried and where it now lives; the checklist itself no longer needs doing.
 ## State at handoff (deployment lane, 2026-07-29)
 
 - Server runs the **Jul 26** build + DB; commits since (ForAgents rebuild, **API
-  gating `bfbbc7c`**) are NOT deployed. The API-gating deploy has manual
+  gating `bfbbc7c`**) are NOT deployed. **Verified live 2026-07-31 and worse than
+  it looks:** the JS bundle carries the *v1* paper (43 questions, Claude 49% →
+  100%) while `/research/*.svg` serves the *v2* figures (25-47% → 95-99%), because
+  Docs.tsx inlines the markdown at build time but `frontend/public/` is served
+  statically. Prose ships on a rebuild; figures ship the moment the directory
+  syncs, so the two halves of the paper can drift on production. The public
+  Research tab is currently self-contradicting and should not be sent to anyone
+  until a rebuild lands. The API-gating deploy has manual
   prerequisites — see "Melany's open manual steps" above; deploying backend+frontend
   without them 401s the live map.
 - Server containers healthy; `STADIA_API_KEY` not set on the server (commute shows "—").

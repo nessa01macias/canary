@@ -26,8 +26,11 @@ Headline blocks (bare, pooled): **superlatives 12% · numeric 20% · pairwise 45
 in-window aggregates fail unless they were published: the gap is unpublished
 computation, not recency). v1 pilot (43q, `064dc90`) in git history.
 
-Reproduce: `cd backend && python -m app.benchmark.generate_v1 && python -m app.benchmark.run
-&& python -m app.benchmark.run --grounded && python -m app.benchmark.judge
-&& python -m app.benchmark.judge --repair && python -m app.benchmark.stats`
+Reproduce (against the frozen v2 artifact; without these two env vars the harness
+defaults to the v1 pilot): `cd backend && export BENCH_FILE=benchmark_v2.json
+BENCH_RUNS=benchmark_runs_v2 && python -m app.benchmark.run && python -m
+app.benchmark.run --grounded && python -m app.benchmark.judge && python -m
+app.benchmark.judge --repair && python -m app.benchmark.stats`. Do not run
+`generate_v2`: it overwrites the freeze.
 (v0 history: previous-generation models scored 0-39% bare, dominated by refusals;
 see the git history of this file.)

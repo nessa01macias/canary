@@ -27,7 +27,11 @@ result new at this scale concerns the temporal control: on questions whose answe
 fall entirely inside training windows, unassisted accuracy is 37%, not the 95%
 measured in the small pilot. The deficit is therefore not recency: aggregates that
 were never published cannot be recalled from any training vintage or retrieved by
-live search, which scored lowest (25%).
+live search, which scored lowest (25%). Errors are also not independent. On the
+ranking block, incorrect answers concentrate on a small set of nationally salient
+neighborhoods, with the Tenderloin, the Mission and South of Market accounting for
+three quarters of the wrong answers that name an identifiable area, indicating
+that models absent an aggregate fall back on name salience rather than on noise.
 Validity is checked from three directions: every expected answer was re-derived
 from the city's own APIs by a script independent of our pipeline, at freeze time,
 before any model query (136 of 137 confirmed; the failing item was dropped
@@ -46,8 +50,14 @@ getting better here, where are new businesses opening, how much housing was just
 approved near this address. Every question has a verifiable answer in the city's
 public records. On their own, the models scored between 25% and 47%, and unlike
 older models they rarely said "I don't know"; one gave confidently wrong answers on
-two of every three questions. Asked which neighborhood was rising fastest, the five models produced
-four different confident answers, all wrong. The reason is that these answers were
+two of every three questions. Asked which neighborhood was gaining new businesses
+fastest, the five models produced three different confident answers between them,
+and all of them were wrong. Their mistakes were not scattered, either. When the
+models had no real figure to work from, they reached for whichever neighborhood is
+most famous for that kind of thing. Three names, the Tenderloin, the Mission and
+South of Market, account for three quarters of the wrong answers that named a
+neighborhood at all, while the true answers were quieter places like Japantown,
+Lakeshore and Portola. The reason is that these answers were
 never written down anywhere: nobody had computed them from the millions of raw
 records the city publishes, so there was nothing for a model to learn or retrieve.
 When we supplied the same models with one response from Canary's data, three scored
@@ -141,31 +151,33 @@ programmatically from the database and frozen at git commit `d891dac` (SHA-256 o
 the question file recorded in the commit) before any model was queried. The
 protocol's block targets (35/22/25/25/20/15/8) were reduced by quality floors,
 every shortfall named in the artifact: six candidate superlatives had no reliable
-gap between first and second place, eleven candidate addresses had too little
-approved construction nearby, and only validated measurement mechanisms qualify
-as distractors. One further item (q039) was dropped by the freeze-time
-verification of §2.5. The v1 pilot (43 questions, frozen at `064dc90`, same block
+gap between first and second place, nine candidate addresses had too little
+approved construction nearby and two failed to geocode, two pairwise candidates
+missed their floors, and only validated measurement mechanisms qualify as
+distractors, which yielded six of the eight designed. One further item (q039) was
+dropped by the freeze-time verification of §2.5. The v1 pilot (43 questions, frozen at `064dc90`, same block
 design at smaller scale) is preserved in the repository history and summarized
 where its results differ.
 
 | Block | n | Form | Rationale |
 |---|---|---|---|
-| Direction | 15 | "Is X rising or falling in {neighborhood}?" | Press coverage sometimes exists; recall can succeed |
-| Superlative | 5 | "Which neighborhood had the largest increase in X?" | Requires an aggregation over all areas that has not been published |
-| Numeric | 8 | Counts, ±30% tolerance | Tests quantitative knowledge directly |
-| Pairwise | 6 | "Which of A or B rose more?" | Chance baseline is 50%; measures comparison under uncertainty |
-| Address-level | 3 | "Units approved within ~500 m of {address}?" | The forward-looking question relevant to an individual property |
-| Temporal | 4 | Changes between the years ending June 2024 and June 2025 | Control: falls inside training windows |
-| Distractors | 2 | Enforcement-vs-victimization; the 311 artifact | Control: penalizes uncritical acceptance of misleading aggregates |
+| Direction | 35 | "Is X rising or falling in {neighborhood}?" | Press coverage sometimes exists; recall can succeed |
+| Superlative | 15 | "Which neighborhood had the largest increase in X?" | Requires an aggregation over all areas that has not been published |
+| Numeric | 25 | Counts, ±30% tolerance | Tests quantitative knowledge directly |
+| Pairwise | 23 | "Which of A or B rose more?" | Chance baseline is 50%; measures comparison under uncertainty |
+| Address-level | 17 | "Units approved within ~500 m of {address}?" | The forward-looking question relevant to an individual property |
+| Temporal | 15 | Changes between the years ending June 2024 and June 2025 | Control: falls inside training windows |
+| Distractors | 6 | Enforcement-vs-victimization; the 311 artifact; closure lag; assessment lag | Control: penalizes uncritical acceptance of misleading aggregates |
 
 Metrics used include victim-reported crime, business openings, eviction filings,
 encampment reports, and net approved housing units. Volume and effect-size floors
 ensure that each expected answer is unambiguous at the stated tolerance.
 
-One bookkeeping note for reproducers: the second distractor (the
-enforcement-versus-victimization item, q042) is typed `direction` in the frozen
-artifact file. All analyses classify it with the distractor block, as tabled above,
-and the analysis script (`app.benchmark.stats`) encodes that mapping explicitly.
+One bookkeeping note for reproducers: in v2 every distractor is typed `trap` in
+the frozen artifact (q132 through q137) and needs no remapping. The note applies
+to the v1 pilot only, where the second distractor was typed `direction`; the
+analysis script (`app.benchmark.stats`) applies that remapping to v1 artifacts
+alone.
 
 ### 2.3 Experimental setup
 
@@ -205,28 +217,60 @@ costly outcome for users, who receive misinformation rather than no information.
 **Judging completeness.** Verdict coverage is completed by a pre-specified repair
 pass that grades only missing verdicts, with the same judge and prompt, never
 re-grading existing ones; every repaired verdict is flagged in the artifacts. In
-v2, a provider overload burst left 72 of 2,443 verdicts unparsed on the first
-pass; the repair pass (with backoff) healed 69, and the remaining 3 are excluded
+v2, a provider overload burst left 97 of 1,243 verdicts unparsed on the first
+pass; the repair pass (with backoff) healed 94, and the remaining 3 are excluded
 rather than assumed. In v1 the analogous figures were 19 unparsed, 18 healed, 1
 excluded, plus one rubric-deviating verdict retained as judged and flagged for
 the human audit.
 
 **Cross-vendor panel.** Answers are additionally re-graded by two judges from
 other vendors (`gpt-5.6-sol` and `grok-4.5`, each itself a tested system, which
-we disclose), using the identical prompt as the primary judge. In v2, across the
-467 items where all three verdicts parsed (panel coverage excludes the two cells
-whose answers arrived in the network-failure recovery, which were not re-paneled
-under the run's cost cap), pairwise agreement is 96-98%, Fleiss kappa is 0.95,
-96.2% of items are unanimous, and no item lacks a majority. The self-preference
-probe again finds none: every judge's delta on its own vendor's answers is
-within 1.4 percentage points of the other judges', none meaningfully favoring
-self. The v1 panel (all 430 pilot items, deltas −1.2/−0.6/0.0) measured kappa
-0.946 with the same null result. The primary estimator remains the pre-specified
-single judge; the panel is a robustness check (`benchmark_v2_panel.json`,
-verdicts under `benchmark_runs_v2/panel/`).
+we disclose), using the identical prompt as the primary judge. Both panel judges
+were run against all ten model-condition cells.
+
+Panel coverage in v2 is nonetheless substantially incomplete, and the
+incompleteness is not random. Of 1,021 answers for which all three judges returned a
+response, 554 lost at least one verdict to provider-side failures (read timeouts
+and rate limiting), leaving 467 items with three parsed verdicts. The losses fall
+almost entirely on the two panel judges (the xAI judge returned 407 errors, the
+OpenAI judge 145, the primary judge 2) and they cluster by cell rather than
+scattering: the xAI judge failed on every Perplexity item in both conditions, and
+the OpenAI judge failed on 123 of 136 Claude grounded items. The resulting
+coverage is:
+
+| Cell | Panel-complete | Answers |
+|---|---|---|
+| Grok 4.5 unassisted | 135 | 136 |
+| Claude Fable 5 unassisted | 111 | 136 |
+| GPT-5.6 Sol unassisted | 72 | 136 |
+| GPT-5 search unassisted | 69 | 70 |
+| Grok 4.5 grounded | 67 | 136 |
+| Claude Fable 5 grounded | 13 | 136 |
+| Perplexity sonar-pro, both conditions | 0 | 271 |
+| GPT-5.6 Sol grounded, GPT-5 search grounded | 0 | 222 |
+
+Two consequences follow and we state them rather than aggregate over them. The
+panel speaks to 467 of 1,243 answers (38%), it says nothing at all about
+Perplexity, and it covers only 80 grounded answers of 630, so it is largely a
+check on the unassisted condition. Across those 467 items, pairwise agreement is
+96-98%, Fleiss kappa is 0.95, 96.2% of items are unanimous, and no item lacks a
+majority. The self-preference probe finds every judge's delta on its own vendor's
+answers within 1.4 percentage points of the other judges'. That probe is the
+weaker of the two results, because each judge's own-vendor stratum is restricted
+to the items that same judge succeeded in grading; we therefore claim no
+detectable self-preference on the completed subset, not its absence in general.
+
+The v1 panel is the stronger evidence on both counts: it covered all 430 pilot
+items with no coverage loss, measuring kappa 0.946 and deltas of −1.2/−0.6/0.0.
+The v2 panel should be read as a second, partial replication of that result
+rather than as an independent full-coverage check. Completing panel coverage,
+with retries budgeted for provider failure, is carried into the registered
+regeneration. The primary estimator remains the pre-specified single judge; the
+panel is a robustness check (`benchmark_v2_panel.json`, verdicts under
+`benchmark_runs_v2/panel/`).
 
 All verdicts are stored with one-line rationales
-(`benchmark_runs_v1/*.judged.json`) and are auditable. A stratified human audit of
+(`benchmark_runs_v2/*.judged.json`) and are auditable. A stratified human audit of
 judge verdicts is part of the protocol, with the agreement rate to be published as
 the judge's error bar. One limitation is noted for the record: the judge shares a
 vendor with one tested model. The fixed-evidence design (the judge never assesses
@@ -237,28 +281,51 @@ human audit are the mitigations.
 
 A benchmark whose ground truth is computed by the authors' own pipeline invites a
 circularity objection. To remove it, every expected answer was re-derived by a
-standalone script (`scripts/verify_v1_answers.py`) that uses only the Python
-standard library and HTTP: it queries the city's own SODA endpoints directly,
+standalone script (`scripts/verify_v2_answers.py` for v2,
+`scripts/verify_v1_answers.py` for the pilot) that uses only the Python standard
+library and `requests`: it queries the city's own SODA endpoints directly,
 aggregates server-side, and uses the city's own analysis-neighborhood
 assignments rather than our H3 spine. The script shares no code with the Canary
 pipeline, and its raw API responses are archived alongside the report.
 
 For v2 the verification ran at freeze time, before any model query, as the
-protocol requires. Of 137 generated questions, 136 were confirmed directly from
-the city's APIs (every superlative winner and recorded runner-up, every pairwise
-ordering, all 17 address-ring totals exactly, every embedded trap decomposition;
-one Prop-13 trap is documentary rather than computable). Live-API drift over the
-frozen snapshots peaked at 0.65%. The one failure gated the run: the "largest
-decrease in business closures" item depended on administrative closures that the
-documented metric was meant to exclude, and a staging-layer boolean parse bug
-(the live export marks such rows with a literal string, not a boolean) had made
-the exclusion a no-op. The item was dropped before any model ran, the parser was
-fixed for future builds, and all other closure questions were verified invariant
-under both semantics. In the v1 pilot the same verification ran post hoc and
-confirmed 42 of 43 answers; its one finding, a ring-geometry axis-order bug, is
-retained below as the erratum of record for v1.
+protocol requires. It performs two distinct checks, and separating them matters
+because they caught different things.
 
-The one mismatch is an erratum against ourselves. The address-level ring
+The first is **reconciliation**: does the frozen expected answer still hold
+against the city's live records? Every one of the 137 generated questions
+reconciled. 136 were confirmed computationally (every superlative winner and
+recorded runner-up, every pairwise ordering, all 17 address-ring totals exactly,
+every embedded trap decomposition), and one Prop-13 trap is documentary rather
+than computable. No question failed reconciliation. Live-API drift over the
+frozen snapshots peaked at 1.8%, on a superlative runner-up value whose ordering
+was unaffected; on the direction-block twelve-month aggregates it peaked at 0.65%.
+
+The second is a **semantics check**: does the metric compute what its own
+documentation says it computes? This is where the one failure surfaced, and it is
+worth being precise about its shape. The "largest decrease in business closures"
+item (q039) reconciled perfectly: the frozen answer and the live API agreed on
+the winner, the runner-up, and the values. Both were nevertheless wrong relative
+to the documented metric, because a staging-layer boolean parse bug (the live
+export marks administrative closures with a literal string, not a boolean) had
+silently turned a documented exclusion into a no-op. Under the intended
+semantics the winner changes from Japantown to Visitacion Valley. The item was
+dropped before any model ran, the parser was fixed for future builds, and all
+other closure questions were verified invariant under both semantics.
+
+We draw the methodological point out because it generalizes past this study.
+Reconciliation alone would have passed q039, and did: an independent
+re-derivation confirms that a number was computed consistently, not that it was
+defined correctly. A pipeline and an external checker can agree precisely because
+both read the same mislabeled column. Independent verification therefore has to
+carry a definitional audit alongside the recomputation, or it certifies
+reproducibility while leaving validity untested.
+
+In the v1 pilot the same verification ran post hoc and confirmed 42 of 43
+answers; its one finding, a ring-geometry axis-order bug, was a genuine
+reconciliation failure and is retained below as the erratum of record for v1.
+
+That v1 mismatch is an erratum against ourselves. The address-level ring
 geometry was computed with a swapped coordinate axis order: the distance
 function follows the EPSG:4326 authority order (latitude first), so the "500 m"
 rings were in fact ellipses of roughly 395 m east-west by 933 m north-south.
@@ -304,10 +371,10 @@ answers received later in the recovery were kept, none were discarded, and no
 answer was re-asked after a successful response. Because questions are ordered by
 block, the missing answers concentrate in later blocks for those two cells. All
 accuracies are reported over answered-and-judged items with exact denominators.
-Three verdicts of 2,443 failed to parse after retries and are excluded rather than
+Three verdicts of 1,243 failed to parse after retries and are excluded rather than
 assumed.
 
-![Grouped bar chart of unassisted versus grounded accuracy for the five models. Unassisted bars sit between 36 and 45 percent; grounded bars sit between 93 and 100 percent.](frontend/public/research/fig1_models.svg)
+![Grouped bar chart of unassisted versus grounded accuracy for the five models. Unassisted bars sit between 25 and 47 percent; grounded bars sit between 95 and 99 percent.](frontend/public/research/fig1_models.svg)
 
 **Figure 1.** Overall accuracy by model and condition (data of Table 1). "With
 Canary data" is the grounded condition: the model sees one Canary API response
@@ -327,7 +394,7 @@ Table 2. Accuracy by question block, pooled across the five models, with Wilson
 | Temporal (in training window) | 37% [26, 49] (22/60) | 99% [93, 100] (74/75) |
 | Distractors | 96% [80, 99] (23/24) | 100% [89, 100] (30/30) |
 
-![Grouped horizontal bar chart of unassisted versus grounded accuracy for the seven question blocks. Superlative and numeric blocks score zero unassisted and 91 to 100 percent grounded; the temporal control is near ceiling in both conditions.](frontend/public/research/fig2_blocks.svg)
+![Grouped horizontal bar chart of unassisted versus grounded accuracy for the seven question blocks. Superlative scores 12 percent unassisted and numeric 20 percent, against 90 and 95 percent grounded; the temporal control collapses to 37 percent unassisted and recovers to 99 percent grounded; only the distractor block is high in both conditions.](frontend/public/research/fig2_blocks.svg)
 
 **Figure 2.** Accuracy by question block, pooled across the five models (data of
 Table 2), with Wilson 95% whiskers. The blocks that require an unpublished
@@ -338,30 +405,58 @@ to be published (§3.4).
 
 ### 3.1 Error analysis: the superlative block
 
-Question 16 asked which San Francisco neighborhood had the largest increase in new
-business openings over the past year. The registry answer is Japantown (+38%, the
-largest rise citywide). Representative unassisted responses:
+Question q036 asked which San Francisco neighborhood had the biggest increase in
+new business openings over the past year. The registry answer is Japantown (+38%,
+the largest rise citywide). The five unassisted responses:
 
-- **Grok 4.5:** "Mission District," supported by reasoning about pre-2025 permitting
-  trends and foot traffic along the Valencia corridor.
-- **GPT-5.6 Sol:** Union Square, attributed to the downtown retail rebound.
-- **Claude Fable 5:** Downtown/Union Square, citing the city's Vacant to Vibrant
-  program and first-year tax waivers as mechanisms.
+- **Claude Fable 5:** Hayes Valley, attributed to the neighborhood's AI startup
+  concentration and the coworking, cafe and retail activity around it.
+- **Grok 4.5:** Hayes Valley, citing business registries, local press trackers and
+  commercial vacancy data.
+- **GPT-5 search:** Mission Bay, citing 2025 consumer-spending growth retrieved
+  from the web.
 - **Perplexity sonar-pro:** Mission Bay, citing a genuine 2025 sales-tax analysis
-  retrieved from the web.
+  showing a 31% revenue increase.
+- **GPT-5.6 Sol:** Financial District/Downtown, attributed to renewed office
+  activity and storefront backfill.
 
-Four distinct answers, each argued from real but non-dispositive context, none
-correct (the example is from the pilot; the question recurs in v2 with the same
-outcome). At v2 scale the superlative block scores 12% unassisted (9 of 75), the
-successes concentrated where a ranking had received press coverage. We note a qualitative difference from v0, where three previous-generation
-models converged on the same incorrect answer (the Mission), a pattern consistent
-with shared training-distribution priors. The frontier models diverge more, and
-construct more sophisticated justifications, without any improvement in accuracy.
-This is the expected signature of a task whose answer is absent from the training
-distribution and from the retrievable web: no reasoning path terminates at the fact,
-because the fact was never published. In the grounded condition, Grok 4.5 answered
-the same question in one line: Japantown, 50 to 69 openings, +38%, with the
-z-score.
+Three distinct answers, each argued from real but non-dispositive context, none
+correct. At v2 scale the superlative block scores 12% unassisted (9 of 75), the
+successes concentrated where a ranking had received press coverage.
+
+**The errors are not independent.** In v0 we observed three previous-generation
+models converging on the same wrong answer and read it as a shared
+training-distribution prior. At v2 scale that pattern is measurable rather than
+anecdotal, and it persists at the frontier. Across the fifteen superlative items,
+three or more of the five models selected the same incorrect neighborhood on five
+items, and on one (q051, the largest rise in enforcement-driven incident counts)
+all five named the Tenderloin, where the record gives the Mission. Wrong
+superlative answers concentrate on a small set of nationally legible
+neighborhoods: the Tenderloin appears 18 times, the Mission 14, and South of
+Market 9. That is 41 of the 55 incorrect responses that name an identifiable
+neighborhood, three quarters of them, and 41 of the 66 incorrect responses
+overall (the remaining 11 are refusals or name no resolvable area). The
+ground-truth answer set for these items is quieter, including Japantown,
+Lakeshore, Portola, Twin Peaks, McLaren Park and Sunset/Parkside.
+
+The substantive reading is that when the ranking has not been published, models do
+not fail toward noise. They fail toward salience, selecting the neighborhood whose
+name carries the strongest association with the metric in question: the Tenderloin
+for anything adverse, the Mission for anything changing. This is the area-level
+counterpart of the Silicon Gaze finding (§1) that model-produced neighborhood
+rankings track social divides rather than measured characteristics, reproduced
+here against per-neighborhood ground truth rather than against inferred sentiment.
+It also carries a fair-housing consequence for deployed systems, since the
+mechanism systematically attaches adverse superlatives to the same small set of
+neighborhoods irrespective of the record.
+
+Frontier models therefore did not escape the prior; they became more articulate
+inside it, constructing more sophisticated justifications without any improvement
+in accuracy. This is the expected signature of a task whose answer is absent from
+the training distribution and from the retrievable web: no reasoning path
+terminates at the fact, because the fact was never published. In the grounded
+condition, Grok 4.5 answered the same class of question in one line: Japantown,
+50 to 69 openings, +38%, with the z-score.
 
 ### 3.2 Error analysis: the numeric block
 
@@ -379,8 +474,9 @@ tolerance (25 of 122), against 95% grounded (119 of 125).
 In v0, previous-generation models refused frequently (GPT-4o declined 39 of 46
 items). In v1, refusals nearly disappear outside the search-configured model, and
 error mass moves into confident, specific, well-argued wrong answers. In v2 this
-is 46-66% of all items per model (72/136 for Claude Fable 5, 89/135 for Grok 4.5);
-only the search-configured model still refuses in volume (25 refusals). From a user-welfare perspective this is a regression: an abstention
+is 46-66% of all items for the four models that answer in volume (72/136 for
+Claude Fable 5, 89/135 for Grok 4.5), and 32% for the search-configured model,
+which is the only one that still refuses in volume (25 refusals). From a user-welfare perspective this is a regression: an abstention
 prompts further search, whereas a fluent wrong answer terminates it.
 
 ### 3.4 Controls
@@ -415,6 +511,60 @@ consumers of structured area data, and that the binding constraint is the existe
 and machine-legibility of the data itself.
 
 ## 4. Discussion
+
+### 4.1 Where an area answer comes from
+
+Interpreting these results requires being explicit about the channels through
+which a language model can arrive at a fact about a neighborhood. There are three,
+and this study constrains each of them separately.
+
+**The first is parametric memory: text the model read during training.** This
+channel can only carry a fact if some document stated it. For the questions here,
+that document would have to contain a computed aggregate, such as a ranking of all
+forty-one analysis neighborhoods by change in business openings. The city
+publishes the underlying records, millions of individual permits, registrations
+and incident reports, but it does not publish the aggregation, and neither does
+anyone else. The temporal control isolates this channel: those questions concern
+periods lying entirely inside the training windows, so recency cannot be the
+limiting factor, and models still scored 37%. Where the aggregate had been written
+about, they succeeded; where it had not, training vintage bought them nothing.
+
+**The second is retrieval: text fetched from the live web at query time.** This
+channel is subject to the same constraint, because retrieval can only return
+documents that exist. Our two search-configured systems bracket the outcome. GPT-5
+with native web search scored lowest of all five at 25%, and Perplexity sonar-pro,
+scoring highest unassisted at 47%, still missed the majority of items and cited
+real sources while doing so. Retrieval does not fail here for lack of capability.
+It fails because the corpus does not contain the answer, and a retrieval system
+that cannot find the target returns the nearest adjacent document instead: a
+sales-tax analysis, a vacancy report, a press piece about a different
+neighborhood. §3.1 shows both search systems doing exactly this.
+
+**The third is inference from priors, which is what remains when the first two are
+empty.** Under a system prompt instructing it to commit to an answer, a model with
+no retrievable fact and no memorized aggregate must still produce a neighborhood
+name, and §3.1 measures which one it produces. The selection is not random. It
+tracks name salience: the Tenderloin for adverse metrics, the Mission for change,
+South of Market for construction, together about two thirds of incorrect
+superlative answers. The observable signature of this channel is confidence
+without correctness, which is precisely the failure mode that grew between
+generations (§3.3).
+
+The three channels explain the shape of Table 2. Blocks whose answers sometimes
+appeared in text, direction and the distractors, score moderately to well. Blocks
+requiring an aggregation nobody published, superlative, numeric and address-level,
+collapse. The distractor block is the informative control in the other direction:
+those items require reasoning about a supplied misleading aggregate rather than
+recall of an unpublished one, and models score 96%. Reasoning is intact. The
+inputs are missing.
+
+This also bounds what better models can achieve. Capability improvements act on
+the third channel, making inference sharper, and on the second, making retrieval
+more efficient. Neither operation can return a number that was never computed by
+anyone. The remedy has to add the fact, which is what the grounded condition does
+and what §3.5 measures.
+
+### 4.2 Interpretation
 
 **The deficit is informational, not cognitive, and not temporal.** Four
 observations triangulate this conclusion: capability improved between generations
@@ -452,7 +602,7 @@ requirement of benchmark practice rather than a one-time exercise, and the v2
 sequencing, verify before querying, is the version we recommend.
 
 **Scope of claims.** These results establish the failure and its remediability at
-pilot scale, on our question dimensions, in one metropolitan area. They do not
+136 questions, on our question dimensions, in one metropolitan area. They do not
 establish market demand for external grounding; that is an adoption question outside
 the scope of this study.
 
@@ -465,24 +615,32 @@ externally timestamped registration is reserved for the next regeneration, and
 until then the freeze rests on the git commit and its recorded hash. A network
 failure on the querying machine reduced two cells' coverage (GPT-5 search
 unassisted 69/136, GPT-5.6 Sol grounded 86/136), disclosed in Table 1 with exact
-denominators; three of 2,443 verdicts remain unparsed and excluded; the
-cross-vendor panel covers 467 triple-parsed items rather than all cells. The
-judge is a language model: verdicts are stored and auditable, a human audit of a
-verdict sample is owed, and the judge shares a vendor with one tested model,
-though the panel (§2.4) measures that risk directly and finds kappa 0.95
-agreement with no self-preference in both versions. In the
+denominators; three of 1,243 verdicts remain unparsed and excluded. The
+cross-vendor panel is the weakest link in this run: provider-side failures cost
+it 554 of 1,021 items, leaving 467, with no coverage of Perplexity in either
+condition and only 80 of 630 grounded answers (§2.4). Its kappa of 0.95 is
+therefore a partial replication of the v1 panel's full-coverage 0.946 rather than
+an independent check of this run, and its self-preference null holds only on the
+subset each judge completed. The judge is a language model: verdicts are stored
+and auditable, a human audit of a verdict sample is owed, and the judge shares a
+vendor with one tested model. In the
 grounded condition, Canary data serves as both context and ground truth by design;
 the condition tests whether models retrieve and commit to supplied area data, while
 the validity of the data itself is assessed separately, with receipts and
 falsifiable forward predictions, in Appendix A. The ±30% numeric
-tolerance is permissive. The temporal (n=4) and distractor (n=2) blocks are small
-and their percentages carry wide uncertainty.
+tolerance is permissive. The distractor block (n=6) is small and its percentage
+carries wide uncertainty; the temporal block (n=15) carries a Wilson interval of
+[26, 49], wide enough that its point estimate should be read as a range.
 
 ## 6. Reproducibility
 
+Every step below reads the frozen v2 artifact, selected by two environment
+variables. Set them first; without them the harness defaults to the v1 pilot.
+
 ```
 cd backend
-python -m app.benchmark.generate_v1        # regenerate questions from the live snapshot
+export BENCH_FILE=benchmark_v2.json BENCH_RUNS=benchmark_runs_v2
+
 python -m app.benchmark.run                # unassisted condition, all configured providers
 python -m app.benchmark.run --grounded     # grounded condition
 python -m app.benchmark.judge              # primary verdicts and summary table
@@ -491,12 +649,21 @@ python -m app.benchmark.panel              # cross-vendor judge panel
 python -m app.benchmark.panel --agree      # panel agreement report
 python -m app.benchmark.stats              # Wilson intervals, McNemar, Tables 1-2
 python scripts/gen_figures.py              # Figures 1-2 from the stats artifact
-python scripts/verify_v1_answers.py        # Canary-free re-derivation from city APIs
+python scripts/verify_v2_answers.py        # Canary-free re-derivation from city APIs
 ```
 
-Artifacts: `data/processed/benchmark_v1.json` (questions and receipts, frozen at
-`064dc90`); `data/processed/benchmark_runs_v1/` (all raw answers and judged
-verdicts), stamped with pipeline git version and source snapshot date. The intended
+`python -m app.benchmark.generate_v2` regenerates the question set from the live
+database and is deliberately omitted from the sequence above: it overwrites the
+frozen artifact, and the freeze is what makes the graded answers checkable. Run
+it only to build a new version.
+
+Artifacts: `data/processed/benchmark_v2.json` (questions and receipts, frozen at
+`d891dac`, following the pre-verification freeze of 137 questions at `fbd6166`);
+`data/processed/benchmark_runs_v2/` (all raw answers and judged verdicts), stamped
+with pipeline git version and source snapshot date; `benchmark_v2_stats.json`,
+`benchmark_v2_panel.json` and `benchmark_v2_verification.json` for the analysis,
+panel and verification outputs. The v1 pilot artifacts are retained under the
+same names with the `v1` suffix. The intended
 cadence is monthly regeneration alongside the data, so that the question set tracks
 the live record.
 

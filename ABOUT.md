@@ -55,8 +55,9 @@ We tested the five newest AI models, including ones with live web search, on 136
 checkable questions about San Francisco neighborhoods, each answer verified against
 the city's own records before any model ran. They scored 25-47%, and unlike older
 models they rarely admit uncertainty anymore. One was confidently wrong on two of
-every three answers. When we asked which neighborhood was rising fastest, the five
-models gave four different confident answers, and all of them were wrong.
+every three answers. When we asked which neighborhood was gaining new businesses
+fastest, the five models gave three different confident answers between them, and
+all of them were wrong.
 
 The reason is simple: these answers were never written down anywhere on the
 internet, so no AI can find them, no matter how smart it gets. They even failed on
