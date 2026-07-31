@@ -122,8 +122,8 @@ email `hello@canary-placeholder.example` still needs replacing before deploy.
 - **Before the API gating can go live** (do in this order or the live map 401s):
   (1) run the new `api_keys`/`api_usage` DDL in the Supabase SQL editor; (2)
   ensure `SUPABASE_SERVICE_KEY` is set on the backend server; (3) issue the anon
-  key (`cd backend && ./venv/bin/python scripts/issue_api_key.py --label "web app"
-  --tier anon`) and set it as `VITE_CANARY_ANON_KEY` in the frontend build; (4)
+  key (`cd backend && venv\Scripts\python.exe scripts/issue_api_key.py --label
+  "web app" --tier anon`) and set it as `VITE_CANARY_ANON_KEY` in the build; (4)
   issue partner keys as needed. Deploy backend + frontend together after that.
 - Grade the judge audit CSV: `backend/data/processed/benchmark_audit_sample.csv`
   (37 rows, fill `human_agrees` y/n) → becomes the judge's published error bar.
@@ -135,17 +135,31 @@ email `hello@canary-placeholder.example` still needs replacing before deploy.
 
 ## Environment gotchas
 
-- Python: **`cd /Users/…/canary/backend && ./venv/bin/python …`**. Bare `python`
-  is not found, and `./venv/bin/python` from the wrong cwd fails. Benchmark
-  modules run via `-m app.benchmark.x`; standalone scripts (issue_api_key,
-  gen_figures, verify_*) run as `./venv/bin/python scripts/x.py` from backend/.
-- Pipeline: `make pipeline` (raw → staged parquet → canary.duckdb). The API holds
-  read-only DuckDB connections; heavy pipeline writes and the API can contend.
+- **The dev machine is now Windows 11** (migrated 2026-07-31 from the RELEX
+  MacBook — see "Machine migration" below). Paths in older notes that read
+  `./venv/bin/python` or `/Users/melany.macias/...` are Mac-era; translate them.
+- Python: from `backend/`, run **`venv\Scripts\python.exe …`** (Windows) — the Mac
+  `./venv/bin/python` does not exist here. Bare `python` is the system 3.14, not
+  the venv, so always use the explicit venv path. Benchmark modules run via
+  `-m app.benchmark.x`; standalone scripts (issue_api_key, gen_figures, verify_*)
+  run as `venv\Scripts\python.exe scripts/x.py` from backend/.
+- Pipeline: `make pipeline` (raw → staged parquet → canary.duckdb). The Makefile
+  auto-selects the right interpreter per platform. GNU make 4.4.1 is installed via
+  winget (`ezwinports.make`); if `make` is missing from a fresh shell it is a PATH
+  refresh, not a missing install. The API holds read-only DuckDB connections;
+  heavy pipeline writes and the API can contend.
+- Two dependency pins are Windows-adjusted in `requirements.txt`: `uvloop` is
+  Unix-only and now carries a `sys_platform != 'win32'` marker (uvicorn falls back
+  to the asyncio loop, no functional loss), and `websockets` was loosened from
+  `==16.1.1` to `>=12,<17` because the hard pin was unsatisfiable alongside the
+  supabase SDK. Do not re-pin either without testing on Windows.
 - Never ship internal docs to the site: CONTEXT.md, DEPLOY.md, DATA_SOURCES.md,
   PROTOCOL_V2.md, this file. Only ABOUT/RESEARCH/SOURCES are imported by Docs.tsx.
-- No launchd/schedulers on the work laptop (RELEX-managed; security flagged a
-  launchd job before). Automation goes off-laptop. This is why the
-  `com.canary.refresh.plist` was removed.
+- Scheduler rule, corrected 2026-07-31: the no-persistence ban was specific to the
+  **RELEX-managed MacBook**, where corporate security flagged a launchd job. This
+  Windows machine is personal, so local automation is not a security problem here.
+  Off-laptop (Hetzner box / GitHub Actions) is still the better home for the
+  refresh runner, for uptime reasons rather than policy ones.
 
 ## Canonical references (all travel with the repo)
 
@@ -172,21 +186,26 @@ the slim serve image, repo-root build context, rsync --delete ghosts, the RELEX
 network lying about prod, headless-Chrome ground truth, no-schedulers-on-laptop).
 Read DEPLOY.md before any deploy on the new machine.
 
-## ⚠️ Laptop-migration checklist (do BEFORE retiring the old machine)
+## ✅ Machine migration — COMPLETE (2026-07-31)
 
-Git does NOT carry these — copy manually (AirDrop / drive / Migration Assistant):
+The move off the RELEX MacBook is done. Kept here as the record of what was
+carried and where it now lives; the checklist itself no longer needs doing.
 
-1. **`~/.ssh/id_ed25519` (+ .pub)** — the only key the server (root@5.78.144.35)
-   trusts. Without it: no deploys, no server login. Fallback: Hetzner web console.
-   Or from the OLD laptop pre-authorize the new one:
-   `cat newkey.pub | ssh root@5.78.144.35 'cat >> ~/.ssh/authorized_keys'`
-2. **The three gitignored env files** (all real keys live here, none in git):
-   root `.env` (deploy env), `backend/.env` (Firecrawl, Supabase service key, LLM keys),
-   `frontend/.env` (local dev).
-3. **`backend/data/`** — ~16 GB raw archive (the moat; partially non-refetchable) +
-   `canary.duckdb` + `processed/`. The most valuable data on the machine.
-4. On the new laptop: recreate `backend/venv` (`pip install -r requirements.txt`),
-   `cd frontend && npm ci`, then verify `ssh root@5.78.144.35 'echo ok'`.
+1. **SSH key** — `id_ed25519` (+ .pub) now at `C:\Users\PC\.ssh\`, verified against
+   root@5.78.144.35. Still the only key the server trusts; Hetzner web console is
+   the fallback if it is ever lost.
+2. **The three gitignored env files** — restored to `.env`, `backend/.env`,
+   `frontend/.env`. All real keys live here and none are in git.
+3. **`backend/data/`** — recovered from `/opt/canary-archive/data` on the Hetzner
+   box (18 GB: 17 GB raw + `canary.duckdb` + `staged/` + `processed/`), which is
+   where the old laptop had staged it. That server copy is the only off-laptop
+   backup of the raw archive; do not delete it until a real backup exists.
+4. **Dev environment** — `backend/venv` rebuilt (see the Windows dependency notes
+   under "Environment gotchas"), `frontend` `npm ci` clean, production build green,
+   GNU make installed.
+5. The migration bundle that carried the secrets (`canary-migration/`) was verified
+   byte-for-byte against every restored file and then deleted. `.gitignore` still
+   blocks that path so a future bundle cannot be committed by accident.
 
 ## State at handoff (deployment lane, 2026-07-29)
 

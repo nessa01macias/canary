@@ -1,6 +1,10 @@
 # Canary data pipeline. Raw acquisition (app/ingestion) is run separately/elsewhere;
 # these targets only consume finalized raw snapshots.
+ifeq ($(OS),Windows_NT)
+PY := venv/Scripts/python.exe
+else
 PY := venv/bin/python
+endif
 
 .PHONY: ingest pipeline stage areas build trajectory
 
