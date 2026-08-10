@@ -83,17 +83,34 @@ Ordering rule for combined code+DB deploys: build images while the DB uploads, b
    (an explicit list broke the build the day ABOUT.md appeared).
 4. **`rsync --delete` always.** Without it, locally-deleted .tsx files ghost on the
    server, `tsc -b` type-checks them, and the build fails on code that no longer exists.
-5. **The work laptop lies about prod (RELEX).** On VPN the domain is blocked outright
+5. **No rsync on the Windows dev machine.** Git Bash ships `tar`, `ssh` and `scp` but
+   not `rsync`, so every rsync line in the routine above fails with "command not
+   found". Use tar over ssh instead, and remember it has no `--delete`, so if you
+   deleted files locally you must remove the ghosts on the server by hand (gotcha 4
+   still applies):
+   ```bash
+   tar czf - --exclude='frontend/node_modules' --exclude='frontend/dist' \
+     frontend ABOUT.md RESEARCH.md SOURCES.md BENCHMARK.md \
+     | ssh root@5.78.144.35 'cd /opt/canary && tar xzf -'
+   ```
+6. **Frontend-only deploys are safe and sometimes required.** The `web` image needs
+   only `frontend/` and root `*.md` (Dockerfile copies nothing from `backend/`), so
+   you can ship docs and UI without touching the API: sync those paths, then
+   `docker compose build web && docker compose up -d web`. This is the correct move
+   while the API-gating prerequisites are outstanding, since a full deploy would
+   activate `require_key` and 401 the live map. Done this way 2026-07-31: prose and
+   figures are now both v2 on prod, `api` container untouched.
+7. **The work laptop lies about prod (RELEX).** On VPN the domain is blocked outright
    (ERR_CONNECTION_CLOSED). Off VPN, corporate SSL inspection (issuer "Retail Logistics
    Excellence - Forward Trust CA") breaks curl/openssl from the laptop. Only trust
    server-side checks: `curl --resolve canarylayer.com:443:127.0.0.1 ...`. The
    user-level truth test is a phone on cellular.
-6. **Headless ground truth on the server.** `docker run zenika/alpine-chrome` against
+8. **Headless ground truth on the server.** `docker run zenika/alpine-chrome` against
    the live site (chmod 777 the output dir first — Chrome runs non-root). `--screenshot`
    fires at DOM load, far too early for the map; add `--virtual-time-budget`. The
    definitive "map works" signal is `/api/sf/*` hits appearing in the api logs — those
    only fire after the map fully renders.
-7. **No schedulers on the work laptop** (RELEX security flagged the launchd ratchet
+9. **No schedulers on the work laptop** (RELEX security flagged the launchd ratchet
    2026-07-29; removed). Until an off-laptop runner exists, refresh manually:
    `cd backend && ./venv/bin/python -m app.ingestion.refresh` — staleness is visible at
    `/api/freshness`.
