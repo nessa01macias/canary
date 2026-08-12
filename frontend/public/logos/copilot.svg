@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 32" fill="none">
+  <g fill="#14110f">
+    <ellipse cx="11" cy="16" rx="8" ry="5" transform="rotate(-25 11 16)" opacity="0.85" />
+    <ellipse cx="21" cy="16" rx="8" ry="5" transform="rotate(25 21 16)" opacity="0.85" />
+  </g>
+  <text x="38" y="22" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#14110f">Copilot</text>
+</svg>

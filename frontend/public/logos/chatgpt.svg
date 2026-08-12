@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 32" fill="none">
+  <path d="M6 10c0-3.3 2.7-6 6-6h10c3.3 0 6 2.7 6 6v9c0 3.3-2.7 6-6 6H14l-6 5v-5c-1.1 0-2-.9-2-2V10z"
+        stroke="#14110f" stroke-width="2.4" stroke-linejoin="round" />
+  <text x="38" y="22" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" fill="#14110f">ChatGPT</text>
+</svg>

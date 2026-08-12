@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122 32" fill="none">
+  <g stroke="#14110f" stroke-width="3" stroke-linecap="round">
+    <line x1="20" y1="16" x2="27" y2="16" />
+    <line x1="18" y1="19.46" x2="21.5" y2="25.53" />
+    <line x1="14" y1="19.46" x2="10.5" y2="25.53" />
+    <line x1="12" y1="16" x2="5" y2="16" />
+    <line x1="14" y1="12.54" x2="10.5" y2="6.47" />
+    <line x1="18" y1="12.54" x2="21.5" y2="6.47" />
+  </g>
+  <text x="38" y="22" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#14110f">Claude</text>
+</svg>

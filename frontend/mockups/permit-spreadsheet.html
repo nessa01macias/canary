@@ -1,0 +1,93 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_tokens.css">
+<style>
+  .window { width: 880px; height: 520px; display: flex; flex-direction: column; font-size: 10.5px; }
+  .ss-titlebar {
+    padding: 6px 12px; font-size: 10.5px; color: #4a4a4a; background: #f0efec;
+    border-bottom: 1px solid #d0cfca;
+  }
+  .ss-toolbar {
+    height: 26px; display: flex; align-items: center; gap: 5px; padding: 0 10px;
+  }
+  .ss-icon { width: 15px; height: 15px; border-radius: 2px; background: #e2e0da; }
+  .ss-sep { width: 1px; height: 14px; background: #d0cfca; margin: 0 5px; }
+  .ss-formulabar {
+    display: flex; align-items: center; height: 24px; border-top: 1px solid #d0cfca;
+    border-bottom: 1px solid #d0cfca; font-family: 'Liberation Mono', monospace; font-size: 10px;
+  }
+  .ss-namebox { width: 56px; border-right: 1px solid #d0cfca; padding: 0 8px; display: flex; align-items: center; }
+  .ss-fx { padding: 0 8px; color: #6b6b6b; font-style: italic; }
+  .ss-formula { flex: 1; padding: 0 6px; }
+  .ss-grid { flex: 1; overflow: hidden; }
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  th.colhdr, td.rownum {
+    background: #f0efec; color: #6b6b6b; font-weight: 400; text-align: center;
+    border: 1px solid #d9d8d3; font-size: 9px; width: 20px;
+  }
+  th.colhdr { height: 16px; }
+  td.rownum { width: 20px; }
+  td, th.datahdr {
+    border: 1px solid #e6e5e1; padding: 3px 6px; text-align: left; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  th.datahdr { background: #eef0e8; font-weight: 700; }
+  td.ref-err { color: #9b2c2c; font-family: 'Liberation Mono', monospace; }
+  .ss-tabs {
+    display: flex; align-items: center; gap: 2px; padding: 5px 10px;
+    border-top: 1px solid #d0cfca; background: #f0efec;
+  }
+  .ss-tab {
+    padding: 4px 12px; font-size: 10px; border: 1px solid #d0cfca; border-bottom: none;
+    background: #e7e6e1; color: #6b6b6b;
+  }
+  .ss-tab.active { background: #fff; color: #1a1a1a; font-weight: 700; }
+</style></head>
+<body>
+<div class="window sans">
+  <div class="ss-titlebar">submittal_log_v7_FINAL_rev3(KO edits).xlsx &mdash; Read-only &mdash; checked out by D. Reyes</div>
+  <div class="ss-toolbar">
+    <div class="ss-icon"></div><div class="ss-icon"></div><div class="ss-sep"></div>
+    <div class="ss-icon"></div><div class="ss-icon"></div><div class="ss-icon"></div><div class="ss-sep"></div>
+    <div class="ss-icon"></div><div class="ss-icon"></div><div class="ss-icon"></div>
+  </div>
+  <div class="ss-formulabar">
+    <div class="ss-namebox">F14</div>
+    <div class="ss-fx">fx</div>
+    <div class="ss-formula">=VLOOKUP(B14,'Log (old)'!A:F,4,FALSE)</div>
+  </div>
+  <div class="ss-grid">
+    <table>
+      <tr>
+        <th class="colhdr"></th>
+        <th class="colhdr">A</th><th class="colhdr">B</th><th class="colhdr">C</th>
+        <th class="colhdr">D</th><th class="colhdr">E</th><th class="colhdr">F</th><th class="colhdr">G</th>
+      </tr>
+      <tr>
+        <td class="rownum">1</td>
+        <th class="datahdr">Submittal No.</th><th class="datahdr">Date Rec&rsquo;d</th>
+        <th class="datahdr">Description</th><th class="datahdr">Reviewer</th>
+        <th class="datahdr">Cycle</th><th class="datahdr">Status</th><th class="datahdr">Comments Due</th>
+      </tr>
+      <tr><td class="rownum">2</td><td>SUB-041</td><td>2025-04-02</td><td>Grading &amp; ESC plan</td><td>J. Farah</td><td>2</td><td class="status-green">Approved as Noted</td><td>2025-04-16</td></tr>
+      <tr><td class="rownum">3</td><td>SUB-042</td><td>2025-04-02</td><td>Watermain material submittal &mdash; DI Cl.52</td><td>D. Reyes</td><td>1</td><td class="status-amber">Under Review</td><td>2025-04-30</td></tr>
+      <tr><td class="rownum">4</td><td>SUB-043</td><td>2025-04-09</td><td>Pipe wall thickness certification</td><td>D. Reyes</td><td>2</td><td class="status-red">Revise &amp; Resubmit</td><td>2025-04-23</td></tr>
+      <tr><td class="rownum">5</td><td>SUB-044</td><td>2025-04-11</td><td>ADA ramp detail</td><td>J. Farah</td><td>1</td><td class="status-green">Approved as Noted</td><td>2025-04-25</td></tr>
+      <tr><td class="rownum">6</td><td>SUB-045</td><td>2025-04-15</td><td>Transformer pad location</td><td>M. Okafor</td><td>1</td><td class="status-amber">Awaiting Ext. Agency</td><td>&mdash;</td></tr>
+      <tr><td class="rownum">7</td><td>SUB-046</td><td>2025-04-18</td><td>Alternative Methods Request &mdash; ROW width</td><td>D. Reyes</td><td>1</td><td class="status-red">Incomplete &mdash; returned</td><td>2025-05-02</td></tr>
+      <tr><td class="rownum">8</td><td>SUB-047</td><td>2025-04-22</td><td>Erosion control inspection log</td><td>J. Farah</td><td>1</td><td class="status-green">Approved as Noted</td><td>2025-05-06</td></tr>
+      <tr><td class="rownum">9</td><td>SUB-048</td><td>2025-04-30</td><td>Fire hydrant flow test data</td><td>M. Okafor</td><td>1</td><td class="status-amber">Under Review</td><td>2025-05-14</td></tr>
+      <tr><td class="rownum">10</td><td>SUB-049</td><td>2025-05-06</td><td>Street lighting photometric plan</td><td>D. Reyes</td><td>1</td><td class="status-amber">Under Review</td><td>2025-05-20</td></tr>
+      <tr><td class="rownum">11</td><td>SUB-050</td><td>2025-05-06</td><td>Site servicing summary, revised</td><td>J. Farah</td><td>3</td><td class="status-green">Approved as Noted</td><td>2025-05-20</td></tr>
+      <tr><td class="rownum">12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="rownum">13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="rownum">14</td><td></td><td></td><td></td><td></td><td></td><td class="ref-err">#REF!</td><td></td></tr>
+    </table>
+  </div>
+  <div class="ss-tabs">
+    <div class="ss-tab active">Log</div>
+    <div class="ss-tab">Log (old)</div>
+    <div class="ss-tab">Sheet3</div>
+    <div class="ss-tab">PIVOT_DO_NOT_EDIT</div>
+  </div>
+</div>
+</body></html>

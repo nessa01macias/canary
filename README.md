@@ -1,7 +1,7 @@
 # canary
 
-Real estate intelligence for upwards mobility — "the change layer of the physical world."
+Jurisdiction-research API for AEC pursuit teams — the scattered public record (planning acts, zoning, permits, nearby approvals, submittal requirements) aggregated into one cited API/MCP that plugs into the tools teams already use.
 
-We compute how neighborhoods are changing (permits, zoning, POI churn, 311) from open data, instead of just describing what they are today.
+We compress the pre-bid research a pursuit team does before responding to a public RFP from weeks to days.
 
 See [CONTEXT.md](CONTEXT.md) for the full thesis, business model, competitive research, and open tests.

@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_tokens.css">
+<style>
+  .window { width: 360px; height: 640px; display: flex; flex-direction: column; }
+  .vc-header {
+    padding: 22px 18px 14px; border-bottom: 1px solid #d0cfca; text-align: center;
+  }
+  .vc-name { font-size: 14px; font-weight: 700; }
+  .vc-number { font-size: 11.5px; color: #6b6b6b; margin-top: 2px; }
+  .vc-log { padding: 8px 16px; }
+  .vc-row {
+    display: flex; justify-content: space-between; padding: 9px 2px;
+    border-bottom: 1px solid #ececea; font-size: 12px;
+  }
+  .vc-row .dir { color: #6b6b6b; }
+  .vc-row .miss { color: #9b2c2c; }
+  .vc-row .time { color: #6b6b6b; font-size: 10.5px; }
+  .vc-vm {
+    margin: 14px 12px 0; border: 1px solid #d0cfca; border-radius: 10px; padding: 14px;
+  }
+  .vc-vm-top { display: flex; align-items: center; gap: 10px; }
+  .vc-play {
+    width: 34px; height: 34px; border-radius: 50%; background: #1a1a1a;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .vc-play:before { content: ''; border-left: 9px solid #fff; border-top: 6px solid transparent; border-bottom: 6px solid transparent; margin-left: 2px; }
+  .vc-wave { flex: 1; display: flex; align-items: flex-end; gap: 2px; height: 20px; }
+  .vc-wave span { width: 2px; background: #d0cfca; display: block; }
+  .vc-dur { font-size: 10.5px; color: #6b6b6b; }
+  .vc-ts { font-size: 10.5px; color: #6b6b6b; margin-top: 8px; }
+  .vc-transcript { font-size: 12.5px; line-height: 1.55; margin-top: 8px; }
+  .vc-caveat { font-size: 10px; color: #6b6b6b; font-style: italic; margin-top: 8px; }
+</style></head>
+<body>
+<div class="window sans">
+  <div class="vc-header">
+    <div class="vc-name">Ridgemont Water &amp; Sewer District &mdash; Records</div>
+    <div class="vc-number">(406) 555-0148</div>
+  </div>
+  <div class="vc-log">
+    <div class="vc-row"><span class="dir">Outgoing</span><span class="time">18:42</span></div>
+    <div class="vc-row"><span class="dir">Outgoing &mdash; no answer</span><span class="time">Tue</span></div>
+    <div class="vc-row"><span class="miss">Missed</span><span class="time">Tue</span></div>
+    <div class="vc-row"><span class="dir">Outgoing</span><span class="time">4:07</span></div>
+  </div>
+  <div class="vc-vm">
+    <div class="vc-vm-top">
+      <div class="vc-play"></div>
+      <div class="vc-wave">
+        <span style="height:6px"></span><span style="height:14px"></span><span style="height:9px"></span>
+        <span style="height:18px"></span><span style="height:11px"></span><span style="height:7px"></span>
+        <span style="height:15px"></span><span style="height:10px"></span><span style="height:5px"></span>
+        <span style="height:13px"></span><span style="height:8px"></span><span style="height:16px"></span>
+        <span style="height:6px"></span><span style="height:12px"></span><span style="height:9px"></span>
+      </div>
+      <div class="vc-dur">0:42</div>
+    </div>
+    <div class="vc-ts">Yesterday, 4:12 PM</div>
+    <div class="vc-transcript">
+      &ldquo;Hi, returning your call about the pre-application inquiry &mdash; the manual you&rsquo;re working from was superseded, so call the clerk&rsquo;s office back and ask for the current amendments. I&rsquo;m out Thursday and Friday.&rdquo;
+    </div>
+    <div class="vc-caveat">Transcription may be inaccurate.</div>
+  </div>
+  <div class="vc-log" style="margin-top: 6px;">
+    <div class="vc-row"><span class="dir">Outgoing &mdash; no answer</span><span class="time">Mon</span></div>
+    <div class="vc-row"><span class="dir">Outgoing</span><span class="time">2:15</span></div>
+    <div class="vc-row"><span class="miss">Missed</span><span class="time">Mon</span></div>
+    <div class="vc-row" style="border-bottom:none;"><span class="dir">Outgoing &mdash; no answer</span><span class="time">Fri</span></div>
+  </div>
+</div>
+</body></html>

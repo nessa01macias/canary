@@ -1,0 +1,138 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_tokens.css">
+<style>
+  .window { width: 760px; height: 580px; }
+  .zm-head {
+    padding: 10px 16px 8px; display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #d0cfca;
+  }
+  .zm-crest {
+    width: 26px; height: 26px; flex-shrink: 0;
+  }
+  .zm-head-text { font-size: 11px; letter-spacing: 0.5px; line-height: 1.5; }
+  .zm-head-text b { font-size: 12.5px; }
+  .zm-map { position: relative; }
+  .zm-label { font-size: 9.5px; font-weight: 700; }
+  .zm-street { font-size: 8px; fill: #6b6b6b; letter-spacing: 0.5px; }
+  .zm-legend {
+    position: absolute; left: 14px; bottom: 44px;
+    background: rgba(255,255,255,0.92); border: 1px solid #d0cfca;
+    padding: 6px 9px; font-size: 8.5px; line-height: 1.7;
+  }
+  .zm-swatch { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: middle; border: 1px solid #b9b7b0; }
+  .zm-north {
+    position: absolute; right: 18px; top: 14px; font-size: 10px; font-weight: 700;
+    text-align: center;
+  }
+  .zm-scale { position: absolute; right: 16px; bottom: 44px; font-size: 8px; color: #6b6b6b; text-align: right; }
+  .zm-footer {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    border-top: 1px solid #d0cfca; background: #f7f7f5;
+    padding: 6px 16px; font-size: 8.5px; color: #6b6b6b;
+  }
+</style></head>
+<body>
+<div class="window">
+  <div class="zm-head">
+    <svg class="zm-crest" viewBox="0 0 24 24"><path d="M12 2 L21 6 V12 C21 17 17 21 12 22 C7 21 3 17 3 12 V6 Z" fill="none" stroke="#1a1a1a" stroke-width="1.2"/><line x1="12" y1="6" x2="12" y2="18" stroke="#1a1a1a" stroke-width="0.8"/></svg>
+    <div class="zm-head-text">
+      <b>CITY OF RIDGEMONT — ZONING BY-LAW MAP</b><br>
+      SHEET 14 OF 62
+    </div>
+  </div>
+  <svg class="zm-map" width="760" height="480" viewBox="0 0 760 480">
+    <rect class="map-fill-5 map-stroke" x="0" y="0" width="760" height="480"/>
+    <!-- parcel grid -->
+    <g class="map-stroke">
+      <rect class="map-fill-1" x="40" y="40" width="140" height="90"/>
+      <rect class="map-fill-1" x="180" y="40" width="90" height="90"/>
+      <rect class="map-fill-3" x="270" y="40" width="120" height="90"/>
+      <rect class="map-fill-2" x="390" y="40" width="100" height="90"/>
+      <rect class="map-fill-1" x="490" y="40" width="90" height="90"/>
+      <rect class="map-fill-4" x="580" y="40" width="140" height="90"/>
+
+      <rect class="map-fill-1" x="40" y="130" width="90" height="100"/>
+      <rect class="map-fill-1" x="130" y="130" width="80" height="100"/>
+      <rect x="210" y="130" width="150" height="100" fill="#f0e3d0" stroke="#b9b7b0"/>
+      <rect x="210" y="130" width="150" height="100" fill="url(#hatch)" stroke="#1a1a1a" stroke-width="2"/>
+      <rect class="map-fill-3" x="360" y="130" width="90" height="100"/>
+      <rect class="map-fill-1" x="450" y="130" width="90" height="100"/>
+      <rect class="map-fill-2" x="540" y="130" width="90" height="100"/>
+      <rect class="map-fill-1" x="630" y="130" width="90" height="100"/>
+
+      <rect class="map-fill-1" x="40" y="230" width="100" height="110"/>
+      <rect class="map-fill-1" x="140" y="230" width="90" height="110"/>
+      <rect class="map-fill-1" x="230" y="230" width="90" height="110"/>
+      <rect class="map-fill-5" x="320" y="230" width="130" height="110"/>
+      <rect class="map-fill-1" x="450" y="230" width="90" height="110"/>
+      <rect class="map-fill-3" x="540" y="230" width="90" height="110"/>
+      <rect class="map-fill-1" x="630" y="230" width="90" height="110"/>
+
+      <rect class="map-fill-1" x="40" y="340" width="130" height="100"/>
+      <rect class="map-fill-1" x="170" y="340" width="90" height="100"/>
+      <rect class="map-fill-1" x="260" y="340" width="90" height="100"/>
+      <rect class="map-fill-1" x="350" y="340" width="90" height="100"/>
+      <rect class="map-fill-4" x="440" y="340" width="100" height="100"/>
+      <rect class="map-fill-1" x="540" y="340" width="90" height="100"/>
+      <rect class="map-fill-1" x="630" y="340" width="90" height="100"/>
+    </g>
+    <defs>
+      <pattern id="hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#8a5a00" stroke-width="1.4" opacity="0.55"/>
+      </pattern>
+    </defs>
+    <!-- subject parcel, heavy outline -->
+    <rect x="210" y="130" width="150" height="100" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+
+    <!-- zone labels -->
+    <text class="zm-label" x="95" y="90">R-3</text>
+    <text class="zm-label" x="215" y="90">R-3</text>
+    <text class="zm-label" x="320" y="90">C-2</text>
+    <text class="zm-label" x="430" y="90">OS</text>
+    <text class="zm-label" x="525" y="90">R-3</text>
+    <text class="zm-label" x="640" y="90">I-1</text>
+
+    <text class="zm-label" x="75" y="185">R-3</text>
+    <text class="zm-label" x="160" y="185">R-3</text>
+    <text class="zm-label" x="270" y="178" fill="#1a1a1a">R-3(h)</text>
+    <text class="zm-label" x="395" y="185">C-2</text>
+    <text class="zm-label" x="485" y="185">R-3</text>
+    <text class="zm-label" x="575" y="185">OS</text>
+    <text class="zm-label" x="665" y="185">R-3</text>
+
+    <text class="zm-label" x="80" y="290">R-3</text>
+    <text class="zm-label" x="175" y="290">R-3</text>
+    <text class="zm-label" x="265" y="290">R-3</text>
+    <text class="zm-label" x="370" y="290">I-1</text>
+    <text class="zm-label" x="485" y="290">R-3</text>
+    <text class="zm-label" x="575" y="290">C-2</text>
+    <text class="zm-label" x="665" y="290">R-3</text>
+
+    <text class="zm-label" x="95" y="395">R-3</text>
+    <text class="zm-label" x="205" y="395">R-3</text>
+    <text class="zm-label" x="295" y="395">R-3</text>
+    <text class="zm-label" x="385" y="395">R-3</text>
+    <text class="zm-label" x="480" y="395">OS</text>
+    <text class="zm-label" x="575" y="395">R-3</text>
+    <text class="zm-label" x="665" y="395">R-3</text>
+
+    <!-- streets -->
+    <text class="zm-street" x="30" y="15">WESTON ST</text>
+    <text class="zm-street" transform="translate(376,20)">ALMIRA AVE</text>
+    <text class="zm-street" transform="rotate(-90) translate(-260,10)">FIFTH LINE</text>
+
+    <!-- APN callout -->
+    <text x="215" y="120" font-size="9" font-weight="700" font-family="'Liberation Mono', monospace">APN 0742-118-03</text>
+  </svg>
+  <div class="zm-legend">
+    <div><span class="zm-swatch" style="background:#f0e3d0"></span>R-3 &mdash; Residential</div>
+    <div><span class="zm-swatch" style="background:#e6d7e8"></span>C-2 &mdash; Commercial</div>
+    <div><span class="zm-swatch" style="background:#d9e6f2"></span>OS &mdash; Open Space</div>
+    <div><span class="zm-swatch" style="background:#dde7d5"></span>I-1 &mdash; Industrial</div>
+    <div><span class="zm-swatch" style="background:#efefef"></span>Undesignated</div>
+  </div>
+  <div class="zm-north">N<br>&uarr;</div>
+  <div class="zm-scale">0&nbsp;&nbsp;&nbsp;50&nbsp;&nbsp;&nbsp;100 m</div>
+  <div class="zm-footer">Consolidated to Amendment No. 47. Office consolidation &mdash; not certified. Adopted 2016-11-02.</div>
+</div>
+</body></html>

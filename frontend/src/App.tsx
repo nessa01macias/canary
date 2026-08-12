@@ -53,7 +53,15 @@ import { useHexTexture } from './map/useHexTexture'
 import { addScopeCircleLayers, useScopeCamera } from './map/useScopeCamera'
 import './App.css'
 
-function App() {
+type Props = {
+  // Where App should already be looking when it mounts, set by which door the
+  // visitor came through on the landing page (see Root.tsx). Defaults to the
+  // plain map so any other future caller of <App /> is unaffected.
+  initialView?: 'map' | 'agents' | 'research'
+  initialDocsTab?: string
+}
+
+function App({ initialView = 'map', initialDocsTab }: Props) {
   const mapContainer = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markerElsRef = useRef<HTMLElement[]>([])
@@ -90,9 +98,9 @@ function App() {
   // rung (scope-subordinate state; the effect lives next to the scope machinery).
   const [report, setReport] = useState<AddressReport | null>(null)
   const [reportLoading, setReportLoading] = useState(false)
-  const [researchOpen, setResearchOpen] = useState(false)
-  const [docsTab, setDocsTab] = useState<string | undefined>(undefined)
-  const [agentsOpen, setAgentsOpen] = useState(false)
+  const [researchOpen, setResearchOpen] = useState(initialView === 'research')
+  const [docsTab, setDocsTab] = useState<string | undefined>(initialView === 'research' ? initialDocsTab : undefined)
+  const [agentsOpen, setAgentsOpen] = useState(initialView === 'agents')
   // One layer, zoom as the axis: past STREET_ZOOM the map is about individual
   // permits/businesses; below it, area trajectory.
   const [zoomedIn, setZoomedIn] = useState(false)
