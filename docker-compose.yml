@@ -1,8 +1,18 @@
 # Canary deployment — two services behind Caddy.
 #
 #   web  Caddy: serves the React bundle and reverse-proxies /api -> api:8000.
-#        Terminates TLS (auto-HTTPS once SITE_ADDRESS is a real domain).
 #   api  FastAPI/uvicorn: reads the derived layer (canary.duckdb) read-only.
+#
+# TOPOLOGY: Canary shares a host with Pharos (a separate business). pharos-caddy
+# owns host ports 80/443 and terminates TLS for canarylayer.com, then proxies to
+# canary-web over the canary_edge network. So `web` publishes NO ports and runs
+# with SITE_ADDRESS=:80. It keeps its own Caddy purely to preserve the asset
+# rules that MapLibre depends on (see frontend/Caddyfile — .mjs content-type and
+# the no-SPA-fallback on /assets/*, both of which fail silently if lost).
+#
+# ISOLATION: two networks. `api` is on canary_internal only and cannot reach any
+# Pharos container. Only canary-web joins canary_edge. Both services carry
+# memory/CPU and log-size caps so neither project can starve or disk-fill the other.
 #
 # The raw archive (data/raw, 3.2GB+) and the pipeline are NOT part of this stack.
 # Only the derived artifact canary.duckdb is shipped to the server (see deploy/push-duckdb.sh).
@@ -13,6 +23,22 @@
 services:
   api:
     build: ./backend
+    # PINNED, and deliberately NOT :latest. This is the image that has served
+    # production since 2026-07-30, transplanted here during the host migration.
+    #
+    # It predates commit bfbbc7c ("API Phase 1: gate the API"). Every commit
+    # from bfbbc7c onward wraps the data routers in Depends(require_key), and
+    # with SUPABASE_SERVICE_KEY unset that gate fails CLOSED — every /api/*
+    # returns 401, all the map's fetches live inside map.on('load'), and you
+    # get a blank map with NO console error. Rebuilding this service without
+    # first resolving the gate is therefore a silent outage.
+    #
+    # Before you ever run `docker compose build api`, read DEPLOY.md's
+    # "API gate" gotcha and either set CANARY_DEV_OPEN_API=1 or plumb real keys.
+    image: canary-api:pregate-20260730
+    # Explicit name so the shared edge proxy can address these by a stable,
+    # project-scoped identity rather than the generic compose service name.
+    container_name: canary-api
     restart: unless-stopped
     environment:
       # Serving reads the derived DB read-only…
@@ -43,6 +69,23 @@ services:
       - ./backend/data/raw/overture_places:/app/data/raw/overture_places:ro
     expose:
       - "8000"
+    # Internal network ONLY. The api shares a host with Pharos (a separate
+    # business), and must not be able to reach pharos-backend-* or admin-backend.
+    # Docker doesn't route between bridge networks, so this is enforced, not
+    # merely conventional.
+    networks:
+      - canary_internal
+    # Blast-radius ceilings, not a squeeze — the host has 62GB/14 cores. These
+    # stop a runaway Canary process from starving the live Pharos containers.
+    mem_limit: 2g
+    cpus: 2.0
+    # Pharos caps its logs the same way. Without this an unbounded log is a
+    # shared-fate disk-fill that would take Pharos down along with Canary.
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
 
   web:
     build:
@@ -53,19 +96,52 @@ services:
       args:
         # Only the map-tile key is client-side. No DB creds reach the browser.
         VITE_MAPTILER_KEY: ${VITE_MAPTILER_KEY}
+    # PINNED to the bundle built from 75df17b — what production serves today.
+    # Rebuilding from a later commit also ships the new landing page and the
+    # commute mock (which reports synthetic ETAs as real when STADIA_API_KEY is
+    # blank). Both are product changes; ship them deliberately, not as a side
+    # effect of a host migration.
+    image: canary-web:75df17b
+    # pharos-caddy routes canarylayer.com here by this exact name. Never rely on
+    # the bare service name `web` on a shared network — a future Pharos service
+    # called `web` would silently hijack the route.
+    container_name: canary-web
     restart: unless-stopped
     environment:
-      # ":80" (default) -> serves HTTP on the bare IP.
-      # "canary.example.com" -> Caddy provisions a Let's Encrypt cert automatically.
+      # MUST be ":80" on the shared Pharos host: pharos-caddy terminates TLS and
+      # reverse-proxies to this container over plain HTTP. Set to a hostname here
+      # and this inner Caddy would race for its own Let's Encrypt cert behind a
+      # proxy that already has one — cert failures and redirect loops.
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
-    ports:
-      - "80:80"
-      - "443:443"
+    # NO ports: block. pharos-caddy owns host 80/443 on this box; this container
+    # is reached only through it, over canary_edge.
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+    networks:
+      # canary_internal to reach `api`; canary_edge so pharos-caddy can reach us.
+      # This container is the single deliberate seam between the two projects.
+      - canary_internal
+      - canary_edge
+    mem_limit: 512m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
     depends_on:
       - api
+
+networks:
+  # Private to this project — Pharos containers are not on it.
+  canary_internal:
+    driver: bridge
+  # Created out-of-band (`docker network create canary_edge`) and shared with
+  # exactly one foreign container: pharos-caddy. Declared external so this
+  # compose project never owns or deletes it.
+  canary_edge:
+    external: true
 
 volumes:
   caddy_data:
