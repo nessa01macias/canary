@@ -59,6 +59,34 @@ Canary and Pharos are separate businesses on one machine. The division is delibe
   container, which would take Pharos down. A failed validate/reload leaves the running
   config untouched, so a bad block cannot break Pharos.
 
+## Where the data actually lives
+
+The move to a shared box changed the data story, so be precise about it. Nothing here
+is served from the laptop, and nothing large is rebuilt on the server.
+
+| Artifact | Size | Laptop | EX44 | Notes |
+|---|---|---|---|---|
+| `backend/data/raw/` — the raw archive | ~17 GB | **yes, primary** | as `/home/deploy/canary-archive` | 59 source dirs. Partially non-refetchable. |
+| `canary.duckdb` — derived layer | 900 MB local / **443 MB compacted** | yes | yes, compacted only | The only DB on the server. |
+| `claims.json`, `freshness.json` | ~60 KB | yes | yes | The only two files from `processed/` that belong on the server. |
+| `overture_places/` | ~4 MB | yes | yes | Backs `/api/places/search`. |
+| Everything else in `processed/` | ~17 MB | yes | **no** | Benchmark runs and intermediates. Server has no use for them. |
+| User contributions | — | no | no | Supabase, external to both. |
+
+Two consequences worth internalising:
+
+- **The archive now has two copies**, laptop and EX44, and they were verified identical
+  (58 dirs, 454 files) at the 2026-08-12 migration. That is the off-site backup the old
+  R2-vs-B2 debate was about, and it costs €0 because the disk was already paid for. It
+  is not automatically synced — re-run the copy after a big capture if you want it current.
+- **The server is disposable; the data is not.** The EX44 holds nothing that could not be
+  rebuilt from git plus the laptop — *except* that it is now the second copy of the
+  archive. Losing the box costs a rebuild. Losing every copy of `data/raw` costs the moat.
+
+Disk is not a constraint: ~265 GB free, plus ~120 GB of reclaimable Docker build cache
+behind that. The archive could grow many times over before this matters. **Don't prune
+that build cache** — it's Pharos's, and clearing it silently slows Freddy's next build.
+
 ## The routine: "commit, push, redeploy"
 
 Code now travels by **git**, not rsync/tar — the server is a real clone. `SSH=...` is
