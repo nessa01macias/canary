@@ -96,12 +96,18 @@ services:
       args:
         # Only the map-tile key is client-side. No DB creds reach the browser.
         VITE_MAPTILER_KEY: ${VITE_MAPTILER_KEY}
-    # PINNED to the bundle built from 75df17b — what production serves today.
-    # Rebuilding from a later commit also ships the new landing page and the
-    # commute mock (which reports synthetic ETAs as real when STADIA_API_KEY is
-    # blank). Both are product changes; ship them deliberately, not as a side
-    # effect of a host migration.
-    image: canary-web:75df17b
+    # PINNED, and the tag must change on every rebuild — never reuse a tag, or you
+    # overwrite the image you would roll back to. `canary-web:75df17b` is still on
+    # the box as the pre-landing-page rollback target.
+    #
+    # This is a FRONTEND-ONLY deploy (see DEPLOY.md gotcha 6): the web image copies
+    # nothing from backend/, so shipping it leaves `api` on its pinned pre-gate
+    # image. That is what keeps the API ungated (gotcha 11) AND keeps /api/commute
+    # answering routing_unconfigured — the commute mock that reports synthetic ETAs
+    # as real is backend code, so it does not ship with this.
+    # Verified before deploying: every /api/* path this bundle calls already exists
+    # on the pinned api. Re-check that if the frontend starts calling a new endpoint.
+    image: canary-web:landing-20260812
     # pharos-caddy routes canarylayer.com here by this exact name. Never rely on
     # the bare service name `web` on a shared network — a future Pharos service
     # called `web` would silently hijack the route.
