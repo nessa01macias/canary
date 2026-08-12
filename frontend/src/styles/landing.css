@@ -1,0 +1,812 @@
+/* The front door — Ramp/Finch-style instrument: black on white, one accent,
+   huge tight type, generous whitespace. Scoped entirely under .landing so it
+   can't collide with the app's cascade (imported directly by Landing.tsx,
+   not through App.css's ordered chain). */
+
+.landing {
+  --ink: #14110f;
+  --grey: #6b6660;
+  --line: rgba(20, 17, 15, 0.1);
+  /* Actual rendered nav height (22px padding + button) — used to offset the
+     scatter section's own pinned stage so it doesn't scroll under the nav. */
+  --nav-h: 80px;
+  background: #fff;
+  color: var(--ink);
+  min-height: 100%;
+  font-family: var(--sans);
+}
+
+.landing h1, .landing h2, .landing h3 {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* ── Fold: nav + hero + testimonial fit one screen, no orphaned peek of the
+   next section's heading at the bottom edge. ─────────────────────────── */
+.landing-fold { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+.landing-fold-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(48px, 8vw, 88px);
+  padding: 24px 0;
+}
+
+/* ── Nav ─────────────────────────────────────────────────────────────── */
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px clamp(20px, 5vw, 64px);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+}
+.landing-brand {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.landing-nav-right { display: flex; align-items: center; gap: 20px; }
+.landing-nav-link {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 14.5px;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0;
+}
+.landing-nav-link:hover { opacity: 0.65; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────── */
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 13px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.landing-btn:active { transform: translateY(1px); }
+.landing-btn-primary { background: var(--orange); color: #fff; }
+.landing-btn-primary:hover { opacity: 0.88; }
+.landing-btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+.landing-btn-ghost:hover { border-color: var(--ink); }
+.landing-btn-sm { padding: 9px 16px; font-size: 13.5px; border-radius: 7px; }
+
+/* ── Hero ────────────────────────────────────────────────────────────── */
+.landing-hero {
+  text-align: center;
+  padding: 0 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.landing-hero h1 {
+  font-size: clamp(38px, 6.4vw, 74px);
+  line-height: 1.04;
+}
+.landing-sub {
+  margin: 22px auto 0;
+  max-width: 560px;
+  color: var(--grey);
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.55;
+}
+.landing-hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+
+
+/* ── Generic section shell ──────────────────────────────────────────── */
+.landing-section {
+  padding: clamp(48px, 8vw, 88px) 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+}
+/* The scatter + ghost sections run wider than the text column above them —
+   Ramp's chaos reads at near-full-bleed scale, not tucked into a narrow
+   reading column. */
+.landing-section--wide { max-width: 1340px; overflow-x: hidden; }
+.landing-section h2 {
+  font-size: clamp(26px, 3.6vw, 40px);
+}
+.landing-section-sub {
+  color: var(--grey);
+  font-size: 15.5px;
+  margin: 14px auto 0;
+  max-width: 480px;
+}
+.landing-section--after { background: none; }
+
+/* ── Testimonial ─────────────────────────────────────────────────────── */
+.landing-testimonial-section { padding: 0 20px; }
+.landing-testimonial-card {
+  max-width: 820px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(20, 17, 15, 0.07);
+  padding: clamp(24px, 4vw, 36px) clamp(28px, 6vw, 52px);
+  text-align: left;
+}
+.landing-testimonial-quote {
+  margin: 0;
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.55;
+  color: var(--ink);
+}
+.landing-testimonial-attribution {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.landing-testimonial-logo { height: 18px; width: auto; opacity: 0.85; }
+.landing-testimonial-title { font-size: 13.5px; font-weight: 600; color: var(--grey); }
+.landing-testimonial-badge { margin-left: auto; font-size: 13.5px; font-weight: 600; color: var(--grey); }
+
+/* ── Section 2: scattered sources ───────────────────────────────────── */
+/* Deliberately uneven footprint — six identical tiles read as a product
+   grid, not chaos (see the asset brief). Each card's width/height comes
+   inline from SCATTER_ITEMS; position/rotation live here per card index. */
+.landing-scatter {
+  position: relative;
+  height: 745px;
+  max-width: 1205px;
+  margin: 64px auto 0;
+  /* Shrink the whole cluster to fit short browser windows instead of letting
+     the bottom cards run past the fold — this section can be pinned
+     (ScatterStage), so on a short viewport there'd be no way to scroll them
+     into view otherwise. 340px ≈ heading + margins + section padding above
+     it; clamped so it never inverts (negative scale) or shrinks past
+     legibility on pathologically short windows. */
+  transform: scale(clamp(0.42, calc((100vh - 340px) / 745px), 1));
+  transform-origin: top center;
+}
+.landing-scatter-card {
+  position: absolute;
+  /* No overflow/background here — the frame (below) clips the image; this
+     wrapper stays open so the chip tab can stick out past its top edge. */
+}
+.landing-scatter-frame {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(20, 17, 15, 0.08);
+  overflow: hidden;
+}
+.landing-scatter-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* The always-visible orange type chip — carries the page's identity whether
+   the real screenshot has landed yet or not. Straddles the frame's top edge
+   as a tab so it never sits on top of the mockup's own header text. */
+.landing-scatter-chip {
+  position: absolute;
+  top: -11px;
+  left: 14px;
+  z-index: 5;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: var(--orange);
+  padding: 3px 7px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(20, 17, 15, 0.2);
+}
+/* Fallback (no image yet): fills the exact same footprint so nothing shifts
+   when a real asset drops into public/scatter/. */
+.landing-scatter-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 14px 14px 12px;
+  text-align: left;
+  background: #fff;
+}
+.landing-scatter-fallback.is-hidden { display: none; }
+.landing-scatter-title { font-size: 13px; font-weight: 600; line-height: 1.3; }
+.landing-scatter-sub { font-size: 11px; color: var(--grey); }
+
+/* The submittal log reads as "more sheets underneath" — two offset paper
+   edges behind the card rather than re-rendering the image three times. */
+.landing-scatter-card.is-stacked::before,
+.landing-scatter-card.is-stacked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  z-index: -1;
+}
+.landing-scatter-card.is-stacked::before { transform: translate(8px, 8px); }
+.landing-scatter-card.is-stacked::after { transform: translate(16px, 16px); opacity: 0.7; }
+
+.landing-scatter-card--1 { top: 0px;   left: 0px;   transform: rotate(-4deg); z-index: 3; }
+.landing-scatter-card--2 { top: 25px;  left: 375px; transform: rotate(3deg);  z-index: 4; }
+.landing-scatter-card--3 { top: 0px;   left: 738px; transform: rotate(-2deg); z-index: 2; }
+.landing-scatter-card--4 { top: 413px; left: 0px;   transform: rotate(2.5deg); z-index: 2; }
+.landing-scatter-card--5 { top: 363px; left: 538px; transform: rotate(-3deg); z-index: 4; }
+.landing-scatter-card--6 { top: 288px; left: 763px; transform: rotate(4deg);  z-index: 3; }
+
+/* ── Scroll-pinned stage (desktop, motion-ok): sections 2→3 as one scrub ──
+   The wrapper is taller than its content (JS sets height = stage + extra
+   scroll px); position:sticky holds the stage at the viewport top for that
+   extra distance, and Landing.tsx converts scroll position within it into
+   the 0→1 `progress` driving every inline style below. No CSS transitions
+   on the scrubbed elements — the whole point is 1:1 tracking with scroll,
+   not a lagging animation. */
+.landing-scatter-pinwrap {
+  position: relative;
+}
+.landing-scatter-stage {
+  position: sticky;
+  top: var(--nav-h);
+  padding: clamp(48px, 8vw, 88px) 20px;
+  max-width: 1340px;
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+.landing-scatter-heading {
+  position: relative;
+  min-height: 148px;
+}
+.landing-scatter-heading-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.landing-scatter-heading-face h2 { font-size: clamp(26px, 3.6vw, 40px); }
+.landing-scatter-heading-face.is-b { pointer-events: none; }
+/* The resolved-status card, scrubbed version — a sibling of the cards inside
+   the SAME .landing-scatter (not a separate ghost copy), absolutely centered
+   over them. JS drives opacity + translate(-50%, Ypx); left:50% here is what
+   the -50% X centers against. */
+/* position:fixed + dead-center of the viewport — deliberately independent of
+   where the scatter cards land (that block can be scaled down on short
+   windows, see .landing-scatter), so the card is always centered on SCREEN,
+   not just centered within the scatter's own box. overflow:hidden on
+   .landing-scatter-stage doesn't clip this (fixed descendants only respect
+   an ancestor's overflow if that ancestor also has a transform/filter set,
+   which the stage doesn't) — that's intentional here. */
+.landing-fanin-status.is-scrubbed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+}
+
+/* ── Section 3 fallback (mobile / prefers-reduced-motion): two static
+   screens, no scrub — same six sources, faded to near-white silhouettes,
+   with one crisp status card on top. Preserves the scatter's spatial memory
+   (thumbnails would throw it away). */
+.landing-fanin-ghost {
+  position: relative;
+  min-height: 745px;
+  max-width: 1205px;
+  margin: 56px auto 0;
+}
+.landing-scatter--ghost {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  height: auto;
+}
+.landing-scatter--ghost .landing-scatter-card {
+  opacity: 0.09;
+  filter: grayscale(1);
+  box-shadow: none;
+}
+.landing-scatter--ghost .landing-scatter-chip,
+.landing-scatter--ghost .is-stacked::before,
+.landing-scatter--ghost .is-stacked::after {
+  display: none;
+}
+.landing-fanin-status {
+  position: relative;
+  z-index: 2;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 640px;
+  top: 220px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  padding: 37px 43px;
+  text-align: left;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  box-shadow: 0 27px 64px rgba(20, 17, 15, 0.16);
+}
+/* The typewriter caret — sits at the end of whichever row is currently
+   being typed (see typingLineIdx in Landing.tsx), blinks while active. */
+.landing-fanin-cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  background: var(--orange);
+  vertical-align: text-bottom;
+  animation: fanin-caret-blink 0.9s step-end infinite;
+}
+@keyframes fanin-caret-blink { 50% { opacity: 0; } }
+.landing-fanin-status-row { color: var(--ink); }
+.landing-fanin-status-row:first-child {
+  color: var(--grey);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* The receipt row: six real sources, one click away — each opens the actual
+   mockup image (public/scatter/*.png). Reuses the scatter chips' kind/label
+   language so the callback to the cards above reads immediately. */
+.landing-fanin-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  animation: fanin-sources-in 0.35s ease both;
+}
+@keyframes fanin-sources-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.landing-fanin-source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #faf8f6;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px 6px 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.landing-fanin-source-chip:hover {
+  background: #fff;
+  border-color: var(--orange);
+  transform: translateY(-1px);
+}
+.landing-fanin-source-kind {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  background: var(--orange);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.landing-fanin-source-label {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* ── Section 3.5: benchmark proof ───────────────────────────────────── */
+.landing-proof-stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 64px 0 48px;
+  flex-wrap: wrap;
+}
+.landing-proof-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 46px;
+  border-radius: 16px;
+}
+.landing-proof-card-label {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.landing-proof-before,
+.landing-proof-after {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.landing-proof-metric {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--grey);
+  margin-top: 8px;
+}
+.landing-proof-metric--after { color: rgba(255, 255, 255, 0.85); }
+.landing-proof-card--before {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 28px 48px -16px rgba(20, 17, 15, 0.2), 0 8px 16px rgba(20, 17, 15, 0.06);
+}
+.landing-proof-card--before .landing-proof-card-label { color: var(--grey); }
+.landing-proof-before { color: var(--ink); }
+.landing-proof-card--after {
+  background: var(--orange);
+  box-shadow: 0 28px 48px -16px rgba(255, 102, 36, 0.55), 0 8px 20px rgba(255, 102, 36, 0.25);
+}
+.landing-proof-card--after .landing-proof-card-label { color: rgba(255, 255, 255, 0.85); }
+.landing-proof-after { color: #fff; }
+.landing-proof-arrow {
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--grey);
+}
+
+/* ── Section 4: stack / logo row ─────────────────────────────────────── */
+.landing-stack-section { background: #faf8f6; border-radius: 20px; }
+.landing-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 3.6vw, 40px);
+  row-gap: 26px;
+  margin: 72px 0 24px;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  flex-wrap: wrap;
+}
+.landing-logo { display: inline-flex; align-items: center; height: 28px; }
+.landing-logo-more {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--grey);
+}
+/* Wide enough that each sentence sits on its own line at normal widths (the
+   <br/> between them is deliberate — two beats, not one wrapped paragraph);
+   still wraps naturally once the viewport can't fit it. Top margin mirrors
+   the section's own responsive padding so the gap above this line roughly
+   matches the card's bottom padding below it, instead of the tighter fixed
+   gap it inherited from .landing-section-sub elsewhere on the page. */
+.landing-tools-sub {
+  max-width: min(720px, 92vw);
+  margin-top: clamp(40px, 7vw, 64px);
+}
+.landing-logo img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
+}
+.landing-logo img:hover { opacity: 1; }
+.landing-logo-fallback {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--grey);
+}
+.landing-logo-fallback.is-hidden { display: none; }
+
+/* ── Section 5: value blocks ────────────────────────────────────────── */
+.landing-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  text-align: left;
+  max-width: 980px;
+}
+.landing-value { color: var(--ink); }
+.landing-value svg { color: var(--orange); margin-bottom: 14px; }
+.landing-value h3 { font-size: 17px; margin-bottom: 8px; }
+.landing-value p { font-size: 14.5px; color: var(--grey); line-height: 1.55; margin: 0; }
+
+/* ── Closing CTA ─────────────────────────────────────────────────────── */
+.landing-closing {
+  text-align: center;
+  padding: clamp(72px, 10vw, 120px) 20px;
+}
+.landing-closing h2 {
+  font-size: clamp(26px, 3.6vw, 40px);
+  margin-bottom: 32px;
+}
+
+/* World-of-dots backdrop, Mireye-style: a huge globe cropped to just its top
+   rim, filling the fold edge-to-edge behind the hero and testimonial —
+   everything else in the fold sits above it via .landing-fold-body's
+   z-index. */
+.landing-dotmap {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-200vw + 58vh);
+  width: 200vw;
+  height: 200vw;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+.landing-dotmap-point {
+  fill: var(--ink);
+  opacity: 0.5;
+  transition: fill 1.4s ease, opacity 1.4s ease;
+}
+.landing-dotmap-point.is-lit {
+  fill: var(--orange);
+  opacity: 1;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.landing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px clamp(20px, 5vw, 64px) 40px;
+  border-top: 1px solid var(--line);
+  color: var(--grey);
+  font-size: 13.5px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.landing-footer-links { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.landing-footer button,
+.landing-footer a {
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--grey);
+  text-decoration: none;
+  cursor: pointer;
+}
+.landing-footer button:hover,
+.landing-footer a:hover { color: var(--ink); }
+
+/* ── Contact form popup ("Get API access") ──────────────────────────────── */
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 17, 15, 0.4);
+  animation: contact-fade 0.15s ease;
+}
+.contact-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 86vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 32px 28px 28px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(20, 17, 15, 0.3);
+  animation: contact-rise 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  text-align: left;
+}
+.contact-card h2 {
+  font-size: 22px;
+  margin: 0 0 6px;
+}
+/* 1040px, not 780 — Calendly's inline widget only switches from its stacked
+   mobile layout to the compact side-by-side (calendar + times) layout once
+   its container clears roughly 1000px. Below that it reverts to the tall
+   stacked view, which is what forces scrolling. */
+/* Calendly auto-resizes its iframe to whatever height ITS content actually
+   needs — that varies a little by browser/zoom/font rendering, so a small
+   fixed cap can clip it with no scrollbar to show. Size generously off the
+   viewport and fall back to a real scrollbar (not overflow:hidden) for
+   whatever a hard cap doesn't cover — cropped content is worse than a
+   scrollbar we mostly never need. */
+.contact-card--calendly {
+  max-width: 1040px;
+  width: 100%;
+  height: min(88vh, 820px);
+  max-height: 88vh;
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.contact-card--calendly h2 { margin: 0 0 14px; flex: 0 0 auto; }
+/* The widget area, not the whole card, is the scroll fallback — Calendly
+   resizes its iframe to fit ITS content, which varies a little by browser/
+   zoom/font rendering. Most of the time this space is tall enough and
+   nothing scrolls; when it isn't, only this panel scrolls, so the "Book a
+   demo" header stays pinned instead of scrolling away with it. */
+.contact-card--calendly .calendly-inline-widget {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+.contact-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--grey);
+  cursor: pointer;
+  border-radius: 6px;
+}
+.contact-close:hover { background: rgba(20, 17, 15, 0.06); color: var(--ink); }
+
+@keyframes contact-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes contact-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Map password gate ("Enter the map") ─────────────────────────────────
+   Reuses .contact-overlay/.contact-card (the default, non-calendly size) —
+   this is just a small form in the same modal chrome. */
+.gate-sub {
+  color: var(--grey);
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+.gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gate-input {
+  font: inherit;
+  font-size: 15px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fff;
+}
+.gate-input:focus { outline: none; border-color: var(--orange); }
+.gate-input.is-error { border-color: #d64545; }
+.gate-error { color: #d64545; font-size: 13px; margin: 0; }
+.gate-submit { width: 100%; margin-top: 4px; }
+
+/* ── Docs popup ("See how it works") ──────────────────────────────────────
+   Docs.tsx (shared with the main app) brings its own docs.css/docs-paper.css
+   chrome, imported directly by Landing.tsx. Two things that chrome assumes
+   from the app shell don't hold on this page, so they're patched here:
+   .research-overlay is position:absolute (fine inside the app's fixed-size
+   map container; wrong on this long scrolling page, where it must pin to
+   the viewport instead of the whole document), and .drawer-close +
+   @keyframes slide-up live in record-drawer.css, which isn't imported here
+   to avoid pulling in that file's map-drawer-specific styles. */
+.landing .research-overlay { position: fixed; z-index: 100; overscroll-behavior: contain; }
+/* docs.css caps the card at 760px — fine inside the app's narrower map
+   shell, way too narrow for this page's own popup on a laptop screen. Raise
+   it so the card fills the width the overlay's own 24px padding already
+   leaves on top/bottom, same on left/right, and let the text fill that same
+   width instead of sitting in a narrower centered column. */
+/* docs.css only sets max-height, so the card shrink-wraps each tab's own
+   content — "Data sources" is short, "Research" is long, so switching tabs
+   made the card resize under you. Fix it to one height (same value as the
+   old max-height) so every tab renders in the same frame and only the body
+   scrolls. */
+.landing .research-card { max-width: 1600px; height: 88vh; }
+/* width:100% is needed alongside the card's own max-width — .docs-tabs is
+   itself a flex container, which shrink-wraps its row of buttons instead of
+   stretching to the column's cross size the way the plain block
+   .research-body does; without it the tabs end up narrower than (and
+   misaligned with) the body below. */
+.landing .docs-tabs,
+.landing .research-body { width: 100%; }
+.landing .research-body { overscroll-behavior: contain; }
+.drawer-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  color: #666;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes slide-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Responsive: scatter + ghost degrade to a vertical stack ───────────── */
+@media (max-width: 720px) {
+  .landing-scatter {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: none;
+  }
+  .landing-scatter-card {
+    /* relative, not static — .landing-scatter-frame's absolute inset:0 needs
+       this as its positioned ancestor, even stacked in normal flow. */
+    position: relative !important;
+    width: 100% !important;
+    height: 160px !important;
+    transform: none !important;
+  }
+  .landing-scatter-card.is-stacked::before,
+  .landing-scatter-card.is-stacked::after { display: none; }
+  /* The ghost backdrop only works as a wide fan — on narrow screens just
+     show the resolved status card on its own (still the payoff moment). */
+  .landing-fanin-ghost { min-height: 0; }
+  .landing-scatter--ghost { display: none; }
+  .landing-fanin-status { top: 0; max-width: 100%; }
+  .landing-values { grid-template-columns: 1fr; }
+  .landing-hero-actions { flex-direction: column; align-items: stretch; }
+}
+
+/* ── Responsive: the Calendly popup, tighter chrome on small viewports ─── */
+@media (max-width: 640px) {
+  .contact-overlay { padding: 10px; }
+  .contact-card--calendly {
+    height: calc(100vh - 20px);
+    max-height: calc(100vh - 20px);
+    padding: 14px 12px 10px;
+    border-radius: 12px;
+  }
+  .contact-card--calendly h2 { font-size: 17px; margin-bottom: 10px; }
+}

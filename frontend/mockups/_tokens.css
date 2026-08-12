@@ -1,0 +1,46 @@
+/* Shared visual system for the six scattered-source mockups. Consistency
+   across the set comes from these tokens, not from matching dimensions —
+   each asset keeps its own aspect ratio (see the brief: uniform tiles read
+   as a product grid, not chaos). */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: 'Liberation Sans', Arial, sans-serif;
+  color: #1a1a1a;
+  background: transparent;
+}
+
+.window {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #d0cfca;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.serif { font-family: 'Liberation Serif', 'Times New Roman', serif; }
+.sans { font-family: 'Liberation Sans', Arial, sans-serif; }
+.mono { font-family: 'Liberation Mono', 'Courier New', monospace; }
+
+.muted { color: #6b6b6b; }
+.link { color: #0b4a8f; text-decoration: underline; }
+.highlight { background: #fff3b0; }
+
+.status-amber { color: #8a5a00; }
+.status-red { color: #9b2c2c; }
+.status-green { color: #2f6b3a; }
+
+.map-fill-1 { fill: #f0e3d0; }
+.map-fill-2 { fill: #e6d7e8; }
+.map-fill-3 { fill: #d9e6f2; }
+.map-fill-4 { fill: #dde7d5; }
+.map-fill-5 { fill: #efefef; }
+.map-stroke { stroke: #b9b7b0; stroke-width: 1; }
+
+/* generic grey toolbar band used by the portal / spreadsheet / phone chrome */
+.chrome-bar {
+  background: #f7f7f5;
+  border-bottom: 1px solid #d0cfca;
+}

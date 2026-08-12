@@ -21,12 +21,19 @@ should surface immediately, not silently allow access.
 from __future__ import annotations
 
 import hashlib
+import os
 import time
 from dataclasses import dataclass
 
 from fastapi import HTTPException, Request
 
 from . import store
+
+# Local-dev escape hatch. With CANARY_DEV_OPEN_API set, require_key waves every
+# request through with a synthetic internal key — so the map runs with zero setup
+# (no Supabase, no issued keys). OFF by default → production still fails closed.
+# This is the ONLY bypass; it changes nothing else about the gate.
+_DEV_OPEN = os.environ.get("CANARY_DEV_OPEN_API", "").strip().lower() in {"1", "true", "yes", "on"}
 
 # ---- key cache (active keys only), refreshed from Supabase on a short TTL -----
 _CACHE_TTL_S = 60.0
@@ -91,6 +98,12 @@ def _extract(request: Request) -> str | None:
 
 
 async def require_key(request: Request) -> KeyRecord:
+    if _DEV_OPEN:
+        # Zero-setup local dev: no key needed. Never reached in prod (flag unset).
+        rec = KeyRecord(prefix="dev", label="dev-open", tier="internal", rate_limit_per_min=10_000)
+        request.state.api_key = rec
+        return rec
+
     raw = _extract(request)
     if not raw:
         raise HTTPException(

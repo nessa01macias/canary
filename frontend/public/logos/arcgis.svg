@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 32" fill="none">
+  <g stroke="#14110f" stroke-width="1.8">
+    <circle cx="16" cy="16" r="11" />
+    <ellipse cx="16" cy="16" rx="5" ry="11" />
+    <line x1="5" y1="16" x2="27" y2="16" />
+  </g>
+  <text x="38" y="22" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#14110f">ArcGIS</text>
+</svg>
