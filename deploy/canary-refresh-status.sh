@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-screen answer to "is the capture job healthy, and what did it do?"
-#   ssh root@5.78.144.35 canary-refresh-status        # recent history
-#   ssh root@5.78.144.35 'canary-refresh-status -v'   # + full log of the last run
+#   ssh deploy@144.76.58.207 canary-refresh-status        # recent history
+#   ssh deploy@144.76.58.207 'canary-refresh-status -v'   # + full log of the last run
 set -uo pipefail
 
 LOGDIR=/var/log/canary
@@ -46,7 +46,7 @@ fi
 echo
 echo "=== disk ==="
 df -h / | awk 'NR==1||NR==2'
-du -sh /opt/canary/backend/data/raw 2>/dev/null | sed 's/^/raw archive: /'
+du -sh /home/deploy/canary/backend/data/raw 2>/dev/null | sed 's/^/raw archive: /'
 
 echo
 echo "=== systemd's view of the last run ==="

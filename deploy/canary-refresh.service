@@ -1,21 +1,24 @@
 [Unit]
 Description=Canary daily capture (perishable sources only)
-Documentation=file:/opt/canary/DEPLOY.md
+Documentation=file:/home/deploy/canary/DEPLOY.md
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/opt/canary/deploy/refresh-runner.sh
-WorkingDirectory=/opt/canary/backend
+ExecStart=/home/deploy/canary/deploy/refresh-runner.sh
+WorkingDirectory=/home/deploy/canary/backend
 
 # The fetchers need API keys (Firecrawl, Census, HF) from the backend env file.
-EnvironmentFile=-/opt/canary/backend/.env
+EnvironmentFile=-/home/deploy/canary/backend/.env
 
-# This box also serves canarylayer.com on 2 shared vCPUs. The capture must always
-# lose to the API: low CPU weight, soft memory ceiling well under the 2GB total,
-# and a hard cap that fails the job rather than inviting the kernel OOM killer to
-# pick a victim (which could be the api container).
+# NOT CURRENTLY INSTALLED — see the STATUS note in refresh-runner.sh.
+#
+# This box serves canarylayer.com AND Pharos, a separate live business. The capture
+# must always lose to both: low CPU weight, a soft memory ceiling, and a hard cap
+# that fails the job rather than inviting the kernel OOM killer to pick a victim
+# (which could be the api container, or one of Pharos's). The limits stay tight even
+# though the EX44 has 62GB — the point is blast radius, not scarcity.
 CPUWeight=20
 IOWeight=20
 MemoryHigh=512M
@@ -24,7 +27,7 @@ TasksMax=256
 
 # Filesystem containment: it only ever writes the raw archive and its own logs.
 ProtectSystem=strict
-ReadWritePaths=/opt/canary/backend/data /var/log/canary
+ReadWritePaths=/home/deploy/canary/backend/data /var/log/canary
 ProtectHome=yes
 PrivateTmp=yes
 NoNewPrivileges=yes

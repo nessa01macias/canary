@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-# Canary off-laptop capture runner (Hetzner 5.78.144.35, invoked by canary-refresh.timer).
+# Canary off-laptop capture runner (invoked by canary-refresh.timer).
+#
+# STATUS: written but NEVER INSTALLED. It was authored for the old standalone CPX11
+# (deleted 2026-08-12) and assumes a Python venv at backend/venv on the server. The
+# EX44 that Canary now shares with Pharos runs containers only — there is no venv
+# there — so this needs a rethink (run it inside the api image, or keep capture on a
+# workstation) before it can be enabled. Paths below are updated to the new host so
+# the file is not actively misleading; that is all.
 #
 # Captures the PERISHABLE daily sources only — state dumps and rolling windows that
 # the source stops serving tomorrow. It deliberately does NOT run the weekly/monthly
-# archive pulls or `make pipeline`: this box has 2 vCPU / 2GB RAM and shares its disk
-# with production, and a full rebuild would exhaust both. Those stay on a workstation.
+# archive pulls or `make pipeline`. The old reason was that the 2GB box would exhaust
+# itself; the reason now is stronger: this host also runs Pharos, a live revenue
+# business, and the raw archive lives on the workstation anyway.
 #
 # Everything it does is logged three ways:
 #   journald           journalctl -u canary-refresh          (systemd's own record)
@@ -12,7 +20,7 @@
 #   run ledger         /var/log/canary/runs.jsonl            (one JSON line per run)
 set -uo pipefail
 
-REPO=/opt/canary
+REPO=/home/deploy/canary
 BACKEND="$REPO/backend"
 PY="$BACKEND/venv/bin/python"
 LOGDIR=/var/log/canary
@@ -74,7 +82,8 @@ fi
   echo
 } | tee -a "$RUNLOG"
 
-# nice/ionice keep the fetch from competing with the API for the 2 shared vCPUs.
+# nice/ionice keep the fetch from competing with the API — and, on the shared EX44,
+# with Pharos.
 timeout --signal=TERM --kill-after=60 "$MAX_SECONDS" \
   nice -n 10 ionice -c2 -n7 \
   "$PY" -m app.ingestion.refresh --tier daily --fetch-only \

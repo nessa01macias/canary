@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
-# One-time setup for a fresh Hetzner Ubuntu box (24.04 / 26.04). Run AS ROOT on the
-# server. Installs Docker + Compose, a basic firewall, and prepares /opt/canary.
+# NOT the current deployment path. Kept for the standalone-box case only.
+#
+# Since 2026-08-12 Canary shares the Hetzner EX44 with Pharos, where Docker, the
+# firewall and the edge proxy (pharos-caddy) already exist — so none of this runs.
+# Standing Canary up there is: git clone to /home/deploy/canary, scp the .env, push
+# the DuckDB, `docker network create canary_edge`, `docker compose up -d`, then add
+# the canarylayer.com block to /home/deploy/pharos/Caddyfile. See DEPLOY.md.
+#
+# NEVER run this against the EX44: it would install packages and enable ufw on a box
+# running someone else's production. It is for a fresh, dedicated, empty server.
+#
+# One-time setup for a fresh Hetzner Ubuntu box (24.04 / 26.04). Run AS ROOT.
+# Installs Docker + Compose, a basic firewall, and prepares the repo dir.
 #
 #   ssh root@<server-ip> 'bash -s' < deploy/bootstrap-server.sh
-#
-# After this: push canary.duckdb (deploy/push-duckdb.sh), copy the repo + .env, then
-# `docker compose up -d --build`. See DEPLOY.md.
 set -euo pipefail
 
 REMOTE_DIR="${CANARY_REMOTE_DIR:-/opt/canary}"

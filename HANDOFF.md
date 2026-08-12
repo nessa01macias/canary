@@ -197,14 +197,17 @@ The move off the RELEX MacBook is done. Kept here as the record of what was
 carried and where it now lives; the checklist itself no longer needs doing.
 
 1. **SSH key** — `id_ed25519` (+ .pub) now at `C:\Users\PC\.ssh\`, verified against
-   root@5.78.144.35. Still the only key the server trusts; Hetzner web console is
-   the fallback if it is ever lost.
+   root@5.78.144.35. *(Superseded 2026-08-12: that box is deleted. The server key is
+   now `resources/claude_pharos_mel` for `deploy@144.76.58.207` — gitignored, and
+   also held in the Pharos repo. `id_ed25519` no longer opens anything of ours.)*
 2. **The three gitignored env files** — restored to `.env`, `backend/.env`,
    `frontend/.env`. All real keys live here and none are in git.
 3. **`backend/data/`** — recovered from `/opt/canary-archive/data` on the Hetzner
    box (18 GB: 17 GB raw + `canary.duckdb` + `staged/` + `processed/`), which is
-   where the old laptop had staged it. That server copy is the only off-laptop
-   backup of the raw archive; do not delete it until a real backup exists.
+   where the old laptop had staged it. *(Superseded 2026-08-12: that server was
+   deleted, but the archive was copied to `/home/deploy/canary-archive` on the EX44
+   first and verified byte-for-byte — 58 directories, 454 files, identical. So the
+   off-laptop backup still exists, now on a box that costs nothing extra.)*
 4. **Dev environment** — `backend/venv` rebuilt (see the Windows dependency notes
    under "Environment gotchas"), `frontend` `npm ci` clean, production build green,
    GNU make installed.

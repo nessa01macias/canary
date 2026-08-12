@@ -1,6 +1,6 @@
 [Unit]
 Description=Run the Canary daily capture at 09:00 UTC
-Documentation=file:/opt/canary/DEPLOY.md
+Documentation=file:/home/deploy/canary/DEPLOY.md
 
 [Timer]
 # 09:00 UTC = 01:00/02:00 Pacific — after the overnight DataSF/state refreshes have
