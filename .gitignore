@@ -4,3 +4,11 @@
 !.env.example
 
 canary-migration/
+
+# Credentials and private material that live in the working tree but must never
+# be committed. resources/ holds the Pharos SSH private key — and the deploy
+# routine in DEPLOY.md opens with `git add -A`, so without this line one routine
+# deploy would publish it. research/ and the pitch deck are private work product.
+resources/
+research/
+*.pptx
