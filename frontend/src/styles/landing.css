@@ -693,33 +693,6 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ── Map password gate ("Enter the map") ─────────────────────────────────
-   Reuses .contact-overlay/.contact-card (the default, non-calendly size) —
-   this is just a small form in the same modal chrome. */
-.gate-sub {
-  color: var(--grey);
-  font-size: 14px;
-  margin: 0 0 20px;
-}
-.gate-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.gate-input {
-  font: inherit;
-  font-size: 15px;
-  padding: 11px 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--ink);
-  background: #fff;
-}
-.gate-input:focus { outline: none; border-color: var(--orange); }
-.gate-input.is-error { border-color: #d64545; }
-.gate-error { color: #d64545; font-size: 13px; margin: 0; }
-.gate-submit { width: 100%; margin-top: 4px; }
-
 /* ── Docs popup ("See how it works") ──────────────────────────────────────
    Docs.tsx (shared with the main app) brings its own docs.css/docs-paper.css
    chrome, imported directly by Landing.tsx. Two things that chrome assumes

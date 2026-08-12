@@ -1,10 +1,7 @@
-import { useState } from 'react'
-import App from './App'
 import { Landing } from './components/Landing'
 
-// The gate: every load lands on the landing page first (the front door);
-// entering swaps in the actual product (the map IS the demo).
+// The landing page is the entire public site — the map is unreleased, with
+// no UI path to reach it from here (see Landing.tsx).
 export default function Root() {
-  const [entered, setEntered] = useState(false)
-  return entered ? <App /> : <Landing onEnter={() => setEntered(true)} />
+  return <Landing />
 }

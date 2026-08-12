@@ -5,22 +5,18 @@ import '../styles/docs-paper.css'
 import { Docs } from './Docs'
 import { DotWorldMap } from './DotWorldMap'
 
-// The front door, shown before the map on every load. Two-panel narrative
-// (Ramp's "Systems that never spoke" → "Now sing together"): the scattered
-// public record resolves into one cited API call. Sections 2+3 are ONE
-// scroll-pinned stage (see ScatterStage below) — the same six cards fade
-// from full color to ghosted as you scroll, with the status card and second
-// headline crossfading in, instead of two disconnected static screens.
+// The front door — the only public surface. Two-panel narrative (Ramp's
+// "Systems that never spoke" → "Now sing together"): the scattered public
+// record resolves into one cited API call. Sections 2+3 are ONE scroll-pinned
+// stage (see ScatterStage below) — the same six cards fade from full color to
+// ghosted as you scroll, with the status card and second headline
+// crossfading in, instead of two disconnected static screens.
 //
-// Nothing on this page routes straight to the map: "See how it works" opens
-// the Docs popup (read-only, no gate), and every "Enter the map" opens a
-// password prompt (MapGateModal) — onEnter only fires after that succeeds.
-// "Book a demo call" opens a Calendly booking popup — a direct call slot
-// beats a contact form nobody replies to promptly.
+// Nothing on this page grants map access — the map is unreleased. "See how
+// it works" opens the Docs popup (read-only). "Book a demo call" opens a
+// Calendly booking popup — a direct call slot beats a contact form nobody
+// replies to promptly.
 const CALENDLY_URL = 'https://calendly.com/kattch/canary-chat?hide_gdpr_banner=1'
-const MAP_PASSWORD = 'san francisco'
-
-type Props = { onEnter: () => void }
 
 // The scattered "before" artifacts — one parcel (1200 Weston St), five
 // authorities, six sources. Each carries its own real asset (dropped into
@@ -404,17 +400,16 @@ const VALUE_BLOCKS = [
   },
 ]
 
-export function Landing({ onEnter }: Props) {
+export function Landing() {
   const [contactOpen, setContactOpen] = useState(false)
   const [docsOpen, setDocsOpen] = useState(false)
-  const [mapGateOpen, setMapGateOpen] = useState(false)
 
   // Unlike the app shell (a fixed-size view that never scrolls), this is a
   // long scrolling page — with nothing locking body scroll, wheel/trackpad
   // input over a popup that hits its own scroll limit chains straight up to
   // the page behind it, which is visible (and visibly moving) through the
   // scrim. Lock it for as long as any popup is open.
-  const anyModalOpen = contactOpen || docsOpen || mapGateOpen
+  const anyModalOpen = contactOpen || docsOpen
   useEffect(() => {
     if (!anyModalOpen) return
     const prevOverflow = document.body.style.overflow
@@ -427,7 +422,6 @@ export function Landing({ onEnter }: Props) {
       <nav className="landing-nav">
         <span className="landing-brand">canary</span>
         <div className="landing-nav-right">
-          <button className="landing-nav-link" onClick={() => setMapGateOpen(true)}>Enter the map</button>
           <button className="landing-btn landing-btn-primary landing-btn-sm" onClick={() => setContactOpen(true)}>
             Book a demo call
           </button>
@@ -513,18 +507,11 @@ export function Landing({ onEnter }: Props) {
         <span>canary</span>
         <div className="landing-footer-links">
           <button onClick={() => setContactOpen(true)}>Book a demo call</button>
-          <button onClick={() => setMapGateOpen(true)}>Enter the map</button>
         </div>
       </footer>
 
       {contactOpen && <ContactModal onClose={() => setContactOpen(false)} />}
       {docsOpen && <Docs onClose={() => setDocsOpen(false)} />}
-      {mapGateOpen && (
-        <MapGateModal
-          onClose={() => setMapGateOpen(false)}
-          onSuccess={() => { setMapGateOpen(false); onEnter() }}
-        />
-      )}
     </div>
   )
 }
@@ -568,59 +555,3 @@ function ContactModal({ onClose }: { onClose: () => void }) {
   )
 }
 
-// The map is gated behind a password — this is the pre-launch build, not the
-// public product yet. Correct password calls onSuccess, which is what
-// actually mounts the map (Root's onEnter); wrong password just shakes out
-// an inline error, no navigation happens either way until it matches.
-function MapGateModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
-  const [value, setValue] = useState('')
-  const [error, setError] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    inputRef.current?.focus()
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (value.trim().toLowerCase() === MAP_PASSWORD) {
-      onSuccess()
-    } else {
-      setError(true)
-    }
-  }
-
-  return (
-    <div
-      className="contact-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Enter the map"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="contact-card">
-        <button className="contact-close" onClick={onClose} aria-label="Close">&times;</button>
-        <h2>Enter the map</h2>
-        <p className="gate-sub">This is a pre-launch build &mdash; enter the password to continue.</p>
-        <form onSubmit={submit} className="gate-form">
-          <input
-            ref={inputRef}
-            type="password"
-            value={value}
-            onChange={(e) => { setValue(e.target.value); setError(false) }}
-            placeholder="Password"
-            aria-label="Password"
-            aria-invalid={error}
-            className={`gate-input${error ? ' is-error' : ''}`}
-            autoComplete="off"
-          />
-          {error && <p className="gate-error">That&rsquo;s not it &mdash; try again.</p>}
-          <button type="submit" className="landing-btn landing-btn-primary gate-submit">Enter</button>
-        </form>
-      </div>
-    </div>
-  )
-}
