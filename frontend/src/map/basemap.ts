@@ -115,29 +115,101 @@ export function declutterBasemap(map: maplibregl.Map) {
   }
 }
 
+// The one true transfer stations SF reads as landmarks — the Market St subway
+// halls where every Muni Metro line converges, plus the Caltrain terminal and
+// the two well-connected Central Subway stops. These are the ONLY `station`s we
+// keep at city scale (see wireStationZoomScope). Names are matched exactly
+// against the vendor `name`, so surface platforms that share a street name
+// ("Church Street & 18th Street" vs the "Church" hall) never sneak in.
+const LANDMARK_STATIONS = [
+  // Market St subway (Muni Metro) — the underground interchange halls
+  'Embarcadero',
+  'Montgomery Street',
+  'Powell Street',
+  'Civic Center',
+  'Van Ness',
+  'Church',
+  'Castro',
+  'Forest Hill',
+  'West Portal',
+  // Caltrain terminal / T-Third
+  'San Francisco 4th & King Street',
+  // Central Subway — new, and each connects to the Market St spine
+  'Chinatown-Rose Pak',
+  'Union Square/Market Street',
+]
+
+// The one ferry landmark that reads at city scale: the Ferry Building, an
+// actual transfer hub (ferries + F-line + Muni Metro/BART at Embarcadero). The
+// vendor's `Transport` layer tags a dozen ferry terminals the same way — Pier
+// 41 Gate 1/2, Red & White Fleet, Oracle Park, Alcatraz, Treasure Island… —
+// so, exactly like the rail stations, we curate rather than trust the tag.
+const LANDMARK_FERRIES = ['San Francisco Ferry Building', 'Ferry Building']
+
 // Transit stops: outdoor-v2's `Station` layer draws every named bus/tram/
 // subway stop from ~z12, which buries SF in icons at the city-wide framing.
-// We tighten it in two ways, and let it relax back as you zoom in to the
-// street. The base filter keeps `has name` (unnamed stops never show), so
-// the only question is WHICH named stops appear this far out.
+// We tighten it hard when zoomed out and let it relax back at the street.
 // outdoor-v2 marks the Station label `text-optional`, so the icon still
 // draws when its name is culled by label-collision — that's the bare,
 // "unnamed"-looking icons. Tie the icon to its label: no visible name,
 // no icon.
 export function wireStationZoomScope(map: maplibregl.Map) {
+  // Never a bare, label-less icon on either transit layer: if the name can't
+  // place, drop the icon with it. (outdoor-v2 defaults both to text-optional.)
   if (map.getLayer('Station')) map.setLayoutProperty('Station', 'text-optional', false)
+  if (map.getLayer('Transport')) map.setLayoutProperty('Transport', 'text-optional', false)
+
+  // The `Transport` layer (ferries, plus non-transit parking/bike/car POIs)
+  // ships street-only (z14+). Let it *reach* zoom-out so the landmark ferry can
+  // show there — the filter below, not the zoom range, decides what actually
+  // draws that far out.
+  if (map.getLayer('Transport')) map.setLayerZoomRange('Transport', 11, 24)
+
+  // The vendor's full `Transport` filter — every POI class it draws at street
+  // zoom. We restore exactly this once past STREET_ZOOM so nothing vendor-side
+  // is lost; zoom-out swaps in the landmark-ferry-only filter instead.
+  const transportCloseIn: maplibregl.FilterSpecification = [
+    'all',
+    ['==', '$type', 'Point'],
+    [
+      'in',
+      'class',
+      'aerialway', 'bicycle', 'bicycle_parking', 'car', 'car_rental',
+      'car_repair', 'cycle_barrier', 'ferry_terminal', 'harbor',
+      'motorcycle_parking', 'parking', 'parking_garage', 'parking_paid',
+    ],
+  ]
 
   const setStationScope = (z: number) => {
+    if (map.getLayer('Transport')) {
+      // Below street zoom, the only Transport POI worth a label is the landmark
+      // ferry hub — everything else (parking, bike racks, minor ferry gates)
+      // waits until you're zoomed in.
+      const ferryFarOut: maplibregl.FilterSpecification = [
+        'all',
+        ['==', 'class', 'ferry_terminal'],
+        ['in', 'name', ...LANDMARK_FERRIES],
+      ]
+      map.setFilter('Transport', z >= STREET_ZOOM ? transportCloseIn : ferryFarOut)
+    }
     if (!map.getLayer('Station')) return
-    // Below street zoom, only the landmark stations — major interchanges the
-    // vendor tags with subclass `station` (Caltrain, the big Muni/BART halls,
-    // ferry terminals). Individual bus_stop / tram_stop / subway platforms are
-    // dropped until you're zoomed in far enough to actually route by them.
+    // Below street zoom, only the genuine transfer hubs. The vendor is no help
+    // here: it tags EVERY light-rail platform (Marin Street, Evans, Judah & La
+    // Playa…) with the same subclass `station` as the real Muni Metro halls,
+    // and its `rank` is a local label-collision priority, not importance —
+    // sparse outlying stops score rank 1 and win the label fight while the
+    // downtown interchanges get culled. So we curate: keep ALL BART
+    // (subclass `subway`) plus a hand-picked allowlist of the Muni Metro /
+    // Caltrain landmarks. Everything else waits until you're zoomed in far
+    // enough to actually route by it.
     const farOut: maplibregl.FilterSpecification = [
       'all',
-      ['in', 'class', 'bus', 'railway'],
       ['has', 'name'],
-      ['==', 'subclass', 'station'],
+      [
+        'any',
+        ['==', 'subclass', 'subway'],
+        ['in', 'name', ...LANDMARK_STATIONS],
+      ],
     ]
     const closeIn: maplibregl.FilterSpecification = [
       'all',

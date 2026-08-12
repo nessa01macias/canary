@@ -57,6 +57,11 @@ export const ENABLED_MODES: CommuteMode[] = MODES.filter((m) => m.enabled).map((
 export const ROUTE_COLORS = ['#2E9E7E', '#2F6BE0', '#D2762B']
 export const routeColor = (i: number) => ROUTE_COLORS[i % ROUTE_COLORS.length]
 
+// The origin ("you are here") color. Every route line fades FROM this blue at the
+// origin TO its destination's color — so a green destination reads as a blue→green
+// gradient, tying both ends of the line to the dot it springs from.
+export const ORIGIN_COLOR = '#2F6BE0'
+
 const STORE_KEY = 'canary.commute.destinations.v1'
 
 export function loadDestinations(): Destination[] {
