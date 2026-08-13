@@ -241,6 +241,15 @@ class GateEventIn(BaseModel):
     area: str | None = Field(default=None, max_length=80)
 
 
+class LocalDataSignalIn(BaseModel):
+    """One free-text answer to the landing page's 'what unscrapable local
+    knowledge would be most valuable' prompt — research input for a possible
+    future consumer product, not tied to any account or contribution."""
+
+    answer: str = Field(min_length=1, max_length=500)
+    session_id: str = Field(min_length=8, max_length=64)
+
+
 # --------------------------------------------------------------------------- #
 #  Resident layer — the READ side of the moat. k-anonymised (n ≥ 3) aggregates
 #  only; raw reviews are unreadable by design (RLS has no SELECT policy).

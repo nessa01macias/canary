@@ -4,3 +4,10 @@
 !.env.example
 
 canary-migration/
+
+# Personal Claude Code config — pre-push quality gate + its state marker.
+.claude/settings.local.json
+.claude/.last-reviewed-sha
+
+node_modules/
+.DS_Store

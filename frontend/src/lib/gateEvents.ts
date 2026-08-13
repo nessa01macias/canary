@@ -11,7 +11,10 @@ import { apiFetch } from './api'
 
 export type GateVariant = 'report_unlock' | 'founding'
 
-function sessionId(): string {
+// Exported for reuse by other fire-and-forget client-side signals (e.g.
+// localDataSignal.ts) that want the same session grouping as gate events,
+// without each one minting its own separate id.
+export function sessionId(): string {
   let id = localStorage.getItem('canary_session')
   if (!id) {
     id = crypto.randomUUID()

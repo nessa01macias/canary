@@ -31,6 +31,7 @@ from .schemas import (
     Citation,
     ContributionIn,
     GateEventIn,
+    LocalDataSignalIn,
     MetricInfo,
     ResidentAreaAgg,
     ResidentHexAgg,
@@ -395,6 +396,22 @@ async def post_gate_event(body: GateEventIn) -> dict:
         raise HTTPException(503, "Events store not configured on the server.")
     try:
         await store.insert_gate_event(body.model_dump(exclude_none=True))
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"ok": True}
+
+
+@router.post("/local-data-signals", status_code=201)
+async def post_local_data_signal(body: LocalDataSignalIn) -> dict:
+    """
+    One free-text answer to the landing page's 'what unscrapable local
+    knowledge would be most valuable' prompt — research input for a possible
+    future consumer product. No PII, insert-only store.
+    """
+    if not store.supabase_configured():
+        raise HTTPException(503, "Events store not configured on the server.")
+    try:
+        await store.insert_local_data_signal(body.model_dump())
     except RuntimeError as e:
         raise HTTPException(502, str(e))
     return {"ok": True}
