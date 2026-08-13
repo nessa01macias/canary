@@ -122,6 +122,11 @@ const SECTOR_ROW_2 = SECTORS.filter((_, i) => i % 2 === 1)
 
 function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
   e.currentTarget.style.display = 'none'
+  // ScatterCard's fallback text starts hidden and depends on this to ever
+  // show. StackLogo's sibling (the name label) doesn't carry 'is-hidden' at
+  // all, so this is a harmless no-op there — safe to run unconditionally
+  // for every onImgError caller instead of splitting the two behaviors.
+  e.currentTarget.nextElementSibling?.classList.remove('is-hidden')
 }
 
 function SectorCard({ sector }: { sector: (typeof SECTORS)[number] }) {

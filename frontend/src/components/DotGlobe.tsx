@@ -100,6 +100,12 @@ const EMPTY_HOVER: HoverState = { center: null, rings: RINGS.map(() => []) }
 type FlareGroupDescriptor = {
   indices: number[]
   timerId: number | null
+  // The inline-style fade-out scheduled by extinguish(false) — one per
+  // member of the group, since each schedules its own (landing.css's shared
+  // transition is too snappy to read as decay, see extinguish below).
+  // Tracked so useMiniFlares' unmount cleanup can cancel them too, not just
+  // the hold timer.
+  fadeTimerIds: number[]
   extinguish: (immediate: boolean) => void
 }
 
@@ -134,6 +140,12 @@ function useHoverGlow(
 ) {
   const svgRef = useRef<SVGSVGElement>(null)
   const rafRef = useRef<number | null>(null)
+  // Updated on every mousemove regardless of throttle state, so the rAF
+  // callback below always reads the latest position by the time it actually
+  // runs — closing over the event that scheduled the frame instead would
+  // use a stale position for every mousemove event dropped by the `if
+  // (rafRef.current != null) return` throttle during fast cursor movement.
+  const latestPointRef = useRef({ x: 0, y: 0 })
 
   const clearHover = () => {
     const prev = hoverRef.current
@@ -147,7 +159,7 @@ function useHoverGlow(
   }
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-    const { clientX, clientY } = e
+    latestPointRef.current = { x: e.clientX, y: e.clientY }
     if (rafRef.current != null) return
     rafRef.current = requestAnimationFrame(() => {
       rafRef.current = null
@@ -155,8 +167,8 @@ function useHoverGlow(
       const ctm = svg?.getScreenCTM()
       if (!svg || !ctm) return
       const screenPoint = svg.createSVGPoint()
-      screenPoint.x = clientX
-      screenPoint.y = clientY
+      screenPoint.x = latestPointRef.current.x
+      screenPoint.y = latestPointRef.current.y
       const local = screenPoint.matrixTransform(ctm.inverse())
 
       let nearestIdx = -1
@@ -238,6 +250,12 @@ function useMiniFlares(
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     let timeoutId: number
+    // Every descriptor with a still-pending hold or fade timer — so unmount
+    // can cancel them all, not just the next scheduled `fire`. Without this,
+    // a flare mid-hold or mid-fade when DotGlobe unmounts (e.g. navigating
+    // off the landing page) keeps its timers running for up to ~6s after,
+    // touching detached SVG nodes.
+    const liveDescriptors = new Set<FlareGroupDescriptor>()
 
     const fire = () => {
       const centerIdx = Math.floor(Math.random() * pointCount)
@@ -260,6 +278,7 @@ function useMiniFlares(
       const descriptor: FlareGroupDescriptor = {
         indices: group.map(({ i }) => i),
         timerId: null,
+        fadeTimerIds: [],
         extinguish: (immediate) => {
           if (descriptor.timerId != null) { window.clearTimeout(descriptor.timerId); descriptor.timerId = null }
           group.forEach(({ i, cls }) => {
@@ -292,14 +311,19 @@ function useMiniFlares(
               glow.style.transition = 'opacity 4.4s cubic-bezier(0.22, 1, 0.36, 1)'
               glow.style.opacity = '0'
             }
-            window.setTimeout(() => {
+            const fadeTimerId = window.setTimeout(() => {
               glow?.classList.remove(cls)
               if (glow) { glow.style.opacity = ''; glow.style.transition = '' }
+              descriptor.fadeTimerIds = descriptor.fadeTimerIds.filter((id) => id !== fadeTimerId)
+              if (descriptor.fadeTimerIds.length === 0) liveDescriptors.delete(descriptor)
             }, 4400)
+            descriptor.fadeTimerIds.push(fadeTimerId)
           })
+          if (immediate) liveDescriptors.delete(descriptor)
         },
       }
 
+      liveDescriptors.add(descriptor)
       group.forEach(({ i, cls }) => {
         activeMiniFlares.current.add(i)
         activeFlareGroups.current.set(i, descriptor)
@@ -326,7 +350,14 @@ function useMiniFlares(
     }
     timeoutId = window.setTimeout(fire, 1000 + Math.random() * 2400)
 
-    return () => window.clearTimeout(timeoutId)
+    return () => {
+      window.clearTimeout(timeoutId)
+      liveDescriptors.forEach((d) => {
+        if (d.timerId != null) window.clearTimeout(d.timerId)
+        d.fadeTimerIds.forEach((id) => window.clearTimeout(id))
+      })
+      liveDescriptors.clear()
+    }
   }, [pointCount, glowRefs, hoverRef, activeMiniFlares, activeFlareGroups, firedRipples, fireRipple])
 }
 

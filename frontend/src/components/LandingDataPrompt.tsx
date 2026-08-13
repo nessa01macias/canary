@@ -68,6 +68,10 @@ export function LandingDataPrompt() {
 
   const removeTag = (index: number) => {
     setTags((prev) => prev.filter((_, i) => i !== index))
+    // Otherwise removing the last remaining tag re-satisfies the "Thanks"
+    // message's render condition (tags empty + answer empty) on its own,
+    // resurrecting a stale confirmation for a send that isn't happening.
+    setSentCount(0)
   }
 
   const send = (e: React.FormEvent) => {
@@ -121,7 +125,7 @@ export function LandingDataPrompt() {
           <input
             type="text"
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={(e) => { setAnswer(e.target.value); setSentCount(0) }}
             onKeyDown={handleInputKeyDown}
             placeholder={tags.length > 0 ? 'Add another…' : 'e.g. wait times for the metro'}
             aria-label="Your answer — press Enter to add"
