@@ -10,6 +10,30 @@
   /* Actual rendered nav height (22px padding + button) — used to offset the
      scatter section's own pinned stage so it doesn't scroll under the nav. */
   --nav-h: 80px;
+  /* The "frosted" preset — the glass treatment shared by the nav and every
+     card over the dot-globe background. Tune once here; every user of it
+     references these instead of repeating literals. */
+  --glass-bg: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-blur: blur(20px) saturate(160%);
+  /* Same shrink-to-fit factor .landing-scatter scales itself by (see that
+     rule for the full explanation) — shared here so anything that needs to
+     track the collage's shrink, like .landing-fanin-status's offset below
+     it, moves in lockstep instead of the gap between them stretching or
+     shrinking as the viewport-height term changes (e.g. during scroll on a
+     browser chrome that shows/hides and changes 100vh). */
+  --collage-scale: min(
+    clamp(0.42, calc((100vh - 220px) / 784px), 1),
+    calc((100vw - 48px) / 1700px)
+  );
+  /* Extra shrink on top of --collage-scale, applied ONLY to the ghosted
+     "Unblocked" state (see .landing-scatter--ghost) — the full-color "The
+     manual research…" collage keeps the plain fit-to-viewport scale. Default
+     1 = no extra shrink; the animated (scrubbed) path overrides this
+     directly via inline style, interpolated with the same progress driving
+     the ghost fade, since there it's one continuous element crossfading
+     rather than two separate sections. */
+  --ghost-shrink: 1;
   background: #fff;
   color: var(--ink);
   min-height: 100%;
@@ -24,7 +48,144 @@
 
 /* ── Fold: nav + hero + testimonial fit one screen, no orphaned peek of the
    next section's heading at the bottom edge. ─────────────────────────── */
-.landing-fold { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+.landing-fold {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* Vector reproduction of public/background_image.png (see DotGlobe.tsx /
+   dotGlobeData.ts) — centered behind the hero/testimonial, same footprint
+   the raster version had. */
+.landing-dot-globe {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(360vw, 4500px);
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: 0.9;
+  /* .landing-fold-body sits above this in the stack with pointer-events:
+     none of its own (punched through for its cards, see below) — this is
+     the thing that actually re-enables hit-testing so the SVG can see the
+     mouse at all. The transparent <rect> inside gives it a full-bleed hit
+     area instead of only the painted dots. */
+  pointer-events: auto;
+}
+/* The dot-globe is clipped hard by .landing-fold's overflow:hidden — the
+   graphic itself has no idea where that boundary is, so whatever row of
+   (potentially large, dark) dots happens to land there gets sliced clean
+   off instead of tapering out. This sits above it (still below the actual
+   content) and washes the last stretch before that edge to white, so the
+   transition into the next section reads as a fade, not a crop line. */
+.landing-fold-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 82%, #fff 100%);
+}
+/* Both circles pulse together, in lockstep — same --pulse-r-min/-max, same
+   delay/duration (see PULSE_STYLE in DotGlobe.tsx, applied to both). They
+   have to move as one: if only the base ink circle's radius animated, the
+   glow overlay (static at the original radius) would peek out past it
+   whenever the base shrank, showing up as a pale ring/stroke-looking halo
+   around every hovered/flashing dot instead of a clean solid circle. */
+.landing-dot-globe-point,
+.landing-dot-globe-glow {
+  animation-name: landing-dot-pulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.landing-dot-globe-point {
+  fill: var(--ink);
+  stroke: none;
+  /* Animates the actual `r` attribute (modern browsers expose SVG geometry
+     properties to CSS), not transform: scale — scale has no awareness of
+     neighboring dots and would let an already-max-size dot grow straight
+     into the ones next to it. --pulse-r-min/-max are set per-dot inline
+     (DotGlobe.tsx), pre-clamped to MAX_RADIUS, so growth is capped at
+     exactly the ceiling that keeps every dot touching-but-not-overlapping
+     at rest. */
+}
+@keyframes landing-dot-pulse {
+  0%, 100% { r: var(--pulse-r-min); }
+  50% { r: var(--pulse-r-max); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-dot-globe-point,
+  .landing-dot-globe-glow { animation: none; }
+}
+/* Orange glow overlay, same position/radius as each base dot, invisible by
+   default. Sits directly on top of the (fully opaque) ink base, so a
+   fractional opacity here composites cleanly against ink rather than
+   diluting toward the page background. */
+.landing-dot-globe-glow {
+  fill: var(--orange);
+  stroke: none;
+  opacity: 0;
+  /* fill is here too, not just opacity — is-ripple swaps fill to amber and
+     back as the wave passes a dot (see DotGlobe.tsx), and without a
+     transition on fill specifically that swap snapped instantly even
+     though the surrounding opacity fades were smooth. */
+  transition: opacity 0.2s ease, fill 0.2s ease;
+}
+/* Ambient sparks (see useMiniFlares in DotGlobe.tsx) — a small cross of
+   dots lighting up on its own, same orange as a hover. The center dot at
+   full ambient brightness, its four touching neighbors fainter, so the
+   spark reads as one small flare instead of five equal dots. Fade-IN only
+   — the shared opacity transition on the base rule handles that for free
+   when the class is added; fade-OUT is deliberately NOT this transition
+   (see DotGlobe.tsx, which hands off to a slow inline-style fade instead),
+   since this 0.2s is tuned for hover's snappy in/out and shouldn't have to
+   also serve a much slower ambient decay. Declared BEFORE every is-hover-*
+   rule on purpose: hovering a dot mid-ambient-flare should always read as a
+   normal, fully-bright hover, not get muted to the flare's own (fainter,
+   here-and-gone) opacity. */
+.landing-dot-globe-glow.is-mini-flare { opacity: 0.85; }
+.landing-dot-globe-glow.is-mini-flare-arm { opacity: 0.5; }
+.landing-dot-globe-glow.is-hover-center { opacity: 1; }
+/* Plain opacity fade of the same var(--orange) — unlike the old light-grey
+   map (where fading orange toward a pale base drifted pink, fixed by
+   swapping in amber), this base is dark ink: blending toward black
+   preserves hue almost exactly, it just darkens/deepens. Amber would
+   actually make it WORSE here — its hue is already shifted yellow of
+   --orange, and blending that over dark ink pushed it further off toward
+   yellow-brown instead of staying "canary orange". No per-ring scale here
+   (tried it, reverted) — a uniform transform:scale on every lit dot
+   ignores each dot's own r, so small halftone dots got blown up to the
+   same visual size as big ones and the flare lost the underlying darkness
+   pattern entirely. Size stays exactly the base dot's own r; only opacity
+   changes, kept high through the inner rings so it reads as a solid
+   orange blot instead of fading to ink a couple of rings out. */
+.landing-dot-globe-glow.is-hover-ring1 { opacity: 0.95; }
+.landing-dot-globe-glow.is-hover-ring2 { opacity: 0.8; }
+/* Rings 3-7 are single cardinal spikes (top/bottom/left/right only, see
+   DotGlobe.tsx's CARDINAL_RING) continuing straight out from the diamond,
+   each fainter than the last — two extra rings past the old ring5 ceiling
+   give the spikes more reach so the flare is bigger overall, not just
+   brighter at the core. */
+.landing-dot-globe-glow.is-hover-ring3 { opacity: 0.6; }
+.landing-dot-globe-glow.is-hover-ring4 { opacity: 0.42; }
+.landing-dot-globe-glow.is-hover-ring5 { opacity: 0.26; }
+.landing-dot-globe-glow.is-hover-ring6 { opacity: 0.14; }
+.landing-dot-globe-glow.is-hover-ring7 { opacity: 0.06; }
+/* The ripple wave (see useRippleWave in DotGlobe.tsx) — touching a mini-flare
+   sends a ring of this color expanding outward across the whole map, then
+   fading back to nothing. Same var(--amber) previously used for the
+   hover/mini-flare "infection" combo this replaced — still reads as a
+   distinct "something happened" signal against the hover/ambient orange.
+   Fully opaque, not a fraction — same reasoning as is-hit below: at partial
+   opacity the amber blends with whatever's under it, and since the base ink
+   dots vary a lot in their own opacity (halftone darkness), that blend was
+   inconsistent dot-to-dot — some read muddy brown, some clean amber. Full
+   opacity fully covers the ink so every lit dot reads as the same
+   saturated color regardless of what it started as. Declared last so it
+   wins the fill tie on any dot the wave is currently passing through
+   that's also lit some other way. */
+.landing-dot-globe-glow.is-ripple { fill: var(--amber); opacity: 1; }
 .landing-fold-body {
   position: relative;
   z-index: 1;
@@ -34,6 +195,12 @@
   justify-content: center;
   gap: clamp(48px, 8vw, 88px);
   padding: 24px 0;
+  /* Even with no background, this box would otherwise sit above (and so
+     block mouse events from reaching) the dot-map behind it — punch a hole
+     here and re-enable pointer-events only on the actual cards below, so
+     hovering the empty space around them still reaches the map's hover
+     glow. */
+  pointer-events: none;
 }
 
 /* ── Nav ─────────────────────────────────────────────────────────────── */
@@ -46,7 +213,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #fff;
+  /* Frosted glass — same recipe as .landing-hero / cards below. */
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: 0 8px 32px rgba(20, 17, 15, 0.06);
 }
 .landing-brand {
   font-size: 19px;
@@ -70,7 +241,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 999px;
   padding: 13px 22px;
   font-size: 15px;
   font-weight: 600;
@@ -84,14 +255,39 @@
 .landing-btn-primary:hover { opacity: 0.88; }
 .landing-btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
 .landing-btn-ghost:hover { border-color: var(--ink); }
-.landing-btn-sm { padding: 9px 16px; font-size: 13.5px; border-radius: 7px; }
+.landing-btn-sm { padding: 9px 16px; font-size: 13.5px; }
 
 /* ── Hero ────────────────────────────────────────────────────────────── */
 .landing-hero {
   text-align: center;
-  padding: 0 20px;
-  max-width: 900px;
+  padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 48px);
+  max-width: 820px;
+  /* Explicit width, not just margin:auto — as a flex item of
+     .landing-fold-body (column flex, default align-items:stretch), an auto
+     cross-axis margin disables stretch and shrinks the box to fit its
+     content instead, which was rendering this narrower than
+     .landing-testimonial-card below it despite matching max-width. Explicit
+     width sidesteps that: fills the row up to the cap, margin:auto still
+     centers it once max-width binds on wide screens. The -40px matches
+     .landing-testimonial-section's own 0 20px padding, which insets the
+     testimonial card the same amount from the other side (its own
+     margin:auto) — so both cards land on the same outer edges instead of
+     hero running edge-to-edge while the testimonial sits inset. */
+  width: calc(100% - 40px);
   margin: 0 auto;
+  /* Frosted glass over the dot-globe background. Width matches
+     .landing-testimonial-card below it. */
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: 0 8px 32px rgba(20, 17, 15, 0.06);
+  /* Translucent, not a real barrier — mouse events (and so the dot-map's
+     hover glow) pass straight through the card; only the buttons below
+     opt back in so they stay clickable. */
+  pointer-events: none;
 }
 .landing-hero h1 {
   font-size: clamp(38px, 6.4vw, 74px);
@@ -100,7 +296,12 @@
 .landing-sub {
   margin: 22px auto 0;
   max-width: 560px;
-  color: var(--grey);
+  /* Darker than the usual --grey — this sits on the frosted hero card over
+     the dot-globe, where background luminance varies (lighter on the left,
+     darker on the right after the blur), and --grey's contrast against the
+     darker side was borderline/failing for text this size. */
+  color: var(--ink);
+  opacity: 0.72;
   font-size: clamp(15px, 1.6vw, 18px);
   line-height: 1.55;
 }
@@ -111,6 +312,7 @@
   margin-top: 34px;
   flex-wrap: wrap;
 }
+.landing-hero-actions .landing-btn { pointer-events: auto; }
 
 
 /* ── Generic section shell ──────────────────────────────────────────── */
@@ -122,8 +324,11 @@
 }
 /* The scatter + ghost sections run wider than the text column above them —
    Ramp's chaos reads at near-full-bleed scale, not tucked into a narrow
-   reading column. */
-.landing-section--wide { max-width: 1340px; overflow-x: hidden; }
+   reading column. 1876px = 1340×1.4, kept in step with .landing-scatter's
+   own (also ×1.4'd) max-width — this was the actual bottleneck capping the
+   enlarged cluster's width and clipping its rightmost cards before the
+   inner max-width could ever bind. */
+.landing-section--wide { max-width: 1876px; overflow-x: hidden; }
 .landing-section h2 {
   font-size: clamp(26px, 3.6vw, 40px);
 }
@@ -140,12 +345,18 @@
 .landing-testimonial-card {
   max-width: 820px;
   margin: 0 auto;
-  background: #fff;
-  border: 1px solid var(--line);
+  /* Frosted glass — same recipe as .landing-hero. */
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: 0 8px 24px rgba(20, 17, 15, 0.07);
   padding: clamp(24px, 4vw, 36px) clamp(28px, 6vw, 52px);
   text-align: left;
+  /* No interactive elements inside — leave it as passthrough (inherits
+     none from .landing-fold-body) so hover reaches the map underneath. */
 }
 .landing-testimonial-quote {
   margin: 0;
@@ -169,18 +380,87 @@
 /* Deliberately uneven footprint — six identical tiles read as a product
    grid, not chaos (see the asset brief). Each card's width/height comes
    inline from SCATTER_ITEMS; position/rotation live here per card index. */
-.landing-scatter {
+/* Reserves flow height for the (position:absolute) cluster inside — plain
+   width:auto, no explicit width here, so this box itself never hits the
+   margin:auto-on-an-overwide-box case below. Height is the full unscaled
+   1043px reference regardless of how much the cluster inside is actually
+   shrunk by its own transform: transforms are paint-time only and were
+   never affecting layout height even before this wrapper existed, so this
+   preserves the exact vertical rhythm the page already had. */
+.landing-scatter-wrap {
   position: relative;
-  height: 745px;
-  max-width: 1205px;
-  margin: 64px auto 0;
-  /* Shrink the whole cluster to fit short browser windows instead of letting
-     the bottom cards run past the fold — this section can be pinned
-     (ScatterStage), so on a short viewport there'd be no way to scroll them
-     into view otherwise. 340px ≈ heading + margins + section padding above
-     it; clamped so it never inverts (negative scale) or shrinks past
-     legibility on pathologically short windows. */
-  transform: scale(clamp(0.42, calc((100vh - 340px) / 745px), 1));
+  /* Was a flat 1043px — .landing-scatter only visually shrinks via
+     transform:scale (which doesn't affect layout size), so on any viewport
+     where --collage-scale < 1 this reserved box stayed full height while
+     the collage rendered smaller inside it, leaving dead space below before
+     the next section. Scaling the reserved height the same way removes
+     that gap instead of just reserving room for the largest-possible case. */
+  /* --ghost-shrink defaults to 1 (see .landing) — for the animated path this
+     is overridden inline (ScatterStage), interpolating 1→0.8 with the same
+     progress driving the color→ghost fade, so the extra shrink phases in
+     with "Unblocked" rather than applying to "The manual research…" too. */
+  height: calc(1043px * var(--collage-scale) * var(--ghost-shrink));
+  /* margin-top only, no horizontal auto — this box's own content
+     (.landing-scatter) is position:absolute and contributes zero to its
+     intrinsic width, so `margin: auto` on the inline axis would collapse
+     it to 0 width wherever this box's sizing isn't already forced to fill
+     its container. That was a harmless no-op under plain block layout
+     (a width:auto block already fills its container, leaving auto margins
+     nothing to do) but became a real bug once .landing-scatter-stage
+     switched to a flex column (see that rule): flex's auto-margin handling
+     eats the cross-axis space instead of stretching, so the wrap collapsed
+     to 0 width, centered, instead of filling the stage. */
+  margin-top: 32px;
+}
+.landing-scatter {
+  /* Centered via position:absolute + left:50% + a negative left margin
+     (≈ half the reference width, see below), NOT margin:auto — a
+     block-level box in normal flow whose own width EXCEEDS its containing
+     block's width
+     causes the UA to treat auto margins as 0 per spec (i.e. it silently
+     left-aligns instead of centering with symmetric overflow, which is
+     exactly the "fixed reference box wider than the viewport" case here on
+     any normal screen). left:50%/negative-margin has no such caveat — an
+     explicit margin value is never "auto", so there's nothing to collapse.
+     (This is the same technique already used for .landing-scatter--ghost
+     below, now applied everywhere .landing-scatter renders instead of just
+     that one copy.) */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  /* Not simply -width/2 (-850px): the cards' actual content spans local
+     x:0 to x:1681 (card 3's left:1033px + w:648px, the rightmost edge —
+     see the width comment below), not 0 to 1700. Centering the CONTENT
+     (not the box) means shifting margin-left right by half that 19px
+     slack, to -840.5px, so the leftover space splits evenly instead of
+     sitting entirely on the right. */
+  margin-left: -840.5px;
+  /* Reference box tightened to the cards' actual bounding box — leftmost
+     edge is 0 (cards 1 and 4), rightmost is card 3's left:1033px +
+     w:648px = 1681px, so 1700px (+ ~19px slack for rotation/shadow
+     overhang) is the real footprint, not the round ×1.4-of-original-1320px
+     figure this used to be: that left ~167px of dead space on the right
+     side only, which pulled the visible cluster left of true center. */
+  width: 1700px;
+  height: 1043px;
+  /* Shrink the whole cluster to fit the viewport — both axes, not just
+     height. This section can be pinned (ScatterStage), so on a short
+     viewport there'd be no way to scroll the bottom cards into view
+     otherwise, and on a narrow-but-tall window the cards were clipping off
+     the right edge instead of shrinking to fit. Two independent ratios,
+     take whichever is more restrictive:
+     — height term: clamp(0.42, …, 1), same tuning as before (784px = 560×1.4
+       — deliberately less headroom than the raw 1043px reference height, so
+       this reaches full size on a merely modest viewport instead of
+       requiring a very tall one; floored at 0.42 so it never shrinks past
+       legibility on pathologically short windows).
+     — width term: no floor — if the viewport is too narrow for even a 0.42
+       scale to fit, width still has to win, because a clipped card is worse
+       than a smaller one. (Only matters between the 720px mobile breakpoint,
+       where a completely different static layout takes over below, and
+       roughly 900px wide — outside that range this term isn't the binding
+       one.) */
+  transform: scale(calc(var(--collage-scale) * var(--ghost-shrink)));
   transform-origin: top center;
 }
 .landing-scatter-card {
@@ -194,7 +474,11 @@
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(20, 17, 15, 0.08);
+  /* Scaled up with the cards themselves (was 0 8px 24px / 0.08) — at the
+     old, smaller card size this shadow read as a lift-off-the-page effect;
+     on the now-40%-bigger cards the same absolute shadow size read as flat,
+     since it's proportionally tiny relative to the card. */
+  box-shadow: 0 14px 40px rgba(20, 17, 15, 0.16);
   overflow: hidden;
 }
 .landing-scatter-frame img {
@@ -202,24 +486,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-/* The always-visible orange type chip — carries the page's identity whether
-   the real screenshot has landed yet or not. Straddles the frame's top edge
-   as a tab so it never sits on top of the mockup's own header text. */
-.landing-scatter-chip {
-  position: absolute;
-  top: -11px;
-  left: 14px;
-  z-index: 5;
-  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #fff;
-  background: var(--orange);
-  padding: 3px 7px;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(20, 17, 15, 0.2);
 }
 /* Fallback (no image yet): fills the exact same footprint so nothing shifts
    when a real asset drops into public/scatter/. */
@@ -253,12 +519,14 @@
 .landing-scatter-card.is-stacked::before { transform: translate(8px, 8px); }
 .landing-scatter-card.is-stacked::after { transform: translate(16px, 16px); opacity: 0.7; }
 
-.landing-scatter-card--1 { top: 0px;   left: 0px;   transform: rotate(-4deg); z-index: 3; }
-.landing-scatter-card--2 { top: 25px;  left: 375px; transform: rotate(3deg);  z-index: 4; }
-.landing-scatter-card--3 { top: 0px;   left: 738px; transform: rotate(-2deg); z-index: 2; }
-.landing-scatter-card--4 { top: 413px; left: 0px;   transform: rotate(2.5deg); z-index: 2; }
-.landing-scatter-card--5 { top: 363px; left: 538px; transform: rotate(-3deg); z-index: 4; }
-.landing-scatter-card--6 { top: 288px; left: 763px; transform: rotate(4deg);  z-index: 3; }
+/* Offsets ×1.4 of the original design (0/25/738/413/538/363/763/288 →
+   0/35/1033/578/753/508/1068/403), same as SCATTER_ITEMS' w/h. */
+.landing-scatter-card--1 { top: 0px;   left: 0px;    transform: rotate(-4deg); z-index: 3; }
+.landing-scatter-card--2 { top: 35px;  left: 525px;  transform: rotate(3deg);  z-index: 4; }
+.landing-scatter-card--3 { top: 0px;   left: 1033px; transform: rotate(-2deg); z-index: 2; }
+.landing-scatter-card--4 { top: 578px; left: 0px;    transform: rotate(2.5deg); z-index: 2; }
+.landing-scatter-card--5 { top: 508px; left: 753px;  transform: rotate(-3deg); z-index: 4; }
+.landing-scatter-card--6 { top: 403px; left: 1068px; transform: rotate(4deg);  z-index: 3; }
 
 /* ── Scroll-pinned stage (desktop, motion-ok): sections 2→3 as one scrub ──
    The wrapper is taller than its content (JS sets height = stage + extra
@@ -273,8 +541,63 @@
 .landing-scatter-stage {
   position: sticky;
   top: var(--nav-h);
+  /* Shadows the shared --collage-scale (see .landing) with numbers that
+     match THIS path's actual chrome. The shared formula's 220px/784px was
+     tuned against the static fallback's simpler overhead (no nav offset,
+     no separate fixed-height heading box) and hits its 1.0 ceiling long
+     before this stage's extra ~260px of nav+heading+margin overhead
+     actually fits — so on nearly every real browser window the graphic
+     rendered larger than the pinned area had room for, no matter how the
+     leftover space was distributed above/below it. Recomputed against this
+     stage's true fixed overhead (nav-h 80 + padding 176 + heading 148 +
+     margin 32 = 436px) and the graphic's real 1043px reference height, so
+     scale actually reaching 1 now means the graphic actually fits — which
+     is what gives the flex centering below real slack to distribute on
+     ordinary laptop screens, not just on windows taller than ~1480px.
+     Scoped to this element (not redefined on .landing) so the fallback
+     section, which never had this mismatch, keeps the original value. */
+  --collage-scale: min(
+    clamp(0.42, calc((100vh - 436px) / 1043px), 1),
+    calc((100vw - 48px) / 1700px)
+  );
+  /* Fills the pinned viewport slot instead of just shrink-wrapping its
+     content, so there's a real floor under how short the stage can get —
+     but ONLY at the top of the scrub. --center-t (Landing.tsx, phased by
+     the same cardT driving ghost-shrink) fades this floor down to 0 by the
+     time "Unblocked" settles: the wrap has shrunk to ~55% there, so a floor
+     still pinned to the full viewport left a large amount of leftover
+     space with nowhere good to go — collected below the group (flex-start,
+     see below) it read as a big dead gap before the next section; collected
+     above+below (centered, tried first) it read as the whole composition
+     drifting toward the viewport's center as you scrolled. Shrinking the
+     floor itself in step with the content sidesteps both: on short
+     viewports content is already taller than the floor at cardT=0 anyway,
+     so this has no effect there either. */
+  /* --status-floor (Landing.tsx, set every scroll/resize tick from the
+     status card's actual measured bottom) is a SECOND, independent floor:
+     the fading viewport-fill term above can and does drop below what the
+     status card itself needs once ghost-shrink has kicked in, and this
+     stage clips its own overflow — without this, the card's lower rows
+     (the source chips) got cut off right as the dead-gap-below-it shrank
+     away. Whichever floor is taller wins. */
+  min-height: max(
+    calc((100vh - var(--nav-h)) * var(--center-t, 1)),
+    var(--status-floor, 0px)
+  );
+  display: flex;
+  flex-direction: column;
+  /* flex-start, not center: pins the heading to a constant position (right
+     after padding-top) regardless of how much slack min-height above still
+     leaves — any leftover space collects below the card instead of moving
+     the heading around, which doesn't need to move once initially placed. */
+  justify-content: flex-start;
   padding: clamp(48px, 8vw, 88px) 20px;
-  max-width: 1340px;
+  /* 1876px = 1340×1.4, matching .landing-section--wide's own fix — this is
+     the ANIMATED (scroll-pinned) path's wrapper, a separate element from
+     .landing-section--wide used by the static fallback; missing this one
+     the first time round left the default (motion-enabled) path still
+     clipping the enlarged cards even after the fallback path was fixed. */
+  max-width: 1876px;
   margin: 0 auto;
   text-align: center;
   overflow: hidden;
@@ -296,18 +619,27 @@
    the SAME .landing-scatter (not a separate ghost copy), absolutely centered
    over them. JS drives opacity + translate(-50%, Ypx); left:50% here is what
    the -50% X centers against. */
-/* position:fixed + dead-center of the viewport — deliberately independent of
-   where the scatter cards land (that block can be scaled down on short
-   windows, see .landing-scatter), so the card is always centered on SCREEN,
-   not just centered within the scatter's own box. overflow:hidden on
-   .landing-scatter-stage doesn't clip this (fixed descendants only respect
-   an ancestor's overflow if that ancestor also has a transform/filter set,
-   which the stage doesn't) — that's intentional here. */
+/* position:absolute, anchored to .landing-scatter-stage (sticky, untransformed
+   ancestor — a sibling of .landing-scatter, see the JSX comment, so this
+   does NOT inherit .landing-scatter's own transform:scale) at a distance
+   below the GRAPHIC's own top edge, not the stage's. `top` here is only the
+   pre-mount fallback (a plausible guess for the un-centered layout) — once
+   mounted, Landing.tsx's useScrollProgress overwrites it every scroll/resize
+   tick from graphicRef.offsetTop + STATUS_CARD_OFFSET, so it keeps landing
+   over the same spot on the cards even as .landing-scatter-stage's own
+   vertical centering moves the graphic up or down within the stage. */
 .landing-fanin-status.is-scrubbed {
-  position: fixed;
-  top: 50%;
+  position: absolute;
+  top: 340px;
   left: 50%;
   z-index: 6;
+  /* No transition, deliberately — same rule as the rest of the scrub: 1:1
+     scroll-tracking beats a smoothed-but-laggy fade. A CSS transition here
+     was tried and made the WHOLE scrub feel sluggish (every statusT change
+     during scrolling inherited the same lag, not just the pastSection
+     cutover it was meant for) — the hard cut at the exact release pixel
+     reads as more physical, not less, since it's synced to the actual
+     scroll input like everything else. */
 }
 
 /* ── Section 3 fallback (mobile / prefers-reduced-motion): two static
@@ -316,44 +648,89 @@
    (thumbnails would throw it away). */
 .landing-fanin-ghost {
   position: relative;
-  min-height: 745px;
-  max-width: 1205px;
-  margin: 56px auto 0;
+  /* This section only ever shows the ghosted "Unblocked" state (unlike the
+     animated path, there's no full-color version of this box to shrink by
+     mistake) — --ghost-shrink here (inherited by .landing-scatter--ghost
+     below, a descendant) applies the extra shrink unconditionally. */
+  --ghost-shrink: 0.55;
+  /* Matches .landing-scatter's own reference width (see that rule) — this
+     reuses the same (now-bigger) absolute-positioned cards via
+     .landing-scatter--ghost. Height tracks --collage-scale/--ghost-shrink
+     for the same reason as .landing-scatter-wrap above: transform:scale
+     shrinks the collage visually without shrinking this reserved box,
+     leaving dead space otherwise. */
+  min-height: calc(1043px * var(--collage-scale) * var(--ghost-shrink));
+  max-width: 1700px;
+  margin: 28px auto 0;
 }
+/* position/top/left/margin-left now all come from the base .landing-scatter
+   rule (both use the same absolute + left:50%/-850px centering) — only the
+   height differs: .landing-fanin-ghost already reserves the flow space via
+   its own min-height, so this doesn't need its own fixed 1043px. */
 .landing-scatter--ghost {
-  position: absolute;
-  inset: 0;
-  margin: 0;
   height: auto;
 }
 .landing-scatter--ghost .landing-scatter-card {
-  opacity: 0.09;
+  /* Visible enough to read as "the resolved card sits on top of real
+     source documents", not just texture — both 0.09 and 0.22 read as
+     near-invisible in practice (especially at the smaller scales this
+     renders at on shorter viewports), losing the effect entirely and
+     making the status card look like it was floating on blank space
+     rather than on top of a stack. */
+  opacity: 0.45;
   filter: grayscale(1);
   box-shadow: none;
 }
-.landing-scatter--ghost .landing-scatter-chip,
 .landing-scatter--ghost .is-stacked::before,
 .landing-scatter--ghost .is-stacked::after {
   display: none;
+}
+/* Vertical offset for the fallback/ghost layout only — scoped here instead
+   of on the shared .landing-fanin-status rule below because .is-scrubbed
+   (the pinned/scrubbed variant) positions itself completely differently
+   (position:absolute + a fixed top, see above) and must not also inherit
+   this. margin-top, not `top` on a relatively-positioned box: a relative
+   offset doesn't count toward the parent's own content height, so
+   .landing-fanin-ghost's box (and therefore the gap before the next
+   section) was sized independently of where the card actually visually
+   sat — the two drifted apart across viewport sizes (this rule and
+   .landing-fanin-ghost's own min-height both scale off --collage-scale,
+   but from different starting terms), landing anywhere from the card
+   overlapping the next section to a large dead gap before it, depending on
+   viewport. margin-top makes the offset a real part of the flow, so the
+   wrapper's rendered height always actually matches. */
+.landing-fanin-ghost .landing-fanin-status {
+  margin-top: calc(220px * var(--collage-scale) * var(--ghost-shrink));
 }
 .landing-fanin-status {
   position: relative;
   z-index: 2;
   margin: 0 auto;
   width: 100%;
-  max-width: 640px;
-  top: 220px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 19px;
-  padding: 37px 43px;
+  max-width: 800px;
+  /* Frosted glass, same border/blur recipe as .landing-hero but a higher
+     background opacity (0.72 vs the shared 0.18) — this card sits over the
+     ghosted scatter cards, which are already near-white, so the standard
+     hero-strength glass (tuned for the colorful dot-map behind IT) reads as
+     basically invisible here. Denser small monospace text also needs more
+     contrast to stay legible than the hero's big bold headline does. */
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  /* Bottom padding trimmed well below top/sides — the source chips are
+     their own pill shapes with their own internal padding, so a bottom
+     inset equal to the top's reads as noticeably more empty space below
+     them than above the first text row. */
+  padding: 46px 54px 26px;
   text-align: left;
   font-family: 'SF Mono', ui-monospace, Menlo, monospace;
-  font-size: 23px;
+  font-size: 29px;
   font-weight: 600;
   line-height: 1.7;
   letter-spacing: -0.01em;
-  box-shadow: 0 27px 64px rgba(20, 17, 15, 0.16);
+  box-shadow: 0 34px 80px rgba(20, 17, 15, 0.16);
 }
 /* The typewriter caret — sits at the end of whichever row is currently
    being typed (see typingLineIdx in Landing.tsx), blinks while active. */
@@ -370,24 +747,46 @@
 .landing-fanin-status-row { color: var(--ink); }
 .landing-fanin-status-row:first-child {
   color: var(--grey);
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+}
+/* Sub-line nested under the fact right above it ("— Council Item 14
+   deferred..."), not a full-weight row of its own. */
+.landing-fanin-status-row.is-sub {
+  color: var(--grey);
+  font-size: 0.72em;
+  font-weight: 400;
+  padding-left: 1.4em;
+  margin-top: -0.2em;
 }
 
-/* The receipt row: six real sources, one click away — each opens the actual
-   mockup image (public/scatter/*.png). Reuses the scatter chips' kind/label
-   language so the callback to the cards above reads immediately. */
+/* The receipt block: a caption + six real sources, one click away — each
+   opens the actual mockup image (public/scatter/*.png). Reuses the scatter
+   chips' kind/label language so the callback to the cards above reads
+   immediately. The divider lives here (not on .landing-fanin-sources itself)
+   so the caption sits inside it, above the chip row. */
+.landing-fanin-sources-block {
+  margin-top: 22px;
+  padding-top: 20px;
+  /* var(--line) is rgba(20, 17, 15, 0.1) — doubled alpha, twice as dark. */
+  border-top: 1px solid rgba(20, 17, 15, 0.2);
+  animation: fanin-sources-in 0.35s ease both;
+}
+.landing-fanin-sources-caption {
+  color: var(--grey);
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
 .landing-fanin-sources {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-  animation: fanin-sources-in 0.35s ease both;
+  gap: 10px;
 }
 @keyframes fanin-sources-in {
   from { opacity: 0; transform: translateY(4px); }
@@ -396,11 +795,11 @@
 .landing-fanin-source-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #faf8f6;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 6px 12px 6px 8px;
+  padding: 8px 15px 8px 10px;
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
@@ -412,17 +811,17 @@
 }
 .landing-fanin-source-kind {
   font-family: 'SF Mono', ui-monospace, Menlo, monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
   color: #fff;
   background: var(--orange);
-  padding: 2px 5px;
-  border-radius: 4px;
+  padding: 3px 7px;
+  border-radius: 999px;
 }
 .landing-fanin-source-label {
   font-family: var(--sans);
-  font-size: 12.5px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--ink);
   letter-spacing: normal;
@@ -439,11 +838,83 @@
   flex-wrap: wrap;
 }
 .landing-proof-card {
+  /* Purely a click target + hover wrapper now — no background of its own. */
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.landing-proof-card:hover { transform: translateY(-3px); }
+.landing-proof-card:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+/* Was a 3D rotateX flip — read as overwhelming for what's just a "here's
+   what backs this number" hint, so this is a plain crossfade instead: both
+   faces stacked (position:absolute; inset:0) in the same spot, front fades
+   out / back fades in together on hover/focus. Same "reveal a CTA" idea,
+   much quieter. */
+.landing-proof-card-flip {
+  position: relative;
+  /* Faces are absolute (position:absolute; inset:0), so this element has no
+     intrinsic size of its own to shrink-wrap to — an absolutely positioned
+     child never contributes to its parent's width/height. Without an
+     explicit floor for both, it was collapsing toward 0×0 and the "25 – 47%"
+     text (etc.) was wrapping/overlapping inside a near-zero-width box.
+     340px, not 280px — "95 – 99%" measures ~219px wide at the max clamped
+     font-size, and with 46px padding each side a 280px card only had 188px
+     to work with, still wrapping it. */
+  width: 340px;
+  min-height: 184px;
+  border-radius: 16px;
+  /* No overflow:hidden — that was clipping to slide-transition spillover
+     from an earlier version of the hover effect (now a plain instant
+     opacity swap, nothing to clip), but it was ALSO clipping each face's
+     own box-shadow (shadows paint outside the element's box, so an
+     ancestor's overflow:hidden clips them same as any other overflow),
+     which is why neither card was showing its shadow at all. */
+}
+/* A plain crossfade (both faces stacked, opacity only) read as muddy — for a
+   couple hundred ms both texts sit exactly on top of each other, legible at
+   once, which looks like a glitch rather than a transition. This slides
+   instead: front pushes straight up and out, back rises in from below to
+   replace it — bottom-to-top motion, but nothing ever overlaps in the same
+   spot, so it stays legible the whole way through. */
+/* Tried a rotateX flip (too much motion), then a straight crossfade (both
+   faces starting their fade at the same instant — for a beat both texts sat
+   at ~50% opacity, legible at once and reading as a glitch), then a slide
+   (still "sliding," not wanted), then an instant no-transition swap (too
+   abrupt, wanted "gentle"). This is a gentle fade again, but sequential —
+   the outgoing face starts fading immediately, the incoming face waits
+   (transition-delay) until the outgoing one is mostly clear, so the two
+   never sit at similar opacity at the same time. */
+.landing-proof-card-face {
+  position: absolute;
+  inset: 0;
+  padding: 32px 46px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 46px;
-  border-radius: 16px;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+.landing-proof-card-face--front { opacity: 1; transition-delay: 0.12s; }
+.landing-proof-card-face--back { opacity: 0; transition-delay: 0s; }
+.landing-proof-card:hover .landing-proof-card-face--front,
+.landing-proof-card:focus-visible .landing-proof-card-face--front {
+  opacity: 0;
+  transition-delay: 0s;
+}
+.landing-proof-card:hover .landing-proof-card-face--back,
+.landing-proof-card:focus-visible .landing-proof-card-face--back {
+  opacity: 1;
+  transition-delay: 0.12s;
+}
+.landing-proof-card-cta {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink);
 }
 .landing-proof-card-label {
   font-family: 'SF Mono', ui-monospace, Menlo, monospace;
@@ -459,6 +930,7 @@
   font-weight: 750;
   letter-spacing: -0.02em;
   line-height: 1;
+  white-space: nowrap;
 }
 .landing-proof-metric {
   font-size: 13px;
@@ -467,18 +939,30 @@
   margin-top: 8px;
 }
 .landing-proof-metric--after { color: rgba(255, 255, 255, 0.85); }
-.landing-proof-card--before {
-  background: #fff;
-  border: 1px solid var(--line);
+/* Frosted glass — same preset as the nav/hero/status cards — is now the
+   DEFAULT for every face (base .landing-proof-card-face, not scoped to
+   --before), since the back of the "With Canary" card should read the same
+   "unassisted" white as the front of that card, not orange. Only the
+   --after card's FRONT face opts into orange below. */
+.landing-proof-card-face {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: 0 28px 48px -16px rgba(20, 17, 15, 0.2), 0 8px 16px rgba(20, 17, 15, 0.06);
 }
-.landing-proof-card--before .landing-proof-card-label { color: var(--grey); }
+.landing-proof-card-label { color: var(--grey); }
 .landing-proof-before { color: var(--ink); }
-.landing-proof-card--after {
+.landing-proof-card--after .landing-proof-card-face--front {
+  /* Full-opacity brand orange — a translucent version drifted toward peach
+     and no longer read as "canary orange" against the page behind it. */
   background: var(--orange);
+  border-color: transparent;
   box-shadow: 0 28px 48px -16px rgba(255, 102, 36, 0.55), 0 8px 20px rgba(255, 102, 36, 0.25);
 }
-.landing-proof-card--after .landing-proof-card-label { color: rgba(255, 255, 255, 0.85); }
+.landing-proof-card--after .landing-proof-card-face--front .landing-proof-card-label {
+  color: rgba(255, 255, 255, 0.85);
+}
 .landing-proof-after { color: #fff; }
 .landing-proof-arrow {
   font-size: clamp(30px, 4vw, 40px);
@@ -486,8 +970,54 @@
   color: var(--grey);
 }
 
+/* Reveal on scroll (useInView toggles .is-visible on .landing-proof-stat) —
+   before card, then arrow, then after card, each rising + fading in with a
+   slight stagger instead of popping in together. */
+.landing-proof-card,
+.landing-proof-arrow {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.landing-proof-stat.is-visible .landing-proof-card,
+.landing-proof-stat.is-visible .landing-proof-arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+.landing-proof-stat.is-visible .landing-proof-card--before { transition-delay: 0s; }
+.landing-proof-stat.is-visible .landing-proof-arrow { transition-delay: 0.15s; }
+.landing-proof-stat.is-visible .landing-proof-card--after { transition-delay: 0.25s; }
+@media (prefers-reduced-motion: reduce) {
+  .landing-proof-card,
+  .landing-proof-arrow,
+  .landing-stack-section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  /* The swap itself still happens on hover/focus (it's how the CTA becomes
+     reachable, not just decorative) — just instantly instead of the gentle
+     staggered fade. */
+  .landing-proof-card-face {
+    transition: none;
+    transition-delay: 0s;
+  }
+}
+
 /* ── Section 4: stack / logo row ─────────────────────────────────────── */
 .landing-stack-section { background: #faf8f6; border-radius: 20px; }
+/* Reveal on scroll (useInView toggles .is-visible) — the whole section rises
+   + fades in as it enters the viewport, same rule as .landing-proof-stat
+   below just applied to the section itself. */
+.landing-stack-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.landing-stack-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 .landing-logo-row {
   display: flex;
   align-items: center;
@@ -500,7 +1030,7 @@
   margin-right: auto;
   flex-wrap: wrap;
 }
-.landing-logo { display: inline-flex; align-items: center; height: 28px; }
+.landing-logo { display: inline-flex; align-items: center; gap: 9px; height: 28px; }
 .landing-logo-more {
   font-size: 14.5px;
   font-weight: 600;
@@ -517,19 +1047,152 @@
   margin-top: clamp(40px, 7vw, 64px);
 }
 .landing-logo img {
-  height: 100%;
+  height: 22px;
   width: auto;
   object-fit: contain;
-  opacity: 0.75;
+  opacity: 0.9;
   transition: opacity 0.15s ease;
 }
-.landing-logo img:hover { opacity: 1; }
-.landing-logo-fallback {
+.landing-logo:hover img { opacity: 1; }
+.landing-logo-name {
   font-size: 15px;
   font-weight: 600;
-  color: var(--grey);
+  color: var(--ink);
 }
-.landing-logo-fallback.is-hidden { display: none; }
+
+/* ── Sectors we power ────────────────────────────────────────────────── */
+/* Full-bleed horizontal carousel, breaking out of .landing-section's
+   centered max-width — the standard "break out of a centered container"
+   trick: 100vw at the viewport edge regardless of where this sits in the
+   page's own margin/padding context. */
+.landing-sectors-carousel {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  /* No bottom padding — .landing-closing right after this already brings
+     clamp(72px, 10vw, 120px) of its own top padding. Stacking this
+     section's padding on top of that read as a dead, oversized gap
+     between the last row of cards and the CTA heading. */
+  padding: 8px clamp(20px, 5vw, 64px) 0;
+  overflow: hidden;
+}
+/* Two rows stacked (the "2 cards tall" part). */
+.landing-sectors-track {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+/* Each row's cards are rendered twice back to back (see Landing.tsx), so
+   the row is exactly 2x one "cycle" wide. Animating that row -50% is then
+   a perfect, seamless loop — the frame right before the jump is pixel-
+   identical to the frame right after. Each row loops independently (rather
+   than one shared transform on the track) so a 7-card row and a 6-card row
+   each land on their own exact repeat point instead of one trying to fit
+   both. Same px/sec on both keeps them reading as one wall sliding
+   together even though their loop points don't line up in time. */
+.landing-sectors-row {
+  display: flex;
+  width: max-content;
+  animation: landing-sectors-pan 60s linear infinite;
+  will-change: transform;
+}
+@keyframes landing-sectors-pan {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+/* Running-bond brick pattern: row 2 needs to read roughly half a card
+   narrower than row 1. A margin-left used to do this, but margin is box
+   model, not part of the looping content — it sat outside the animated
+   region, so the loop's reset point exposed it as genuine empty space.
+   A same-size lead-in card tried next kept every card visually uniform-
+   width... no, actually made it half-width, which broke "every card same
+   width." Baking the stagger into the KEYFRAMES themselves (translateX
+   starts/ends 160px further along) fixes both: every card in the row
+   stays full width and un-cropped by anything but the carousel's own
+   edge (same as any card mid-scroll), and since the offset is a constant
+   added to both the `from` and `to` values, frame(x) still equals
+   frame(x - halfRowWidth) for every x — the seamless-loop math from
+   .landing-sectors-row doesn't care what constant you start it at. */
+.landing-sectors-row--offset { animation-name: landing-sectors-pan-offset; }
+@keyframes landing-sectors-pan-offset {
+  from { transform: translateX(-160px); }
+  to { transform: translateX(calc(-50% - 160px)); }
+}
+@media (min-width: 1024px) {
+  .landing-sectors-row--offset { animation-name: landing-sectors-pan-offset-lg; }
+  @keyframes landing-sectors-pan-offset-lg {
+    from { transform: translateX(-310px); }
+    to { transform: translateX(calc(-50% - 310px)); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-sectors-row { animation: none; }
+}
+/* Caption is overlaid on the photo (bottom-anchored, white text over a
+   dark gradient scrim) rather than sitting in a separate footer strip. */
+.landing-sector-card {
+  position: relative;
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  /* Uniform trailing margin instead of the row's flex `gap` — every card
+     (including the last one in each duplicated half) then contributes
+     exactly (card + 20px) to the row's total width, so the row's total is
+     always a clean multiple of that unit and translateX(-50%) in the pan
+     animation lands exactly on the seam between the two copies. `gap`
+     doesn't have this property: it only inserts space *between* children,
+     so two concatenated copies end up with one gap fewer than a true
+     half-and-half split, and -50% falls short of the real seam — the
+     "weird gap" that showed up once per loop. */
+  margin-right: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(20, 17, 15, 0.10);
+}
+@media (min-width: 1024px) {
+  .landing-sector-card { width: 600px; }
+}
+.landing-sector-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.landing-sector-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Dark gradient scrim so the white caption stays legible over any photo,
+   without flattening the top of the image. */
+.landing-sector-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.32) 40%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+}
+.landing-sector-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 22px;
+  font-size: clamp(20px, 5.5vw, 24px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+/* Cards go 2x wider at this breakpoint (see .landing-sector-card above) —
+   scale the caption up with them instead of leaving it small on a much
+   bigger photo. */
+@media (min-width: 1024px) {
+  .landing-sector-name {
+    padding: 28px 32px;
+    font-size: clamp(24px, 2vw, 30px);
+  }
+}
 
 /* ── Section 5: value blocks ────────────────────────────────────────── */
 .landing-values {
@@ -551,33 +1214,9 @@
 }
 .landing-closing h2 {
   font-size: clamp(26px, 3.6vw, 40px);
-  margin-bottom: 32px;
+  margin-bottom: 48px;
 }
 
-/* World-of-dots backdrop, Mireye-style: a huge globe cropped to just its top
-   rim, filling the fold edge-to-edge behind the hero and testimonial —
-   everything else in the fold sits above it via .landing-fold-body's
-   z-index. */
-.landing-dotmap {
-  position: absolute;
-  left: 50%;
-  bottom: calc(-200vw + 58vh);
-  width: 200vw;
-  height: 200vw;
-  transform: translateX(-50%);
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.4;
-}
-.landing-dotmap-point {
-  fill: var(--ink);
-  opacity: 0.5;
-  transition: fill 1.4s ease, opacity 1.4s ease;
-}
-.landing-dotmap-point.is-lit {
-  fill: var(--orange);
-  opacity: 1;
-}
 
 /* ── Footer ──────────────────────────────────────────────────────────── */
 .landing-footer {
@@ -591,6 +1230,10 @@
   flex-wrap: wrap;
   gap: 12px;
 }
+/* .landing-brand carries font-size/weight but not color — override the
+   footer's own color: var(--grey) so the wordmark still reads ink-black
+   here, not washed out to the same grey as the footer links around it. */
+.landing-footer .landing-brand { color: var(--ink); }
 .landing-footer-links { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .landing-footer button,
 .landing-footer a {
@@ -746,7 +1389,22 @@
 
 /* ── Responsive: scatter + ghost degrade to a vertical stack ───────────── */
 @media (max-width: 720px) {
+  .landing-scatter-wrap {
+    /* Base rule reserves a fixed 1043px of flow height for the desktop
+       cluster — irrelevant once .landing-scatter below goes back to normal
+       (stacked) flow and determines its own height from its content. */
+    height: auto;
+    margin-top: 0;
+  }
   .landing-scatter {
+    /* Base rule now absolutely positions + centers a fixed 1700px reference
+       box (see above) — none of that applies to the stacked mobile layout,
+       so it's back to a plain, full-width block in normal flow. */
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-left: 0;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -755,8 +1413,14 @@
   }
   .landing-scatter-card {
     /* relative, not static — .landing-scatter-frame's absolute inset:0 needs
-       this as its positioned ancestor, even stacked in normal flow. */
+       this as its positioned ancestor, even stacked in normal flow. top/left
+       reset too — position:relative still honors them as an offset from
+       normal flow (unlike position:static), so without this each
+       .landing-scatter-card--N's desktop-cluster offset (up to 1068px) was
+       shoving the stacked mobile card that far off to the side. */
     position: relative !important;
+    top: auto !important;
+    left: auto !important;
     width: 100% !important;
     height: 160px !important;
     transform: none !important;
@@ -782,4 +1446,175 @@
     border-radius: 12px;
   }
   .contact-card--calendly h2 { font-size: 17px; margin-bottom: 10px; }
+}
+
+/* ── Data-signal corner prompt (LandingDataPrompt.tsx) ──────────────────
+   Deliberately a plain solid card, not the page's frosted-glass preset —
+   it floats over arbitrary page content (not a fixed dot-globe/collage
+   backdrop the glass was tuned for), so a translucent card here would have
+   wildly inconsistent legibility depending on scroll position. */
+.landing-data-prompt {
+  position: fixed;
+  right: clamp(20px, 4vw, 32px);
+  bottom: clamp(20px, 4vw, 32px);
+  z-index: 60;
+  /* Actually small, per the comment above — was 720px (min(720px, 100vw-32px))
+     and blanketed a third of the page over whatever section happened to be
+     scrolled underneath it. Chat-widget scale still overlaps the corner of
+     whatever's behind it, but little enough that nothing load-bearing gets
+     permanently hidden. */
+  width: min(360px, calc(100vw - 32px));
+  background: #fff;
+  border: 1px solid rgba(255, 102, 36, 0.35);
+  border-radius: 20px;
+  /* Soft orange glow layered under the existing depth shadow — same
+     accent as the Send button/CTA, kept faint so it signals "there's
+     something here" without out-competing "Book a demo call" next to it. */
+  box-shadow: 0 24px 56px rgba(20, 17, 15, 0.16), 0 0 32px rgba(255, 102, 36, 0.18);
+  padding: 24px 24px 20px;
+  text-align: left;
+  animation: landing-data-prompt-in 0.35s ease both;
+}
+@keyframes landing-data-prompt-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-data-prompt { animation: none; }
+}
+.landing-data-prompt-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--grey);
+  cursor: pointer;
+  border-radius: 10px;
+}
+.landing-data-prompt-close:hover { background: rgba(20, 17, 15, 0.06); color: var(--ink); }
+.landing-data-prompt-question {
+  margin: 0 28px 8px 0;
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.landing-data-prompt-hint {
+  margin: 0 28px 18px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--grey);
+}
+/* Tag-input field: a single bordered box that holds every committed chip
+   plus the raw text input, all flowing together and wrapping onto new
+   lines together — reads as one field, not "chips, then separately a
+   textbox." Enter commits the current text to a chip (LandingDataPrompt.tsx);
+   nothing is sent until the "Send" button below it. */
+.landing-data-prompt-chiprow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.landing-data-prompt-chiprow:focus-within { border-color: var(--orange); }
+.landing-data-prompt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  /* Without this, a chip can't shrink below its text's natural width (flex
+     items default to min-width: auto) — an unbroken long entry just grew
+     past the card edge instead of respecting max-width. */
+  min-width: 0;
+  max-width: 100%;
+  background: #f0ede9;
+  border-radius: 999px;
+  padding: 5px 6px 5px 12px;
+  font-size: 13px;
+  /* Explicit, matched to the input/button's own line-height — without this
+     the chip's text used the browser default (much taller than 13px needs),
+     making the chip ~34px against the input/button's 27px. That mismatch
+     was the whole row's height jumping every time the first chip landed. */
+  line-height: 1;
+  color: var(--ink);
+}
+/* The truncating part — ellipsis on the text only, so the remove button
+   never gets pushed out past the card's edge (see prior comment). */
+.landing-data-prompt-chip-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.landing-data-prompt-chip-remove {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--grey);
+  cursor: pointer;
+}
+.landing-data-prompt-chip-remove:hover { background: rgba(20, 17, 15, 0.08); color: var(--ink); }
+.landing-data-prompt-chip-input {
+  flex: 1 1 100px;
+  min-width: 100px;
+  padding: 5px 4px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: none;
+  border: none;
+}
+.landing-data-prompt-chip-input:focus { outline: none; }
+/* Its own row below the chip field, not the last item inside it — that
+   used to make it jump around (mid-row after the last chip, alone on a new
+   line, wherever wrapping happened to land it) depending on how many chips
+   there were. `display:block` + `margin-left:auto` right-aligns it without
+   needing a wrapper element, and it stays in exactly the same spot
+   regardless of how many rows the chips above it wrap onto. */
+.landing-data-prompt-submit {
+  display: block;
+  margin: 10px 0 0 auto;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--orange);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.landing-data-prompt-submit:hover:not(:disabled) { opacity: 0.88; }
+/* Actual grey, not a dimmed orange — a faded accent color still reads as
+   "this is the accent, slightly dimmed," which pulls the eye toward an
+   action that isn't available yet. Flat grey reads as inert instead. */
+.landing-data-prompt-submit:disabled {
+  background: var(--line);
+  color: var(--grey);
+  cursor: not-allowed;
+}
+.landing-data-prompt-sent {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--grey);
 }

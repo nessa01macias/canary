@@ -109,6 +109,11 @@ async def insert_gate_event(row: dict) -> None:
     await _insert("gate_events", row)
 
 
+async def insert_local_data_signal(row: dict) -> None:
+    """Insert one free-text 'what local knowledge is most valuable' answer."""
+    await _insert("local_data_signals", row)
+
+
 async def _insert(table: str, row: dict) -> None:
     if not supabase_configured():
         raise RuntimeError(

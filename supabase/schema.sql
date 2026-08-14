@@ -61,6 +61,25 @@ create policy "contributions insert any" on contributions
 -- …but NO select policy ⇒ neither anon nor logged-in users can read raw
 -- contributions back. Only the k-anonymised views below are readable.
 
+-- ---------------------------------------------------------------------------
+-- local_data_signals — free-text answers to the landing page's "what
+-- unscrapable local knowledge would be most valuable" prompt (see
+-- POST /api/local-data-signals). Research input for a possible future
+-- consumer product, not tied to any account. Same insert-any/no-select shape
+-- as contributions above — visitors write, only the service key reads.
+-- ---------------------------------------------------------------------------
+create table if not exists local_data_signals (
+  id          uuid primary key default gen_random_uuid(),
+  created_at  timestamptz not null default now(),
+  session_id  text not null,
+  answer      text not null
+);
+alter table local_data_signals enable row level security;
+drop policy if exists "local_data_signals insert any" on local_data_signals;
+create policy "local_data_signals insert any" on local_data_signals
+  for insert with check (true);
+-- No select policy — same reasoning as contributions.
+
 -- Profiles: a signed-in user manages only their own row.
 drop policy if exists "profiles self read" on profiles;
 create policy "profiles self read" on profiles
