@@ -13,9 +13,16 @@
   /* The "frosted" preset — the glass treatment shared by the nav and every
      card over the dot-globe background. Tune once here; every user of it
      references these instead of repeating literals. */
-  --glass-bg: rgba(255, 255, 255, 0.18);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-blur: blur(20px) saturate(160%);
+  /* Was 0.18 — nowhere near enough over the dot-globe's large, dark, densely
+     packed dots: the blur alone doesn't fully occlude them, so bold ink text
+     sitting directly on top (the hero headline especially) read as
+     illegible, not just "textured". 0.85 actually washes the background out
+     instead of merely softening it; .landing-fanin-status below already
+     proved a value in this range is what legibility over busy content
+     actually takes here, at 0.72 for a lighter, less dense background. */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(28px) saturate(160%);
   /* Same shrink-to-fit factor .landing-scatter scales itself by (see that
      rule for the full explanation) — shared here so anything that needs to
      track the collage's shrink, like .landing-fanin-status's offset below
@@ -708,12 +715,11 @@
   margin: 0 auto;
   width: 100%;
   max-width: 800px;
-  /* Frosted glass, same border/blur recipe as .landing-hero but a higher
-     background opacity (0.72 vs the shared 0.18) — this card sits over the
-     ghosted scatter cards, which are already near-white, so the standard
-     hero-strength glass (tuned for the colorful dot-map behind IT) reads as
-     basically invisible here. Denser small monospace text also needs more
-     contrast to stay legible than the hero's big bold headline does. */
+  /* Frosted glass, same border/blur recipe as .landing-hero but a slightly
+     LOWER background opacity (0.72 vs the shared 0.85) — this card sits over
+     the ghosted scatter cards, which are already near-white, so it needs
+     less washing-out than the hero needs over the busy dot-globe. Still
+     opaque enough for the denser small monospace text here to stay legible. */
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
